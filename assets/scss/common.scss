@@ -1,0 +1,53 @@
+#__layout {
+  width: 100%;
+  min-height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  margin: 0;
+}
+
+div, button, label, li {
+  font-family: "FiraSansExtraCondensed";
+}
+
+a, h1, h2, h3, h4, h5, h6, input {
+  font-family: "Roboto";
+  font-weight: normal;
+}
+
+input {
+  box-sizing: border-box;
+}
+
+thead > tr > th {
+  font-family: "Roboto";
+  font-weight: normal;
+  font-size: 10px;
+}
+
+#__nuxt {
+  height: 100%;
+}
+
+p {
+  margin: 0;
+}
+
+.mr_10 {
+  margin-right: 10px;
+}
+
+.ml_10 {
+  margin-left: 10px;
+}

@@ -1,0 +1,36 @@
+.key-value-table {
+  width: 100%;
+  text-align: left;
+  font-size: 16px;
+  border-collapse: collapse;
+  font-family: FiraSansExtraCondensed;
+
+  &.--with-border {
+    tr {
+      border: 1px solid var(--color-2, #dbdbdb);
+
+      th {
+        border-right: 1px solid var(--color-2, #dbdbdb);
+      }
+    }
+  }
+
+  tr {
+    border-bottom: 1px solid var(--color-2, #dbdbdb);
+
+    th, td {
+      padding: 10px 16px;
+      font-size: 14px;
+    }
+
+    th {
+      font-weight: 300;
+    }
+
+    td {
+      font-weight: normal;
+      color: black;
+      font-size: 18px;
+    }
+  }
+}

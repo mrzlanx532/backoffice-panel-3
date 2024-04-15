@@ -1,0 +1,107 @@
+.form {
+
+  &__header-section-top {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__header-section-bottom {
+
+  }
+
+  &__header {
+    padding: 20px;
+    position: sticky;
+    top: 0;
+    background: var(--color-1, #ffffff);
+    border-bottom: 1px solid var(--color-2, #dbdbdb);
+
+    .tabs {
+      top: 20px;
+      left: -20px;
+      width: calc(100% + 40px);
+      justify-content: space-around;
+    }
+
+    .tabs__item {
+      width: 100%;
+    }
+  }
+
+  &__content {
+    padding: 20px;
+  }
+
+  &__header-title {
+    margin: 0;
+    color: grey;
+    font-size: 20px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    background: linear-gradient(to right, var(--color-gradient-1, #DE4020) 0%, var(--color-gradient-2, orange) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  &__footer {
+    position: sticky;
+    bottom: 0;
+    background: var(--color-1, #ffffff);
+    padding: 20px;
+    display: flex;
+    justify-content: right;
+  }
+
+  &__header-close-button {
+    width: 28px;
+    height: 28px;
+
+    &:hover {
+      cursor: pointer;
+
+      svg {
+        color: var(--color-gradient-2, orange);
+      }
+    }
+
+    svg {
+      width: 28px;
+      height: 28px;
+      color: var(--color-gradient-1, #DE4020);
+    }
+  }
+
+  .input {
+    display: block;
+    outline: none;
+    border-radius: 5px;
+    border: none;
+    height: 32px;
+    padding: 8px 4px 8px 8px;
+    width: 0;
+    flex: 1 30px;
+
+    &__label {
+      font-family: Roboto;
+      font-size: 14px;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+      color: var(--color-5, #2b2b2b);
+    }
+
+    &__container {
+      margin-top: 10px;
+      display: flex;
+      border-radius: 5px;
+      border: 1px solid var(--color-2, #dbdbdb);
+
+      &:focus-within {
+        border: 1px solid var(--color-gradient-2, orange);
+      }
+    }
+  }
+}

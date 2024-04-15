@@ -1,0 +1,134 @@
+html, body, #__nuxt, #__layout {
+  min-height: 100vh;
+}
+
+html {
+  overflow: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.document-scroll {
+
+  &_hidden {
+    visibility: hidden;
+  }
+
+  &__container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  &__overlay {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    top: 0;
+    left: 0;
+  }
+
+  &__slider-y {
+    z-index: 9999;
+    pointer-events: auto;
+    position: absolute;
+    border-radius: var(--document-scroll-border-radius, 5px);
+    width: var(--document-scroll-thickness, 4px);
+    top: 0;
+    right: 0;
+    transition: width 200ms;
+    background: var(--document-scroll-background, grey);
+  }
+
+  &__track-y {
+    z-index: 9999;
+    pointer-events: auto;
+    width: var(--document-scroll-thickness, 4px);
+    background: var(--document-scroll-track-background, transparent);
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    transition: width 200ms;
+    border-radius: var(--document-scroll-track-border-radius, 0);
+
+    &:hover {
+      width: var(--document-scroll-thickness-hover-active, 8px);
+
+      .document-scroll__slider-y {
+        width: var(--document-scroll-thickness-hover-active, 8px);
+      }
+    }
+
+    &:active {
+      width: var(--document-scroll-thickness-hover-active, 8px);
+
+      .document-scroll__slider-y {
+        width: var(--document-scroll-thickness-hover-active, 8px);
+      }
+    }
+  }
+
+  &__slider-x {
+    background: var(--document-scroll-background, transparent);
+    z-index: 9999;
+    pointer-events: auto;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transition: height 200ms;
+    border-radius: var(--document-scroll-border-radius, 5px);
+    height: var(--document-scroll-thickness, 4px);
+
+    &:hover {
+      height: var(--document-scroll-thickness-hover-active, 8px);
+
+      .document-scroll__slider-x {
+        height: var(--document-scroll-thickness-hover-active, 8px);
+      }
+    }
+
+    &:active {
+      height: var(--document-scroll-thickness-hover-active, 8px);
+
+      .document-scroll__slider-x {
+        height: var(--document-scroll-thickness-hover-active, 8px);
+      }
+    }
+  }
+
+  &__track-x {
+    width: 100%;
+    background: var(--document-scroll-track-background, transparent);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: var(--document-scroll-thickness, 4px);
+    transition: height 200ms;
+    border-radius: var(--document-scroll-track-border-radius, 0);
+
+    &:hover {
+      height: var(--document-scroll-thickness-hover-active, 8px);
+    }
+
+    &:active {
+      height: var(--document-scroll-thickness-hover-active, 8px);
+    }
+  }
+
+  &_grabbed {
+    -o-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}

@@ -1,0 +1,23 @@
+.section {
+
+  & > * {
+    font-family: Roboto;
+  }
+
+  &__header {
+    font-size: 16px;
+  }
+
+  &__content {
+    font-size: 12px;
+    margin-top: 20px;
+    color: var(--color-4, #757575);
+  }
+
+  &__group > * {
+    margin-top: 15px;
+    &:first-of-type {
+      margin-top: 0;
+    }
+  }
+}

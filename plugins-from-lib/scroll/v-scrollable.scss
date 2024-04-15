@@ -1,0 +1,117 @@
+.v-scrollable {
+  opacity: 0;
+  transition: opacity 100ms;
+}
+
+.v-scrollable.v-scrollable_active {
+  opacity: 1;
+}
+
+.scrollable {
+
+  visibility: hidden;
+
+  &__container {
+    position: relative;
+  }
+
+  &__container.--without-track .scrollable__track-x,
+  &__container.--without-track .scrollable__track-y, {
+    background: transparent;
+  }
+
+  &__container.--smart-opacity.--smart-opacity-enabled .scrollable__track-x,
+  &__container.--smart-opacity.--smart-opacity-enabled .scrollable__track-y {
+    opacity: 0.3;
+    transition: .5s;
+  }
+
+  &__container.--smart-opacity .scrollable__track-x,
+  &__container.--smart-opacity .scrollable__track-y {
+    opacity: 0.3;
+    transition: none;
+  }
+
+  &__container.--smart-opacity:active .scrollable__track-x,
+  &__container.--smart-opacity:hover .scrollable__track-x,
+  &__container.--smart-opacity:active .scrollable__track-y,
+  &__container.--smart-opacity:hover .scrollable__track-y {
+    opacity: 1;
+  }
+
+  &__wrapper {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    float: left;
+  }
+
+  &__track-x {
+    height: 4px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background: var(--scrollable-track-background, transparent);
+    z-index: 1;
+  }
+
+  &__slider-x {
+    border-radius: 4px;
+    background: var(--scrollable-slider-background, transparent);
+    height: 4px;
+    position: absolute;
+    z-index: 1;
+  }
+
+  &__track-y {
+    width: 4px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: var(--scrollable-track-background, transparent);
+    z-index: 1;
+  }
+
+  &__slider-y {
+    border-radius: 4px;
+    background: var(--scrollable-slider-background, transparent);
+    width: 4px;
+    position: absolute;
+    right: 0;
+    z-index: 1;
+  }
+
+  &__content {
+    width: 100%;
+    padding: 0;
+    position: relative;
+    overflow: scroll;
+    box-sizing: border-box;
+  }
+
+  &__scroll {
+    position: relative;
+    background: rgba(0, 0, 0, 0.1);
+    width: 9px;
+    border-radius: 4px;
+    top: 0;
+    z-index: 2;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.25s linear;
+  }
+
+  &_hidden {
+    display: none;
+  }
+
+  &_grabbed {
+    -o-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}

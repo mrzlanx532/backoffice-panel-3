@@ -1,0 +1,109 @@
+.browser {
+  @import "browser-parts/table";
+  @import "browser-parts/paginator";
+  @import "browser-parts/filters";
+  @import "browser-detail";
+
+  &__control-panel {
+    background: var(--color-1, #ffffff);
+    padding: 5px 15px;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 5px;
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    border-bottom: 3px solid var(--color-3, #f3f3f3);
+
+    &-right {
+      display: flex;
+    }
+
+    &-right-actions {
+      display: flex;
+      align-items: center;
+      margin-left: 10px;
+    }
+
+    @import "browser-parts/control-panel";
+  }
+
+  &__search-string-container {
+    display: flex;
+    border: 1px solid var(--color-2, #dbdbdb);
+    border-radius: 5px;
+  }
+
+  &__search-string {
+    padding: 8px;
+    border: none;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    height: 30px;
+    outline: none;
+    width: 145px;
+  }
+
+  &__search-string-button {
+    width: 30px;
+    height: 30px;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    svg {
+      width: 30px;
+      height: 30px;
+      border-left: 1px solid var(--color-2, #dbdbdb);
+      color: var(--color-gradient-1, #DE4020);
+
+      &:hover {
+        color: var(--color-gradient-2, orange);
+      }
+    }
+  }
+
+  &__container {
+    display: flex;
+    padding-top: 10px;
+  }
+
+  &__spinner-container {
+    display: flex;
+    height: 100%;
+    min-height: 90vh;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  &__error {
+    font-size: 30px;
+    color: var(--color-2, #dbdbdb);
+
+    &-container {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      right: 200px;
+    }
+
+    &-status-code {
+      text-align: center;
+    }
+
+    &-message {
+      font-size: 22px;
+      text-align: center;
+    }
+  }
+
+  &__table-is-empty-message {
+    font-size: 30px;
+    color: var(--color-2, #dbdbdb);
+    user-select: none;
+  }
+}

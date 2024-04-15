@@ -1,0 +1,25 @@
+.tabs {
+  position: relative;
+  width: 100%;
+  display: flex;
+
+  &__item {
+    user-select: none;
+    white-space: nowrap;
+    text-align: center;
+    padding: 10px 20px;
+    color: var(--color-4, #757575);
+    border-bottom: 1px solid transparent;
+    transition-property: border-bottom, color;
+    transition-duration: 0.3s;
+
+    &_active {
+      border-bottom: 1px solid var(--color-gradient-1, #DE4020);
+      color: var(--color-gradient-1, #DE4020);
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
