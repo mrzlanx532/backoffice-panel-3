@@ -41,17 +41,23 @@
 
     <div :style="style">Shadow-rounded</div>
     <div>
-      <Button v-for="(btnClass, index) in btnClasses" v-if="btnClass !== '--special'" :classes="['--rounded --shadow ' + btnClass]" :key="index">Отправить</Button>
+      <template v-for="(btnClass, index) in btnClasses">
+        <Button v-if="btnClass !== '--special'" :classes="['--rounded --shadow ' + btnClass]" :key="index">Отправить</Button>
+      </template>
     </div>
 
     <div :style="style">Shadow</div>
     <div>
-      <Button v-for="(btnClass, index) in btnClasses" v-if="btnClass !== '--special'" :classes="['--shadow ' + btnClass]" :key="index">Отправить</Button>
+      <template v-for="(btnClass, index) in btnClasses">
+        <Button v-if="btnClass !== '--special'" :classes="['--shadow ' + btnClass]" :key="index">Отправить</Button>
+      </template>
     </div>
 
     <div :style="style">Rounded</div>
-    <div class="">
-      <Button v-for="(btnClass, index) in btnClasses" v-if="btnClass !== '--special'" :classes="['--rounded ' + btnClass]" :key="index">Отправить</Button>
+    <div>
+      <template v-for="(btnClass, index) in btnClasses">
+        <Button  v-if="btnClass !== '--special'" :classes="['--rounded ' + btnClass]" :key="index">Отправить</Button>
+      </template>
     </div>
 
     <div :style="style">Большие кнопки</div>
