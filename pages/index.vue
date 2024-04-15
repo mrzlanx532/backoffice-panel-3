@@ -98,7 +98,11 @@
 
     <div :style="style">Ссылки</div>
     <div style="display: flex;">
-      <Link v-for="(btnClass, index) in btnClasses" :class="btnClass" :key="index" :style="{'margin': index === 0 ? '0' : '0 10px'}">Перейти</Link>
+      <Link
+          v-for="(btnClass, index) in btnClasses"
+          :class="btnClass"
+          :key="index"
+      >Перейти</Link>
     </div>
   </Page>
 </template>

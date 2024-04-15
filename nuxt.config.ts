@@ -5,7 +5,7 @@ export default defineNuxtConfig({
     autoImport: false
   },
   plugins: [
-    'plugins/modal.js',
+    //'plugins/modal.js',
     'plugins/scrollable.ts',
     'plugins/click-outside.ts'
   ],
