@@ -146,7 +146,7 @@ export default {
 
         this.closeOpenMenuItem(oldActiveMenuItem)
 
-        this.$router.navigateTo('/')
+        this.$router.push('/')
 
         return
       }
