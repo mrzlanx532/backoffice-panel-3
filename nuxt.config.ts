@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   },
   plugins: [
     'plugins/modal.js',
-    'plugins/document-scroll.ts',
+    'plugins/scrollable.ts',
     'plugins/click-outside.ts'
   ],
   css: [

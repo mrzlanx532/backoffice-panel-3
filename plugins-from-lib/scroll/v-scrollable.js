@@ -1,7 +1,6 @@
-import Vue from "vue";
 import createElementWithClass from './helpers'
 
-class Scrollable {
+export default class Scrollable {
     MIN_SCROLL_HEIGHT = 30
 
     isDragIsActive = false
@@ -236,16 +235,4 @@ class Scrollable {
             });
         }
     }
-}
-
-const install = async function (Vue = Vue, options = {}) {
-    Vue.directive('scrollable', {
-        inserted: function (el, binding) {
-            new Scrollable(el, binding.value)
-        }
-    })
-}
-
-export default {
-    install
 }
