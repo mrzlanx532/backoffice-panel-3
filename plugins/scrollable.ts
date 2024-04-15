@@ -10,9 +10,6 @@ import './../plugins-from-lib/scroll/document-scroll.no_ssr.scss'
 
 export default defineNuxtPlugin((nuxtApp) => {
     nuxtApp.vueApp.directive('scrollable', {
-        beforeMounted: function (el) {
-            el.classList.add('v-scrollable')
-        },
         mounted: function (el, binding) {
             new Scrollable(el, binding.value)
         }
