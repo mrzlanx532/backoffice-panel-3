@@ -98,11 +98,12 @@
 
     <div :style="style">Ссылки</div>
     <div style="display: flex;">
-      <Link
+      <BaseLink
           v-for="(btnClass, index) in btnClasses"
           :class="btnClass"
           :key="index"
-      >Перейти</Link>
+          :style="{'margin': index === 0 ? '0' : '0 10px'}"
+      >Перейти</BaseLink>
     </div>
   </Page>
 </template>
@@ -111,7 +112,7 @@
 import Page from "@/components/Base/Page"
 import Button from "@/components/Base/Button"
 import StateButton from "@/components/Base/StateButton"
-import Link from "@/components/Base/Link"
+import BaseLink from "@/components/Base/BaseLink"
 
 export default {
   name: 'UsersPage',
@@ -119,7 +120,7 @@ export default {
     Page,
     Button,
     StateButton,
-    Link
+    BaseLink
   },
   data() {
     return {
