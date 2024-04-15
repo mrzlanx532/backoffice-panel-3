@@ -9,4 +9,7 @@ export default defineNuxtConfig({
     'plugins/scrollable.js',
     'plugins/click-outside.js'
   ],
+  css: [
+    'assets/scss/main.scss',
+  ],
 })

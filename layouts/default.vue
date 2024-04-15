@@ -4,7 +4,7 @@
       <SideMenu/>
       <div class="page">
         <div class="page__container">
-          <Nuxt/>
+          <slot />
         </div>
       </div>
     </div>

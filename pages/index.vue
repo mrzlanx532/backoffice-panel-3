@@ -1,6 +1,6 @@
 <template>
   <Page h1="Главная | UI KIT">
-    <div style="max-height: 200px; padding: 20px;" v-scrollable="{classes: ['--smart-opacity']}" class="v-scrollable">
+    <div style="max-height: 200px; padding: 20px;">
       <div style="height: 400px;  background: aquamarine;">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem corporis, cupiditate excepturi facere fuga harum, ipsum, laudantium non quia quisquam rem repellat soluta. Aliquid consequuntur eveniet harum nisi non, saepe.
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem corporis, cupiditate excepturi facere fuga harum, ipsum, laudantium non quia quisquam rem repellat soluta. Aliquid consequuntur eveniet harum nisi non, saepe.
@@ -105,7 +105,6 @@ import Link from "@/components/Base/Link"
 
 export default {
   name: 'UsersPage',
-  middleware: 'auth',
   components: {
     Page,
     Button,

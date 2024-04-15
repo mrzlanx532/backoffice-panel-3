@@ -3,7 +3,7 @@
     <div class="error-page__container">
       <h1>{{ message }}</h1>
       <p>{{ error.message }}</p>
-      <NuxtLink v-if="error.statusCode === 404" :to="to.link">{{ to.title }}</NuxtLink>
+      <slot />
     </div>
   </div>
 </template>

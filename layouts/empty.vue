@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Nuxt/>
+    <slot />
   </div>
 </template>
 <script>
