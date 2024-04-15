@@ -5,6 +5,7 @@
 </template>
 <script>
 export default {
-  name: "LayoutEmpty"
+  middleware: ['sanctum:guest'],
+  name: "empty"
 }
 </script>

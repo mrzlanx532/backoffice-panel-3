@@ -1,6 +1,6 @@
 <template>
   <div class="detail">
-    <Link @click="onClickBack" class="detail__link-back --danger">Вернуться назад</Link>
+    <BaseLink @click="onClickBack" class="detail__link-back --danger">Вернуться назад</BaseLink>
     <div class="detail__header">
       <h1 class="detail__title">{{ h1 }}</h1>
       <div class="detail__control">
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import Link from "@/components/Base/Link"
+import BaseLink from "@/components/Base/BaseLink"
 
 export default {
   name: "Detail",
@@ -32,7 +32,7 @@ export default {
     },
   },
   components: {
-    Link
+    BaseLink
   },
   data() {
     return {

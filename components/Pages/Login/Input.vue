@@ -1,18 +1,18 @@
 <template>
   <div class="login__input-container">
-    <label :for="this.name">{{ localLabel }}</label>
+    <label :for="name">{{ localLabel }}</label>
     <input
         class="login__input"
-        :type="this.type"
-        :name="this.name"
+        :type="type"
+        :name="name"
         v-model="localValue"
         @change="onChange"
     >
     <div
         class="login__input-error"
-        :class="{'login__input-error_hidden': errorMessage[this.name] === ''}"
+        :class="{'login__input-error_hidden': errorMessage[name] === ''}"
     >
-      {{ errorMessage[this.name] }}
+      {{ errorMessage[name] }}
     </div>
   </div>
 </template>

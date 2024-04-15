@@ -4,7 +4,7 @@
       <div class="login__header">
         Авторизация
       </div>
-      <Input
+      <LoginInput
           type="text"
           label="Логин"
           name="email"
@@ -12,7 +12,7 @@
           :value="formData.email"
           :errorMessage="errorsMessages"
       />
-      <Input
+      <LoginInput
           type="password"
           label="Пароль"
           name="password"
@@ -26,22 +26,29 @@
       >
         {{ errorGlobal }}
       </div>
-      <Button :classes="['--full-width --special']" text="Войти" @click="onClick">
+      <LoginButton :classes="['--full-width --special']" text="Войти" @click="onClick">
         Войти
-      </Button>
+      </LoginButton>
     </form>
   </div>
 </template>
 <script>
-import Input from "@/components/Pages/Login/Input";
-import Button from "@/components/Base/Button";
+
+import { definePageMeta } from "#imports";
+
+definePageMeta({
+  layout: 'empty',
+  middleware: ['sanctum:guest']
+})
+
+import { default as LoginInput } from "@/components/Pages/Login/Input";
+import { default as LoginButton } from "@/components/Base/Button";
 
 export default {
   layout: 'empty',
-  auth: 'guest',
   components: {
-    Input,
-    Button
+    LoginInput,
+    LoginButton
   },
   data: function () {
     return {
