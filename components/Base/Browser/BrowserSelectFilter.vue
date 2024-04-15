@@ -21,7 +21,7 @@
             </div>
             <div class="select__active-select-option-cancel" @click.stop="onClickCancel(filter.id, index)">
               <svg>
-                <use xlink:href="img/sprite.svg#cancel_cross_bold"></use>
+                <use xlink:href="/img/sprite.svg#cancel_cross_bold"></use>
               </svg>
             </div>
           </div>
@@ -32,7 +32,7 @@
              @click.stop="onCrossClick(filter.id)"
         >
           <svg>
-            <use xlink:href="img/sprite.svg#cancel_cross_bold"/>
+            <use xlink:href="/img/sprite.svg#cancel_cross_bold"/>
           </svg>
         </div>
         <div

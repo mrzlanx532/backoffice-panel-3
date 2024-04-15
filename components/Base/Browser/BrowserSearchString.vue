@@ -11,7 +11,7 @@
     >
     <div class="browser__search-string-button" @click="onSearch">
       <svg width="32px" height="32px">
-        <use xlink:href="img/sprite.svg#search"/>
+        <use xlink:href="/img/sprite.svg#search"/>
       </svg>
     </div>
   </div>

@@ -6,7 +6,7 @@
         @click="leftDoubleArrowClick"
     >
       <svg height="15px">
-        <use xlink:href="img/sprite.svg#left_double_arrow"></use>
+        <use xlink:href="/img/sprite.svg#left_double_arrow"></use>
       </svg>
     </div>
     <div
@@ -15,7 +15,7 @@
         @click="leftSingleArrowClick"
     >
       <svg height="15px">
-        <use xlink:href="img/sprite.svg#left_single_arrow"></use>
+        <use xlink:href="/img/sprite.svg#left_single_arrow"></use>
       </svg>
     </div>
     <div>
@@ -37,7 +37,7 @@
         @click="rightSingleArrowClick"
     >
       <svg height="15px">
-        <use xlink:href="img/sprite.svg#right_single_arrow"></use>
+        <use xlink:href="/img/sprite.svg#right_single_arrow"></use>
       </svg>
     </div>
     <div
@@ -46,7 +46,7 @@
         @click="rightDoubleArrowClick"
     >
       <svg height="15px">
-        <use xlink:href="img/sprite.svg#right_double_arrow"></use>
+        <use xlink:href="/img/sprite.svg#right_double_arrow"></use>
       </svg>
     </div>
   </div>

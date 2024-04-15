@@ -24,12 +24,12 @@
             <div class="browser-detail__header-buttons">
               <div class="browser-detail__header-more-button" @click="onClickMoreButton">
                 <svg stroke="currentColor" class="feather feather-external-link">
-                  <use xlink:href="img/sprite.svg#more_button"/>
+                  <use xlink:href="/img/sprite.svg#more_button"/>
                 </svg>
               </div>
               <div class="browser-detail__header-close-button" @click="onClickCloseButton">
                 <svg>
-                  <use xlink:href="img/sprite.svg#cancel_cross" />
+                  <use xlink:href="/img/sprite.svg#cancel_cross" />
                 </svg>
               </div>
             </div>

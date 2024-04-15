@@ -5,7 +5,7 @@
         <div class="form__header-title">{{ title }}</div>
         <div class="form__header-close-button" @click="$emit('close')">
           <svg>
-            <use xlink:href="img/sprite.svg#cancel_cross"/>
+            <use xlink:href="/img/sprite.svg#cancel_cross"/>
           </svg>
         </div>
       </div>

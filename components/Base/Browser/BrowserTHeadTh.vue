@@ -12,7 +12,7 @@
           ]"
       >
         <svg width="14px" height="14px">
-          <use xlink:href="img/sprite.svg#order"/>
+          <use xlink:href="/img/sprite.svg#order"/>
         </svg>
       </div>
     </div>

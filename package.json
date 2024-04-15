@@ -10,6 +10,9 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "lodash.debounce": "^4.0.8",
+    "lodash.isempty": "^4.4.0",
+    "moment": "^2.30.1",
     "nuxt": "^3.11.2",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
