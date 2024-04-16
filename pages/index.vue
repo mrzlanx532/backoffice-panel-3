@@ -30,13 +30,7 @@
     </div>
     <div :style="style">State-кнопка</div>
     <div>
-      <StateButton
-          :data-id="24600"
-          :options="stateOptions"
-          :selectedOption="selectedOption"
-          url="/music/tracks/state-update"
-          @change="onChangeStateButton"
-      />
+
     </div>
 
     <div :style="style">Shadow-rounded</div>
@@ -115,6 +109,11 @@ import StateButton from "@/components/Base/StateButton"
 import BaseLink from "@/components/Base/BaseLink"
 
 export default {
+  setup() {
+    definePageMeta({
+      middleware: ['auth']
+    })
+  },
   name: 'UsersPage',
   components: {
     Page,

@@ -15,7 +15,6 @@
 import SideMenu from "@/components/Base/SideMenu"
 
 export default {
-  middleware: ['sanctum:auth'],
   name: 'default',
   components: {
     SideMenu,

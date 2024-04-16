@@ -128,7 +128,7 @@ export default {
   },
   methods: {
     async logout() {
-      await this.$auth.logout()
+      await useAuthStore().logout()
     },
     onClickOutside() {
       if (this.activeMenuItem) {

@@ -2,10 +2,6 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
-  imports: {
-    autoImport: false
-  },
-
   plugins: [
     //'plugins/modal.js',
     'plugins/scrollable.ts',
@@ -16,18 +12,5 @@ export default defineNuxtConfig({
     'assets/scss/main.scss',
   ],
 
-  modules: ["nuxt-auth-sanctum"],
-
-  sanctum: {
-    baseUrl: 'http://backoffice-api.lsmlocal.ru',
-    endpoints: {
-      user: '/managers/self/detail',
-      login: '/managers/self/auth',
-      logout: '/managers/self/logout'
-    },
-    redirect: {
-      onAuthOnly: '/login',
-      onGuestOnly: '/'
-    },
-  },
+  modules: ['@pinia/nuxt']
 })
