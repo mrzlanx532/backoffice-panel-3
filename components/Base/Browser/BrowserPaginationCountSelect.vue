@@ -34,7 +34,12 @@ export default {
       type: Object,
       required: false
     },
-    options: [],
+    options: {
+      type: Array,
+      default() {
+        return []
+      }
+    },
     selectedValue: {
       type: Number,
       required: true

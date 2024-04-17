@@ -1,6 +1,6 @@
 <template>
   <div class="browser">
-    <transition name="fade">
+    <Transition name="fade">
       <div class="browser__control-panel" v-if="!firstLoadingIsActive">
         <div class="page__title-container">
           <div class="page__title">{{ h1 }}</div>
@@ -23,7 +23,7 @@
           </div>
         </div>
       </div>
-    </transition>
+    </Transition>
     <div class="browser__spinner-container" v-if="firstLoadingIsActive">
       <Spinner class="--half-opacity"/>
     </div>
@@ -140,6 +140,10 @@ export default {
 
     const isSlotRightSideExists = () => {
       return !!slots.rightSide
+    }
+
+    return {
+      isSlotRightSideExists
     }
   },
   name: 'Browser',
@@ -288,16 +292,18 @@ export default {
 
         const response = await useCustomFetch(fetchURLString.toString(), config)
 
+        const data = response.data.value
+
         this.fetchErrorStatusCode = null
         this.fetchErrorMessage = null
 
-        this.totalItems = response.meta.count
-        this.setItems(response.items)
+        this.totalItems = data.meta.count
+        this.setItems(data.items)
 
         if (this.firstLoadingIsActive) {
 
-          this.setFilters(response.filters)
-          this.sorts = response.meta.sort.reduce((acc, value) => {
+          this.setFilters(data.filters)
+          this.sorts = data.meta.sort.reduce((acc, value) => {
             return {...acc, [value]: null}
           }, {})
         }
@@ -306,9 +312,8 @@ export default {
 
       } catch (err) {
 
-        console.log(err)
-        //this.fetchErrorMessage = err.response.statusText
-        //this.fetchErrorStatusCode = err.response.status
+        this.fetchErrorMessage = err.response.statusText
+        this.fetchErrorStatusCode = err.response.status
       }
     },
     setFilters(filters) {

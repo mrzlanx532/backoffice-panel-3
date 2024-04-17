@@ -56,6 +56,10 @@ export default {
     const isSlotHeaderExists = () => {
       return !!slots.header
     }
+
+    return {
+      isSlotHeaderExists
+    }
   },
   name: 'BrowserDetail',
   components: {
