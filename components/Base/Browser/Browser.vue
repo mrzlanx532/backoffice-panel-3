@@ -1,97 +1,103 @@
 <template>
   <div class="browser">
-    <div class="browser__control-panel" v-if="!firstLoadingIsActive">
-      <div class="page__title-container">
-        <div class="page__title">{{ h1 }}</div>
-      </div>
-      <BrowserSearchString @search="onSearchStringInput"/>
-      <div class="browser__control-panel-right">
-        <BrowserPagination
-            :page="currentPage"
-            :total="totalItems"
-            :per-page="selectedPaginationItemsCount"
-            @changePage="onChangePage"
-        />
-        <BrowserPaginationCountSelect
-            @change="onChangePaginationItemsCount"
-            :options="paginationItemsCountOptions"
-            :selected-value="selectedPaginationItemsCount"
-        />
-        <div class="browser__control-panel-right-actions" v-if="isSlotRightSideExists">
-          <slot name="rightSide"/>
-        </div>
-      </div>
-    </div>
-    <div class="browser__spinner-container" v-if="firstLoadingIsActive">
-      <Spinner class="--half-opacity"/>
-    </div>
-    <div class="browser__container" v-if="!firstLoadingIsActive">
-      <div class="browser__filters" v-if="filters.length">
-        <template v-for="filter in filters">
-          <component
-              :is="filterMapper[filter.type]"
-              :filter="filter"
-              @filterValueChanged="onFilterValueChanged"
-          ></component>
-        </template>
-      </div>
-      <div
-          class="browser__error-container"
-          v-if="fetchErrorStatusCode !== null"
-      >
-        <div class="browser__error">
-          <div class="browser__error-status-code">
-            Error code: {{ fetchErrorStatusCode }}
+    <ClientOnly>
+      <TransitionGroup name="fade">
+        <div class="browser__control-panel" v-if="!firstLoadingIsActive">
+          <div class="page__title-container">
+            <div class="page__title">{{ h1 }}</div>
           </div>
-          <div class="browser__error-message">
-            {{ fetchErrorMessage }}
+          <BrowserSearchString @search="onSearchStringInput"/>
+          <div class="browser__control-panel-right">
+            <BrowserPagination
+                :page="currentPage"
+                :total="totalItems"
+                :per-page="selectedPaginationItemsCount"
+                @changePage="onChangePage"
+            />
+            <BrowserPaginationCountSelect
+                @change="onChangePaginationItemsCount"
+                :options="paginationItemsCountOptions"
+                :selected-value="selectedPaginationItemsCount"
+            />
+            <div class="browser__control-panel-right-actions" v-if="isSlotRightSideExists">
+              <slot name="rightSide"/>
+            </div>
           </div>
         </div>
+      </TransitionGroup>
+      <div class="browser__spinner-container" v-if="firstLoadingIsActive">
+        <Spinner class="--half-opacity"/>
       </div>
-      <div
-          v-else
-          class="browser__table-container"
-          :class="[
-            {'browser__table-container_loading': loadingIsActive},
-            {'browser__table-container_is-empty': items.length === 0}
-          ]"
-      >
-        <table v-if="items.length" class="browser__table">
-          <thead>
-            <tr>
-              <BrowserTHeadTh
-                  @sortChanged="onSortChanged"
-                  v-for="column in columns"
-                  :key="column.name"
-                  :sorts="sorts"
-                  :column="column"
-              />
-            </tr>
-          </thead>
-          <tbody>
-          <tr v-for="item in items" @click="onClickRow(item)">
-            <td v-for="column in columns">
-              <template v-if="column.hasOwnProperty('component')">
-                <component :is="column.component" :item="item"/>
-              </template>
-              <template v-else-if="column.hasOwnProperty('preset')">
-                {{ handleByPreset(column, item)}}
-              </template>
-              <template v-else-if="column.hasOwnProperty('toFormat')">
-                {{ column.toFormat(item) }}
-              </template>
-              <template v-else>
-                {{ item[column.name] }}
-              </template>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-        <div v-else class="browser__table-is-empty-message">
-          Записей нет
+      <Transition name="fade">
+        <div class="browser__container" v-if="!firstLoadingIsActive">
+          <div class="browser__filters" v-if="filters.length">
+            <template v-for="filter in filters">
+              <component
+                  :is="filterMapper[filter.type]"
+                  :filter="filter"
+                  @filterValueChanged="onFilterValueChanged"
+              ></component>
+            </template>
+          </div>
+          <div
+              class="browser__error-container"
+              v-if="fetchErrorStatusCode !== null"
+          >
+            <div class="browser__error">
+              <div class="browser__error-status-code">
+                Error code: {{ fetchErrorStatusCode }}
+              </div>
+              <div class="browser__error-message">
+                {{ fetchErrorMessage }}
+              </div>
+            </div>
+          </div>
+          <div
+              v-else
+              class="browser__table-container"
+              :class="[
+                {'browser__table-container_loading': loadingIsActive},
+                {'browser__table-container_is-empty': items.length === 0}
+              ]"
+          >
+            <table v-if="items.length" class="browser__table">
+              <thead>
+                <tr>
+                  <BrowserTHeadTh
+                      @sortChanged="onSortChanged"
+                      v-for="column in columns"
+                      :key="column.name"
+                      :sorts="sorts"
+                      :column="column"
+                  />
+                </tr>
+              </thead>
+              <tbody>
+              <tr v-for="item in items" @click="onClickRow(item)">
+                <td v-for="column in columns">
+                  <template v-if="column.hasOwnProperty('component')">
+                    <component :is="column.component" :item="item"/>
+                  </template>
+                  <template v-else-if="column.hasOwnProperty('preset')">
+                    {{ handleByPreset(column, item)}}
+                  </template>
+                  <template v-else-if="column.hasOwnProperty('toFormat')">
+                    {{ column.toFormat(item) }}
+                  </template>
+                  <template v-else>
+                    {{ item[column.name] }}
+                  </template>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            <div v-else class="browser__table-is-empty-message">
+              Записей нет
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </Transition>
+    </ClientOnly>
     <BrowserDetail
         :data-id="id"
         :title-property="detailTitleProperty"

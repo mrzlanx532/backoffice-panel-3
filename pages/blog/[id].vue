@@ -2,7 +2,7 @@
   <Detail
       :h1="h1"
       fetchUrl="/blog/posts/detail"
-      :data-id="this.entityId"
+      :data-id="entityId"
       @itemUpdated="onItemUpdated"
   >
     <template v-slot:header>
@@ -30,8 +30,20 @@ import Section from "@/components/Base/Section"
 import Detail from "@/components/Base/Detail"
 import Button from "@/components/Base/Button"
 import FlexTable from "@/components/Base/FlexTable";
+import {useRoute} from "#imports";
 
 export default {
+  setup() {
+    const route = useRoute()
+
+    const entityId = route.params.id
+
+    console.log(entityId)
+
+    return {
+      entityId
+    }
+  },
   name: 'BlogDetail',
   components: {
     Section,
@@ -88,11 +100,6 @@ export default {
   computed: {
     h1: function () {
       return 'Пост ' + this.entityId
-    }
-  },
-  asyncData({params}) {
-    return {
-      entityId: params.id
     }
   },
   methods: {

@@ -15,6 +15,7 @@
 
 <script>
 import BaseLink from "@/components/Base/BaseLink"
+import {useCustomFetch} from "@/composables/useCustomFetch";
 
 export default {
   name: "Detail",
@@ -47,11 +48,16 @@ export default {
       this.isLoading = true
 
       try {
-        this.item = await this.$axios.$get(process.env.BACKEND_API_BASE_URL + this.fetchUrl, {
+
+        const fetchUrl = this.fetchUrl
+
+        const response = await useCustomFetch(fetchUrl.toString(), {
           params: {
             id: this.dataId
           }
         })
+
+        this.item = response.data.value
       } catch (e) {
         alert(e)
       }
