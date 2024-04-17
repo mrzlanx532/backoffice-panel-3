@@ -18,7 +18,7 @@
               :options="paginationItemsCountOptions"
               :selected-value="selectedPaginationItemsCount"
           />
-          <div class="browser__control-panel-right-actions" v-if="this.$slots.rightSide">
+          <div class="browser__control-panel-right-actions" v-if="isSlotRightSideExists">
             <slot name="rightSide"/>
           </div>
         </div>
@@ -131,8 +131,17 @@ import BrowserPaginationCountSelect from "@/components/Base/Browser/BrowserPagin
 import BrowserTHeadTh from "@/components/Base/Browser/BrowserTHeadTh";
 import browserPresetsMethodsMixin from "@/helpers/browser-presets-methods-mixin";
 import BrowserDetail from "@/components/Base/Browser/BrowserDetail";
+import { useCustomFetch } from "#imports"
+import { useSlots } from "vue";
 
 export default {
+  setup() {
+    const slots = useSlots()
+
+    const isSlotRightSideExists = () => {
+      return !!slots.rightSide
+    }
+  },
   name: 'Browser',
   props: {
     columns: {
@@ -183,7 +192,7 @@ export default {
   },
   computed: {
     fetchURL: function () {
-      return process.env.BACKEND_API_BASE_URL + '/' + (this.browserFetchUrl ? this.browserFetchUrl : `${this.urlPrefix}/browse`)
+      return `${this.urlPrefix}/browse`
     },
     detailPageUrl: function () {
       return '/' + (this.detailPageUrlPrefix ? `${this.detailPageUrlPrefix}/${this.id}` : `${this.urlPrefix}/${this.id}`)
@@ -275,7 +284,9 @@ export default {
 
       try {
 
-        const response = await this.$axios.$get(this.fetchURL, config)
+        const fetchURLString = this.fetchURL
+
+        const response = await useCustomFetch(fetchURLString.toString(), config)
 
         this.fetchErrorStatusCode = null
         this.fetchErrorMessage = null
@@ -294,8 +305,10 @@ export default {
         this.loadingIsActive = false
 
       } catch (err) {
-        this.fetchErrorMessage = err.response.statusText
-        this.fetchErrorStatusCode = err.response.status
+
+        console.log(err)
+        //this.fetchErrorMessage = err.response.statusText
+        //this.fetchErrorStatusCode = err.response.status
       }
     },
     setFilters(filters) {

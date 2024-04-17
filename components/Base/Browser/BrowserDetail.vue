@@ -34,7 +34,7 @@
               </div>
             </div>
           </div>
-          <div class="browser-detail__header-second-row" v-if="this.$slots.header">
+          <div class="browser-detail__header-second-row" v-if="isSlotHeaderExists">
             <slot name="header"/>
           </div>
         </div>
@@ -47,8 +47,16 @@
 <script>
 import Button from "@/components/Base/Button"
 import Spinner from "@/components/Base/Spinner";
+import {useSlots} from "vue";
 
 export default {
+  setup() {
+    const slots = useSlots()
+
+    const isSlotHeaderExists = () => {
+      return !!slots.header
+    }
+  },
   name: 'BrowserDetail',
   components: {
     Button,
