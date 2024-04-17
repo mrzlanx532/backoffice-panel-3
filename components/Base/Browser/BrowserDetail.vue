@@ -48,6 +48,7 @@
 import Button from "@/components/Base/Button"
 import Spinner from "@/components/Base/Spinner";
 import {useSlots} from "vue";
+import {useCustomFetch} from "@/composables/useCustomFetch";
 
 export default {
   setup() {
@@ -92,7 +93,7 @@ export default {
   },
   computed: {
     fetchURL: function () {
-      return process.env.BACKEND_API_BASE_URL + '/' + (this.browserFetchUrl ? this.browserFetchUrl : `${this.urlPrefix}/detail`)
+      return `${this.urlPrefix}/detail`
     },
   },
   data() {
@@ -138,11 +139,16 @@ export default {
     async fetchData() {
       this.isLoading = true
       try {
-        this.item = await this.$axios.$get(this.fetchURL, {
+
+        const fetchUrlAsString = this.fetchURL
+
+        const response = await useCustomFetch(fetchUrlAsString.toString(), {
           params: {
             id: this.dataId
           }
         })
+
+        this.item = response.data.value
       } catch (e) {
         alert(e)
       }
