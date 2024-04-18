@@ -144,8 +144,15 @@ export default {
       return !!slots.rightSide
     }
 
+    const filterMapper = shallowRef({
+      SELECT: BrowserSelectFilter,
+      SELECT_SEARCH: BrowserSelectSearchFilter,
+      INPUT: BrowserInputFilter
+    })
+
     return {
-      isSlotRightSideExists
+      isSlotRightSideExists,
+      filterMapper
     }
   },
   name: 'Browser',
@@ -225,11 +232,6 @@ export default {
       fetchErrorStatusCode: null,
       fetchErrorMessage: null,
       openItem: {},
-      filterMapper: {
-        SELECT: BrowserSelectFilter,
-        SELECT_SEARCH: BrowserSelectSearchFilter,
-        INPUT: BrowserInputFilter
-      },
       paginationItemsCountOptions: [
         20, 50, 100
       ],

@@ -50,7 +50,7 @@
                 @mouseup="onMouseDownOnDropdownOption(filter.id, option, index)"
             >{{ option.title }}</div>
           </template>
-          <div class="select__dropdown-option select__dropdown-option_empty">Нет записей</div>
+          <div v-else class="select__dropdown-option select__dropdown-option_empty">Нет записей</div>
         </div>
       </div>
     </div>
@@ -82,6 +82,7 @@ export default {
     document.removeEventListener('visibilitychange', this.onDocumentVisibilityChange)
   },
   created() {
+    this.filteredOptions = this.filter.options
     this.filteredOptions = this.filter.options
 
     document.addEventListener('visibilitychange', this.onDocumentVisibilityChange)
@@ -115,7 +116,7 @@ export default {
     },
     onClickCancel(filterName, index) {
       if (this.filter.config.multiple) {
-        this.$delete(this.selectedItems, index)
+        delete this.selectedItems[index]
 
         this.$emit('filterValueChanged', {'id': filterName, 'value': Object.values(this.selectedItems).map(item => item.id)})
       }

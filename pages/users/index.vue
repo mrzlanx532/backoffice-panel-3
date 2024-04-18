@@ -38,6 +38,42 @@ import StateButton from "@/components/Base/StateButton"
 import PageWithBrowserMixin from "@/mixins/pages/browser.js"
 
 export default {
+  setup() {
+    const columns = shallowRef([
+      {
+        name: 'id',
+        title: 'ID'
+      },
+      {
+        name: 'name',
+        title: 'Имя'
+      },
+      {
+        name: 'company',
+        title: 'Подписка (Срок действия)',
+        component: SubscriptionRow
+      },
+      {
+        name: 'downloads_counter',
+        title: 'Скач.'
+      },
+      {
+        name: 'views_counter',
+        title: 'Просмотр'
+      },
+      {
+        name: 'created_at',
+        title: 'Дата создания',
+        preset: {
+          name: 'timestampToFormatPreset',
+        }
+      },
+    ])
+
+    return {
+      columns
+    }
+  },
   name: 'UsersPage',
   mixins: [PageWithBrowserMixin],
   components: {
@@ -89,36 +125,6 @@ export default {
         {
           title: 'Отчеты',
           componentName: 'subscription'
-        },
-      ],
-      columns: [
-        {
-          name: 'id',
-          title: 'ID'
-        },
-        {
-          name: 'name',
-          title: 'Имя'
-        },
-        {
-          name: 'company',
-          title: 'Подписка (Срок действия)',
-          component: SubscriptionRow
-        },
-        {
-          name: 'downloads_counter',
-          title: 'Скач.'
-        },
-        {
-          name: 'views_counter',
-          title: 'Просмотр'
-        },
-        {
-          name: 'created_at',
-          title: 'Дата создания',
-          preset: {
-            name: 'timestampToFormatPreset',
-          }
         },
       ],
     }
