@@ -30,7 +30,13 @@
     </div>
     <div :style="style">State-кнопка</div>
     <div>
-
+      <StateButton
+          :data-id="24600"
+          :options="stateOptions"
+          :selectedOption="selectedOption"
+          url="music/tracks/state-update"
+          @change="onChangeStateButton"
+      />
     </div>
 
     <div :style="style">Shadow-rounded</div>

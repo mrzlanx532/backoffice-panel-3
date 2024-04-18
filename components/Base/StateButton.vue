@@ -33,6 +33,8 @@
   </div>
 </template>
 <script>
+import {useCustomFetch} from "@/composables/useCustomFetch";
+
 export default {
   name: "StateButton",
   props: {
@@ -86,12 +88,14 @@ export default {
       this.selectedOptionLocal = this.selectedOption
 
       let data = {
-        id: this.dataId,
+        method: 'POST',
+        body: {
+          id: this.dataId,
+          [this.updateParamName]: this.selectedOptionLocal.id
+        }
       }
 
-      data[this.updateParamName] = this.selectedOptionLocal.id
-
-      this.$axios.$post(process.env.BACKEND_API_BASE_URL + this.url, data)
+      useCustomFetch(this.url, data)
     }
   },
   methods: {
@@ -109,7 +113,7 @@ export default {
       this.isOpen = false
     }
   },
-  created() {
+  mounted() {
     this.setIntervalInstance = setInterval(() => {
       this.loadingMessage = this.loadingMessage === '&nbsp;...' || this.loadingMessage === '...' ? '.' : this.loadingMessage + '.'
     }, 100)
