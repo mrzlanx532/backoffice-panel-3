@@ -2,7 +2,7 @@
   <Detail
       :h1="h1"
       :data-id="entityId"
-      fetchUrl="/users/detail"
+      fetchUrl="users/detail"
       @itemUpdated="onItemUpdated"
   >
     <template v-slot:header>
@@ -24,8 +24,18 @@ import Button from "@/components/Base/Button"
 import Tabs from "@/components/Base/Tabs"
 import MainTab from "@/pages/users/ignore/tabs/main"
 import SubscriptionTab from "@/pages/users/ignore/tabs/subscription"
+import { useRoute } from '#imports'
 
 export default {
+  setup() {
+    const route = useRoute()
+
+    const entityId = route.params.id
+
+    return {
+      entityId
+    }
+  },
   name: 'UserDetail',
   components: {
     Section,

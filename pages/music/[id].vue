@@ -1,11 +1,11 @@
 <template>
   <Detail
       :h1="h1"
-      fetchUrl="/music/tracks/detail"
-      :data-id="this.entityId"
+      fetchUrl="music/tracks/detail"
+      :data-id="entityId"
       @itemUpdated="onItemUpdated"
   >
-    <template v-slot:header>
+    <template #header>
       <div class="btn__group">
         <Button :classes="['--big --outline-primary']">Изменить</Button>
         <Button :classes="['--big --outline-danger']">Удалить</Button>
@@ -19,17 +19,19 @@
         />
       </div>
     </template>
-    <template v-slot:content>
-      <transition name="fade">
-        <Section v-if="Object.keys(item).length > 0">
-          <template v-slot:header>
-            <Tabs :tabs="tabs"/>
-          </template>
-          <template v-slot:content>
-            <component :is="selectedTabMap.content" :item="item"/>
-          </template>
-        </Section>
-      </transition>
+    <template #content>
+      <ClientOnly>
+        <Transition name="fade">
+          <Section v-if="Object.keys(item).length > 0">
+            <template v-slot:header>
+              <Tabs :tabs="tabs"/>
+            </template>
+            <template v-slot:content>
+              <component :is="{...selectedTabMap.content}" :item="item"/>
+            </template>
+          </Section>
+        </Transition>
+      </ClientOnly>
     </template>
   </Detail>
 </template>
@@ -42,8 +44,18 @@ import Spinner from "@/components/Base/Spinner";
 import MainTab from "@/pages/music/ignore/tabs/main"
 import Tabs from "@/components/Base/Tabs";
 import StateButton from "@/components/Base/StateButton";
+import { useRoute } from '#imports'
 
 export default {
+  setup() {
+    const route = useRoute()
+
+    const entityId = route.params.id
+
+    return {
+      entityId
+    }
+  },
   name: 'UserDetail',
   components: {
     Section,
