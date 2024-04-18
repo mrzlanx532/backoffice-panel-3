@@ -49,6 +49,7 @@ import Button from "@/components/Base/Button"
 import Spinner from "@/components/Base/Spinner";
 import {useSlots} from "vue";
 import {useCustomFetch} from "@/composables/useCustomFetch";
+import {useRouter} from "#imports";
 
 export default {
   setup() {
@@ -58,8 +59,11 @@ export default {
       return !!slots.header
     }
 
+    const router = useRouter()
+
     return {
-      isSlotHeaderExists
+      isSlotHeaderExists,
+      router
     }
   },
   name: 'BrowserDetail',
@@ -133,7 +137,8 @@ export default {
     },
     onClickMoreButton() {
       if (this.detailPageUrlPrefix && this.dataId !== null) {
-        this.$router.push(this.detailPageUrlPrefix)
+
+        this.router.push({path: this.detailPageUrlPrefix})
       }
     },
     async fetchData() {

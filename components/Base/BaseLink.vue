@@ -1,7 +1,7 @@
 <template>
   <div class="link">
     <div class="link__container">
-      <a href="javascript: console.log(1);" @click="onClick"><slot/></a>
+      <a @click.self.prevent.stop="onClick"><slot/></a>
       <div class="link__underline"></div>
     </div>
   </div>

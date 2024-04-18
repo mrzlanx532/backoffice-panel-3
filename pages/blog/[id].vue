@@ -1,7 +1,7 @@
 <template>
   <Detail
       :h1="h1"
-      fetchUrl="/blog/posts/detail"
+      fetchUrl="blog/posts/detail"
       :data-id="entityId"
       @itemUpdated="onItemUpdated"
   >
@@ -37,8 +37,6 @@ export default {
     const route = useRoute()
 
     const entityId = route.params.id
-
-    console.log(entityId)
 
     return {
       entityId

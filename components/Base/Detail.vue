@@ -16,8 +16,16 @@
 <script>
 import BaseLink from "@/components/Base/BaseLink"
 import {useCustomFetch} from "@/composables/useCustomFetch";
+import {useRouter} from "#imports"
 
 export default {
+  setup() {
+    const router = useRouter()
+
+    return {
+      router
+    }
+  },
   name: "Detail",
   props: {
     h1: {
@@ -42,7 +50,7 @@ export default {
   },
   methods: {
     onClickBack() {
-      this.$router.back()
+      this.router.back()
     },
     async fetchData() {
       this.isLoading = true
