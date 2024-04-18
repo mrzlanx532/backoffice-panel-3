@@ -98,7 +98,7 @@ export default {
     onMouseDownOnDropdownOption(filterName, option) {
       if (this.filter.config.multiple) {
 
-        this.selectedItems[option.id] ? this.$delete(this.selectedItems, option.id) : this.$set(this.selectedItems, option.id, option)
+        this.selectedItems[option.id] ? delete this.selectedItems[option.id] : this.selectedItems[option.id] = option
 
         this.$emit('filterValueChanged', {'id': filterName, 'value': Object.values(this.selectedItems).map(item => item.id)})
         return

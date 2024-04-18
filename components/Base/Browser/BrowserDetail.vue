@@ -145,9 +145,7 @@ export default {
       this.isLoading = true
       try {
 
-        const fetchUrlAsString = this.fetchURL
-
-        const response = await useCustomFetch(fetchUrlAsString.toString(), {
+        const response = await useCustomFetch(unref(this.fetchURL), {
           params: {
             id: this.dataId
           }

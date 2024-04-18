@@ -290,9 +290,7 @@ export default {
 
       try {
 
-        const fetchURLString = this.fetchURL
-
-        const response = await useCustomFetch(fetchURLString.toString(), config)
+        const response = await useCustomFetch(unref(this.fetchURL), config)
 
         const data = response.data.value
 

@@ -24,7 +24,7 @@
     </template>
 
     <template #browserDetailContent>
-      <component :is="selectedTabMap" :item="item"/>
+<!--      <component :is="selectedTabMap" :item="item"/>-->
     </template>
   </Browser>
 </template>
@@ -48,12 +48,12 @@ export default {
     StateButton
   },
   computed: {
-    selectedTabMap() {
+    /*selectedTabMap() {
 
       const componentName = this.tabs[this.selectedTab].componentName
 
       return () => import(`@/pages/users/ignore/tabs/${componentName}`)
-    }
+    }*/
   },
   data() {
     return {
