@@ -292,9 +292,7 @@ export default {
 
       try {
 
-        const response = await useCustomFetch(unref(this.fetchURL), config)
-
-        const data = response.data.value
+        const data = await this.$customFetch(unref(this.fetchURL), config)
 
         this.fetchErrorStatusCode = null
         this.fetchErrorMessage = null
@@ -313,9 +311,8 @@ export default {
         this.loadingIsActive = false
 
       } catch (err) {
-
-        this.fetchErrorMessage = err.response.statusText
-        this.fetchErrorStatusCode = err.response.status
+        this.fetchErrorMessage = err.message
+        this.fetchErrorStatusCode = 500
       }
     },
     setFilters(filters) {

@@ -145,15 +145,14 @@ export default {
       this.isLoading = true
       try {
 
-        const response = await useCustomFetch(unref(this.fetchURL), {
+        this.item = await this.$customFetch(unref(this.fetchURL), {
           params: {
             id: this.dataId
           }
         })
 
-        this.item = response.data.value
-      } catch (e) {
-        alert(e)
+      } catch (err) {
+        throw err
       }
       this.isLoading = false
 
