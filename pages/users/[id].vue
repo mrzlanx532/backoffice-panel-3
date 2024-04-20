@@ -13,7 +13,9 @@
     </template>
     <template v-slot:content>
       <Tabs @change="onChangeTab" :tabs="tabs"/>
-      <component :is="selectedTabMap.content" :item="item"/>
+      <ClientOnly>
+        <component :is="selectedTabMap.content" :item="item"/>
+      </ClientOnly>
     </template>
   </Detail>
 </template>
@@ -32,8 +34,32 @@ export default {
 
     const entityId = route.params.id
 
+    const tabs = shallowRef([
+        {
+          title: 'Инфо',
+          content: MainTab
+        },
+        {
+          title: 'Подписка',
+          content: SubscriptionTab
+        },
+        {
+          title: 'Скачанное (музыка)',
+          content: SubscriptionTab
+        },
+        {
+          title: 'Скачанное (шумы)',
+          content: SubscriptionTab
+        },
+        {
+          title: 'Отчеты',
+          content: SubscriptionTab
+        },
+    ])
+
     return {
-      entityId
+      entityId,
+      tabs
     }
   },
   name: 'UserDetail',
@@ -57,28 +83,6 @@ export default {
     return {
       item: {},
       selectedTab: 0,
-      tabs: [
-        {
-          title: 'Инфо',
-          content: MainTab
-        },
-        {
-          title: 'Подписка',
-          content: SubscriptionTab
-        },
-        {
-          title: 'Скачанное (музыка)',
-          content: SubscriptionTab
-        },
-        {
-          title: 'Скачанное (шумы)',
-          content: SubscriptionTab
-        },
-        {
-          title: 'Отчеты',
-          content: SubscriptionTab
-        },
-      ],
     }
   },
   asyncData({params}) {
