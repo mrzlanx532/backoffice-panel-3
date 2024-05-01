@@ -1,8 +1,7 @@
 <script setup>
-import { definePageMeta, useCookie } from "#imports"
+import { definePageMeta, useNuxtApp } from "#imports"
 import { ref } from 'vue'
 import { default as LoginInput } from '@/components/Pages/Login/Input'
-import { useAuthStore } from "@/stores/useAuthStore";
 
 definePageMeta({
   middleware: ['guest'],
@@ -14,10 +13,10 @@ const formData = ref({
   password: '4aWvh75t'
 })
 
-const auth = useAuthStore()
+const { $auth } = useNuxtApp()
 
 async function onClick() {
-  await auth.login(formData.value).catch((err) => {
+  await $auth().login(formData.value).catch((err) => {
     console.log(err)
   })
 }

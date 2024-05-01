@@ -6,12 +6,28 @@ export default defineNuxtConfig({
     //'plugins/modal.js',
     'plugins/scrollable.ts',
     'plugins/click-outside.ts',
-    'plugins/custom-fetch.ts'
   ],
+
+  laravelAuth: {
+    domain: 'http://backoffice-api.lsmlocal.ru',
+    redirects: {
+      guest: '/login',
+      auth: '/'
+    },
+    endpoints: {
+      login: 'managers/self/auth',
+      logout: 'managers/self/logout',
+      fetchUser: 'managers/self/detail',
+      register: 'managers/self/register', // Опционально
+    },
+  },
 
   css: [
     'assets/scss/main.scss',
   ],
 
-  modules: ['@pinia/nuxt']
+  modules: [
+      '@pinia/nuxt',
+      '@mrzlanx532/laravel-auth'
+  ]
 })

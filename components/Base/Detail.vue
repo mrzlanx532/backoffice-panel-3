@@ -15,7 +15,6 @@
 
 <script>
 import BaseLink from "@/components/Base/BaseLink"
-import {useCustomFetch} from "@/composables/useCustomFetch";
 import {useRouter} from "#imports"
 
 export default {

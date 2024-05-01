@@ -48,7 +48,6 @@
 import Button from "@/components/Base/Button"
 import Spinner from "@/components/Base/Spinner";
 import {useSlots} from "vue";
-import {useCustomFetch} from "@/composables/useCustomFetch";
 import {useRouter} from "#imports";
 
 export default {
@@ -61,9 +60,12 @@ export default {
 
     const router = useRouter()
 
+    const runtimeConfig = useRuntimeConfig()
+
     return {
       isSlotHeaderExists,
-      router
+      router,
+      runtimeConfig
     }
   },
   name: 'BrowserDetail',
@@ -97,7 +99,7 @@ export default {
   },
   computed: {
     fetchURL: function () {
-      return `${this.urlPrefix}/detail`
+      return `${this.runtimeConfig.public.laravelAuth.domain}/${this.urlPrefix}/detail`
     },
   },
   data() {
@@ -145,7 +147,7 @@ export default {
       this.isLoading = true
       try {
 
-        this.item = await this.$customFetch(unref(this.fetchURL), {
+        this.item = await this.$authFetch(unref(this.fetchURL), {
           params: {
             id: this.dataId
           }

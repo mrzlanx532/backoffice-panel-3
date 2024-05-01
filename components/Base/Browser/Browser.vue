@@ -133,7 +133,6 @@ import BrowserPaginationCountSelect from "@/components/Base/Browser/BrowserPagin
 import BrowserTHeadTh from "@/components/Base/Browser/BrowserTHeadTh";
 import browserPresetsMethodsMixin from "@/helpers/browser-presets-methods-mixin";
 import BrowserDetail from "@/components/Base/Browser/BrowserDetail";
-import { useCustomFetch } from "#imports"
 import { useSlots } from "vue";
 
 export default {
@@ -150,9 +149,12 @@ export default {
       INPUT: BrowserInputFilter
     })
 
+    const runtimeConfig = useRuntimeConfig()
+
     return {
       isSlotRightSideExists,
-      filterMapper
+      filterMapper,
+      runtimeConfig
     }
   },
   name: 'Browser',
@@ -205,7 +207,7 @@ export default {
   },
   computed: {
     fetchURL: function () {
-      return `${this.urlPrefix}/browse`
+      return `${this.runtimeConfig.public.laravelAuth.domain}/${this.urlPrefix}/browse`
     },
     detailPageUrl: function () {
       return '/' + (this.detailPageUrlPrefix ? `${this.detailPageUrlPrefix}/${this.id}` : `${this.urlPrefix}/${this.id}`)
@@ -292,7 +294,7 @@ export default {
 
       try {
 
-        const data = await this.$customFetch(unref(this.fetchURL), config)
+        const data = await this.$authFetch(unref(this.fetchURL), config)
 
         this.fetchErrorStatusCode = null
         this.fetchErrorMessage = null

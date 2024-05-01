@@ -33,9 +33,14 @@
   </div>
 </template>
 <script>
-import {useCustomFetch} from "@/composables/useCustomFetch";
-
 export default {
+  setup() {
+    const runtimeConfig = useRuntimeConfig()
+
+    return {
+      runtimeConfig
+    }
+  },
   name: "StateButton",
   props: {
     options: {
@@ -95,7 +100,7 @@ export default {
         }
       }
 
-      useCustomFetch(this.url, data)
+      this.$authFetch(`${this.runtimeConfig.public.laravelAuth.domain}/${this.url}`, data)
     }
   },
   methods: {

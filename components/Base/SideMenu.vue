@@ -47,6 +47,7 @@
   </aside>
 </template>
 <script>
+import { useNuxtApp } from "#imports"
 
 export default {
   name: 'Menu',
@@ -128,7 +129,9 @@ export default {
   },
   methods: {
     async logout() {
-      await useAuthStore().logout()
+      const { $auth } = useNuxtApp()
+
+      await $auth().logout()
     },
     onClickOutside() {
       if (this.activeMenuItem) {

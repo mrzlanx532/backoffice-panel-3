@@ -77,8 +77,14 @@ import SubscriptionRow from "@/components/CustomRows/users/SubscriptionRow";
 import { getMethods } from "@/mixins/browser";
 import Button from "@/components/Base/Button"
 import Section from "@/components/Base/Section";
+import {definePageMeta} from "#imports";
 
 export default {
+  setup() {
+    definePageMeta({
+      middleware: ['auth'],
+    })
+  },
   name: 'BlogPage',
   mixins: [PageWithBrowserMixin],
   components: {
