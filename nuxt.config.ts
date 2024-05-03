@@ -1,9 +1,7 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
   plugins: [
-    //'plugins/modal.js',
     'plugins/scrollable.ts',
     'plugins/click-outside.ts',
   ],
@@ -28,6 +26,7 @@ export default defineNuxtConfig({
 
   modules: [
       '@pinia/nuxt',
-      '@mrzlanx532/laravel-auth'
+      '@mrzlanx532/nuxt-3-laravel-auth-module',
+      '@mrzlanx532/nuxt-3-modal-module'
   ]
 })
