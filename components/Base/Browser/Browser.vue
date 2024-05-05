@@ -213,7 +213,7 @@ export default {
       return '/' + (this.detailPageUrlPrefix ? `${this.detailPageUrlPrefix}/${this.id}` : `${this.urlPrefix}/${this.id}`)
     }
   },
-  data: function () {
+  data () {
     return {
       id: null,
       item: {},
