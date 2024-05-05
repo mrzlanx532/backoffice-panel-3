@@ -28,6 +28,26 @@ import CompanyTab from "@/modals/users/tabs/company"
 import SubscriptionTab from "@/modals/users/tabs/subscription"
 
 export default {
+  setup() {
+    const tabs = shallowRef([
+      {
+        title: 'Инфо',
+        component: InfoTab
+      },
+      {
+        title: 'Компания',
+        component: CompanyTab
+      },
+      {
+        title: 'Подписка',
+        component: SubscriptionTab
+      }
+    ])
+
+    return {
+      tabs
+    }
+  },
   name: 'UsersEdit',
   components: {
     Form,
@@ -45,20 +65,6 @@ export default {
   data() {
     return {
       selectedTab: 0,
-      tabs: [
-        {
-          title: 'Инфо',
-          component: InfoTab
-        },
-        {
-          title: 'Компания',
-          component: CompanyTab
-        },
-        {
-          title: 'Подписка',
-          component: SubscriptionTab
-        }
-      ],
       formData: {
         about: '',
         company_address: '',

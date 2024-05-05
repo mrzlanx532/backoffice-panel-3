@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@mrzlanx532/nuxt-3-laravel-auth-module": "^0.0.1",
-    "@mrzlanx532/nuxt-3-modal-module": "^0.0.2",
+    "@mrzlanx532/nuxt-3-modal-module": "^0.0.4",
     "@pinia/nuxt": "^0.5.1",
     "lodash.debounce": "^4.0.8",
     "lodash.isempty": "^4.4.0",
