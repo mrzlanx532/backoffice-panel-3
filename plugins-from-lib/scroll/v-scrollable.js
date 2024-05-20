@@ -188,6 +188,18 @@ export default class Scrollable {
 
     wrapTarget(el, options) {
 
+        const mo = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (!el.classList.contains('scrollable__content')) {
+                    el.classList.add('scrollable__content')
+                }
+            })
+        })
+        mo.observe(el, {
+            attributes: true,
+            attributeFilter: ['class']
+        })
+
         const parentNode = el.parentNode
 
         this.el = el

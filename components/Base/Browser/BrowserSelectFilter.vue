@@ -5,8 +5,9 @@
       <div
           class="select__selected-container"
           :class="{
-            'select__selected-container_open': isSelecting,
-            'select__selected-container_multiple': filter.config.multiple
+            '--open': isSelecting,
+            '--multiple': filter.config.multiple,
+            '--inverse': inverseRender
           }"
           @click="onClickSelectedValue"
       >
@@ -40,8 +41,17 @@
             :class="{'select__dropdown-icon-container_open': isSelecting}"
         ></div>
       </div>
-      <div v-if="isSelecting" class="select__dropdown-container">
-        <div class="select__dropdown" v-scrollable="{classes: ['--without-track', '--smart-opacity']}">
+      <div
+          v-if="isSelecting"
+          class="select__dropdown-container"
+          :class="{'--inverse': inverseRender}"
+      >
+        <div
+            ref="test"
+            class="select__dropdown"
+            :class="{'--inverse': inverseRender}"
+            v-scrollable="{classes: ['--without-track', '--smart-opacity']}"
+        >
           <template v-if="filter.options.length > 0">
             <div
                 v-for="(option, index) in filter.options"
@@ -75,16 +85,28 @@ export default {
       selectedItems: {},
       selectedId: null,
       selectedTitle: null,
-      isSelecting: false
+      isSelecting: false,
+      inverseRender: false,
+    }
+  },
+  watch: {
+    isSelecting(val) {
+      this.$nextTick(() => {
+        if (this.$refs.test === null) {
+          this.inverseRender = false
+          return
+        }
+
+        const rect = this.$refs.test.getBoundingClientRect()
+
+        this.inverseRender = window.innerHeight < (rect.height + rect.top)
+      })
     }
   },
   destroyed() {
     document.removeEventListener('visibilitychange', this.onDocumentVisibilityChange)
   },
   created() {
-    this.filteredOptions = this.filter.options
-    this.filteredOptions = this.filter.options
-
     document.addEventListener('visibilitychange', this.onDocumentVisibilityChange)
   },
   methods: {

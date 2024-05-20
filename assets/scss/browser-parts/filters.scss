@@ -60,12 +60,16 @@
     background: var(--color-1, #ffffff);
     border: 1px solid var(--color-2, #dbdbdb);
 
-    &_open {
-      border-bottom-left-radius: 0 !important;
-      border-bottom-right-radius: 0 !important;
+    &.--open {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
     }
 
-    &_multiple {
+    &.--open.--inverse {
+      border-radius: 0 0 5px 5px;
+    }
+
+    &.--multiple {
       height: auto;
       min-height: 30px;
     }
@@ -146,6 +150,10 @@
   &__dropdown-container {
     position: relative;
     width: inherit;
+
+    &.--inverse {
+      top: -180px;
+    }
   }
 
   &__dropdown {
@@ -158,6 +166,12 @@
     border-top: none;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
+
+    &.--inverse {
+      border-top: 1px solid var(--color-2, #dbdbdb);
+      border-bottom: none;
+      border-radius: 5px 5px 0 0;
+    }
   }
 
   &__dropdown_select-search {
