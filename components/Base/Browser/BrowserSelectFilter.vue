@@ -3,6 +3,7 @@
     <div :for="filter.id" class="browser__filter-name">{{ filter.title }}</div>
     <div class="browser__filter-container select__container" tabindex="0" v-click-outside="onClickOutside">
       <div
+          ref="selected__container"
           class="select__selected-container"
           :class="{
             '--open': isSelecting,
@@ -44,7 +45,7 @@
       <div
           v-if="isSelecting"
           class="select__dropdown-container"
-          :class="{'--inverse': inverseRender}"
+          :style="{top: topPxStyle}"
       >
         <div
             ref="select__dropdown"
@@ -87,6 +88,7 @@ export default {
       selectedTitle: null,
       isSelecting: false,
       inverseRender: false,
+      topPxStyle: 0
     }
   },
   watch: {
@@ -94,12 +96,24 @@ export default {
       this.$nextTick(() => {
         if (this.$refs.select__dropdown === null) {
           this.inverseRender = false
+          this.topPxStyle = 0;
           return
         }
 
         const rect = this.$refs.select__dropdown.getBoundingClientRect()
 
         this.inverseRender = window.innerHeight < (rect.height + rect.top)
+
+        const ro = new ResizeObserver(() => {
+          if (window.innerHeight >= (rect.height + rect.top)) {
+            this.topPxStyle = 0
+            return
+          }
+
+          this.topPxStyle = ((rect.height + this.$refs.selected__container.offsetHeight) * -1) + 'px'
+        })
+
+        ro.observe(this.$refs.selected__container, {})
       })
     }
   },
