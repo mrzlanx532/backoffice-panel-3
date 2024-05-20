@@ -5,8 +5,8 @@
       <div
           class="select__selected-container"
           :class="{
-            'select__selected-container_open': isSelecting,
-            'select__selected-container_multiple': filter.config.multiple
+            '--open': isSelecting,
+            '--multiple': filter.config.multiple
           }"
           @click="onClickSelectedValue"
       >

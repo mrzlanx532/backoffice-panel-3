@@ -47,7 +47,7 @@
           :class="{'--inverse': inverseRender}"
       >
         <div
-            ref="test"
+            ref="select__dropdown"
             class="select__dropdown"
             :class="{'--inverse': inverseRender}"
             v-scrollable="{classes: ['--without-track', '--smart-opacity']}"
@@ -92,12 +92,12 @@ export default {
   watch: {
     isSelecting(val) {
       this.$nextTick(() => {
-        if (this.$refs.test === null) {
+        if (this.$refs.select__dropdown === null) {
           this.inverseRender = false
           return
         }
 
-        const rect = this.$refs.test.getBoundingClientRect()
+        const rect = this.$refs.select__dropdown.getBoundingClientRect()
 
         this.inverseRender = window.innerHeight < (rect.height + rect.top)
       })
