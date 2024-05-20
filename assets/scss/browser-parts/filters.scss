@@ -232,6 +232,10 @@
     font-family: Roboto;
     border-top: none;
 
+    &.--inverse {
+      border-top: 1px solid var(--color-2, #dbdbdb);;
+    }
+
     &_open {
       visibility: inherit;
     }
@@ -276,6 +280,10 @@
   &_range {
     padding: 8px 4px !important;
   }
+}
+
+.select__dropdown.select__dropdown_select-search.--inverse {
+  border-radius: 0;
 }
 
 .input__remove-button {

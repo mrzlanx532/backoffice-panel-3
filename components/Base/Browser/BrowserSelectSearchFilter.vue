@@ -3,10 +3,12 @@
     <div :for="filter.id" class="browser__filter-name">{{ filter.title }}</div>
     <div class="browser__filter-container select__container" v-click-outside="onClickOutside">
       <div
+          ref="selected__container"
           class="select__selected-container"
           :class="{
             '--open': isSelecting,
-            '--multiple': filter.config.multiple
+            '--multiple': filter.config.multiple,
+            '--inverse': inverseRender
           }"
           @click="onClickSelectedValue"
       >
@@ -40,7 +42,10 @@
             :class="{'select__dropdown-icon-container_open': isSelecting}"
         ></div>
       </div>
-      <div class="select__search-input-container">
+      <div
+          class="select__search-input-container"
+          :style="{top: topPxStyleInput}"
+      >
         <input
             autocomplete="off"
             name="search"
@@ -48,11 +53,21 @@
             ref="input"
             type="text"
             class="select__search-input select__search-input_open"
+            :class="{'--inverse': inverseRender}"
             v-model="searchString"
         >
       </div>
-      <div v-if="isSelecting" class="select__dropdown-container">
-        <div class="select__dropdown select__dropdown_select-search" v-scrollable="{classes: ['--without-track', '--smart-opacity']}">
+      <div
+          v-if="isSelecting"
+          class="select__dropdown-container"
+          :style="{top: topPxStyle}"
+      >
+        <div
+            ref="select__dropdown"
+            class="select__dropdown select__dropdown_select-search"
+            :class="{'--inverse': inverseRender}"
+            v-scrollable="{classes: ['--without-track', '--smart-opacity']}"
+        >
           <template v-if="filteredOptions.length > 0">
             <div
                 v-for="(option, index) in filteredOptions"
@@ -89,7 +104,10 @@ export default {
       isSelecting: false,
       searchString: '',
       options: [],
-      filteredOptions: []
+      filteredOptions: [],
+      inverseRender: false,
+      topPxStyle: 0,
+      topPxStyleInput: 0
     }
   },
   destroyed() {
@@ -107,9 +125,48 @@ export default {
       this.filteredOptions = this.filteredOptions.filter((option) => {
         return option.title.toLowerCase().includes(newValue.toLowerCase())
       })
+    },
+    isSelecting(val) {
+      this.$nextTick(() => {
+        if (this.$refs.select__dropdown === null) {
+          this.inverseRender = false
+          this.topPxStyle = 0;
+          return
+        }
+
+        const rect = this.$refs.select__dropdown.getBoundingClientRect()
+
+        this.inverseRender = window.innerHeight < (rect.height + rect.top)
+
+        const ro = new ResizeObserver(() => {
+          this.updateDimensions(rect)
+        })
+        ro.observe(this.$refs.selected__container, {})
+
+        const ro2 = new ResizeObserver(() => {
+          this.updateDimensions(rect)
+        })
+        ro2.observe(this.$refs.select__dropdown)
+      })
     }
   },
   methods: {
+    updateDimensions(rect) {
+      if (!this.isSelecting) {
+        return
+      }
+
+      if (window.innerHeight >= (rect.height + rect.top)) {
+        this.topPxStyle = 0
+        this.topPxStyleInput = 0
+        this.inverseRender = false
+        return
+      }
+
+      this.inverseRender = true
+      this.topPxStyle = ((this.$refs.select__dropdown.offsetHeight + this.$refs.selected__container.offsetHeight + 30) * -1) + 'px'
+      this.topPxStyleInput = ((this.$refs.select__dropdown.offsetHeight + this.$refs.selected__container.offsetHeight + 30) * -1) + 'px'
+    },
     onDocumentVisibilityChange() {
       if (document.hidden) {
         this.isSelecting = false
