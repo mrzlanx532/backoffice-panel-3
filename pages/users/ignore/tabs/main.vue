@@ -16,14 +16,6 @@
         <FlexTable :config="detailConfigCompany" :item="item"/>
       </template>
     </Section>
-    <Section>
-      <template v-slot:header>
-        Компания
-      </template>
-      <template v-slot:content>
-        <FlexTable :config="detailConfigCompany" :item="item"/>
-      </template>
-    </Section>
   </div>
 </template>
 <script>

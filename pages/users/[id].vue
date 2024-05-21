@@ -2,24 +2,27 @@
   <Detail
       :h1="h1"
       :data-id="entityId"
-      fetchUrl="users/detail"
+      url-prefix="users"
       @itemUpdated="onItemUpdated"
   >
-    <template v-slot:header>
+    <template #header>
       <div class="btn__group">
         <Button :classes="['--big --outline-primary']">Изменить</Button>
         <Button :classes="['--big --outline-danger']">Удалить</Button>
       </div>
     </template>
-    <template v-slot:content>
-      <Tabs @change="onChangeTab" :tabs="tabs"/>
+    <template #content>
+      <Tabs @change="onChangeSelectedTab" :tabs="tabs"/>
       <ClientOnly>
-        <component :is="selectedTabMap.content" :item="item"/>
+        <Transition name="fade" mode="out-in">
+          <component :is="selectedTabMap" :item="item"/>
+        </Transition>
       </ClientOnly>
     </template>
   </Detail>
 </template>
 <script>
+import { defineAsyncComponent } from 'vue'
 import Section from "@/components/Base/Section"
 import Detail from "@/components/Base/Detail"
 import Button from "@/components/Base/Button"
@@ -34,32 +37,70 @@ export default {
 
     const entityId = route.params.id
 
-    const tabs = shallowRef([
-        {
-          title: 'Инфо',
-          content: MainTab
-        },
-        {
-          title: 'Подписка',
-          content: SubscriptionTab
-        },
-        {
-          title: 'Скачанное (музыка)',
-          content: SubscriptionTab
-        },
-        {
-          title: 'Скачанное (шумы)',
-          content: SubscriptionTab
-        },
-        {
-          title: 'Отчеты',
-          content: SubscriptionTab
-        },
-    ])
+    const tabs = [
+      {
+        title: 'Инфо',
+        componentName: 'main'
+      },
+      {
+        title: 'Подписка',
+        componentName: 'subscription'
+      },
+      {
+        title: 'Скачанное (музыка)',
+        componentName: 'subscription'
+      },
+      {
+        title: 'Скачанное (шумы)',
+        componentName: 'subscription'
+      },
+      {
+        title: 'Отчеты',
+        componentName: 'subscription'
+      },
+    ]
+
+    const selectedTab = shallowRef(0)
+    const item = shallowRef({})
+
+    const getAsyncComponent = () => {
+
+      return defineAsyncComponent(() => {
+
+        const componentName = tabs[selectedTab.value].componentName
+        return import(`@/pages/users/ignore/tabs/${componentName}.vue`)
+      })
+    }
+
+    let selectedTabMap = shallowRef(getAsyncComponent())
+
+    watch(
+        selectedTab,
+        () => {
+          selectedTabMap.value = getAsyncComponent()
+        }
+    )
+
+    const onChangeSelectedTab = (tabIndex) => {
+      selectedTab.value = tabIndex;
+    }
+
+    const onItemUpdated = (item) => {
+
+      console.log(item)
+
+      item.value = item
+    }
 
     return {
+      selectedTab,
+      selectedTabMap,
       entityId,
-      tabs
+      tabs,
+      item,
+
+      onChangeSelectedTab,
+      onItemUpdated
     }
   },
   name: 'UserDetail',
@@ -75,14 +116,10 @@ export default {
     h1: function () {
       return 'Пользователь ' + this.entityId
     },
-    selectedTabMap: function () {
-      return this.tabs[this.selectedTab]
-    }
   },
   data() {
     return {
       item: {},
-      selectedTab: 0,
     }
   },
   asyncData({params}) {
@@ -91,9 +128,6 @@ export default {
     }
   },
   methods: {
-    onChangeTab(index) {
-      this.selectedTab = index
-    },
     onItemUpdated(item) {
       this.item = item
     }

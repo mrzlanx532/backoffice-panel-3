@@ -15,14 +15,71 @@
 
 <script>
 import BaseLink from "@/components/Base/BaseLink"
-import {useRouter} from "#imports"
+import { useRouter, useNuxtApp } from "#imports"
+import { defineEmits, defineProps, onMounted } from 'vue'
 
 export default {
   setup() {
+
+    const app = useNuxtApp()
+
+    const props = defineProps({
+      h1: {
+        type: String,
+        required: false
+      },
+      dataId: {
+        required: false
+      },
+      urlPrefix: {
+        type: String,
+        required: true
+      },
+    })
+
     const router = useRouter()
 
+    const runtimeConfig = useRuntimeConfig()
+
+    const item = ref({})
+    const isLoading = ref(false)
+
+    const emit = defineEmits(['itemUpdated'])
+
+    const fetchURL = computed(() => {
+      return `${runtimeConfig.public.laravelAuth.domain}/${props.urlPrefix}/detail`
+    })
+
+    const fetchData = async () => {
+
+      isLoading.value = true
+
+      try {
+        const data = await app.$authFetch(fetchURL, {
+          params: {
+            id: props.dataId
+          }
+        })
+
+        isLoading.value = false
+
+        emit('itemUpdated', data)
+
+      } catch (e) {
+        alert(e)
+      }
+    }
+
+    onMounted(() => {
+      fetchData()
+    })
+
     return {
-      router
+      router,
+      runtimeConfig,
+      item,
+
+      fetchData
     }
   },
   name: "Detail",
@@ -34,48 +91,17 @@ export default {
     dataId: {
       required: false
     },
-    fetchUrl: {
+    urlPrefix: {
       type: String,
-      required: false
+      required: true
     },
   },
   components: {
     BaseLink
   },
-  data() {
-    return {
-      item: {}
-    }
-  },
   methods: {
     onClickBack() {
       this.router.back()
-    },
-    async fetchData() {
-      this.isLoading = true
-
-      try {
-
-        const fetchUrl = this.fetchUrl
-
-        const response = await useCustomFetch(fetchUrl.toString(), {
-          params: {
-            id: this.dataId
-          }
-        })
-
-        this.item = response.data.value
-      } catch (e) {
-        alert(e)
-      }
-      this.isLoading = false
-
-      this.$emit('itemUpdated', this.item)
-    }
-  },
-  created() {
-    if (this.fetchUrl) {
-      this.fetchData()
     }
   }
 }
