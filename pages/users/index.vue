@@ -20,16 +20,19 @@
         <Button @click="onClickEdit" :classes="['--big --outline-primary']">Изменить</Button>
         <Button @click="onClickDelete" :classes="['--big --outline-danger']">Удалить</Button>
       </div>
-      <Tabs @change="onChangeTab" :tabs="tabs"/>
+      <Tabs @change="onChangeSelectedTab" :tabs="tabs"/>
     </template>
 
     <template #browserDetailContent>
-<!--      <component :is="selectedTabMap" :item="item"/>-->
+      <Transition name="fade" mode="out-in">
+        <component :is="selectedTabMap" :item="item"/>
+      </Transition>
     </template>
   </Browser>
 </template>
 <script>
 
+import { defineAsyncComponent } from 'vue'
 import Section from "@/components/Base/Section"
 import SubscriptionRow from "@/components/CustomRows/users/SubscriptionRow"
 import Button from "@/components/Base/Button";
@@ -70,8 +73,60 @@ export default {
       },
     ])
 
+    const tabs = [
+      {
+        title: 'Инфо',
+        componentName: 'main'
+      },
+      {
+        title: 'Подписка',
+        componentName: 'subscription'
+      },
+      {
+        title: 'Скачанное (музыка)',
+        componentName: 'subscription'
+      },
+      {
+        title: 'Скачанное (шумы)',
+        componentName: 'subscription'
+      },
+      {
+        title: 'Отчеты',
+        componentName: 'subscription'
+      },
+    ]
+
+    const selectedTab = shallowRef(0)
+
+    const getAsyncComponent = () => {
+
+      return defineAsyncComponent(() => {
+
+        const componentName = tabs[selectedTab.value].componentName
+        return import(`@/pages/users/ignore/tabs/${componentName}.vue`)
+      })
+    }
+
+    let selectedTabMap = shallowRef(getAsyncComponent())
+
+    watch(
+        selectedTab,
+        () => {
+          selectedTabMap.value = getAsyncComponent()
+        }
+    )
+
+    const onChangeSelectedTab = (tabIndex) => {
+      selectedTab.value = tabIndex;
+    }
+
     return {
-      columns
+      selectedTab,
+      selectedTabMap,
+      columns,
+      tabs,
+
+      onChangeSelectedTab
     }
   },
   name: 'UsersPage',
@@ -83,17 +138,8 @@ export default {
     Tabs,
     StateButton
   },
-  computed: {
-    /*selectedTabMap() {
-
-      const componentName = this.tabs[this.selectedTab].componentName
-
-      return () => import(`@/pages/users/ignore/tabs/${componentName}`)
-    }*/
-  },
   data() {
     return {
-      selectedTab: 0,
       requestProperties: [
         'id',
         'name',
@@ -104,29 +150,7 @@ export default {
         'downloads_counter',
         'views_counter',
         'created_at'
-      ],
-      tabs: [
-        {
-          title: 'Инфо',
-          componentName: 'main'
-        },
-        {
-          title: 'Подписка',
-          componentName: 'subscription'
-        },
-        {
-          title: 'Скачанное (музыка)',
-          componentName: 'subscription'
-        },
-        {
-          title: 'Скачанное (шумы)',
-          componentName: 'subscription'
-        },
-        {
-          title: 'Отчеты',
-          componentName: 'subscription'
-        },
-      ],
+      ]
     }
   },
   methods: {
@@ -146,9 +170,18 @@ export default {
         }
       })
     },
-    onChangeTab(index) {
-      this.selectedTab = index;
-    },
   }
 }
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .3s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
