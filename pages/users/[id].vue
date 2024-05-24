@@ -117,16 +117,6 @@ export default {
       return 'Пользователь ' + this.entityId
     },
   },
-  data() {
-    return {
-      item: {},
-    }
-  },
-  asyncData({params}) {
-    return {
-      entityId: params.id
-    }
-  },
   methods: {
     onItemUpdated(item) {
       this.item = item
