@@ -1,5 +1,5 @@
 <template>
-  <div class="section__group">
+  <div class="section__group" v-if="Object.keys(item).length > 0">
     <Section>
       <template v-slot:header>
         Инфо
