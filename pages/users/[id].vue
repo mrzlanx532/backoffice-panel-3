@@ -66,8 +66,8 @@ export default {
     const getAsyncComponent = () => {
 
       return defineAsyncComponent(() => {
-
         const componentName = tabs[selectedTab.value].componentName
+
         return import(`@/pages/users/ignore/tabs/${componentName}.vue`)
       })
     }
@@ -86,9 +86,6 @@ export default {
     }
 
     const onItemUpdated = (item) => {
-
-      console.log(item)
-
       item.value = item
     }
 
@@ -124,3 +121,15 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .3s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

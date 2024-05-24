@@ -1,7 +1,7 @@
 <template>
   <Detail
       :h1="h1"
-      fetchUrl="music/tracks/detail"
+      url-prefix="music/tracks"
       :data-id="entityId"
       @itemUpdated="onItemUpdated"
   >

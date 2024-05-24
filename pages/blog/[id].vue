@@ -1,9 +1,9 @@
 <template>
   <Detail
       :h1="h1"
-      fetchUrl="blog/posts/detail"
       :data-id="entityId"
       @itemUpdated="onItemUpdated"
+      url-prefix="blog/posts"
   >
     <template v-slot:header>
       <div class="btn__group">
