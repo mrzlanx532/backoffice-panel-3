@@ -1,7 +1,7 @@
 <script setup>
 import BaseLink from "@/components/Base/BaseLink"
 import { useNuxtApp, useRouter } from '#imports'
-import { defineEmits, defineProps, onMounted } from 'vue'
+import { onMounted } from 'vue'
 
 const app = useNuxtApp()
 const router = useRouter()
