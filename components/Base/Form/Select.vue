@@ -49,10 +49,11 @@ const onClickCancel = (index) => {
 }
 const onMouseDownOnDropdownOption = (option, index) => {
   if (props.componentData.isMultiple) {
+    selectedItems.value[option.id] ? delete selectedItems.value[option.id] : selectedItems.value[option.id] = option
 
-    selectedItems[option.id] ? delete selectedItems[option.id] : selectedItems[option.id] = option
+    console.log(Object.values(selectedItems).map(item => item.id).filter(id => id !== undefined))
 
-    emit('update:modelValue', Object.values(selectedItems).map(item => item.id))
+    emit('update:modelValue', Object.values(selectedItems).map(item => item.id).filter(id => id !== undefined))
     return
   }
 
