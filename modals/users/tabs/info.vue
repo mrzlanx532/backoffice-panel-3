@@ -7,6 +7,9 @@ const props = defineProps({
   errors: {
     type: Object,
     required: false,
+  },
+  value: {
+    required: false
   }
 })
 
@@ -24,6 +27,7 @@ const onChange = (param, value) => emit('change', param, value)
           :name="el.name"
           :label="el.label"
           :componentData="el.componentData"
+          :value="value"
           @change="onChange"
       />
     </template>

@@ -13,6 +13,7 @@
             :errors="errors"
             :is="tabs[selectedTab].component"
             :data="tabs[selectedTab]"
+            :value="formData[tabs[selectedTab].name]"
             keep-alive
         />
       </keep-alive>

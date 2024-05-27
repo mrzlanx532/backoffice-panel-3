@@ -1,4 +1,6 @@
 <script setup>
+import { onMounted, onUnmounted } from 'vue'
+
 const props = defineProps({
   label: {
     required: true,
@@ -10,7 +12,6 @@ const props = defineProps({
   },
   value: {
     required: false,
-    default: ''
   },
   errors: {
     type: Array,
@@ -37,6 +38,11 @@ const emit = defineEmits(['change'])
 const onChange = () => emit('change', props.name, localValue)
 const onClickOutside = () => isSelecting.value = false
 const onClickSelectedValue = () => isSelecting.value = !isSelecting.value
+const onDocumentVisibilityChange = () =>  {
+  if (document.hidden) {
+    isSelecting.value = false
+  }
+}
 const onClickCancel = (index) => {
   if (props.componentData.isMultiple) {
     delete selectedItems[index]
@@ -50,7 +56,7 @@ const onCrossClick = () => {
 
   emit('change', props.name, null)
 }
-const onMouseDownOnDropdownOption = (option) => {
+const onMouseDownOnDropdownOption = (option, index) => {
   if (props.componentData.isMultiple) {
 
     selectedItems[option.id] ? delete selectedItems[option.id] : selectedItems[option.id] = option
@@ -65,6 +71,10 @@ const onMouseDownOnDropdownOption = (option) => {
 
   emit('change', props.name, option.id)
 }
+
+onMounted(() => onDocumentVisibilityChange())
+onUnmounted(() => onDocumentVisibilityChange())
+
 </script>
 
 <template>
@@ -127,7 +137,7 @@ const onMouseDownOnDropdownOption = (option) => {
                 v-for="(option, index) in componentData.options"
                 class="select__dropdown-option"
                 :class="{'select__dropdown-option_selected': selectedItems[option.id]}"
-                @mouseup="onMouseDownOnDropdownOption(index)"
+                @mouseup="onMouseDownOnDropdownOption(option, index)"
             >{{ option.title }}</div>
           </template>
           <div v-else class="select__dropdown-option select__dropdown-option_empty">Нет записей</div>
