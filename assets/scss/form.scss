@@ -213,17 +213,5 @@
         border-bottom-left-radius: 5px;
       }
     }
-
-    &__active-select-remove-button {
-      width: 15px;
-      padding: 8px 0 8px 0;
-      position: relative;
-
-      svg {
-        width: 15px;
-        height: 15px;
-        color: var(--color-2, #dbdbdb);
-      }
-    }
   }
 }

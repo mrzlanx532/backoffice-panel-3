@@ -11,7 +11,7 @@ const props = defineProps({
     type: String,
   },
   modelValue: {
-    type: [Number, Array]
+    type: [Number, String, Array]
   },
   errors: {
     type: Array,

@@ -3,7 +3,7 @@ import { defineNuxtPlugin } from '#app'
 export default defineNuxtPlugin((nuxtApp) => {
     nuxtApp.vueApp.directive('click-outside', {
         beforeMount(el, binding) {
-            el.clickOutsideEvent = function(event) {
+            el.clickOutsideEvent = function(event: Event) {
                 // Check if the clicked element is neither the element
                 // to which the directive is applied nor its child
                 if (!(el === event.target || el.contains(event.target))) {
