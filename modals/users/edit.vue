@@ -123,7 +123,31 @@ export default {
       },
       {
         title: 'Подписка',
-        component: SubscriptionTab
+        component: SubscriptionTab,
+        formData: [
+          {
+            name: 'subscription_type_id',
+            label: 'Тип подписки',
+            component: FormInput,
+          },
+          {
+            name: 'subscription_till',
+            label: 'Дата истечения',
+            component: FormInput,
+          },
+          {
+            name: 'subscription_till_for_exclusive_tracks',
+            label: 'Дата истечения',
+            component: FormInput,
+            class: '--full'
+          },
+          {
+            name: 'subscription_labels',
+            label: 'Лейблы',
+            component: FormInput,
+            class: '--full'
+          },
+        ]
       }
     ])
 

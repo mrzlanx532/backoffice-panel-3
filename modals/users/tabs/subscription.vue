@@ -1,19 +1,30 @@
+<script setup>
+const props = defineProps({
+  data: {
+    type: Object,
+    required: true,
+  },
+  errors: {
+    type: Object,
+    required: false,
+  }
+})
+
+const emit = defineEmits(['change'])
+
+const onChange = (param, value) => emit('change', param, value)
+</script>
 <template>
   <div class="grid --2x2">
-    <FormInput label="Тип подписки"/>
-    <FormInput label="Дата истечения"/>
-    <FormInput label="Дата истечения" class="--full"/>
-    <FormInput label="Отключить подписку на экс. треки" class="--full"/>
-    <FormInput label="Лейблы" class="--full"/>
+    <template v-for="el in data.formData">
+      <component
+          :is="el.component"
+          :errors="errors && errors[el.name] ? errors[el.name] : null"
+          :class="el.class"
+          :name="el.name"
+          :label="el.label"
+          @change="onChange"
+      />
+    </template>
   </div>
 </template>
-<script>
-import FormInput from "@/components/Base/Form/Input";
-
-export default {
-  name: 'SubscriptionTab',
-  components: {
-    FormInput
-  }
-}
-</script>
