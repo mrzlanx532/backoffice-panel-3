@@ -1,4 +1,10 @@
 export default defineNuxtConfig({
+
+  app: {
+    head: {
+      title: 'LSM Backoffice',
+    }
+  },
   devtools: { enabled: true },
 
   plugins: [

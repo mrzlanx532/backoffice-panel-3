@@ -27,6 +27,7 @@ import InfoTab from "@/modals/users/tabs/info"
 import CompanyTab from "@/modals/users/tabs/company"
 import SubscriptionTab from "@/modals/users/tabs/subscription"
 import FormInput from "@/components/Base/Form/Input";
+import FormSelect from "@/components/Base/Form/Select";
 
 export default {
   setup() {
@@ -59,7 +60,7 @@ export default {
             name: 'locale_id',
             label: 'Язык',
             class: '--full',
-            component: FormInput
+            component: FormSelect,
           },
           {
             name: 'about',

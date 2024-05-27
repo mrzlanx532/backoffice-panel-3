@@ -28,7 +28,7 @@ const onChange = () => emit('change', props.name, localValue)
 
 <template>
   <div>
-    <label class="input__label">{{ label }}</label>
+    <label class="label">{{ label }}</label>
     <div
         class="input__container"
         :class="{'input__container_error': errors && errors[0] }"
