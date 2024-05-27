@@ -8,9 +8,8 @@ const props = defineProps({
     required: true,
     type: String,
   },
-  value: {
-    required: false,
-    default: ''
+  modelValue: {
+    type: String
   },
   errors: {
     type: Array,
@@ -19,11 +18,7 @@ const props = defineProps({
   }
 })
 
-const localValue = defineModel()
-
-const emit = defineEmits(['change'])
-
-const onChange = () => emit('change', props.name, localValue)
+const emit = defineEmits(['change', 'update:modelValue'])
 </script>
 
 <template>
@@ -38,8 +33,8 @@ const onChange = () => emit('change', props.name, localValue)
           :name="name"
           type="text"
           autocomplete="none"
-          v-model="localValue"
-          @change="onChange"
+          :value="props.modelValue"
+          @input="emit('update:modelValue', $event.target.value)"
           :label="label"
       >
     </div>

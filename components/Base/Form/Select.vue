@@ -10,8 +10,8 @@ const props = defineProps({
     required: true,
     type: String,
   },
-  value: {
-    required: false,
+  modelValue: {
+    type: [Number, Array]
   },
   errors: {
     type: Array,
@@ -24,8 +24,6 @@ const props = defineProps({
   }
 })
 
-const localValue = defineModel()
-
 const isSelecting = ref(false)
 const inverseRender = ref(false)
 const selectedItems = ref({})
@@ -33,9 +31,8 @@ const selectedTitle = ref(null)
 const selectedId = ref(null)
 const topPxStyle = ref(0)
 
-const emit = defineEmits(['change'])
+const emit = defineEmits(['update:modelValue'])
 
-const onChange = () => emit('change', props.name, localValue)
 const onClickOutside = () => isSelecting.value = false
 const onClickSelectedValue = () => isSelecting.value = !isSelecting.value
 const onDocumentVisibilityChange = () =>  {
@@ -47,21 +44,15 @@ const onClickCancel = (index) => {
   if (props.componentData.isMultiple) {
     delete selectedItems[index]
 
-    emit('change', props.name, Object.values(selectedItems).map(item => item.id))
+    emit('update:modelValue', Object.values(selectedItems).map(item => item.id))
   }
-}
-const onCrossClick = () => {
-  selectedId.value = null
-  selectedTitle.value = null
-
-  emit('change', props.name, null)
 }
 const onMouseDownOnDropdownOption = (option, index) => {
   if (props.componentData.isMultiple) {
 
     selectedItems[option.id] ? delete selectedItems[option.id] : selectedItems[option.id] = option
 
-    emit('change', props.name, Object.values(selectedItems).map(item => item.id))
+    emit('update:modelValue', Object.values(selectedItems).map(item => item.id))
     return
   }
 
@@ -69,7 +60,7 @@ const onMouseDownOnDropdownOption = (option, index) => {
   selectedTitle.value = option.title
   isSelecting.value = false
 
-  emit('change', props.name, option.id)
+  emit('update:modelValue', option.id)
 }
 
 onMounted(() => onDocumentVisibilityChange())
@@ -108,14 +99,6 @@ onUnmounted(() => onDocumentVisibilityChange())
           </div>
         </div>
         <div class="select__active-select" v-else>{{ selectedTitle }}</div>
-        <div class="select__active-select-remove-button"
-             v-if="selectedId !== null"
-             @click.stop="onCrossClick"
-        >
-          <svg>
-            <use xlink:href="/img/sprite.svg#cancel_cross_bold"/>
-          </svg>
-        </div>
         <div
             class="select__dropdown-icon-container"
             :class="{'select__dropdown-icon-container_open': isSelecting}"

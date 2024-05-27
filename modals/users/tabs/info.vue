@@ -10,12 +10,12 @@ const props = defineProps({
   },
   value: {
     required: false
+  },
+  formData: {
+    type: Object,
+    required: true,
   }
 })
-
-const emit = defineEmits(['change'])
-
-const onChange = (param, value) => emit('change', param, value)
 </script>
 <template>
   <div class="grid --2x2">
@@ -27,8 +27,7 @@ const onChange = (param, value) => emit('change', param, value)
           :name="el.name"
           :label="el.label"
           :componentData="el.componentData"
-          :value="value"
-          @change="onChange"
+          v-model="props.formData[el.name]"
       />
     </template>
   </div>

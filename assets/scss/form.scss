@@ -127,8 +127,7 @@
 
     &__active-select {
       width: 100%;
-      font-size: 12px;
-      padding: 8px 0 8px 8px;
+      font-size: 14px;
       -webkit-user-select: none;
       -moz-user-select: none;
       user-select: none;
@@ -136,11 +135,14 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      font-family: 'Roboto';
+      padding: 8px 4px 8px 12px;
+      height: 32px;
     }
 
     &__selected-container {
       display: flex;
-      height: 30px;
+      height: 34px;
       border-radius: 5px;
       background: var(--color-1, #ffffff);
       border: 1px solid var(--color-2, #dbdbdb);
@@ -157,17 +159,22 @@
     }
 
     &__dropdown-icon-container {
-      width: 100%;
-      font-size: 12px;
-      padding: 8px 0 8px 8px;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      user-select: none;
-      flex: 1 30px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      width: 25px;
       height: 32px;
+
+      &:after {
+        content: "";
+        border-top: 0.3em solid;
+        border-right: 0.3em solid transparent;
+        border-bottom: 0;
+        border-left: 0.3em solid transparent;
+        position: relative;
+        top: 0.2em;
+        right: -7px;
+        transition-property: transform;
+        transition-duration: 0.5s;
+        display: inline-block;
+      }
     }
 
     &__dropdown-container {
@@ -204,6 +211,18 @@
         border-bottom: none;
         border-bottom-right-radius: 5px;
         border-bottom-left-radius: 5px;
+      }
+    }
+
+    &__active-select-remove-button {
+      width: 15px;
+      padding: 8px 0 8px 0;
+      position: relative;
+
+      svg {
+        width: 15px;
+        height: 15px;
+        color: var(--color-2, #dbdbdb);
       }
     }
   }

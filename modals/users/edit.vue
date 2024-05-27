@@ -13,7 +13,7 @@
             :errors="errors"
             :is="tabs[selectedTab].component"
             :data="tabs[selectedTab]"
-            :value="formData[tabs[selectedTab].name]"
+            :formData="formData"
             keep-alive
         />
       </keep-alive>
@@ -69,7 +69,6 @@ export default {
             class: '--full',
             component: FormSelect,
             componentData: {
-              isMultiple: true,
               options: [
                 {
                   id: 'ru',
