@@ -8,7 +8,13 @@
     </template>
     <template #content>
       <keep-alive>
-        <component @change="onChangeFormData" :errors="errors" :is="tabs[selectedTab].component" :data="tabs[selectedTab]" keep-alive/>
+        <component
+            @change="onChangeFormData"
+            :errors="errors"
+            :is="tabs[selectedTab].component"
+            :data="tabs[selectedTab]"
+            keep-alive
+        />
       </keep-alive>
     </template>
     <template #footer>
@@ -61,6 +67,19 @@ export default {
             label: 'Язык',
             class: '--full',
             component: FormSelect,
+            componentData: {
+              isMultiple: true,
+              options: [
+                {
+                  id: 'ru',
+                  title: 'Русский'
+                },
+                {
+                  id: 'en',
+                  title: 'Английский'
+                },
+              ]
+            }
           },
           {
             name: 'about',

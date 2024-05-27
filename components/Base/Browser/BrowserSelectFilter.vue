@@ -16,7 +16,7 @@
           <div
               class="select__active-select-option"
               @click.stop.prevent
-              v-for="(selectedItem, index) in selectedItems" :v-key="selectedItem.id"
+              v-for="(selectedItem, index) in selectedItems" :key="selectedItem.id"
           >
             <div class="select__active-select-option-title">
               {{ selectedItem.title }}

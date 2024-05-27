@@ -23,6 +23,7 @@ const onChange = (param, value) => emit('change', param, value)
           :class="el.class"
           :name="el.name"
           :label="el.label"
+          :componentData="el.componentData"
           @change="onChange"
       />
     </template>
