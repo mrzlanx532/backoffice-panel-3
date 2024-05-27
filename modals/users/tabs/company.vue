@@ -1,22 +1,28 @@
+<script setup>
+const props = defineProps({
+  data: {
+    type: Object,
+    required: true,
+  },
+  errors: {
+    type: Object,
+    required: false,
+  }
+})
+
+const onChange = (param, value) => this.$emit('change', param, value)
+</script>
 <template>
   <div class="grid --3x3">
-    <FormInput label="Название компании" class="--full"/>
-    <FormInput label="Направление работы компании" class="--full"/>
-    <FormInput label="Должность" class="--full"/>
-    <FormInput label="Сайт компании" class="--full"/>
-    <FormInput label="Адрес" class="--full"/>
-    <FormInput label="Индекс"/>
-    <FormInput label="Страна"/>
-    <FormInput label="Город"/>
+    <template v-for="el in data.formData">
+      <component
+          :is="el.component"
+          :error-message="errors && errors[el.name] ? errors[el.name] : null"
+          :class="el.class"
+          :name="el.name"
+          :label="el.label"
+          @change="onChange"
+      />
+    </template>
   </div>
 </template>
-<script>
-import FormInput from "@/components/Base/Form/Input";
-
-export default {
-  name: 'CompanyTab',
-  components: {
-    FormInput
-  }
-}
-</script>

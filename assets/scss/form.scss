@@ -80,9 +80,10 @@
     border-radius: 5px;
     border: none;
     height: 32px;
-    padding: 8px 4px 8px 8px;
-    width: 0;
+    padding: 8px 4px 8px 12px;
     flex: 1 30px;
+    font-size: 14px;
+    width: 100%;
 
     &__label {
       font-family: Roboto;
@@ -99,9 +100,21 @@
       border-radius: 5px;
       border: 1px solid var(--color-2, #dbdbdb);
 
+      &_error {
+        border: 1px solid #ff5252;
+      }
+
       &:focus-within {
         border: 1px solid var(--color-gradient-2, orange);
       }
+    }
+
+    &__error {
+      color: #ff5252;
+      font-size: 12px;
+      max-width: 100%;
+      min-height: 14px;
+      margin-top: 5px;
     }
   }
 }

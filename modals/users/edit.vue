@@ -8,7 +8,7 @@
     </template>
     <template #content>
       <keep-alive>
-        <component @change="onChangeFormData" :is="tabs[selectedTab].component" keep-alive/>
+        <component @change="onChangeFormData" :errors="errors" :is="tabs[selectedTab].component" :data="tabs[selectedTab]" keep-alive/>
       </keep-alive>
     </template>
     <template #footer>
@@ -26,17 +26,99 @@ import Tabs from "@/components/Base/Tabs";
 import InfoTab from "@/modals/users/tabs/info"
 import CompanyTab from "@/modals/users/tabs/company"
 import SubscriptionTab from "@/modals/users/tabs/subscription"
+import FormInput from "@/components/Base/Form/Input";
 
 export default {
   setup() {
     const tabs = shallowRef([
       {
         title: 'Инфо',
-        component: InfoTab
+        component: InfoTab,
+        formData: [
+          {
+            name: 'first_name',
+            label: 'Имя',
+            component: FormInput
+          },
+          {
+            name: 'last_name',
+            label: 'Фамилия',
+            component: FormInput
+          },
+          {
+            name: 'email',
+            label: 'E-mail',
+            component: FormInput
+          },
+          {
+            name: 'phone',
+            label: 'Телефон',
+            component: FormInput
+          },
+          {
+            name: 'locale_id',
+            label: 'Язык',
+            class: '--full',
+            component: FormInput
+          },
+          {
+            name: 'about',
+            label: 'О себе',
+            class: '--full',
+            component: FormInput
+          },
+          {
+            name: 'photo',
+            label: 'Фотография',
+            class: '--full',
+            component: FormInput
+          },
+        ]
       },
       {
         title: 'Компания',
-        component: CompanyTab
+        component: CompanyTab,
+        formData: [
+          {
+            name: 'company_name',
+            label: 'Название компании',
+            component: FormInput,
+            class: '--full'
+          },
+          {
+            name: 'company_business_type_id',
+            label: 'Направление работы компании',
+            component: FormInput,
+            class: '--full'
+          },
+          {
+            name: 'job_title',
+            label: 'Должность',
+            component: FormInput,
+            class: '--full'
+          },
+          {
+            name: 'company_url',
+            label: 'Сайт компании',
+            component: FormInput,
+            class: '--full'
+          },
+          {
+            name: 'company_index',
+            label: 'Индекс',
+            component: FormInput,
+          },
+          {
+            name: 'company_country_id',
+            label: 'Страна',
+            component: FormInput,
+          },
+          {
+            name: 'company_city',
+            label: 'Город',
+            component: FormInput,
+          },
+        ]
       },
       {
         title: 'Подписка',
@@ -88,14 +170,24 @@ export default {
         subscription_till_for_exclusive_tracks: '',
         subscription_type_id: '',
       },
+      errors: [],
     }
   },
   methods: {
-    onClickSave(isSave) {
-      this.$axios.$post('http://backoffice-api.lsmlocal.ru/users/create', this.formData).then(result => {
+    async onClickSave(isSave) {
+      try {
+        const response = await this.$authFetch('http://backoffice-api.lsmlocal.ru/users/create', {
+          method: 'POST',
+          body: this.formData
+        })
 
         this.$emit('modal:resolve')
-      })
+
+      } catch (err) {
+        if (err.status === 422 && err.data.errors) {
+           this.errors = err.data.errors
+        }
+      }
     },
     onChangeTab(index) {
       this.selectedTab = index
