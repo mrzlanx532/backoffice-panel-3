@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, watch, nextTick } from 'vue'
 
 const props = defineProps({
   label: {
@@ -24,6 +24,9 @@ const props = defineProps({
   }
 })
 
+const select__dropdown = ref(null)
+const selected__container = ref(null)
+
 const isSelecting = ref(false)
 const inverseRender = ref(false)
 const selectedItems = ref({})
@@ -42,18 +45,16 @@ const onDocumentVisibilityChange = () =>  {
 }
 const onClickCancel = (index) => {
   if (props.componentData.isMultiple) {
-    delete selectedItems[index]
+    delete selectedItems.value[index]
 
-    emit('update:modelValue', Object.values(selectedItems).map(item => item.id))
+    emit('update:modelValue', Object.values(selectedItems).map(item => item.id).filter(id => id !== undefined))
   }
 }
 const onMouseDownOnDropdownOption = (option, index) => {
   if (props.componentData.isMultiple) {
     selectedItems.value[option.id] ? delete selectedItems.value[option.id] : selectedItems.value[option.id] = option
 
-    console.log(Object.values(selectedItems).map(item => item.id).filter(id => id !== undefined))
-
-    emit('update:modelValue', Object.values(selectedItems).map(item => item.id).filter(id => id !== undefined))
+    emit('update:modelValue', Object.values(selectedItems.value).map(item => item.id).filter(id => id !== undefined))
     return
   }
 
@@ -64,8 +65,41 @@ const onMouseDownOnDropdownOption = (option, index) => {
   emit('update:modelValue', option.id)
 }
 
-onMounted(() => onDocumentVisibilityChange())
-onUnmounted(() => onDocumentVisibilityChange())
+onMounted(() => {
+  document.addEventListener('visibilitychange', onDocumentVisibilityChange)
+})
+onUnmounted(() => {
+  document.removeEventListener('visibilitychange', onDocumentVisibilityChange)
+})
+
+watch(
+    () => isSelecting.value,
+    () => {
+
+      nextTick(() => {
+        if (select__dropdown.value === null) {
+          inverseRender.value = false
+          topPxStyle.value = 0;
+          return
+        }
+
+        const rect = select__dropdown.value.getBoundingClientRect()
+
+        inverseRender.value = window.innerHeight < (rect.height + rect.top)
+
+        const ro = new ResizeObserver(() => {
+          if (window.innerHeight >= (rect.height + rect.top)) {
+            topPxStyle.value = 0
+            return
+          }
+
+          topPxStyle.value = ((rect.height + selected__container.value.offsetHeight) * -1) + 'px'
+        })
+
+        ro.observe(selected__container.value, {})
+      })
+    }
+)
 
 </script>
 

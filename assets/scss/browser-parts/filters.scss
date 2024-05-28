@@ -73,10 +73,6 @@
       height: auto;
       min-height: 30px;
     }
-
-    &:hover {
-      cursor: pointer;
-    }
   }
 
   &__active-select {
@@ -109,6 +105,12 @@
     background: linear-gradient(-45deg, var(--color-gradient-1, #DE4020) 0%, var(--color-gradient-2, orange) 100%);
     color: white;
     border-radius: 5px;
+    transition: opacity .3s;
+    opacity: 1;
+
+    &:hover {
+      opacity: 0.8;
+    }
 
     svg {
       height: 12px;
@@ -120,6 +122,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
   }
 
   &__dropdown-icon-container {
