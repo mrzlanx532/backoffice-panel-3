@@ -118,20 +118,23 @@ watch(
           @click="onClickSelectedValue"
       >
         <div class="select__active-select_multiple" v-if="componentData.isMultiple">
-          <div
-              class="select__active-select-option"
-              @click.stop.prevent
-              v-for="(selectedItem, index) in selectedItems" :key="selectedItem.id"
-          >
-            <div class="select__active-select-option-title">
-              {{ selectedItem.title }}
+          <transition-group name="list">
+            <div
+                class="select__active-select-option"
+                @click.stop.prevent
+                v-for="(selectedItem, index) in selectedItems"
+                :key="index"
+            >
+              <div class="select__active-select-option-title">
+                {{ selectedItem.title }}
+              </div>
+              <div class="select__active-select-option-cancel" @click.stop="onClickCancel(index)">
+                <svg>
+                  <use xlink:href="/img/sprite.svg#cancel_cross_bold"></use>
+                </svg>
+              </div>
             </div>
-            <div class="select__active-select-option-cancel" @click.stop="onClickCancel(index)">
-              <svg>
-                <use xlink:href="/img/sprite.svg#cancel_cross_bold"></use>
-              </svg>
-            </div>
-          </div>
+          </transition-group>
         </div>
         <div class="select__active-select" v-else>{{ selectedTitle }}</div>
         <div
@@ -153,6 +156,7 @@ watch(
           <template v-if="componentData.options.length > 0">
             <div
                 v-for="(option, index) in componentData.options"
+                :key="option.id"
                 class="select__dropdown-option"
                 :class="{'select__dropdown-option_selected': selectedItems[option.id]}"
                 @mouseup="onMouseDownOnDropdownOption(option, index)"
@@ -165,3 +169,15 @@ watch(
     <div class="input__error">{{ errors && errors[0] ? errors[0] : null }}</div>
   </div>
 </template>
+
+<style scoped>
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: opacity .2s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0 !important;
+}
+</style>

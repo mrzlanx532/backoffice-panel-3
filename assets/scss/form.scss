@@ -201,6 +201,7 @@
       &.--open {
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
+        border: 1px solid var(--color-gradient-2, orange);
       }
 
       &.--open.--inverse {
@@ -238,7 +239,7 @@
       z-index: 1;
       background: var(--color-1, #ffffff);
       max-height: 150px;
-      border: 1px solid var(--color-2, #dbdbdb);
+      border: 1px solid var(--color-gradient-2, orange);
       border-top: none;
       border-bottom-right-radius: 5px;
       border-bottom-left-radius: 5px;

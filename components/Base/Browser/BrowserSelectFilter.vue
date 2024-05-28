@@ -13,20 +13,22 @@
           @click="onClickSelectedValue"
       >
         <div class="select__active-select_multiple" v-if="filter.config.multiple">
-          <div
-              class="select__active-select-option"
-              @click.stop.prevent
-              v-for="(selectedItem, index) in selectedItems" :key="selectedItem.id"
-          >
-            <div class="select__active-select-option-title">
-              {{ selectedItem.title }}
+          <transition-group name="list">
+            <div
+                class="select__active-select-option"
+                @click.stop.prevent
+                v-for="(selectedItem, index) in selectedItems" :key="selectedItem.id"
+            >
+              <div class="select__active-select-option-title">
+                {{ selectedItem.title }}
+              </div>
+              <div class="select__active-select-option-cancel" @click.stop="onClickCancel(filter.id, index)">
+                <svg>
+                  <use xlink:href="/img/sprite.svg#cancel_cross_bold"></use>
+                </svg>
+              </div>
             </div>
-            <div class="select__active-select-option-cancel" @click.stop="onClickCancel(filter.id, index)">
-              <svg>
-                <use xlink:href="/img/sprite.svg#cancel_cross_bold"></use>
-              </svg>
-            </div>
-          </div>
+          </transition-group>
         </div>
         <div class="select__active-select" v-else>{{ selectedTitle }}</div>
         <div class="select__active-select-remove-button"
@@ -166,3 +168,15 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: opacity .2s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0 !important;
+}
+</style>
