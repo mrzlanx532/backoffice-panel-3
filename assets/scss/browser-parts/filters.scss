@@ -44,6 +44,7 @@
       color: var(--color-2, #dbdbdb);
 
       &:hover {
+        cursor: pointer;
         color: var(--color-gradient-2, orange);
       }
     }
