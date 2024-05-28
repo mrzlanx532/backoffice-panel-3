@@ -192,6 +192,11 @@
       border-radius: 5px;
       background: var(--color-1, #ffffff);
       border: 1px solid var(--color-2, #dbdbdb);
+      outline: none;
+
+      &:focus {
+        border: 1px solid var(--color-gradient-2, orange);
+      }
 
       &.--multiple {
         height: auto;
@@ -202,6 +207,10 @@
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
         border: 1px solid var(--color-gradient-2, orange);
+
+        &:focus-within {
+          border: 1px solid var(--color-gradient-2, orange);
+        }
       }
 
       &.--open.--inverse {

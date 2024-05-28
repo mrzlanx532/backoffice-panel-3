@@ -63,6 +63,7 @@ const onMouseDownOnDropdownOption = (option, index) => {
   isSelecting.value = false
 
   emit('update:modelValue', option.id)
+  selected__container.value.focus()
 }
 
 onMounted(() => {
@@ -106,8 +107,9 @@ watch(
 <template>
   <div>
     <div class="label">{{ label }}</div>
-    <div class="select__container" tabindex="0" v-click-outside="onClickOutside">
+    <div class="select__container" v-click-outside="onClickOutside">
       <div
+          tabindex="0"
           ref="selected__container"
           class="select__selected-container"
           :class="{
@@ -116,6 +118,7 @@ watch(
             '--inverse': inverseRender
           }"
           @click="onClickSelectedValue"
+          @keyup.enter="onClickSelectedValue"
       >
         <div class="select__active-select_multiple" v-if="componentData.isMultiple">
           <transition-group name="list">
