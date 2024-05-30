@@ -371,6 +371,11 @@
       padding: 20px;
       border-radius: 5px;
       outline: none;
+      transition: border .5s;
+
+      &:hover {
+        border: 1px dashed var(--color-gradient-2, orange);
+      }
 
       &:focus {
         border: 1px dashed var(--color-gradient-2, orange);
