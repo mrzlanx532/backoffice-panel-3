@@ -12,18 +12,20 @@ const createInput = (ctx) => {
         onInput: ctx.onInput
     }
 
-    if (!ctx.componentData || !ctx.componentData.mask ) {
-        return h('input', inputAttrs)
-    }
+    const directives = []
 
     if (ctx.componentData?.mask) {
-        return withDirectives(h('input', {
-            ...inputAttrs,
-            ...{'data-maska': ctx.componentData?.mask}
-        }), [
-            [vMaska],
-        ])
+        inputAttrs['data-maska'] = ctx.componentData.mask
+        directives.push([vMaska])
     }
+
+    const input = h('input', inputAttrs)
+
+    if (directives.length > 0) {
+        return withDirectives(input, directives)
+    }
+
+    return input
 }
 
 export default defineComponent({
