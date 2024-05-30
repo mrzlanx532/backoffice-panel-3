@@ -40,6 +40,16 @@
             <line fill="none" stroke="currentColor" stroke-width="3px" stroke-linejoin="round" stroke-linecap="round" x1="7" x2="25" y1="25" y2="7"/>
         </g>
     </symbol>
+    <symbol id="trash" fill="currentColor" viewBox="0 0 490 490">
+        <g>
+            <path d="M102.492,490h285.016c30.132,0,54.641-24.509,54.641-54.625V94.97h32.539V49.033H337.544V0H152.455v49.033H15.313V94.97
+		h32.539v340.404C47.852,465.491,72.36,490,102.492,490z M396.211,435.375c0,4.71-3.993,8.688-8.703,8.688H102.492
+		c-4.71,0-8.703-3.978-8.703-8.688V94.97h302.422V435.375z"/>
+            <rect x="150.568" y="171.234" width="45.938" height="191.406"/>
+            <rect x="229.688" y="171.234" width="45.938" height="191.406"/>
+            <rect x="308.807" y="171.234" width="45.938" height="191.406"/>
+        </g>
+    </symbol>
     <symbol id="triangle" viewBox="0 0 16 16" >
         <polygon points="8,11 3,6 13,6" fill="currentColor" />
     </symbol>

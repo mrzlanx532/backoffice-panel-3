@@ -35,6 +35,7 @@ import CompanyTab from "@/modals/users/tabs/company"
 import SubscriptionTab from "@/modals/users/tabs/subscription"
 import FormInput from "@/components/Base/Form/Input"
 import FormSelect from "@/components/Base/Form/Select";
+import FormInputFile from "~/components/Base/Form/InputFile.vue"
 
 export default {
   setup() {
@@ -110,7 +111,12 @@ export default {
             name: 'photo',
             label: 'Фотография',
             class: '--full',
-            component: FormInput
+            component: FormInputFile,
+            componentData: {
+              allowedTypes: ['jpg', 'jpeg', 'png'],
+              maxSizeLabel: '5 MB',
+              maxSizeMB: 5
+            }
           },
         ]
       },
