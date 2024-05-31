@@ -287,7 +287,12 @@
 
   .input-file {
 
-    &__cross-container {
+    &__container {
+      margin-top: 10px;
+      display: flex;
+    }
+
+    &__cross-wrapper {
       display: flex;
       justify-content: center;
       height: 200px;
@@ -311,6 +316,12 @@
       }
     }
 
+    &__btn-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-top: 5px;
+    }
+
     &__image-overlay {
       position: absolute;
       top: 0;
@@ -325,9 +336,12 @@
     }
 
     &__image-container {
+      width: 100%;
+    }
+
+    &__image-wrapper {
       height: 200px;
       width: 200px;
-      margin-top: 10px;
       position: relative;
       border-radius: 5px;
 
@@ -361,8 +375,15 @@
         }
       }
     }
-    &__container {
-      margin-top: 10px;
+
+    &__image-actions {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &__input {
       background: var(--color-3, #ffffff);;
       border: 1px dashed var(--color-2, #dbdbdb);
       height: 135px;
@@ -375,10 +396,26 @@
 
       &:hover {
         border: 1px dashed var(--color-gradient-2, orange);
+
+        .input-file__label_choose {
+          color: #8c8c8c;
+        }
+
+        .input-file__label_or {
+          color: #8c8c8c;
+        }
       }
 
       &:focus {
         border: 1px dashed var(--color-gradient-2, orange);
+
+        .input-file__label_choose {
+          color: #8c8c8c;
+        }
+
+        .input-file__label_or {
+          color: #8c8c8c;
+        }
       }
     }
 
@@ -391,11 +428,13 @@
       &_choose {
         font-size: 18px;
         color: var(--color-4, #757575);
+        transition: color .5s;
       }
 
       &_or {
         font-size: 14px;
         color: var(--color-4, #757575);
+        transition: color .5s;
       }
 
       &_download {
@@ -414,24 +453,12 @@
         font-size: 12px;
         font-family: Roboto;
         color: var(--color-4, #757575);
-
-        code {
-          font-weight: bold;
-        }
-
-        span {
-          font-weight: bold;
-        }
       }
 
       &_max-size {
         font-size: 12px;
         font-family: Roboto;
         color: var(--color-4, #757575);
-
-        span {
-          font-weight: bold;
-        }
       }
     }
   }

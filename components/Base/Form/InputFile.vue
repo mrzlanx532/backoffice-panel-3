@@ -78,37 +78,61 @@ const onClick = () => {
 <template>
   <div>
     <label class="label">{{label}}</label>
-    <div class="input-file__image-container" v-if="files.length > 0" @click="onRemove">
-      <img ref="singeImage" src="#" alt="image">
-      <div class="input-file__image-overlay"></div>
-      <div class="input-file__cross-container">
-        <svg>
-          <use xlink:href="/img/sprite.svg#trash"/>
-        </svg>
+    <div class="input-file__container">
+      <template v-if="files.length > 0">
+        <div class="input-file__image-wrapper" v-if="files.length > 0" @click="onRemove">
+          <img ref="singeImage" src="#" alt="image">
+          <div class="input-file__image-overlay"></div>
+          <div class="input-file__cross-wrapper">
+            <svg>
+              <use xlink:href="/img/sprite.svg#trash"/>
+            </svg>
+          </div>
+        </div>
+        <div class="input-file__image-actions">
+          <div>
+            <p class="input-file__label input-file__label_allow-formats">
+              <p>Разрешенные форматы:</p>
+              <template v-if="componentData?.allowedTypes">
+                <code v-for="(allowedType, index) in componentData.allowedTypes">{{ allowedType }}{{ index !== allowedTypes.length - 1 ? ',' : ''}}</code>
+              </template>
+              <template v-else>
+                <span>все</span>
+              </template>
+            </p>
+            <p class="input-file__label input-file__label_max-size mt_10">Максимальный размер</p>
+            <p class="input-file__label input-file__label_max-size"><span>{{ componentData?.maxSizeLabel ? componentData.maxSizeLabel : 'не ограничен' }}</span></p>
+            <div class="input-file__btn-wrapper">
+              <button class="btn --special --small" @click="onClick">Обновить изображение</button>
+            </div>
+            <div class="input-file__btn-wrapper">
+              <button class="btn --outline-contrast-danger --small" @click="onRemove">Убрать</button>
+            </div>
+          </div>
+        </div>
+      </template>
+      <div class="input-file__input"
+           @keyup.enter="onClick"
+           tabindex="0"
+           v-else
+           @click="onClick"
+           @drop.prevent="onDrop"
+           @dragover.prevent
+      >
+        <p class="input-file__label input-file__label_choose">Перетащите файл сюда</p>
+        <p class="input-file__label input-file__label_or">или</p>
+        <p class="input-file__label input-file__label_download">Выберите с устройства</p>
+        <p class="input-file__label input-file__label_allow-formats">
+          Разрешенные форматы:
+          <template v-if="componentData?.allowedTypes">
+            <code v-for="(allowedType, index) in componentData.allowedTypes">{{ allowedType }}{{ index !== allowedTypes.length - 1 ? ',' : ''}}</code>
+          </template>
+          <template v-else>
+            <span>все</span>
+          </template>
+        </p>
+        <p class="input-file__label input-file__label_max-size">Максимальный размер: <span>{{ componentData?.maxSizeLabel ? componentData.maxSizeLabel : 'не ограничен' }}</span></p>
       </div>
     </div>
-    <div class="input-file__container"
-         @keyup.enter="onClick"
-         tabindex="0"
-         v-else
-         @click="onClick"
-         @drop.prevent="onDrop"
-         @dragover.prevent
-    >
-      <div class="input-file__label input-file__label_choose">Перетащите файл сюда</div>
-      <div class="input-file__label input-file__label_or">или</div>
-      <div class="input-file__label input-file__label_download">Выберите с устройства</div>
-      <div class="input-file__label input-file__label_allow-formats">
-        Разрешенные форматы:
-        <template v-if="componentData?.allowedTypes">
-          <code v-for="(allowedType, index) in componentData.allowedTypes">{{ allowedType }}{{ index !== allowedTypes.length - 1 ? ',' : ''}}</code>
-        </template>
-        <template v-else>
-          <span>все</span>
-        </template>
-      </div>
-      <div class="input-file__label input-file__label_max-size">Максимальный размер: <span>{{ componentData?.maxSizeLabel ? componentData.maxSizeLabel : 'не ограничен' }}</span></div>
-    </div>
-    <input type="file" hidden>
   </div>
 </template>
