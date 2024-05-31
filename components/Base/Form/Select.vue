@@ -115,7 +115,8 @@ watch(
           :class="{
             '--open': isSelecting,
             '--multiple': componentData.isMultiple,
-            '--inverse': inverseRender
+            '--inverse': inverseRender,
+            '--has-errors': errors && errors[0]
           }"
           @click="onClickSelectedValue"
           @keyup.enter="onClickSelectedValue"

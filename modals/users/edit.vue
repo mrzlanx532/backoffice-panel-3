@@ -108,7 +108,7 @@ export default {
             component: FormInput
           },
           {
-            name: 'photo',
+            name: 'picture',
             label: 'Фотография',
             class: '--full',
             component: FormInputFile,
@@ -217,37 +217,46 @@ export default {
     return {
       selectedTab: 0,
       formData: {
-        about: '',
-        company_address: '',
-        company_business_type_id: '',
-        company_city: '',
-        company_country_id: '',
-        company_index: '',
-        company_name: '',
-        company_url: '',
-        email: '',
         first_name: '',
-        is_agree: '',
-        job_title: '',
         last_name: '',
-        locale_id: '',
-        password: '',
-        password_confirmation: '',
+        email: '',
         phone: '',
-        state_id: '',
-        subscription_labels: '',
-        subscription_till_for_exclusive_tracks: '',
+        locale_id: '',
+        about: '',
+        picture: '',
+        company_name: '',
+        company_business_type_id: '',
+        job_title: '',
+        company_url: '',
+        company_index: '',
+        company_country_id: '',
+        company_city: '',
         subscription_type_id: '',
+        subscription_till: '',
+        subscription_till_for_exclusive_tracks: '',
+        subscription_labels: ''
       },
       errors: [],
     }
   },
   methods: {
     async onClickSave(isSave) {
+
+      let formData = this.formData
+
+      if (this.formData.picture instanceof File) {
+
+        formData = new FormData()
+
+        Object.entries(this.formData).map(([key, value]) => {
+          formData.append(key, value)
+        })
+      }
+
       try {
         const response = await this.$authFetch('http://backoffice-api.lsmlocal.ru/users/create', {
           method: 'POST',
-          body: this.formData
+          body: formData,
         })
 
         this.$emit('modal:resolve')

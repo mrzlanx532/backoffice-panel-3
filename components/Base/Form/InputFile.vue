@@ -11,7 +11,7 @@ defineProps({
     type: String,
   },
   modelValue: {
-    type: [Number, String, Array]
+    type: [Number, String, Array, File]
   },
   errors: {
     type: Array,
@@ -38,6 +38,8 @@ defineProps({
   }
 })
 
+const emit = defineEmits(['update:modelValue'])
+
 const files = ref([])
 
 const singeImage = ref(null)
@@ -49,6 +51,8 @@ const handleUploadedFiles = (uploadFiles: FileList) => {
 
     nextTick(() => {
       singeImage.value.src = URL.createObjectURL(file)
+
+      emit('update:modelValue', files.value[0])
     })
   })
 }

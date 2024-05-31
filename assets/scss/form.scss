@@ -198,6 +198,10 @@
         border: 1px solid var(--color-gradient-2, orange);
       }
 
+      &.--has-errors {
+        border: 1px solid #ff5252;
+      }
+
       &.--multiple {
         height: auto;
         min-height: 30px;
