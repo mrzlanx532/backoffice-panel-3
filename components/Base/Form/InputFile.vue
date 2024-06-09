@@ -42,7 +42,7 @@ const emit = defineEmits(['update:modelValue'])
 
 const files = ref([])
 
-const singeImage = ref(null)
+const singleImage = ref(null)
 
 const handleUploadedFiles = (uploadFiles: FileList) => {
   Array.from(uploadFiles).map((file) => {
@@ -50,7 +50,7 @@ const handleUploadedFiles = (uploadFiles: FileList) => {
     files.value.push(file)
 
     nextTick(() => {
-      singeImage.value.src = URL.createObjectURL(file)
+      singleImage.value.src = URL.createObjectURL(file)
 
       emit('update:modelValue', files.value[0])
     })
@@ -85,7 +85,7 @@ const onClick = () => {
     <div class="input-file__container">
       <template v-if="files.length > 0">
         <div class="input-file__image-wrapper" v-if="files.length > 0" @click="onRemove">
-          <img ref="singeImage" src="#" alt="image">
+          <img ref="singleImage" src="#" alt="image">
           <div class="input-file__image-overlay"></div>
           <div class="input-file__cross-wrapper">
             <svg>
