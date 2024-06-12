@@ -33,6 +33,6 @@ export default defineNuxtConfig({
   modules: [
       '@pinia/nuxt',
       '@mrzlanx532/nuxt-3-laravel-auth-module',
-      '@mrzlanx532/nuxt-3-modal-module'
+      '@mrzlanx532/nuxt-3-backoffice-ui'
   ]
 })
