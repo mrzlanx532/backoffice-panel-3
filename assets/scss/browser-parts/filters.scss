@@ -332,3 +332,124 @@
     transform: rotate(-45deg);
   }
 }
+
+.date {
+
+  &__input-container {
+    display: flex;
+    border-radius: 5px;
+    border: 1px solid var(--color-2, #dbdbdb);
+    position: relative;
+
+    input {
+      display: block;
+      outline: none;
+      border-radius: 5px;
+      border: none;
+      height: 28px;
+      padding: 8px 0 8px 8px;
+      width: 0;
+      flex: 1 30px;
+      font-size: 12px;
+    }
+  }
+
+  &__input-icon {
+    height: 28px;
+
+    svg {
+      height: 28px;
+      width: 28px;
+    }
+  }
+
+  &__dropdown {
+    position: absolute;
+    top: 28px;
+    width: calc(100% + 2px);
+    border: 1px solid var(--color-2, #dbdbdb);
+    left: -1px;
+    background: var(--color-1, #ffffff);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  &__nav {
+    display: flex;
+    height: 28px;
+
+    >div {
+      cursor: pointer;
+
+      svg {
+        fill: currentColor;
+      }
+
+      &:hover {
+        color: #ff6e00;
+      }
+    }
+
+    svg:hover {
+      color: #ff6e00;
+    }
+  }
+
+  &__arrow-container {
+    padding: 6px;
+    width: 15%;
+
+    svg {
+      height: 16px;
+      width: 16px;
+    }
+  }
+
+  &__month {
+    width: 35%;
+    padding: 6px;
+    text-align: center;
+    font-size: 14px;
+    user-select: none;
+    text-transform: capitalize;
+  }
+
+  &__year {
+    width: 35%;
+    padding: 6px;
+    text-align: center;
+    font-size: 14px;
+    user-select: none;
+  }
+
+  &__calendar-row {
+    display: flex;
+    justify-content: space-evenly;
+    font-size: 14px;
+
+    &.--days {
+      user-select: none;
+      color: var(--color-4, #dbdbdb);
+
+      .date__calendar-cell {
+        cursor: default;
+
+        &:hover {
+          color: var(--color-4, #dbdbdb);
+        }
+      }
+    }
+  }
+
+  &__calendar-cell {
+    display: inline-block;
+    width: 12px;
+    text-align: center;
+    user-select: none;
+    cursor: pointer;
+
+    &:hover {
+      color: #ff6e00;
+    }
+  }
+}
