@@ -300,6 +300,7 @@
       font-family: 'FiraSansExtraCondensed';
       z-index: 1;
       color: var(--color-4, #757575);
+      font-size: 14px;
     }
 
     &__container {
@@ -373,6 +374,10 @@
         border-radius: 5px;
         z-index: 1;
         transition: border .5s;
+      }
+
+      >svg {
+        padding: 25px;
       }
 
       &:hover {
