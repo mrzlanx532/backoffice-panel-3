@@ -310,6 +310,7 @@
     }
 
     &__container {
+      padding: 10px;
       margin-top: 10px;
       display: flex;
       border: 1px solid var(--color-2, #dbdbdb);
@@ -321,6 +322,7 @@
 
       &.--empty {
         border: none;
+        padding: 0;
       }
     }
 
@@ -385,8 +387,7 @@
         object-fit: cover;
         -o-object-position: center;
         object-position: center;
-        padding: 1px 0 1px 1px;
-        border-right: 1px solid var(--color-2, #dbdbdb);
+        box-shadow: 0 1px 5px 0 rgba(0,0,0,0.40);
         border-radius: 5px;
         z-index: 1;
         transition: border .5s;
