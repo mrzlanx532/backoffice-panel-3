@@ -42,6 +42,8 @@ const singleImage = ref(null)
 const unrecognisedFileSprite = ref('')
 
 const handleUploadedFiles = (uploadFiles: FileList) => {
+  unrecognisedFileSprite.value = ''
+
   Array.from(uploadFiles).map((file) => {
 
     const fileExtension = mimeTypeMapper[file.type]['extensions'] ?
@@ -105,12 +107,12 @@ const onClick = () => {
 <template>
   <div>
     <label class="label">{{label}}</label>
-    <div class="input-file__container">
+    <div class="input-file__container" :class="{'--empty': files.length === 0, '--has-errors': errors && errors[0]}">
       <template v-if="files.length > 0">
         <div class="input-file__image-wrapper" v-if="files.length > 0" @click="onRemove">
           <img v-if="unrecognisedFileSprite === ''" ref="singleImage" src="#" alt="image">
           <template v-else>
-            <svg>
+            <svg :class="{'--has-errors': errors && errors[0] }">
               <use :xlink:href="'/img/temp_sprite.svg#' + unrecognisedFileSprite"/>
             </svg>
             <p class="input-file__image-label">Загруженный файл</p>
@@ -135,12 +137,10 @@ const onClick = () => {
             </p>
             <p class="input-file__label input-file__label_max-size mt_10">Максимальный размер</p>
             <p class="input-file__label input-file__label_max-size"><span>{{ componentData?.maxSizeMB ? componentData.maxSizeMB + 'MB' : 'не ограничен' }}</span></p>
-            <div class="input-file__btn-wrapper">
+          </div>
+          <div class="input-file__btn-group">
               <button class="btn --special --small" @click="onClick">Обновить файл</button>
-            </div>
-            <div class="input-file__btn-wrapper">
               <button class="btn --outline-contrast-danger --small" @click="onRemove">Убрать</button>
-            </div>
           </div>
         </div>
       </template>
@@ -167,5 +167,6 @@ const onClick = () => {
         <p class="input-file__label input-file__label_max-size">Максимальный размер: <span>{{ componentData?.maxSizeMB ? componentData.maxSizeMB + 'MB' : 'не ограничен' }}</span></p>
       </div>
     </div>
+    <div class="input__error">{{ errors && errors[0] ? errors[0] : null }}</div>
   </div>
 </template>
