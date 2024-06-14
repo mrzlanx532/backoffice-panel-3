@@ -113,6 +113,7 @@ const onClick = () => {
             <svg>
               <use :xlink:href="'/img/temp_sprite.svg#' + unrecognisedFileSprite"/>
             </svg>
+            <p class="input-file__image-label">Загруженный файл</p>
           </template>
           <div class="input-file__image-overlay"></div>
           <div class="input-file__cross-wrapper">
@@ -135,7 +136,7 @@ const onClick = () => {
             <p class="input-file__label input-file__label_max-size mt_10">Максимальный размер</p>
             <p class="input-file__label input-file__label_max-size"><span>{{ componentData?.maxSizeMB ? componentData.maxSizeMB + 'MB' : 'не ограничен' }}</span></p>
             <div class="input-file__btn-wrapper">
-              <button class="btn --special --small" @click="onClick">Обновить изображение</button>
+              <button class="btn --special --small" @click="onClick">Обновить файл</button>
             </div>
             <div class="input-file__btn-wrapper">
               <button class="btn --outline-contrast-danger --small" @click="onRemove">Убрать</button>

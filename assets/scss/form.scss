@@ -291,6 +291,17 @@
 
   .input-file {
 
+    &__image-label {
+      position: absolute;
+      text-align: center;
+      margin: auto;
+      width: 100%;
+      bottom: 70px;
+      font-family: 'FiraSansExtraCondensed';
+      z-index: 1;
+      color: var(--color-4, #757575);
+    }
+
     &__container {
       margin-top: 10px;
       display: flex;
