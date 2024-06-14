@@ -299,7 +299,7 @@
       bottom: 70px;
       font-family: 'FiraSansExtraCondensed';
       z-index: 1;
-      color: var(--color-4, #757575);
+      color: #ff6200;
       font-size: 14px;
     }
 
@@ -377,7 +377,8 @@
       }
 
       >svg {
-        padding: 25px;
+        padding: 35px;
+        color: #ff6200;
       }
 
       &:hover {
