@@ -239,6 +239,12 @@
         transition-duration: 0.5s;
         display: inline-block;
       }
+
+      &_open {
+        &::after {
+          transform: rotate(180deg);
+        }
+      }
     }
 
     &__dropdown-container {
