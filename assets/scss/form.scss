@@ -349,7 +349,7 @@
       position: relative;
       border-radius: 5px;
 
-      img {
+      >img, >svg {
         position: absolute;
         width: 100%;
         height: 100%;

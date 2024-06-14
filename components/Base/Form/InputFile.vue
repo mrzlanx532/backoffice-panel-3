@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { nextTick } from 'vue'
+import { useNuxtApp } from '#imports'
+import mimeTypeMapper from 'mime-db'
 
-defineProps({
+const props = defineProps({
   label: {
     required: true,
     type: String,
@@ -20,37 +22,57 @@ defineProps({
   },
   componentData: {
     type: Object,
-    required: false
-  },
-  maxSizeMB: {
-    type: Number,
     required: false,
+    default() {
+      return {
+        maxSizeMB: null,
+        allowedTypes: []
+      }
+    }
   },
-  maxSizeLabel: {
-    required: false,
-    type: String,
-    default: 'не ограничен'
-  },
-  allowedTypes: {
-    required: false,
-    type: Array,
-    default: ['jpg', 'jpeg', 'png']
-  }
 })
+
+const { $notification } = useNuxtApp()
 
 const emit = defineEmits(['update:modelValue'])
 
 const files = ref([])
 
 const singleImage = ref(null)
+const unrecognisedFileSprite = ref('')
 
 const handleUploadedFiles = (uploadFiles: FileList) => {
   Array.from(uploadFiles).map((file) => {
 
+    const fileExtension = mimeTypeMapper[file.type]['extensions'] ?
+        mimeTypeMapper[file.type]['extensions'][0] :
+        file.name.split('.').pop()
+
+    if (!props.componentData.allowedTypes.includes(fileExtension)) {
+      $notification.push({type: 'danger', message: `Файл имеет неверный формат`})
+
+      return
+    }
+
+    if (props.componentData.maxSizeMB < (file.size / (1024 ** 2))) {
+      $notification.push({type: 'danger', message: `Размер файла превышает ${props.componentData.maxSizeMB?.toString()}MB`, autoRemoving: false})
+
+      return
+    }
+
     files.value.push(file)
 
     nextTick(() => {
-      singleImage.value.src = URL.createObjectURL(file)
+
+      const blobLink = URL.createObjectURL(file)
+      const img = new Image()
+      img.onerror = () => {
+        unrecognisedFileSprite.value = 'file'
+      }
+      img.onload = () => {
+        singleImage.value.src = blobLink
+      }
+      img.src = blobLink
 
       emit('update:modelValue', files.value[0])
     })
@@ -67,6 +89,7 @@ const onDrop = (e: Event) => {
 
 const onRemove = () => {
   files.value.splice(0, files.value.length)
+  unrecognisedFileSprite.value = ''
 }
 
 const onClick = () => {
@@ -85,7 +108,12 @@ const onClick = () => {
     <div class="input-file__container">
       <template v-if="files.length > 0">
         <div class="input-file__image-wrapper" v-if="files.length > 0" @click="onRemove">
-          <img ref="singleImage" src="#" alt="image">
+          <img v-if="unrecognisedFileSprite === ''" ref="singleImage" src="#" alt="image">
+          <template v-else>
+            <svg>
+              <use :xlink:href="'/img/temp_sprite.svg#' + unrecognisedFileSprite"/>
+            </svg>
+          </template>
           <div class="input-file__image-overlay"></div>
           <div class="input-file__cross-wrapper">
             <svg>
@@ -98,14 +126,14 @@ const onClick = () => {
             <p class="input-file__label input-file__label_allow-formats">
               <p>Разрешенные форматы:</p>
               <template v-if="componentData?.allowedTypes">
-                <code v-for="(allowedType, index) in componentData.allowedTypes">{{ allowedType }}{{ index !== allowedTypes.length - 1 ? ',' : ''}}</code>
+                <code v-for="(allowedType, index) in componentData.allowedTypes">{{ allowedType }}{{ index !== componentData.allowedTypes.length - 1 ? ',' : ''}}</code>
               </template>
               <template v-else>
                 <span>все</span>
               </template>
             </p>
             <p class="input-file__label input-file__label_max-size mt_10">Максимальный размер</p>
-            <p class="input-file__label input-file__label_max-size"><span>{{ componentData?.maxSizeLabel ? componentData.maxSizeLabel : 'не ограничен' }}</span></p>
+            <p class="input-file__label input-file__label_max-size"><span>{{ componentData?.maxSizeMB ? componentData.maxSizeMB + 'MB' : 'не ограничен' }}</span></p>
             <div class="input-file__btn-wrapper">
               <button class="btn --special --small" @click="onClick">Обновить изображение</button>
             </div>
@@ -129,13 +157,13 @@ const onClick = () => {
         <p class="input-file__label input-file__label_allow-formats">
           Разрешенные форматы:
           <template v-if="componentData?.allowedTypes">
-            <code v-for="(allowedType, index) in componentData.allowedTypes">{{ allowedType }}{{ index !== allowedTypes.length - 1 ? ',' : ''}}</code>
+            <code v-for="(allowedType, index) in componentData.allowedTypes">{{ allowedType }}{{ index !== componentData.allowedTypes.length - 1 ? ',' : ''}}</code>
           </template>
           <template v-else>
             <span>все</span>
           </template>
         </p>
-        <p class="input-file__label input-file__label_max-size">Максимальный размер: <span>{{ componentData?.maxSizeLabel ? componentData.maxSizeLabel : 'не ограничен' }}</span></p>
+        <p class="input-file__label input-file__label_max-size">Максимальный размер: <span>{{ componentData?.maxSizeMB ? componentData.maxSizeMB + 'MB' : 'не ограничен' }}</span></p>
       </div>
     </div>
   </div>

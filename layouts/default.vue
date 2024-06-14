@@ -9,6 +9,7 @@
       </div>
     </div>
     <Modal/>
+    <Notification/>
   </div>
 </template>
 <script>

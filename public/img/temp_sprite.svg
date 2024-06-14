@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+    <symbol id="file" viewBox="0 0 80 80">
+        <path fill="#fff" d="M13.5 74.5L13.5 3.5 50.793 3.5 68.5 21.207 68.5 74.5z"/>
+        <path fill="currentColor" d="M50.586,4L68,21.414V74H14V4H50.586 M51,3H13v72h56V21L51,3L51,3z"/>
+        <g>
+            <path fill="#fff" d="M50.5 21.5L50.5 3.5 50.793 3.5 68.5 21.207 68.5 21.5z"/>
+            <path fill="currentColor" d="M51,4.414L67.586,21H51V4.414 M51,3h-1v19h19v-1L51,3L51,3z"/>
+        </g>
+    </symbol>
+</svg>

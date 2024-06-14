@@ -113,9 +113,8 @@ export default {
             class: '--full',
             component: FormInputFile,
             componentData: {
-              allowedTypes: ['jpg', 'jpeg', 'png'],
-              maxSizeLabel: '5 MB',
-              maxSizeMB: 5
+              allowedTypes: ['jpg', 'jpeg', 'png', 'sql'],
+              maxSizeMB: 20
             }
           },
         ]
