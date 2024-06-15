@@ -149,6 +149,7 @@ onMounted(() => rebuildCalendarNumbersRows())
             <div class="date__calendar-row --days">
               <div class="date__calendar-cell" v-for="monthDay in monthDays">{{ monthDay }}</div>
             </div>
+            <hr/>
             <div class="date__calendar-row" v-for="calendarNumberRow in calendarNumbersRows">
               <div
                   class="date__calendar-cell"
