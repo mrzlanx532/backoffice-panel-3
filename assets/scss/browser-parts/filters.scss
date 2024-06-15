@@ -341,6 +341,11 @@
     border: 1px solid var(--color-2, #dbdbdb);
     position: relative;
 
+    &.--is-open {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
     input {
       display: block;
       outline: none;
@@ -356,10 +361,14 @@
 
   &__input-icon {
     height: 28px;
+    padding: 3px 0;
+    border-left: 1px solid var(--color-2, #dbdbdb);
+    cursor: pointer;
 
     svg {
-      height: 28px;
-      width: 28px;
+      height: 20px;
+      width: 26px;
+      color: var(--color-4, #dbdbdb);
     }
   }
 
@@ -422,6 +431,10 @@
     user-select: none;
   }
 
+  &__calendar {
+    padding-bottom: 10px;
+  }
+
   &__calendar-row {
     display: flex;
     justify-content: space-evenly;
@@ -443,17 +456,36 @@
 
   &__calendar-cell {
     display: inline-block;
-    width: 12px;
+    width: 20px;
     text-align: center;
     user-select: none;
     cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+
+
 
     &:hover {
       color: #ff6e00;
     }
 
+    &.--today {
+      border: 1px solid orange;
+    }
+
+    &.--selected {
+      border: 1px solid orange;
+      background: orange;
+      color: var(--color-gradient-1);
+      color: var(--color-1, #ffffff);
+    }
+
     &.--not-current {
       color: var(--color-4, #dbdbdb);
+
+      &:hover {
+        color: #ff6e00;
+      }
     }
   }
 }
