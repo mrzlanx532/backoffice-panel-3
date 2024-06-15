@@ -1,4 +1,4 @@
-<script setup >
+<script setup lang="ts">
 import { computed } from 'vue'
 import moment from 'moment'
 import 'moment/dist/locale/ru'
@@ -15,11 +15,11 @@ const currentYear = computed(() => {
   return currentData.format('YYYY')
 })
 
+const pickedDate: Ref<null|string> = ref(null)
+
 const firstDayOfMonth = moment().startOf('month')
-
 const numberOfWeekDay = firstDayOfMonth.format('d')
-
-const firstDayOfCalender = firstDayOfMonth.subtract(numberOfWeekDay - 1, 'days')
+const firstDayOfCalender = firstDayOfMonth.clone().subtract(numberOfWeekDay - 1, 'days')
 
 const props = defineProps({
   filter: {
@@ -49,12 +49,21 @@ const onClickOutside = () => {
 }
 
 const calculateDate = (index) => {
+  return firstDayOfCalender.clone().add(index, 'days').format('D')
+}
 
-  console.log(index)
+const pickDate = (index) => {
+  pickedDate.value = firstDayOfCalender.clone().add(index, 'days').format('DD.MM.YYYY')
 
-  const tempFirstDayOfMonth = firstDayOfMonth.clone()
+  isOpen.value = false
+}
 
-  return tempFirstDayOfMonth.add(index, 'days').format('D')
+const isNotCurrentMonth = (index) => {
+
+  const currentMonth = Number(firstDayOfMonth.format('M'))
+  const iterationMonth = Number(firstDayOfCalender.clone().add(index, 'days').format('M'))
+
+  return iterationMonth < currentMonth || iterationMonth > currentMonth
 }
 </script>
 
@@ -63,7 +72,11 @@ const calculateDate = (index) => {
     <label :for="filter.id" class="browser__filter-name">{{ filter.title }}</label>
     <div class="browser__filter-container date" v-click-outside="onClickOutside">
       <div class="date__input-container">
-        <input type="text" @click="onClick">
+        <input type="text"
+               @click="onClick"
+               ref="input"
+               :value="pickedDate"
+        >
         <div class="date__input-icon">
           <svg>
             <use xlink:href="/img/temp_sprite.svg#calendar"/>
@@ -85,7 +98,7 @@ const calculateDate = (index) => {
               <div class="date__calendar-cell" v-for="monthDay in monthDays">{{ monthDay }}</div>
             </div>
             <div class="date__calendar-row" v-for="(_, rowIndex) in Array(6)">
-              <div class="date__calendar-cell" v-for="(_, rowCell) in Array(7)">{{ calculateDate((rowIndex * 7) + rowCell) }}</div>
+              <div class="date__calendar-cell" :class="{'--not-current': isNotCurrentMonth((rowIndex * 7) + rowCell)}" v-for="(_, rowCell) in Array(7)" @click="pickDate((rowIndex * 7) + rowCell)">{{ calculateDate((rowIndex * 7) + rowCell) }}</div>
             </div>
           </div>
         </div>

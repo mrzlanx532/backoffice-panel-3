@@ -451,5 +451,9 @@
     &:hover {
       color: #ff6e00;
     }
+
+    &.--not-current {
+      color: var(--color-4, #dbdbdb);
+    }
   }
 }
