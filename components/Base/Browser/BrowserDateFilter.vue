@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { nextTick, onMounted, onUnmounted } from 'vue'
 import moment, { type Moment } from 'moment'
 import 'moment/dist/locale/ru'
 
@@ -32,6 +32,8 @@ const props = defineProps({
   }
 })
 
+const freezeClickOutsideEvent = ref(false)
+
 const navMonthsIsOpen = ref(false)
 const navYearsIsOpen = ref(false)
 
@@ -53,6 +55,9 @@ const calendarNumbersRows = ref([]);
 
 const pickedDate: Ref<null|string> = ref(null)
 
+const yearSelectedEl = ref(null)
+const yearContainerEl = ref(null)
+
 const monthDays = ref([
     'пн',
     'вт',
@@ -70,6 +75,12 @@ const onClick = () => {
 }
 
 const onClickOutside = () => {
+
+  if (freezeClickOutsideEvent.value === true) {
+    freezeClickOutsideEvent.value = false
+    return
+  }
+
   isOpen.value = false
 
   navMonthsIsOpen.value = false
@@ -185,6 +196,12 @@ const onClickNavMonth = () => {
 const onClickNavYear = () => {
   navYearsIsOpen.value = true
   navMonthsIsOpen.value = false
+
+  nextTick(() => {
+    yearContainerEl.value.scrollTo({
+      top: yearSelectedEl.value[0].offsetTop,
+    })
+  })
 }
 
 const onSelectMonth = (month: IMonth) => {
@@ -198,6 +215,9 @@ const onSelectMonth = (month: IMonth) => {
 }
 
 const onSelectYear = (year) => {
+
+  freezeClickOutsideEvent.value = true
+
   calendarNavMoment = year.moment
   calendarNavYear.value = year.moment.format('YYYY')
 
@@ -205,12 +225,25 @@ const onSelectYear = (year) => {
   buildCalendar()
 
   navYearsIsOpen.value = false
+  navMonthsIsOpen.value = false
+}
+
+const onDocumentVisibilityChange = () => {
+  navYearsIsOpen.value = false
+  navMonthsIsOpen.value = false
+  isOpen.value = false
 }
 
 onMounted(() => {
+  document.addEventListener('visibilitychange', onDocumentVisibilityChange)
+
   buildCalendar()
   buildNavMonths()
   buildNavYears()
+})
+
+onUnmounted(() => {
+  document.removeEventListener('visibilitychange', onDocumentVisibilityChange)
 })
 </script>
 
@@ -272,14 +305,24 @@ onMounted(() => {
               {{ month.value }}
             </div>
           </div>
-          <div class="date__years" v-scrollable="{classes: ['--without-track']}" v-show="navYearsIsOpen && !navMonthsIsOpen">
-            <div v-for="year in years"
-                 class="date__year"
-                 :class="{'--is-selected': year.isCalendarNavYear}"
-                 @click="onSelectYear(year)"
-            >
-              {{ year.value }}
-            </div>
+          <div class="date__years" ref="yearContainerEl" v-scrollable="{classes: ['--without-track']}" v-show="navYearsIsOpen && !navMonthsIsOpen">
+            <template v-for="(year, index) in years">
+              <div
+                  v-if="year.isCalendarNavYear"
+                  class="date__year --is-selected"
+                  ref="yearSelectedEl"
+                  @click="onSelectYear(year)"
+              >
+                {{ year.value }}
+              </div>
+              <div
+                  v-else
+                  class="date__year"
+                  @click="onSelectYear(year)"
+              >
+                {{ year.value }}
+              </div>
+            </template>
           </div>
         </div>
       </div>
