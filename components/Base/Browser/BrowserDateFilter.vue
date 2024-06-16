@@ -280,14 +280,14 @@ onUnmounted(() => {
               <svg height="28px"><use xlink:href="/img/sprite.svg#left_single_arrow"/></svg>
             </div>
             <div class="date__nav-center">
-              <div class="date__nav-month" v-show="!navMonthsIsOpen" @click="onClickNavMonth">{{ calendarNavMonth }}</div>
-              <div class="date__nav-year" v-show="!navYearsIsOpen" @click="onClickNavYear">{{ calendarNavYear }}</div>
+              <div class="date__nav-month" v-if="!navMonthsIsOpen" @click="onClickNavMonth">{{ calendarNavMonth }}</div>
+              <div class="date__nav-year" v-if="!navYearsIsOpen" @click="onClickNavYear">{{ calendarNavYear }}</div>
             </div>
             <div class="date__arrow-container --right" @click="onClickNext">
               <svg height="28px"><use xlink:href="/img/sprite.svg#right_single_arrow"/></svg>
             </div>
           </div>
-          <div class="date__calendar" v-show="!navMonthsIsOpen && !navYearsIsOpen">
+          <div class="date__calendar" v-if="!navMonthsIsOpen && !navYearsIsOpen">
             <div class="date__calendar-row --days">
               <div class="date__calendar-cell" v-for="monthDay in monthDays">{{ monthDay }}</div>
             </div>
@@ -307,7 +307,7 @@ onUnmounted(() => {
               </div>
             </div>
           </div>
-          <div class="date__months" v-show="navMonthsIsOpen && !navYearsIsOpen">
+          <div class="date__months" v-if="navMonthsIsOpen && !navYearsIsOpen">
             <div
                 v-for="month in months"
                 class="date__month"
@@ -317,7 +317,7 @@ onUnmounted(() => {
               {{ month.value }}
             </div>
           </div>
-          <div class="date__years" ref="yearContainerEl" v-scrollable="{classes: ['--without-track']}" v-show="navYearsIsOpen && !navMonthsIsOpen">
+          <div class="date__years" ref="yearContainerEl" v-scrollable="{classes: ['--without-track']}" v-if="navYearsIsOpen && !navMonthsIsOpen">
             <template v-for="year in years">
               <div
                   v-if="year.isCalendarNavYear"
