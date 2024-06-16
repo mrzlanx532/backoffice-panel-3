@@ -307,7 +307,7 @@ onUnmounted(() => {
               </div>
             </div>
           </div>
-          <div class="date__months" v-if="navMonthsIsOpen && !navYearsIsOpen">
+          <div class="date__months" v-if="!navYearsIsOpen && navYearsIsOpen">
             <div
                 v-for="month in months"
                 class="date__month"
