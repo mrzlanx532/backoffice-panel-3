@@ -390,17 +390,19 @@
     >div {
       cursor: pointer;
 
-      svg {
+      :hover {
         fill: currentColor;
+        cursor: pointer;
+        color: var(--color-gradient-intermediate);
       }
 
-      &:hover {
-        color: #ff6e00;
+      svg {
+
       }
     }
 
     svg:hover {
-      color: #ff6e00;
+      color: var(--color-gradient-intermediate);
     }
   }
 
@@ -408,27 +410,51 @@
     padding: 6px;
     width: 15%;
 
+    &.--left {
+      flex-basis: 30px;
+    }
+
+    &.--right {
+      flex-basis: 30px;
+    }
+
     svg {
       height: 16px;
       width: 16px;
     }
   }
 
-  &__month {
+  &__nav-month {
+    display: inline-block;
     width: 35%;
     padding: 6px;
     text-align: center;
     font-size: 14px;
     user-select: none;
     text-transform: capitalize;
+
+    &:hover {
+      color: var(--color-gradient-intermediate);
+    }
   }
 
-  &__year {
+  &__nav-year {
+    display: inline-block;
     width: 35%;
     padding: 6px;
     text-align: center;
     font-size: 14px;
     user-select: none;
+
+    &:hover {
+      color: var(--color-gradient-intermediate);
+    }
+  }
+
+  &__nav-center {
+    flex-basis: 100%;
+    display: flex;
+    justify-content: center;
   }
 
   &__calendar {
@@ -492,6 +518,31 @@
       &:hover {
         color: #ff6e00;
       }
+    }
+  }
+
+  &__months {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-gap: 1px;
+  }
+
+  &__month {
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    user-select: none;
+    font-size: 14px;
+
+    &.--is-selected {
+      border: 1px solid var(--color-gradient-2);
+    }
+
+    &:hover {
+      color: var(--color-gradient-1);
     }
   }
 }
