@@ -409,14 +409,7 @@
   &__arrow-container {
     padding: 6px;
     width: 15%;
-
-    &.--left {
-      flex-basis: 30px;
-    }
-
-    &.--right {
-      flex-basis: 30px;
-    }
+    flex-basis: 28px;
 
     svg {
       height: 16px;
@@ -426,7 +419,6 @@
 
   &__nav-month {
     display: inline-block;
-    width: 35%;
     padding: 6px;
     text-align: center;
     font-size: 14px;
@@ -521,11 +513,35 @@
     }
   }
 
-  &__months {
+  &__months, &__years {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(4, 1fr);
     grid-gap: 1px;
+  }
+
+  &__years {
+    height: 160px;
+    position: relative;
+    top: 0;
+  }
+
+  &__year {
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    user-select: none;
+    font-size: 14px;
+
+    &.--is-selected {
+      border: 1px solid var(--color-gradient-2);
+    }
+
+    &:hover {
+      color: var(--color-gradient-1);
+    }
   }
 
   &__month {

@@ -19,6 +19,12 @@ interface IMonth {
   isCurrentMonth: boolean,
 }
 
+interface IYear {
+  value: string,
+  moment: Moment,
+  isCurrentYear: boolean,
+}
+
 const props = defineProps({
   filter: {
     type: Object,
@@ -27,6 +33,10 @@ const props = defineProps({
 })
 
 const navMonthsIsOpen = ref(false)
+const navYearsIsOpen = ref(false)
+
+const startYearMoment = moment().set('year', 1900)
+const endYearMoment = moment().set('year', 2100)
 
 let currentDate = moment()
 let currentDateStartOfDay = moment().startOf('day')
@@ -37,6 +47,8 @@ const calendarNavMonth = ref(calendarNavMoment.format('MMMM'))
 const calendarNavYear = ref(calendarNavMoment.format('YYYY'))
 
 const months = ref([] as IMonth[])
+const years = ref([])
+
 const calendarNumbersRows = ref([]);
 
 const pickedDate: Ref<null|string> = ref(null)
@@ -59,6 +71,9 @@ const onClick = () => {
 
 const onClickOutside = () => {
   isOpen.value = false
+
+  navMonthsIsOpen.value = false
+  navYearsIsOpen.value = false
 }
 
 const selectDate = (moment: Moment) => {
@@ -72,7 +87,7 @@ const selectDate = (moment: Moment) => {
   calendarNavMonth.value = moment.format('MMMM')
   calendarNavYear.value = moment.format('YYYY')
 
-  buildCalendarNumbersRows()
+  buildCalendar()
 }
 
 const onClickPrev = () => {
@@ -82,7 +97,7 @@ const onClickPrev = () => {
   calendarNavMonth.value = calendarNavMoment.format('MMMM')
   calendarNavYear.value = calendarNavMoment.format('YYYY')
 
-  buildCalendarNumbersRows()
+  buildCalendar()
 }
 
 const onClickNext = () => {
@@ -91,10 +106,31 @@ const onClickNext = () => {
   calendarNavMonth.value = calendarNavMoment.format('MMMM')
   calendarNavYear.value = calendarNavMoment.format('YYYY')
 
-  buildCalendarNumbersRows()
+  buildCalendar()
 }
 
-const buildNavMonth = () => {
+const buildNavYears = () => {
+
+  const _years = [];
+
+  const countOfMonth = endYearMoment.diff(startYearMoment, 'years')
+
+  for (let i = 0; i < countOfMonth; i++) {
+
+    const moment = startYearMoment.clone().add(i, 'year').startOf('day')
+
+    _years.push({
+        value: moment.format('YYYY'),
+        moment: moment,
+        isCalendarNavYear: moment.isSame(calendarNavMoment.clone().startOf('day')),
+      } as IYear
+    )
+  }
+
+  years.value = _years
+}
+
+const buildNavMonths = () => {
   months.value = moment()
       .localeData()
       .monthsShort()
@@ -110,7 +146,7 @@ const buildNavMonth = () => {
       })
 }
 
-const buildCalendarNumbersRows = () => {
+const buildCalendar = () => {
   const _calendarNumbersRows = []
 
   const firstDayOfMonth = calendarNavMoment.clone().startOf('months')
@@ -143,21 +179,38 @@ const buildCalendarNumbersRows = () => {
 
 const onClickNavMonth = () => {
   navMonthsIsOpen.value = true
+  navYearsIsOpen.value = false
+}
+
+const onClickNavYear = () => {
+  navYearsIsOpen.value = true
+  navMonthsIsOpen.value = false
 }
 
 const onSelectMonth = (month: IMonth) => {
   calendarNavMoment = month.moment
   calendarNavMonth.value = month.moment.format('MMMM')
 
-  buildNavMonth()
-  buildCalendarNumbersRows()
+  buildNavMonths()
+  buildCalendar()
 
   navMonthsIsOpen.value = false
 }
 
+const onSelectYear = (year) => {
+  calendarNavMoment = year.moment
+  calendarNavYear.value = year.moment.format('YYYY')
+
+  buildNavYears()
+  buildCalendar()
+
+  navYearsIsOpen.value = false
+}
+
 onMounted(() => {
-  buildCalendarNumbersRows()
-  buildNavMonth()
+  buildCalendar()
+  buildNavMonths()
+  buildNavYears()
 })
 </script>
 
@@ -183,13 +236,13 @@ onMounted(() => {
             </div>
             <div class="date__nav-center">
               <div class="date__nav-month" v-show="!navMonthsIsOpen" @click="onClickNavMonth">{{ calendarNavMonth }}</div>
-              <div class="date__nav-year">{{ calendarNavYear }}</div>
+              <div class="date__nav-year" v-show="!navYearsIsOpen" @click="onClickNavYear">{{ calendarNavYear }}</div>
             </div>
             <div class="date__arrow-container --right" @click="onClickNext">
               <svg height="28px"><use xlink:href="/img/sprite.svg#right_single_arrow"/></svg>
             </div>
           </div>
-          <div class="date__calendar" v-show="!navMonthsIsOpen">
+          <div class="date__calendar" v-show="!navMonthsIsOpen && !navYearsIsOpen">
             <div class="date__calendar-row --days">
               <div class="date__calendar-cell" v-for="monthDay in monthDays">{{ monthDay }}</div>
             </div>
@@ -209,7 +262,7 @@ onMounted(() => {
               </div>
             </div>
           </div>
-          <div class="date__months" v-show="navMonthsIsOpen">
+          <div class="date__months" v-show="navMonthsIsOpen && !navYearsIsOpen">
             <div
                 v-for="month in months"
                 class="date__month"
@@ -217,6 +270,15 @@ onMounted(() => {
                 @click="onSelectMonth(month)"
             >
               {{ month.value }}
+            </div>
+          </div>
+          <div class="date__years" v-scrollable="{classes: ['--without-track']}" v-show="navYearsIsOpen && !navMonthsIsOpen">
+            <div v-for="year in years"
+                 class="date__year"
+                 :class="{'--is-selected': year.isCalendarNavYear}"
+                 @click="onSelectYear(year)"
+            >
+              {{ year.value }}
             </div>
           </div>
         </div>
