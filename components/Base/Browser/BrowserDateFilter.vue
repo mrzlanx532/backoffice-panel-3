@@ -32,8 +32,6 @@ const props = defineProps({
   }
 })
 
-const freezeClickOutsideEvent = ref(false)
-
 const navMonthsIsOpen = ref(false)
 const navYearsIsOpen = ref(false)
 const isOpen = ref(false)
@@ -92,12 +90,6 @@ const onClick = () => {
 }
 
 const onClickOutside = () => {
-
-  if (freezeClickOutsideEvent.value === true) {
-    freezeClickOutsideEvent.value = false
-    return
-  }
-
   isOpen.value = false
 
   navMonthsIsOpen.value = false
@@ -233,8 +225,6 @@ const onSelectMonth = (month: IMonth) => {
 
 const onSelectYear = (year) => {
 
-  freezeClickOutsideEvent.value = true
-
   calendarNavMoment = year.moment
   calendarNavYear.value = year.moment.format('YYYY')
 
@@ -328,7 +318,7 @@ onUnmounted(() => {
             </div>
           </div>
           <div class="date__years" ref="yearContainerEl" v-scrollable="{classes: ['--without-track']}" v-show="navYearsIsOpen && !navMonthsIsOpen">
-            <template v-for="(year, index) in years">
+            <template v-for="year in years">
               <div
                   v-if="year.isCalendarNavYear"
                   class="date__year --is-selected"
