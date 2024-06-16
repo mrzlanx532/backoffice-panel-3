@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onMounted, onUnmounted } from 'vue'
+import { nextTick, onMounted, onUnmounted, type Ref } from 'vue'
 import moment, { type Moment } from 'moment'
 import 'moment/dist/locale/ru'
 
@@ -36,6 +36,8 @@ const freezeClickOutsideEvent = ref(false)
 
 const navMonthsIsOpen = ref(false)
 const navYearsIsOpen = ref(false)
+const isOpen = ref(false)
+const isNeedToInverse = ref(false)
 
 const startYearMoment = moment().set('year', 1900)
 const endYearMoment = moment().set('year', 2100)
@@ -55,8 +57,9 @@ const calendarNumbersRows = ref([]);
 
 const pickedDate: Ref<null|string> = ref(null)
 
-const yearSelectedEl = ref(null)
-const yearContainerEl = ref(null)
+const yearSelectedEl: Ref<null|HTMLElement> = ref(null)
+const yearContainerEl: Ref<null|HTMLElement> = ref(null)
+const dropdownEl: Ref<null|HTMLElement> = ref(null)
 
 const monthDays = ref([
     'пн',
@@ -68,7 +71,21 @@ const monthDays = ref([
     'вс'
 ])
 
-const isOpen = ref(false)
+watch(
+    isOpen,
+    ((newVal) => {
+      nextTick(() => {
+        if (newVal) {
+          const rect = dropdownEl.value.getBoundingClientRect()
+
+          isNeedToInverse.value = window.innerHeight < rect.height + rect.top
+          return
+        }
+
+        isNeedToInverse.value = false
+      })
+    })
+)
 
 const onClick = () => {
   isOpen.value = true
@@ -251,7 +268,7 @@ onUnmounted(() => {
   <div class="browser__filter">
     <label :for="filter.id" class="browser__filter-name">{{ filter.title }}</label>
     <div class="browser__filter-container date" v-click-outside="onClickOutside">
-      <div class="date__input-container" :class="{'--is-open': isOpen}">
+      <div class="date__input-container" :class="{'--is-open': isOpen, '--inverse': isNeedToInverse}">
         <input type="text"
                @click="onClick"
                ref="input"
@@ -262,7 +279,12 @@ onUnmounted(() => {
             <use xlink:href="/img/temp_sprite.svg#calendar"/>
           </svg>
         </div>
-        <div v-if="isOpen" class="date__dropdown">
+        <div
+            v-if="isOpen"
+            class="date__dropdown"
+            :class="{'--inverse': isNeedToInverse}"
+            ref="dropdownEl"
+        >
           <div class="date__nav">
             <div class="date__arrow-container --left" @click="onClickPrev">
               <svg height="28px"><use xlink:href="/img/sprite.svg#left_single_arrow"/></svg>
