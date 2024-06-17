@@ -378,13 +378,18 @@
   &__input-remove-icon {
 
     height: 28px;
-    padding: 6px 5px;
+    padding: 7px 5px;
     cursor: pointer;
 
     svg {
-      height: 16px;
-      width: 16px;
+      height: 15px;
+      width: 15px;
       color: var(--color-2, #dbdbdb);
+      cursor: pointer;
+
+      &:hover {
+        color: var(--color-gradient-2, orange);
+      }
     }
   }
 
