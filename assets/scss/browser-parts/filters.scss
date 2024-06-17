@@ -375,6 +375,19 @@
     }
   }
 
+  &__input-remove-icon {
+
+    height: 28px;
+    padding: 6px 5px;
+    cursor: pointer;
+
+    svg {
+      height: 16px;
+      width: 16px;
+      color: var(--color-2, #dbdbdb);
+    }
+  }
+
   &__dropdown {
     position: absolute;
     top: 28px;

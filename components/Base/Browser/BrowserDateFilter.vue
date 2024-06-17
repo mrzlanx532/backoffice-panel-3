@@ -241,6 +241,10 @@ const onDocumentVisibilityChange = () => {
   isOpen.value = false
 }
 
+const onClickRemove = () => {
+  pickedDate.value = null
+}
+
 onMounted(() => {
   document.addEventListener('visibilitychange', onDocumentVisibilityChange)
 
@@ -264,6 +268,11 @@ onUnmounted(() => {
                ref="input"
                :value="pickedDate"
         >
+        <div class="date__input-remove-icon" @click="onClickRemove" v-if="pickedDate !== null">
+          <svg>
+            <use xlink:href="/img/sprite.svg#cancel_cross_bold"/>
+          </svg>
+        </div>
         <div class="date__input-icon" @click="onClick">
           <svg>
             <use xlink:href="/img/temp_sprite.svg#calendar"/>
