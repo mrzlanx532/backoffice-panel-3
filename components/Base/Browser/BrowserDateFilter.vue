@@ -266,7 +266,7 @@ onUnmounted(() => {
     <div class="browser__filter-container date" v-click-outside="onClickOutside">
       <div class="date__input-container" :class="{'--is-open': isOpen, '--inverse': isNeedToInverse}">
         <input
-            v-cleave="{date: true, datePattern: ['d', 'm', 'Y'], delimiter: '.'}"
+            v-cleave="{ date: true, delimiter: '.', datePattern: ['d', 'm', 'Y']}"
             @keydown="onKeydown"
             @click="onClick"
             ref="input"
