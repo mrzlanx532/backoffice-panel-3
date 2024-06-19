@@ -5,13 +5,10 @@ export const maskDate = (e: Event, ref, delimiter = '.') => {
         e.key.match(/F[1-9]|F1[0-2]/) ||
         e.key === 'Tab' ||
         e.key === 'ArrowLeft' ||
-        e.key === 'ArrowRight'
+        e.key === 'ArrowRight' ||
+        (e.ctrlKey === true && e.key === 'a')
     ) {
         return
-    }
-
-    if (e.ctrlKey === true && e.key === 'a') {
-        e.target.select()
     }
 
     e.preventDefault()
@@ -49,12 +46,27 @@ const handleNumbers = (e, ref, delimiter) => {
         ref.value?.length === 2 ||
         ref.value?.length === 5
     ) {
+        if (ref.value.length === 2 && e.key.match(/[2-9]/)) {
+            ref.value = ref.value + delimiter + '0' + e.key
+            return
+        }
+
         ref.value = ref.value + delimiter + e.key
 
         return
     }
 
-    if ((ref.value === null || ref.value === '')  && e.key.match(/[4-9]/)) {
+    if ((ref.value?.length === 1) && ref.value === '3' && e.key.match(/[2-9]/)) {
+        ref.value = ref.value + '1'
+        return;
+    }
+
+    if ((ref.value?.length === 4) && ref.value[ref.value.length - 1] === '1' && e.key.match(/[3-9]/)) {
+        ref.value = ref.value + '2'
+        return;
+    }
+
+    if ((ref.value === null || ref.value === '') && e.key.match(/[4-9]/)) {
         ref.value = '0' + e.key
 
         return

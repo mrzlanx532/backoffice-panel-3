@@ -86,6 +86,19 @@ watch(
     })
 )
 
+watch(
+    pickedDate,
+    ((newVal) => {
+      if (newVal === null) {
+          return
+      }
+
+      if (newVal.length === 10) {
+        selectDate(moment(newVal, 'DD.MM.YYYY'), false)
+      }
+    })
+)
+
 const onClick = () => {
   isOpen.value = true
 }
@@ -97,12 +110,14 @@ const onClickOutside = () => {
   navYearsIsOpen.value = false
 }
 
-const selectDate = (moment: Moment) => {
+const selectDate = (moment: Moment, isNeedClose: boolean = true) => {
 
   pickedDateMoment = moment
   pickedDate.value = moment.format('DD.MM.YYYY')
 
-  isOpen.value = false
+  if (isNeedClose) {
+    isOpen.value = false
+  }
 
   calendarNavMoment = moment
   calendarNavMonth.value = moment.format('MMMM')
@@ -261,6 +276,10 @@ onUnmounted(() => {
 const onKeydown = (e) => {
   maskDate(e, pickedDate)
 }
+
+const onKeydownEnter = () => {
+  isOpen.value = !isOpen.value
+}
 </script>
 <template>
   <div class="browser__filter">
@@ -268,6 +287,7 @@ const onKeydown = (e) => {
     <div class="browser__filter-container date" v-click-outside="onClickOutside">
       <div class="date__input-container" :class="{'--is-open': isOpen, '--inverse': isNeedToInverse}">
         <input
+            @keydown.enter="onKeydownEnter"
             @keydown="onKeydown"
             :value="pickedDate"
             @click="onClick"
