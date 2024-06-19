@@ -2,8 +2,7 @@
 import { nextTick, onMounted, onUnmounted, type Ref } from 'vue'
 import moment, { type Moment } from 'moment'
 import 'moment/dist/locale/ru'
-import { MaskInput, type MaskInputOptions } from 'maska'
-import { vMaska } from "maska"
+import { maskDate } from '~/helpers/mask'
 
 moment.locale('ru')
 
@@ -258,16 +257,19 @@ onMounted(() => {
 onUnmounted(() => {
   document.removeEventListener('visibilitychange', onDocumentVisibilityChange)
 })
-</script>
 
+const onKeydown = (e) => {
+  maskDate(e, pickedDate)
+}
+</script>
 <template>
   <div class="browser__filter">
     <label :for="filter.id" class="browser__filter-name">{{ filter.title }}</label>
     <div class="browser__filter-container date" v-click-outside="onClickOutside">
       <div class="date__input-container" :class="{'--is-open': isOpen, '--inverse': isNeedToInverse}">
         <input
-            v-cleave="{ date: true, delimiter: '.', datePattern: ['d', 'm', 'Y']}"
             @keydown="onKeydown"
+            :value="pickedDate"
             @click="onClick"
             ref="input"
         />
