@@ -393,6 +393,14 @@
     }
   }
 
+  &__multiple-label {
+    /*font-size: 14px;
+    display: inline-block;
+    padding: 5px 0 5px 5px;
+    color: var(--color-4, #757575);
+    user-select: none;*/
+  }
+
   &__dropdown {
     position: absolute;
     top: 28px;
