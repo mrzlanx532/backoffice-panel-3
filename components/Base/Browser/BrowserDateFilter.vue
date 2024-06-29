@@ -42,8 +42,8 @@ const navYearsIsOpen = ref(false)
 const isOpen = ref(false)
 const isNeedToInverse = ref(false)
 
-const startYearMoment = moment().set('year', 1900)
-const endYearMoment = moment().set('year', 2100)
+const startYearMoment = moment().subtract(100, 'year')
+const endYearMoment = moment().add(100, 'year')
 
 let currentDate = moment()
 let currentDateStartOfDay = moment().startOf('day')
