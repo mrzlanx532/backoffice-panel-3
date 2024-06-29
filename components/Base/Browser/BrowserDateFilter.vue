@@ -128,7 +128,7 @@ const selectDate = (moment: Moment, isNeedClose: boolean = true) => {
 
 const onClickPrev = () => {
 
-  calendarNavMoment.subtract(1, 'months')
+  calendarNavMoment = calendarNavMoment.clone().subtract(1, 'months')
 
   calendarNavMonth.value = calendarNavMoment.format('MMMM')
   calendarNavYear.value = calendarNavMoment.format('YYYY')
@@ -137,7 +137,7 @@ const onClickPrev = () => {
 }
 
 const onClickNext = () => {
-  calendarNavMoment.add(1, 'months')
+  calendarNavMoment = calendarNavMoment.clone().add(1, 'months')
 
   calendarNavMonth.value = calendarNavMoment.format('MMMM')
   calendarNavYear.value = calendarNavMoment.format('YYYY')
