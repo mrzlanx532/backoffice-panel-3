@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { nextTick, onMounted, onUnmounted, type Ref } from 'vue'
+import { nextTick, onMounted, onUnmounted, defineEmits, type Ref } from 'vue'
 import moment, { type Moment } from 'moment'
 import 'moment/dist/locale/ru'
 import { maskDate } from '~/helpers/mask'
 
 moment.locale('ru')
+
+const emit = defineEmits(['filterValueChanged'])
 
 interface IRow {
   value: string,
@@ -32,6 +34,8 @@ const props = defineProps({
     required: true
   }
 })
+
+const secondsToCorrectTimezone = ((new Date().getTimezoneOffset() * -1) * 60)
 
 const navMonthsIsOpen = ref(false)
 const navYearsIsOpen = ref(false)
@@ -124,6 +128,8 @@ const selectDate = (moment: Moment, isNeedClose: boolean = true) => {
   calendarNavYear.value = moment.format('YYYY')
 
   buildCalendar()
+
+  emit('filterValueChanged', {'id': props.filter.id, 'value': pickedDateMoment.unix() + secondsToCorrectTimezone})
 }
 
 const onClickPrev = () => {
@@ -258,6 +264,8 @@ const onDocumentVisibilityChange = () => {
 
 const onClickRemove = () => {
   pickedDate.value = null
+
+  emit('filterValueChanged', {'id': props.filter.id, 'value': null})
 }
 
 onMounted(() => {
