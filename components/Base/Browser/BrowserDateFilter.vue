@@ -186,9 +186,8 @@ const buildCalendar = () => {
   const _calendarNumbersRows = []
 
   const firstDayOfMonth = calendarNavMoment.clone().startOf('months')
-  const numberOfWeekDay = firstDayOfMonth.format('d')
-
-  const firstDayOfCalender = firstDayOfMonth.clone().subtract(numberOfWeekDay - 1, 'days')
+  const numberOfWeekDay = Number(firstDayOfMonth.format('d'))
+  const firstDayOfCalender = firstDayOfMonth.clone().subtract(numberOfWeekDay === 0 ? 6 : numberOfWeekDay - 1, 'days')
 
   for (let i = 0; i < 6; i++) {
 
