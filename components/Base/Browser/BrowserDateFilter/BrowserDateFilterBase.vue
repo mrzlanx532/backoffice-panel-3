@@ -29,6 +29,7 @@ const secondsToCorrectTimezone = ((new Date().getTimezoneOffset() * -1) * 60)
 
 const navMonthsIsOpen = ref(false)
 const navYearsIsOpen = ref(false)
+const navTimeIsOpen = ref(false)
 const isOpen = ref(false)
 const isNeedToInverse = ref(false)
 
@@ -107,6 +108,7 @@ const onClickOutside = () => {
 
   navMonthsIsOpen.value = false
   navYearsIsOpen.value = false
+  navTimeIsOpen.value = false
 }
 
 const selectDate = (moment: Moment, isNeedClose: boolean = true) => {
@@ -216,17 +218,25 @@ const buildCalendar = () => {
 const onClickNavMonth = () => {
   navMonthsIsOpen.value = true
   navYearsIsOpen.value = false
+  navTimeIsOpen.value = false
 }
 
 const onClickNavYear = () => {
   navYearsIsOpen.value = true
   navMonthsIsOpen.value = false
+  navTimeIsOpen.value = false
 
   nextTick(() => {
     yearContainerEl.value.scrollTo({
       top: yearSelectedEl.value[0].offsetTop,
     })
   })
+}
+
+const onClickNavTime = () => {
+  navTimeIsOpen.value = true
+  navMonthsIsOpen.value = false
+  navYearsIsOpen.value = false
 }
 
 const onSelectMonth = (month: IMonth) => {
@@ -317,12 +327,15 @@ const onKeydownEnter = () => {
         <div class="date__nav-center">
           <div class="date__nav-month" v-if="!navMonthsIsOpen" @click="onClickNavMonth">{{ calendarNavMonth }}</div>
           <div class="date__nav-year" v-if="!navYearsIsOpen" @click="onClickNavYear">{{ calendarNavYear }}</div>
+          <div class="date__nav-time" v-if="props.typeOf === 'datetime' && !navTimeIsOpen" @click="onClickNavTime">
+            <svg><use xlink:href="/img/temp_sprite.svg#time"/></svg>
+          </div>
         </div>
         <div class="date__arrow-container --right" @click="onClickNext">
           <svg height="28px"><use xlink:href="/img/sprite.svg#right_single_arrow"/></svg>
         </div>
       </div>
-      <div class="date__calendar" v-if="!navMonthsIsOpen && !navYearsIsOpen">
+      <div class="date__calendar" v-if="!navMonthsIsOpen && !navYearsIsOpen && !navTimeIsOpen">
         <div class="date__calendar-row --days">
           <div class="date__calendar-cell" v-for="monthDay in monthDays">{{ monthDay }}</div>
         </div>
@@ -342,7 +355,7 @@ const onKeydownEnter = () => {
           </div>
         </div>
       </div>
-      <div class="date__months" v-if="!navYearsIsOpen && navMonthsIsOpen">
+      <div class="date__months" v-if="navMonthsIsOpen">
         <div
             v-for="month in months"
             class="date__month"
@@ -352,7 +365,7 @@ const onKeydownEnter = () => {
           {{ month.value }}
         </div>
       </div>
-      <div class="date__years" ref="yearContainerEl" v-scrollable="{classes: ['--without-track']}" v-if="navYearsIsOpen && !navMonthsIsOpen">
+      <div class="date__years" ref="yearContainerEl" v-scrollable="{classes: ['--without-track']}" v-if="navYearsIsOpen">
         <template v-for="year in years">
           <div
               v-if="year.isCalendarNavYear"
@@ -370,6 +383,9 @@ const onKeydownEnter = () => {
             {{ year.value }}
           </div>
         </template>
+      </div>
+      <div class="date__time" style="height: 70px; text-align: center;" v-if="navTimeIsOpen">
+        Здесь будет время
       </div>
     </div>
   </div>

@@ -478,6 +478,15 @@
     }
   }
 
+  &__nav-time {
+    padding: 6px;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
   &__nav-center {
     flex-basis: 100%;
     display: flex;
