@@ -33,14 +33,10 @@ const props = defineProps({
     type: Object,
     required: true
   },
-  fromLabel: {
-    type: String,
+  rangeIndex: {
+    type: Number,
     required: false
   },
-  toLabel: {
-    type: String,
-    required: false
-  }
 })
 
 const secondsToCorrectTimezone = ((new Date().getTimezoneOffset() * -1) * 60)
@@ -299,7 +295,7 @@ const onKeydownEnter = () => {
 
 <template>
   <div class="date__input-container" v-click-outside="onClickOutside" :class="{'--is-open': isOpen, '--inverse': isNeedToInverse}">
-    <div class="date__multiple-label" v-if="fromLabel || toLabel">{{ fromLabel ? fromLabel : toLabel ? toLabel : null }}</div>
+    <div class="date__multiple-label" v-if="rangeIndex !== undefined">{{ rangeIndex === 0 ? 'от' : 'до' }}</div>
     <input
         @keydown.enter="onKeydownEnter"
         @keydown="onKeydown"
