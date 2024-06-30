@@ -394,11 +394,11 @@
   }
 
   &__multiple-label {
-    /*font-size: 14px;
+    font-size: 14px;
     display: inline-block;
     padding: 5px 0 5px 5px;
     color: var(--color-4, #757575);
-    user-select: none;*/
+    user-select: none;
   }
 
   &__dropdown {
@@ -409,6 +409,7 @@
     left: -1px;
     background: var(--color-1, #ffffff);
     border-radius: 0 0 5px 5px;
+    z-index: 1;
 
     &.--inverse {
       top: auto;
