@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {type IRow, type IMonth, type IYear} from './types'
 import { nextTick, onMounted, onUnmounted, defineEmits, type Ref } from 'vue'
 import moment, { type Moment } from 'moment'
 import 'moment/dist/locale/ru'
@@ -7,26 +8,6 @@ import { maskDate } from '~/helpers/mask'
 moment.locale('ru')
 
 const emit = defineEmits(['change'])
-
-interface IRow {
-  value: string,
-  moment: Moment
-  isCurrentMonth: boolean,
-  isSelectedValue: boolean,
-  isToday: boolean
-}
-
-interface IMonth {
-  value: string,
-  moment: Moment,
-  isCurrentMonth: boolean,
-}
-
-interface IYear {
-  value: string,
-  moment: Moment,
-  isCurrentYear: boolean,
-}
 
 const props = defineProps({
   filter: {
@@ -269,7 +250,7 @@ const onDocumentVisibilityChange = () => {
 const onClickRemove = () => {
   pickedDate.value = null
 
-  emit('change', {'id': props.filter.id, 'value': null, 'rangeIndex': props.rangeIndex})
+  emit('change', {'value': null, 'rangeIndex': props.rangeIndex})
 }
 
 onMounted(() => {
