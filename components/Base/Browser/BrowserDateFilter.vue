@@ -9,8 +9,25 @@ moment.locale('ru')
 
 const emit = defineEmits(['filterValueChanged'])
 
+const value = []
+
 const onFilterValueChanged = (payload) => {
-  emit('filterValueChanged', payload)
+
+  if (payload.rangeIndex === undefined) {
+    emit('filterValueChanged', {
+      id: props.filter.id,
+      value: payload.value,
+    })
+
+    return
+  }
+
+  value[payload.rangeIndex] = payload.value
+
+  emit('filterValueChanged', {
+    id: props.filter.id,
+    value: value
+  })
 }
 
 const props = defineProps({
@@ -25,10 +42,10 @@ const props = defineProps({
     <label :for="filter.id" class="browser__filter-name">{{ filter.title }}</label>
     <div class="browser__filter-container date">
       <template v-if="filter.config.range">
-        <BrowserDateFilterBase :filter="filter" :range-index="0"/>
-        <BrowserDateFilterBase :filter="filter" :range-index="1" :style="{'marginTop': '2px'}"/>
+        <BrowserDateFilterBase @change="onFilterValueChanged" :filter="filter" :range-index="0"/>
+        <BrowserDateFilterBase @change="onFilterValueChanged" :filter="filter" :range-index="1" :style="{'marginTop': '2px'}"/>
       </template>
-      <BrowserDateFilterBase v-else :filter="filter" @filterValueChanged="onFilterValueChanged"/>
+      <BrowserDateFilterBase v-else :filter="filter" @change="onFilterValueChanged"/>
     </div>
   </div>
 </template>

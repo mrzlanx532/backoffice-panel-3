@@ -6,7 +6,7 @@ import { maskDate } from '~/helpers/mask'
 
 moment.locale('ru')
 
-const emit = defineEmits(['filterValueChanged'])
+const emit = defineEmits(['change'])
 
 interface IRow {
   value: string,
@@ -133,7 +133,7 @@ const selectDate = (moment: Moment, isNeedClose: boolean = true) => {
 
   buildCalendar()
 
-  emit('filterValueChanged', {'id': props.filter.id, 'value': pickedDateMoment.unix() + secondsToCorrectTimezone})
+  emit('change', {'value': pickedDateMoment.unix() + secondsToCorrectTimezone, 'rangeIndex': props.rangeIndex})
 }
 
 const onClickPrev = () => {
@@ -269,7 +269,7 @@ const onDocumentVisibilityChange = () => {
 const onClickRemove = () => {
   pickedDate.value = null
 
-  emit('filterValueChanged', {'id': props.filter.id, 'value': null})
+  emit('change', {'id': props.filter.id, 'value': null, 'rangeIndex': props.rangeIndex})
 }
 
 onMounted(() => {
