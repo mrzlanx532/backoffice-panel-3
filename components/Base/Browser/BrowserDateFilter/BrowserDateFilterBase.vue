@@ -88,6 +88,11 @@ watch(
       }
 
       if (newVal.length === 10) {
+
+        if (!moment(newVal, 'DD.MM.YYYY').isValid()) {
+          return;
+        }
+
         selectDate(moment(newVal, 'DD.MM.YYYY'), false)
       }
     })
