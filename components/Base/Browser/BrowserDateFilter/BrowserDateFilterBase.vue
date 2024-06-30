@@ -18,6 +18,11 @@ const props = defineProps({
     type: Number,
     required: false
   },
+  typeOf: {
+    type: String,
+    required: true,
+    default: 'date'
+  }
 })
 
 const secondsToCorrectTimezone = ((new Date().getTimezoneOffset() * -1) * 60)
