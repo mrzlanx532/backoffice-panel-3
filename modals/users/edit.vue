@@ -197,12 +197,12 @@ export default {
           {
             name: 'subscription_till',
             label: 'Дата истечения',
-            component: FormInput,
+            component: FormDate,
           },
           {
             name: 'subscription_till_for_exclusive_tracks',
             label: 'Дата истечения',
-            component: FormInput,
+            component: FormDate,
             class: '--full'
           },
           {

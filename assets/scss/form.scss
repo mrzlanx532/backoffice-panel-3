@@ -115,6 +115,7 @@
       max-width: 100%;
       min-height: 14px;
       margin-top: 5px;
+      height: 14px;
     }
   }
 
@@ -171,7 +172,7 @@
       text-overflow: ellipsis;
       font-family: 'Roboto';
       padding: 7px 4px 8px 12px;
-      height: 32px;
+      height: 30px;
 
       &_multiple {
         padding: 2px 0 2px 2px;
@@ -225,11 +226,11 @@
 
     &__dropdown-icon-container {
       width: 25px;
-      height: 32px;
+      height: 30px;
 
       &:after {
         content: "";
-        border-top: 0.3em solid;
+        border-top: 0.3em solid var(--color-4, #757575);
         border-right: 0.3em solid transparent;
         border-bottom: 0;
         border-left: 0.3em solid transparent;
@@ -503,5 +504,9 @@
         color: var(--color-4, #757575);
       }
     }
+  }
+
+  .date {
+    margin-top: 14px;
   }
 }
