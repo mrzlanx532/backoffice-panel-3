@@ -35,7 +35,8 @@ import CompanyTab from "@/modals/users/tabs/company"
 import SubscriptionTab from "@/modals/users/tabs/subscription"
 import FormInput from "@/components/Base/Form/Input"
 import FormSelect from "@/components/Base/Form/Select";
-import FormInputFile from "~/components/Base/Form/InputFile.vue"
+import FormInputFile from "@/components/Base/Form/InputFile"
+import FormDate from "@/components/Base/Form/Date"
 
 export default {
   setup() {
@@ -171,7 +172,27 @@ export default {
           {
             name: 'subscription_type_id',
             label: 'Тип подписки',
-            component: FormInput,
+            component: FormSelect,
+            componentData: {
+              options: [
+                {
+                  id: 'NONE',
+                  title: 'Подписка отсутствует'
+                },
+                {
+                  id: 'ONLY_MUSIC',
+                  title: 'Только музыка'
+                },
+                {
+                  id: 'ONLY_SOUNDS',
+                  title: 'Только шумы'
+                },
+                {
+                  id: 'MUSIC_AND_SOUNDS',
+                  title: 'Музыка и шумы'
+                },
+              ]
+            }
           },
           {
             name: 'subscription_till',
