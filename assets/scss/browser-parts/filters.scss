@@ -636,6 +636,8 @@
     font-size: 14px;
     padding-inline-start: 25px;
     color: var(--color-5);
+    user-select: none;
+    cursor: pointer;
   }
 
   &__radio {
