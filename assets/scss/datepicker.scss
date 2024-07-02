@@ -48,4 +48,8 @@
   .dp__action_button {
     font-size: 11px;
   }
+
+  .dp__clear_icon:hover {
+    color: var(--color-gradient-2, orange);
+  }
 }

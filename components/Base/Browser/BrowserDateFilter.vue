@@ -5,7 +5,7 @@ import moment from 'moment'
 import 'moment/dist/locale/ru'
 import { defineEmits } from 'vue'
 
-const date = ref();
+const date = ref([]);
 
 const emit = defineEmits(['filterValueChanged'])
 
@@ -18,17 +18,21 @@ const props = defineProps({
   },
 })
 
-const onUpdate = (data: Array|null|string) => {
-
-  if (data instanceof Array) {
-
-  }
-
+const prepareValue = (data: Moment|null) => {
   const momentDate = moment(data, 'DD.MM.YYYY')
 
-  let value = data === null ? null : Number(momentDate.format('X')) + secondsToCorrectTimezone
+  return data === null ? null : Number(momentDate.format('X')) + secondsToCorrectTimezone
+}
 
-  emit('filterValueChanged', {id: props.filter.id, value})
+const onUpdate = (index = 0) => {
+
+  if (props.filter.config.range) {
+    emit('filterValueChanged', {id: props.filter.id, value: [prepareValue(date.value[0]), prepareValue(date.value[1])]})
+
+    return
+  }
+
+  emit('filterValueChanged', {id: props.filter.id, value: prepareValue(date.value[0])})
 }
 </script>
 
@@ -36,15 +40,45 @@ const onUpdate = (data: Array|null|string) => {
   <div class="browser__filter">
     <div :for="filter.id" class="browser__filter-name">{{ filter.title }}</div>
     <div class="browser__filter-container">
+      <template v-if="filter.config.range">
+        <VueDatePicker
+            placeholder="от"
+            v-model="date[0]"
+            locale="ru"
+            format="dd.MM.yyyy"
+            class="dp__theme_filter"
+            select-text="Выбрать"
+            cancel-text="Отмена"
+            :enable-time-picker="false"
+            @update:model-value="onUpdate(0)"
+            model-type="dd.MM.yyyy"
+            :text-input="true"
+        />
+        <VueDatePicker
+            :style="{'marginTop': '5px'}"
+            placeholder="до"
+            v-model="date[1]"
+            locale="ru"
+            format="dd.MM.yyyy"
+            class="dp__theme_filter"
+            select-text="Выбрать"
+            cancel-text="Отмена"
+            :enable-time-picker="false"
+            @update:model-value="onUpdate(1)"
+            model-type="dd.MM.yyyy"
+            :text-input="true"
+        />
+      </template>
       <VueDatePicker
-          v-model="date"
+          v-else
+          v-model="date[0]"
           locale="ru"
           format="dd.MM.yyyy"
           class="dp__theme_filter"
           select-text="Выбрать"
           cancel-text="Отмена"
           :enable-time-picker="false"
-          @update:model-value="onUpdate"
+          @update:model-value="onUpdate($event, 0)"
           model-type="dd.MM.yyyy"
           :text-input="true"
           :range="filter.config.range"
