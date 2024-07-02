@@ -650,12 +650,22 @@
     top: 2px;
     background: 1px solid var(--color-1);
     border: 1px solid var(--color-2, #dbdbdb);
+
+    &.--checked {
+      border: 1px solid var(--color-gradient-2, orange);
+    }
+
+    &:hover {
+      .boolean__checker {
+        border: 1px solid var(--color-gradient-2, #dbdbdb);
+      }
+    }
   }
 
   &__checker {
     width: 10px;
     height: 10px;
-    background: orange;
+    background: var(--color-gradient-2, orange);
     transform: translate(2px, 2px);
     border-radius: 15px;
   }
