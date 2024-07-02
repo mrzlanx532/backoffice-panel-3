@@ -128,6 +128,7 @@ import BrowserSelectFilter from "@/components/Base/Browser/BrowserSelectFilter"
 import BrowserSelectSearchFilter from "@/components/Base/Browser/BrowserSelectSearchFilter"
 import BrowserInputFilter from "@/components/Base/Browser/BrowserInputFilter"
 import BrowserDateFilter from "@/components/Base/Browser/BrowserDateFilter"
+import BrowserBooleanFilter from "@/components/Base/Browser/BrowserBooleanFilter.vue"
 import BrowserSearchString from "@/components/Base/Browser/BrowserSearchString"
 import BrowserPagination from "@/components/Base/Browser/BrowserPagination"
 import BrowserPaginationCountSelect from "@/components/Base/Browser/BrowserPaginationCountSelect"
@@ -148,7 +149,8 @@ export default {
       SELECT: BrowserSelectFilter,
       SELECT_SEARCH: BrowserSelectSearchFilter,
       INPUT: BrowserInputFilter,
-      DATE: BrowserDateFilter
+      DATE: BrowserDateFilter,
+      BOOLEAN: BrowserBooleanFilter
     })
 
     const runtimeConfig = useRuntimeConfig()

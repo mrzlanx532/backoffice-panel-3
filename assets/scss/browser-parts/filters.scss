@@ -625,3 +625,42 @@
     height: 28px;
   }
 }
+
+.boolean {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  grid-gap: 5px;
+
+  &__label {
+    font-size: 14px;
+    padding-inline-start: 25px;
+    color: var(--color-5);
+  }
+
+  &__radio {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    cursor: pointer;
+    background: black;
+    border-radius: 15px;
+    top: 2px;
+    background: 1px solid var(--color-1);
+    border: 1px solid var(--color-2, #dbdbdb);
+  }
+
+  &__checker {
+    width: 10px;
+    height: 10px;
+    background: orange;
+    transform: translate(2px, 2px);
+    border-radius: 15px;
+  }
+
+  &__item-container {
+    position: relative;
+  }
+}
