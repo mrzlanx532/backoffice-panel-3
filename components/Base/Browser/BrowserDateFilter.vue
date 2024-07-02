@@ -55,7 +55,7 @@ const onUpdate = (index = 0) => {
             :text-input="true"
         />
         <VueDatePicker
-            :style="{'marginTop': '5px'}"
+            :style="{'marginTop': '2px'}"
             placeholder="до"
             v-model="date[1]"
             locale="ru"

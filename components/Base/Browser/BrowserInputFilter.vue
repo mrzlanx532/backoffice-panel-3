@@ -19,7 +19,11 @@
               class="input__remove-button input__remove-button_range"
               @click="onClickRemoveButton('doubleValueFirst')"
               v-show="doubleValueFirst !== '' && doubleValueFirst !== null"
-          ></div>
+          >
+            <svg>
+              <use xlink:href="/img/temp_sprite.svg#min_cross"/>
+            </svg>
+          </div>
         </div>
         <div class="input__container input__container_range">
           <div class="input__label">
@@ -37,7 +41,11 @@
               class="input__remove-button input__remove-button_range"
               @click="onClickRemoveButton('doubleValueSecond')"
               v-show="doubleValueSecond !== '' && doubleValueSecond !== null"
-          ></div>
+          >
+            <svg>
+              <use xlink:href="/img/temp_sprite.svg#min_cross"/>
+            </svg>
+          </div>
         </div>
       </div>
       <div class="input__container" v-else>
@@ -53,7 +61,11 @@
             class="input__remove-button"
             @click="onClickRemoveButton"
             v-show="singleValue !== '' && singleValue !== null"
-        ></div>
+        >
+          <svg>
+            <use xlink:href="/img/temp_sprite.svg#min_cross"/>
+          </svg>
+        </div>
       </div>
     </div>
   </div>

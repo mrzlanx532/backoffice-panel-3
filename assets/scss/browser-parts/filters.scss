@@ -265,7 +265,8 @@
 }
 
 .input__label {
-  padding: 10px 0 10px 4px;
+  height: 28px;
+  padding: 9px 0 10px 10px;
   font-size: 10px;
   font-family: Roboto;
   color: var(--color-4, #757575);
@@ -281,10 +282,6 @@
   width: 0;
   flex: 1 30px;
   font-size: 12px;
-
-  &_range {
-    padding: 8px 4px !important;
-  }
 }
 
 .select__dropdown.select__dropdown_select-search.--inverse {
@@ -293,43 +290,23 @@
 
 .input__remove-button {
   width: 25px;
-  padding: 8px 0 8px 0;
+  padding: 6px 0 6px 0;
   position: relative;
+  height: 28px;
+  cursor: pointer;
+
+  svg {
+    height: 12px;
+    width: 12px;
+    color: var(--color-6, #959595);
+  }
+
+  svg:hover {
+    color: var(--color-gradient-2, orange);
+  }
 
   &_range {
     width: 20px !important;
-  }
-
-  &:hover {
-    cursor: pointer;
-  }
-
-  &:hover {
-    &:before, &:after {
-      background-color: var(--color-gradient-2, orange);
-    }
-  }
-
-  &_range {
-    &:before, &:after {
-      right: 10px !important;
-    }
-  }
-
-  &:before, &:after {
-    position: absolute;
-    right: 15px;
-    content: " ";
-    height: 15px;
-    width: 2px;
-    background-color: var(--color-2, #dbdbdb);
-  }
-
-  &:before {
-    transform: rotate(45deg);
-  }
-  &:after {
-    transform: rotate(-45deg);
   }
 }
 
