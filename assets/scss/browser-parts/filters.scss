@@ -641,15 +641,15 @@
   }
 
   &__radio {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     display: inline-block;
     position: absolute;
     left: 0;
     cursor: pointer;
     background: black;
     border-radius: 15px;
-    top: 2px;
+    top: 4px;
     background: 1px solid var(--color-1);
     border: 1px solid var(--color-2, #dbdbdb);
 
@@ -665,8 +665,8 @@
   }
 
   &__checker {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     background: var(--color-gradient-2, orange);
     transform: translate(2px, 2px);
     border-radius: 15px;
