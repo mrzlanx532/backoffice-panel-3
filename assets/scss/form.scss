@@ -121,7 +121,7 @@
 
     &__container {
       outline: none;
-      margin-top: 10px;
+      margin-top: 14px;
     }
 
     &__active-select-option-title {
@@ -169,7 +169,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       font-family: 'Roboto';
-      padding: 8px 4px 8px 12px;
+      padding: 7px 4px 8px 12px;
       height: 32px;
 
       &_multiple {
@@ -188,7 +188,7 @@
 
     &__selected-container {
       display: flex;
-      height: 34px;
+      height: 32px;
       border-radius: 5px;
       background: var(--color-1, #ffffff);
       border: 1px solid var(--color-2, #dbdbdb);
