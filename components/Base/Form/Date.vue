@@ -36,7 +36,18 @@ const props = defineProps({
 const prepareValue = (data: Moment|null) => {
   const momentDate = moment(data, 'DD.MM.YYYY')
 
-  return data === null ? null : Number(momentDate.format('X')) + secondsToCorrectTimezone
+  if (data === null) {
+    return null
+  }
+
+  if (props?.componentData?.returnFormat) {
+
+    console.log(momentDate.format(props.componentData.returnFormat))
+
+    return momentDate.format(props.componentData.returnFormat)
+  }
+
+  return Number(momentDate.format('X')) + secondsToCorrectTimezone
 }
 
 const onUpdate = () => {
@@ -58,7 +69,6 @@ if (props?.componentData?.altPosition) {
         class="dp__theme_form date"
         locale="ru"
         format="dd.MM.yyyy"
-        :class="classObject"
         select-text="Выбрать"
         :alt-position="altPosition"
         cancel-text="Отмена"

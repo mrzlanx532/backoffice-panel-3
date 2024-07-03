@@ -37,6 +37,7 @@ import FormInput from "@/components/Base/Form/Input"
 import FormSelect from "@/components/Base/Form/Select";
 import FormInputFile from "@/components/Base/Form/InputFile"
 import FormDate from "@/components/Base/Form/Date"
+import FormSwitcher from "@/components/Base/Form/Switcher"
 
 export default {
   setup() {
@@ -118,6 +119,12 @@ export default {
               maxSizeMB: 20
             }
           },
+          {
+            name: 'test',
+            label: 'Отключить подписку на эксклюзивные треки',
+            class: '--full',
+            component: FormSwitcher,
+          },
         ]
       },
       {
@@ -198,6 +205,9 @@ export default {
             name: 'subscription_till',
             label: 'Дата истечения',
             component: FormDate,
+            componentData: {
+              returnFormat: 'DD.MM.yyyy'
+            }
           },
           {
             name: 'subscription_till_for_exclusive_tracks',
@@ -208,12 +218,19 @@ export default {
               altPosition: () => ({
                 top: -40,
                 left: 120
-              })
+              }),
+              returnFormat: 'DD.MM.yyyy'
             }
           },
           {
             name: 'subscription_labels',
             label: 'Лейблы',
+            component: FormInput,
+            class: '--full'
+          },
+          {
+            name: 'subscription_labels',
+            label: 'Отключить подписку на эксклюзивные треки',
             component: FormInput,
             class: '--full'
           },
@@ -260,7 +277,8 @@ export default {
         subscription_type_id: '',
         subscription_till: '',
         subscription_till_for_exclusive_tracks: '',
-        subscription_labels: ''
+        subscription_labels: '',
+        test: false,
       },
       errors: [],
     }
