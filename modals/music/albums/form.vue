@@ -120,8 +120,16 @@ const onClickSave = async () => {
 }
 
 onMounted(async () => {
+
+  const params = {}
+
+  if (props.data.id !== undefined) {
+    params.id = props.data.id
+  }
+
   const response = await $authFetch('http://backoffice-api.lsmlocal.ru/music/albums/form', {
     method: 'GET',
+    params
   })
 
   response.authors.forEach((author) => {

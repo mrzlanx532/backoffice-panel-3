@@ -8,7 +8,7 @@
     middleware: ['auth']
   })
 
-  const { $modal, $notification } = useNuxtApp()
+  const { $modal, $notification, $authFetch } = useNuxtApp()
 
   const id: Ref<number|null> = ref(null)
   const item: Ref<{}, null> = ref({})
@@ -74,8 +74,35 @@
     })
   }
 
+  const onClickEdit = () => {
+    $modal.load('music/albums/form', {
+      title: 'Изменение альбома',
+      id: id
+    }).then(() => {
+      browserEl.value.reset()
+      $notification.push({type: 'success', message: 'Альбом добавлен'})
+    })
+  }
+
+  const onClickDelete = () => {
+    $modal.confirm().then( async (isAgree) => {
+      if (isAgree) {
+        const response = await $authFetch('http://backoffice-api.lsmlocal.ru/music/albums/delete', {
+          method: 'POST',
+          body: {
+            id: id.value
+          }
+        })
+
+        browserEl.value.reset()
+        $notification.push({type: 'success', message: 'Альбом удален'})
+      }
+    })
+  }
+
   const onItemUpdated = (val) => {
     item.value = val
+    id.value = val.id
   }
 </script>
 
@@ -95,5 +122,13 @@
         <Button @click="onClickCreate" :classes="['--small --primary']">Добавить</Button>
       </div>
     </template>
+
+    <template #browserDetailHeader>
+      <div class="btn__group">
+        <Button @click="onClickEdit" :classes="['--big --outline-primary']">Изменить</Button>
+        <Button @click="onClickDelete" :classes="['--big --outline-danger']">Удалить</Button>
+      </div>
+    </template>
+
   </Browser>
 </template>
