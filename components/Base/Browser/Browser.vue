@@ -162,6 +162,7 @@ export default {
     }
   },
   name: 'Browser',
+  expose: ['reset'],
   props: {
     columns: {
       type: Array,
@@ -320,6 +321,18 @@ export default {
         this.fetchErrorMessage = err.message
         this.fetchErrorStatusCode = 500
       }
+    },
+    reset() {
+      this.currentPage = 1
+      this.selectedPaginationItemsCount = 20
+      this.activeFilters = {}
+      this.activeSort = null
+
+      Object.keys(this.sorts).map((key) => {
+        this.sorts[key] = null
+      })
+
+      this.fetchData()
     },
     setFilters(filters) {
       const preparedFilters = [];

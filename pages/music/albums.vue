@@ -4,14 +4,16 @@
   import Button from '@/components/Base/Button'
   import Browser from "@/components/Base/Browser/Browser";
 
-  const { $modal } = useNuxtApp()
-
   definePageMeta({
     middleware: ['auth']
   })
 
+  const { $modal, $notification } = useNuxtApp()
+
   const id: Ref<number|null> = ref(null)
   const item: Ref<{}, null> = ref({})
+
+  const browserEl: Ref<HTMLElement, null> = ref(null)
 
   const requestProperties = ref([
     'id',
@@ -64,10 +66,11 @@
   ])
 
   const onClickCreate = () => {
-    $modal.load('music//albums/form', {
+    $modal.load('music/albums/form', {
       title: 'Создание альбома'
-    }).then(res => {
-      console.log(res)
+    }).then(() => {
+      browserEl.value.reset()
+      $notification.push({type: 'success', message: 'Альбом добавлен'})
     })
   }
 
@@ -78,6 +81,7 @@
 
 <template>
   <Browser
+      ref="browserEl"
       h1="Альбомы музыкальных треков"
       url-prefix="music/albums"
       :columns="columns"

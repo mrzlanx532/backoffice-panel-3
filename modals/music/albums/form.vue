@@ -1,9 +1,16 @@
 <script setup>
+import { useNuxtApp } from '#app'
+import { onMounted } from 'vue'
 import Form from '@/components/Base/Form'
-import FormInput from '~/components/Base/Form/Input.jsx'
-import FormSelect from '~/components/Base/Form/Select'
-import FormDate from '~/components/Base/Form/Date'
-import FormTextArea from '~/components/Base/Form/TextArea'
+import FormInput from '@/components/Base/Form/Input.jsx'
+import FormSelect from '@/components/Base/Form/Select'
+import FormDate from '@/components/Base/Form/Date'
+import FormTextArea from '@/components/Base/Form/TextArea'
+import FormInputFile from '@/components/Base/Form/InputFile'
+
+const emit = defineEmits(['modal:resolve'])
+
+const { $authFetch } = useNuxtApp()
 
 const errors = ref([])
 
@@ -12,6 +19,17 @@ const props = defineProps({
     type: Object,
     required: false
   }
+})
+
+const formDataValues = reactive({
+  'name_ru': '',
+  'name_en': '',
+  'author_id': '',
+  'label_id': '',
+  'release_date': '',
+  'description_ru': '',
+  'description_en': '',
+  'picture': '',
 })
 
 const formData = [
@@ -33,9 +51,7 @@ const formData = [
     component: FormSelect,
     componentData: {
       isMultiple: false,
-      options: [
-
-      ]
+      options: []
     }
   },
   {
@@ -44,9 +60,7 @@ const formData = [
     component: FormSelect,
     componentData: {
       isMultiple: false,
-      options: [
-
-      ]
+      options: []
     }
   },
   {
@@ -64,11 +78,72 @@ const formData = [
     component: FormTextArea,
     class: '--full',
   },
+  {
+    name: 'description_en',
+    label: 'Описание (en)',
+    component: FormTextArea,
+    class: '--full',
+  },
+  {
+    name: 'description_en',
+    label: 'Описание (en)',
+    component: FormTextArea,
+    class: '--full',
+  },
+  {
+    name: 'picture',
+    label: 'Изображение',
+    component: FormInputFile,
+    class: '--full',
+  },
 ]
 
-const onClickSave = () => {
-  console.log('saving...')
+const onClickSave = async () => {
+  let formData = formDataValues
+
+  if (formData.picture instanceof File) {
+
+    formData = new FormData()
+
+    Object.entries(this.formData).map(([key, value]) => {
+      formData.append(key, value)
+    })
+  }
+
+  try {
+    const response = await $authFetch('http://backoffice-api.lsmlocal.ru/music/albums/create', {
+      method: 'POST',
+      body: formData,
+    })
+
+    emit('modal:resolve')
+
+  } catch (err) {
+    if (err.status === 422 && err.data.errors) {
+      errors.value = err.data.errors
+    }
+  }
 }
+
+onMounted(async () => {
+  const response = await $authFetch('http://backoffice-api.lsmlocal.ru/music/albums/form', {
+    method: 'GET',
+  })
+
+  response.authors.forEach((author) => {
+    formData[2].componentData.options.push({
+      id: author.id,
+      title: `${author.name_en} (${author.name_en})`,
+    })
+  })
+
+  response.labels.forEach((label) => {
+    formData[3].componentData.options.push({
+      id: label.id,
+      title: `${label.name_en} (${label.name_en})`,
+    })
+  })
+})
 </script>
 
 <template>
@@ -85,6 +160,8 @@ const onClickSave = () => {
             :label="formDataItem.label"
             :name="formDataItem.name"
             :is="formDataItem.component"
+            v-model="formDataValues[formDataItem.name]"
+            :errors="errors[formDataItem.name]"
         />
       </div>
     </template>
