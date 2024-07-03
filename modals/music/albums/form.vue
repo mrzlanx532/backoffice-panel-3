@@ -85,12 +85,6 @@ const formData = [
     class: '--full',
   },
   {
-    name: 'description_en',
-    label: 'Описание (en)',
-    component: FormTextArea,
-    class: '--full',
-  },
-  {
     name: 'picture',
     label: 'Изображение',
     component: FormInputFile,
