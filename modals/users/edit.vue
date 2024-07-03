@@ -203,7 +203,13 @@ export default {
             name: 'subscription_till_for_exclusive_tracks',
             label: 'Дата истечения',
             component: FormDate,
-            class: '--full'
+            class: '--full',
+            componentData: {
+              altPosition: () => ({
+                top: -40,
+                left: 120
+              })
+            }
           },
           {
             name: 'subscription_labels',

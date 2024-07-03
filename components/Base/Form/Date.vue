@@ -42,6 +42,12 @@ const prepareValue = (data: Moment|null) => {
 const onUpdate = () => {
   emit('update:modelValue', prepareValue(date.value))
 }
+
+let altPosition = null;
+
+if (props?.componentData?.altPosition) {
+  altPosition =  props?.componentData.altPosition
+}
 </script>
 
 <template>
@@ -54,6 +60,7 @@ const onUpdate = () => {
         format="dd.MM.yyyy"
         :class="classObject"
         select-text="Выбрать"
+        :alt-position="altPosition"
         cancel-text="Отмена"
         :enable-time-picker="false"
         @update:model-value="onUpdate()"

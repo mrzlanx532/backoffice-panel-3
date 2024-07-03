@@ -73,7 +73,7 @@ onUnmounted(() => {
   document.removeEventListener('visibilitychange', onDocumentVisibilityChange)
 })
 
-const getInverseValue = () => {
+const getInverseValue = (rect) => {
   if (
       props.componentData !== undefined &&
       props.componentData.inverse !== undefined &&
@@ -98,7 +98,7 @@ watch(
 
         const rect = select__dropdown.value.getBoundingClientRect()
 
-        inverseRender.value = getInverseValue()
+        inverseRender.value = getInverseValue(rect)
 
         const ro = new ResizeObserver(() => {
           if (inverseRender.value === false) {
