@@ -20,7 +20,7 @@ const props = defineProps({
   },
   componentData: {
     type: Object,
-    required: false
+    required: true
   }
 })
 
@@ -126,7 +126,7 @@ watch(
           class="select__selected-container"
           :class="{
             '--open': isSelecting,
-            '--multiple': componentData.isMultiple,
+            '--multiple': componentData.isMultiple !== undefined ? componentData.isMultiple : false,
             '--inverse': inverseRender,
             '--has-errors': errors && errors[0]
           }"
