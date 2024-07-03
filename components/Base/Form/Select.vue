@@ -73,6 +73,18 @@ onUnmounted(() => {
   document.removeEventListener('visibilitychange', onDocumentVisibilityChange)
 })
 
+const getInverseValue = () => {
+  if (
+      props.componentData !== undefined &&
+      props.componentData.inverse !== undefined &&
+      props.componentData.inverse === true
+  ) {
+    return true
+  }
+
+  return window.innerHeight < (rect.height + rect.top)
+}
+
 watch(
     () => isSelecting.value,
     () => {
@@ -86,10 +98,10 @@ watch(
 
         const rect = select__dropdown.value.getBoundingClientRect()
 
-        inverseRender.value = window.innerHeight < (rect.height + rect.top)
+        inverseRender.value = getInverseValue()
 
         const ro = new ResizeObserver(() => {
-          if (window.innerHeight >= (rect.height + rect.top)) {
+          if (inverseRender.value === false) {
             topPxStyle.value = 0
             return
           }
