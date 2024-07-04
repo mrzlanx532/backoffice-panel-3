@@ -80,7 +80,7 @@
       id: id
     }).then(() => {
       browserEl.value.reset()
-      $notification.push({type: 'success', message: 'Альбом добавлен'})
+      $notification.push({type: 'success', message: 'Альбом обновлен'})
     })
   }
 

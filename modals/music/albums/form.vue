@@ -99,13 +99,24 @@ const onClickSave = async () => {
 
     formData = new FormData()
 
+    if (props.data.id !== undefined) {
+      formData.append('id', props.data.id)
+    }
+
     Object.entries(this.formData).map(([key, value]) => {
       formData.append(key, value)
     })
   }
 
+  let method = 'create'
+
+  if (props.data.id !== undefined) {
+    method = 'update'
+    formData.id = props.data.id
+  }
+
   try {
-    const response = await $authFetch('http://backoffice-api.lsmlocal.ru/music/albums/create', {
+    await $authFetch(`http://backoffice-api.lsmlocal.ru/music/albums/${method}`, {
       method: 'POST',
       body: formData,
     })
@@ -131,6 +142,18 @@ onMounted(async () => {
     method: 'GET',
     params
   })
+
+  if (props.data.id !== undefined) {
+    Object.keys(formDataValues).map((key) => {
+
+      if (key === 'label_id') {
+        formDataValues[key] = response.entity.label === null ? null : response.entity.label.id
+        return
+      }
+
+      formDataValues[key] = response.entity[key]
+    })
+  }
 
   response.authors.forEach((author) => {
     formData[2].componentData.options.push({
