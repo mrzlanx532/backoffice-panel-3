@@ -4,9 +4,9 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import moment from 'moment'
 import 'moment/dist/locale/ru'
 
-const selectedDate = ref();
-
 const emit = defineEmits(['update:modelValue'])
+
+const selectedDate = ref();
 
 const secondsToCorrectTimezone = ((new Date().getTimezoneOffset() * -1) * 60)
 

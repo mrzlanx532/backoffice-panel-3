@@ -6,7 +6,7 @@ const createInput = (ctx) => {
         class: 'input',
         name: ctx.name,
         type: 'text',
-        autocomplete: 'none',
+        autocomplete: 'off',
         value: ctx.modelValue,
         label: ctx.label,
         onInput: ctx.onInput
