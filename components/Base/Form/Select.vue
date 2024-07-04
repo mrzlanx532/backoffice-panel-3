@@ -11,6 +11,7 @@ const props = defineProps({
     type: String,
   },
   modelValue: {
+    required: false,
     type: [Number, String, Array]
   },
   errors: {
@@ -30,11 +31,22 @@ const selected__container = ref(null)
 const isSelecting = ref(false)
 const inverseRender = ref(false)
 const selectedItems = ref({})
-const selectedTitle = ref(null)
 const selectedId = ref(null)
 const topPxStyle = ref(0)
+const selectedItemOrItems = ref(props.modelValue !== undefined ? props.modelValue : null)
 
 const emit = defineEmits(['update:modelValue'])
+
+watch(
+    () => props.modelValue,
+    (value) => {
+      props.componentData.options.forEach(option => {
+        if (option.id === value) {
+          selectedItemOrItems.value = option
+        }
+      })
+    }
+)
 
 const onClickOutside = () => isSelecting.value = false
 const onClickSelectedValue = () => isSelecting.value = !isSelecting.value
@@ -58,8 +70,8 @@ const onMouseDownOnDropdownOption = (option, index) => {
     return
   }
 
+  selectedItemOrItems.value = option
   selectedId.value = option.id
-  selectedTitle.value = option.title
   isSelecting.value = false
 
   emit('update:modelValue', option.id)
@@ -152,7 +164,7 @@ watch(
             </div>
           </transition-group>
         </div>
-        <div class="select__active-select" v-else>{{ selectedTitle }}</div>
+        <div class="select__active-select" v-else>{{ selectedItemOrItems.title }}</div>
         <div
             class="select__dropdown-icon-container"
             :class="{'select__dropdown-icon-container_open': isSelecting}"

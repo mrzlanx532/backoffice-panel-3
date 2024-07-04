@@ -28,6 +28,13 @@
     }
   })
 
+  watch(
+      () => props.modelValue,
+      (value) => {
+        internalValue.value = value
+      }
+  )
+
   const onInput = () => {
     textareaEl.value.style.height = "50px";
     textareaEl.value.style.height = textareaEl.value.scrollHeight + "px";

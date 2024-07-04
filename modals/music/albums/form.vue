@@ -50,7 +50,6 @@ const formData = [
     label: 'Автор',
     component: FormSelect,
     componentData: {
-      isMultiple: false,
       options: []
     }
   },
@@ -59,7 +58,6 @@ const formData = [
     label: 'Лейбл',
     component: FormSelect,
     componentData: {
-      isMultiple: false,
       options: []
     }
   },
@@ -148,6 +146,11 @@ onMounted(async () => {
 
       if (key === 'label_id') {
         formDataValues[key] = response.entity.label === null ? null : response.entity.label.id
+        return
+      }
+
+      if (key === 'author_id') {
+        formDataValues[key] = response.entity.author === null ? null : response.entity.author.id
         return
       }
 
