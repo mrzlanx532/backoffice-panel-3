@@ -42,7 +42,7 @@ watch(
         return
       }
 
-      selectedDate.value = moment(value, 'X').format(props.componentData.returnFormat)
+      selectedDate.value = moment(value, props.componentData.returnFormat).format(props.componentData.returnFormat)
     }
 )
 

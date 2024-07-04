@@ -7,6 +7,7 @@ import FormSelect from '@/components/Base/Form/Select'
 import FormDate from '@/components/Base/Form/Date'
 import FormTextArea from '@/components/Base/Form/TextArea'
 import FormInputFile from '@/components/Base/Form/InputFile'
+import moment from 'moment'
 
 const emit = defineEmits(['modal:resolve'])
 
@@ -154,6 +155,11 @@ onMounted(async () => {
 
       if (key === 'author_id') {
         formDataValues[key] = response.entity.author === null ? null : response.entity.author.id
+        return
+      }
+
+      if (key === 'release_date') {
+        formDataValues[key] = response.entity.release_date === null ? null : moment(response.entity.release_date, 'X').format('DD.MM.yyyy')
         return
       }
 
