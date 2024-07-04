@@ -14,7 +14,7 @@ const props = defineProps({
   },
   modelValue: {
     required: false,
-    type: [Number, String, Array, File, Object]
+    type: [Object, String]
   },
   errors: {
     type: Array,
@@ -36,9 +36,11 @@ const props = defineProps({
 watch(
     () => props.modelValue,
     (value) => {
-      if (value === null) {
+      if (value === null || value instanceof File) {
         return
       }
+
+      tryToLoadImage(value.original)
     }
 )
 
@@ -77,18 +79,23 @@ const handleUploadedFiles = (uploadFiles: FileList) => {
     nextTick(() => {
 
       const blobLink = URL.createObjectURL(file)
-      const img = new Image()
-      img.onerror = () => {
-        isUnrecognisedFile.value = true
-      }
-      img.onload = () => {
-        imageEl.value.src = blobLink
-      }
-      img.src = blobLink
+
+      tryToLoadImage(blobLink)
 
       emit('update:modelValue', files.value[0])
     })
   })
+}
+
+const tryToLoadImage = (link: string) => {
+  const img = new Image()
+  img.onerror = () => {
+    isUnrecognisedFile.value = true
+  }
+  img.onload = () => {
+    imageEl.value.src = link
+  }
+  img.src = link
 }
 
 const onChange = (e: Event) => {
@@ -102,6 +109,8 @@ const onDrop = (e: Event) => {
 const onRemove = () => {
   files.value.splice(0, files.value.length)
   isUnrecognisedFile.value = false
+
+  emit('update:modelValue', null)
 }
 
 const onClick = () => {
@@ -118,8 +127,8 @@ const onClick = () => {
   <div>
     <label class="label">{{ label }}</label>
     <div class="input-file__container" :class="{'--empty': files.length === 0, '--has-errors': errors && errors[0]}">
-      <template v-if="files.length > 0">
-        <div class="input-file__image-wrapper" v-if="files.length > 0" @click="onRemove">
+      <template v-if="files.length > 0 || (modelValue && modelValue.original !== undefined)">
+        <div class="input-file__image-wrapper" v-if="files.length > 0 || (modelValue && modelValue.original !== undefined)" @click="onRemove">
           <template v-if="isUnrecognisedFile">
             <svg :class="{'--has-errors': errors && errors[0] }">
               <use :xlink:href="'/img/temp_sprite.svg#file'"/>
