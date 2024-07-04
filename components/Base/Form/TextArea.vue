@@ -36,15 +36,18 @@ watch(
       internalValue.value = value
 
       nextTick(() => {
-        onInput()
+        triggerAutosize()
       })
     }
 )
 
-const onInput = () => {
+const triggerAutosize = () => {
   textareaEl.value.style.height = "50px";
   textareaEl.value.style.height = textareaEl.value.scrollHeight + 2 + "px";
+}
 
+const onInput = () => {
+  triggerAutosize()
   emit('update:modelValue', internalValue.value)
 }
 </script>
