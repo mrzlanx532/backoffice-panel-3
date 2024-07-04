@@ -126,9 +126,9 @@ const onClick = () => {
 <template>
   <div>
     <label class="label">{{ label }}</label>
-    <div class="input-file__container" :class="{'--empty': files.length === 0, '--has-errors': errors && errors[0]}">
-      <template v-if="files.length > 0 || (modelValue && modelValue.original !== undefined)">
-        <div class="input-file__image-wrapper" v-if="files.length > 0 || (modelValue && modelValue.original !== undefined)" @click="onRemove">
+    <div class="input-file__container" :class="{'--empty': files.length === 0 && modelValue?.original === undefined, '--has-errors': errors && errors[0]}">
+      <template v-if="files.length > 0 || modelValue?.original !== undefined">
+        <div class="input-file__image-wrapper" v-if="files.length > 0 || modelValue?.original !== undefined" @click="onRemove">
           <template v-if="isUnrecognisedFile">
             <svg :class="{'--has-errors': errors && errors[0] }">
               <use :xlink:href="'/img/temp_sprite.svg#file'"/>
