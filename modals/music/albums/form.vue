@@ -87,6 +87,9 @@ const formData = [
     label: 'Изображение',
     component: FormInputFile,
     class: '--full',
+    componentData: {
+      allowedTypes: ['jpg', 'jpeg', 'png'],
+    }
   },
 ]
 
@@ -101,7 +104,7 @@ const onClickSave = async () => {
       formData.append('id', props.data.id)
     }
 
-    Object.entries(this.formData).map(([key, value]) => {
+    Object.entries(formDataValues).map(([key, value]) => {
       formData.append(key, value)
     })
   }

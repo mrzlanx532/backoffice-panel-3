@@ -4,7 +4,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import moment from 'moment'
 import 'moment/dist/locale/ru'
 
-const date = ref();
+const selectedDate = ref();
 
 const emit = defineEmits(['update:modelValue'])
 
@@ -33,6 +33,19 @@ const props = defineProps({
   }
 })
 
+watch(
+    () => props.modelValue,
+    (value) => {
+      if (value === null) {
+        selectedDate.value = null
+
+        return
+      }
+
+      selectedDate.value = moment(value, 'X').format(props.componentData.returnFormat)
+    }
+)
+
 const prepareValue = (data: Moment|null) => {
   const momentDate = moment(data, 'DD.MM.YYYY')
 
@@ -41,9 +54,6 @@ const prepareValue = (data: Moment|null) => {
   }
 
   if (props?.componentData?.returnFormat) {
-
-    console.log(momentDate.format(props.componentData.returnFormat))
-
     return momentDate.format(props.componentData.returnFormat)
   }
 
@@ -51,7 +61,7 @@ const prepareValue = (data: Moment|null) => {
 }
 
 const onUpdate = () => {
-  emit('update:modelValue', prepareValue(date.value))
+  emit('update:modelValue', prepareValue(selectedDate.value))
 }
 
 let altPosition = null;
@@ -65,7 +75,7 @@ if (props?.componentData?.altPosition) {
   <div>
     <div class="label">{{ label }}</div>
     <VueDatePicker
-        v-model="date"
+        v-model="selectedDate"
         class="dp__theme_form date"
         locale="ru"
         format="dd.MM.yyyy"

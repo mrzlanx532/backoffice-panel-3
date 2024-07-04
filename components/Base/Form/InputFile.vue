@@ -32,6 +32,13 @@ const props = defineProps({
   },
 })
 
+watch(
+    () => props.modelValue,
+    (value) => {
+      console.log(value)
+    }
+)
+
 const { $notification } = useNuxtApp()
 
 const emit = defineEmits(['update:modelValue'])
