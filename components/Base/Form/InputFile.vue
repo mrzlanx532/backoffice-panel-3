@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick } from 'vue'
+import { nextTick, type Ref } from 'vue'
 import { useNuxtApp } from '#imports'
 import mimeTypeMapper from 'mime-db'
 
@@ -13,6 +13,7 @@ const props = defineProps({
     type: String,
   },
   modelValue: {
+    required: false,
     type: [Number, String, Array, File]
   },
   errors: {
@@ -35,7 +36,9 @@ const props = defineProps({
 watch(
     () => props.modelValue,
     (value) => {
-      console.log(value)
+      if (value === null) {
+        return
+      }
     }
 )
 
@@ -45,8 +48,8 @@ const emit = defineEmits(['update:modelValue'])
 
 const files = ref([])
 
-const singleImage = ref(null)
-const unrecognisedFileSprite = ref('')
+const imageEl: Ref<HTMLElement|null> = ref(null)
+const unrecognisedFileSprite: Ref<string> = ref('')
 
 const handleUploadedFiles = (uploadFiles: FileList) => {
   unrecognisedFileSprite.value = ''
@@ -79,7 +82,7 @@ const handleUploadedFiles = (uploadFiles: FileList) => {
         unrecognisedFileSprite.value = 'file'
       }
       img.onload = () => {
-        singleImage.value.src = blobLink
+        imageEl.value.src = blobLink
       }
       img.src = blobLink
 
@@ -117,7 +120,7 @@ const onClick = () => {
     <div class="input-file__container" :class="{'--empty': files.length === 0, '--has-errors': errors && errors[0]}">
       <template v-if="files.length > 0">
         <div class="input-file__image-wrapper" v-if="files.length > 0" @click="onRemove">
-          <img v-if="unrecognisedFileSprite === ''" ref="singleImage" src="#" alt="image">
+          <img v-if="unrecognisedFileSprite === ''" ref="imageEl" src="#" alt="image">
           <template v-else>
             <svg :class="{'--has-errors': errors && errors[0] }">
               <use :xlink:href="'/img/temp_sprite.svg#' + unrecognisedFileSprite"/>

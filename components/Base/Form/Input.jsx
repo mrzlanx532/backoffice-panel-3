@@ -50,6 +50,7 @@ export default defineComponent({
             type: String,
         },
         modelValue: {
+            required: false,
             type: String
         },
         errors: {

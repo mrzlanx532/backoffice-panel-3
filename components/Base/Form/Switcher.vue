@@ -13,6 +13,7 @@
       type: String,
     },
     modelValue: {
+      required: false,
       type: [Number, String, Array]
     },
     errors: {
