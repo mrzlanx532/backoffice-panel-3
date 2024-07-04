@@ -1,46 +1,52 @@
 <script setup lang="ts">
-  const emit = defineEmits(['update:modelValue'])
+import { nextTick } from 'vue'
 
-  const textareaEl: Ref<HTMLElement, null> = ref(null)
+const emit = defineEmits(['update:modelValue'])
 
-  const internalValue = ref('')
+const textareaEl: Ref<HTMLElement, null> = ref(null)
 
-  const props = defineProps({
-    label: {
-      required: true,
-      type: String,
-    },
-    name: {
-      required: true,
-      type: String,
-    },
-    modelValue: {
-      type: [Number, String, Array]
-    },
-    errors: {
-      type: Array,
-      required: false,
-      default: []
-    },
-    componentData: {
-      type: Object,
-      required: false
-    }
-  })
+const internalValue = ref('')
 
-  watch(
-      () => props.modelValue,
-      (value) => {
-        internalValue.value = value
-      }
-  )
-
-  const onInput = () => {
-    textareaEl.value.style.height = "50px";
-    textareaEl.value.style.height = textareaEl.value.scrollHeight + "px";
-
-    emit('update:modelValue', internalValue.value)
+const props = defineProps({
+  label: {
+    required: true,
+    type: String,
+  },
+  name: {
+    required: true,
+    type: String,
+  },
+  modelValue: {
+    type: [Number, String, Array]
+  },
+  errors: {
+    type: Array,
+    required: false,
+    default: []
+  },
+  componentData: {
+    type: Object,
+    required: false
   }
+})
+
+watch(
+    () => props.modelValue,
+    (value) => {
+      internalValue.value = value
+
+      nextTick(() => {
+        onInput()
+      })
+    }
+)
+
+const onInput = () => {
+  textareaEl.value.style.height = "50px";
+  textareaEl.value.style.height = textareaEl.value.scrollHeight + 2 + "px";
+
+  emit('update:modelValue', internalValue.value)
+}
 </script>
 
 <template>
