@@ -14,7 +14,7 @@ const props = defineProps({
   },
   modelValue: {
     required: false,
-    type: [Number, String, Array, File]
+    type: [Number, String, Array, File, Object]
   },
   errors: {
     type: Array,
@@ -49,10 +49,10 @@ const emit = defineEmits(['update:modelValue'])
 const files = ref([])
 
 const imageEl: Ref<HTMLElement|null> = ref(null)
-const unrecognisedFileSprite: Ref<string> = ref('')
+const isUnrecognisedFile: Ref<boolean|null> = ref(false)
 
 const handleUploadedFiles = (uploadFiles: FileList) => {
-  unrecognisedFileSprite.value = ''
+  isUnrecognisedFile.value = false
 
   Array.from(uploadFiles).map((file) => {
 
@@ -79,7 +79,7 @@ const handleUploadedFiles = (uploadFiles: FileList) => {
       const blobLink = URL.createObjectURL(file)
       const img = new Image()
       img.onerror = () => {
-        unrecognisedFileSprite.value = 'file'
+        isUnrecognisedFile.value = true
       }
       img.onload = () => {
         imageEl.value.src = blobLink
@@ -101,7 +101,7 @@ const onDrop = (e: Event) => {
 
 const onRemove = () => {
   files.value.splice(0, files.value.length)
-  unrecognisedFileSprite.value = ''
+  isUnrecognisedFile.value = false
 }
 
 const onClick = () => {
@@ -116,18 +116,18 @@ const onClick = () => {
 
 <template>
   <div>
-    <label class="label">{{label}}</label>
+    <label class="label">{{ label }}</label>
     <div class="input-file__container" :class="{'--empty': files.length === 0, '--has-errors': errors && errors[0]}">
       <template v-if="files.length > 0">
         <div class="input-file__image-wrapper" v-if="files.length > 0" @click="onRemove">
-          <img v-if="unrecognisedFileSprite === ''" ref="imageEl" src="#" alt="image">
-          <template v-else>
+          <template v-if="isUnrecognisedFile">
             <svg :class="{'--has-errors': errors && errors[0] }">
-              <use :xlink:href="'/img/temp_sprite.svg#' + unrecognisedFileSprite"/>
+              <use :xlink:href="'/img/temp_sprite.svg#file'"/>
             </svg>
             <p class="input-file__image-label">Загруженный файл</p>
           </template>
-          <div class="input-file__image-overlay"></div>
+          <img v-else ref="imageEl" src="#" alt="image">
+          <div class="input-file__image-overlay"/>
           <div class="input-file__cross-wrapper">
             <svg>
               <use xlink:href="/img/sprite.svg#trash"/>

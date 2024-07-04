@@ -87,7 +87,7 @@
   const onClickDelete = () => {
     $modal.confirm().then( async (isAgree) => {
       if (isAgree) {
-        const response = await $authFetch('http://backoffice-api.lsmlocal.ru/music/albums/delete', {
+        await $authFetch('http://backoffice-api.lsmlocal.ru/music/albums/delete', {
           method: 'POST',
           body: {
             id: id.value
