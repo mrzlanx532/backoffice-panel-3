@@ -1,10 +1,10 @@
 export default defineNuxtConfig({
-
   app: {
     head: {
       title: 'LSM Backoffice',
     }
   },
+
   devtools: { enabled: true },
 
   plugins: [
@@ -33,5 +33,7 @@ export default defineNuxtConfig({
       '@pinia/nuxt',
       '@mrzlanx532/nuxt-3-laravel-auth-module',
       '@mrzlanx532/nuxt-3-backoffice-ui'
-  ]
+  ],
+
+  compatibilityDate: '2024-07-05'
 })
