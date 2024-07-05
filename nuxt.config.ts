@@ -9,7 +9,6 @@ export default defineNuxtConfig({
 
   plugins: [
     'plugins/scrollable.ts',
-    'plugins/click-outside.ts',
   ],
 
   laravelAuth: {
