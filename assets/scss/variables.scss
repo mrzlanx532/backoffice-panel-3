@@ -63,3 +63,8 @@
   --warning-btn-color-contrast: #fdca2e;
   --warning-btn-box-shadow: #b58f20;
 }
+
+* {
+  --document-scroll-background: linear-gradient(to bottom, #DE4020 0%, orange 100%);
+  --scrollable-slider-background: linear-gradient(to bottom, #DE4020 0%, orange 100%);
+}

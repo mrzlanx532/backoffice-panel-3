@@ -7,10 +7,6 @@ export default defineNuxtConfig({
 
   devtools: { enabled: true },
 
-  plugins: [
-    'plugins/scrollable.ts',
-  ],
-
   laravelAuth: {
     domain: 'http://backoffice-api.lsmlocal.ru',
     redirects: {
