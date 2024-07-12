@@ -2,7 +2,7 @@
   import { definePageMeta, useNuxtApp } from '#imports'
   import { type Ref } from 'vue'
   import Button from '@/components/Base/Button'
-  import Browser from "@/components/Base/Browser/Browser";
+  import Browser from '@/components/Base/Browser/Browser'
 
   definePageMeta({
     middleware: ['auth']
@@ -11,9 +11,9 @@
   const { $modal, $notification, $authFetch } = useNuxtApp()
 
   const id: Ref<number|null> = ref(null)
-  const item: Ref<{}, null> = ref({})
+  const item: Ref<{}|null> = ref({})
 
-  const browserEl: Ref<HTMLElement, null> = ref(null)
+  const browserEl: Ref<HTMLElement|null> = ref(null)
 
   const requestProperties = ref([
     'id',
