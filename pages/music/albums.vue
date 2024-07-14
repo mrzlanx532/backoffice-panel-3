@@ -65,19 +65,36 @@
     },
   ])
 
-  const onClickCreate = () => {
+  const onClickCreate = async () => {
+    const formResponse = await $authFetch('http://backoffice-api.lsmlocal.ru/music/albums/form', {
+      method: 'GET',
+      params: {
+        id: id.value
+      }
+    })
+
     $modal.load('music/albums/form', {
-      title: 'Создание альбома'
+      title: 'Создание альбома',
+      formResponse
     }).then(() => {
       browserEl.value.reset()
       $notification.push({type: 'success', message: 'Альбом добавлен'})
     })
   }
 
-  const onClickEdit = () => {
+  const onClickEdit = async () => {
+
+    const formResponse = await $authFetch('http://backoffice-api.lsmlocal.ru/music/albums/form', {
+      method: 'GET',
+      params: {
+        id: id.value
+      }
+    })
+
     $modal.load('music/albums/form', {
       title: 'Изменение альбома',
-      id: id
+      id: id,
+      formResponse
     }).then(() => {
       browserEl.value.reset()
       $notification.push({type: 'success', message: 'Альбом обновлен'})

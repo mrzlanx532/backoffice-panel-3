@@ -134,47 +134,38 @@ const onClickSave = async () => {
 
 onMounted(async () => {
 
-  const params = {}
-
-  if (props.data.id !== undefined) {
-    params.id = props.data.id
-  }
-
-  const response = await $authFetch('http://backoffice-api.lsmlocal.ru/music/albums/form', {
-    method: 'GET',
-    params
-  })
+  const formResponse = props.data.formResponse
 
   if (props.data.id !== undefined) {
     Object.keys(formDataValues).map((key) => {
 
       if (key === 'label_id') {
-        formDataValues[key] = response.entity.label === null ? null : response.entity.label.id
+        formDataValues[key] = formResponse.entity.label === null ? null : formResponse.entity.label.id
         return
       }
 
       if (key === 'author_id') {
-        formDataValues[key] = response.entity.author === null ? null : response.entity.author.id
+        formDataValues[key] = formResponse.entity.author === null ? null : formResponse.entity.author.id
         return
       }
 
       if (key === 'release_date') {
-        formDataValues[key] = response.entity.release_date === null ? null : moment(response.entity.release_date, 'X').format('DD.MM.yyyy')
+        formDataValues[key] = formResponse.entity.release_date === null ? null : moment(formResponse.entity.release_date, 'X').format('DD.MM.yyyy')
         return
       }
 
-      formDataValues[key] = response.entity[key]
+      formDataValues[key] = formResponse.entity[key]
     })
   }
 
-  response.authors.forEach((author) => {
+  formResponse.authors.forEach((author) => {
     formData[2].componentData.options.push({
       id: author.id,
       title: `${author.name_en} (${author.name_en})`,
     })
   })
 
-  response.labels.forEach((label) => {
+  formResponse.labels.forEach((label) => {
     formData[3].componentData.options.push({
       id: label.id,
       title: `${label.name_en} (${label.name_en})`,
