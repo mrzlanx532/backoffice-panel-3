@@ -98,8 +98,38 @@ const onClickDelete = () => {
   })
 }
 
-const onClickEdit = () => {
+const onClickEdit = async () => {
+  const formResponse = await $authFetch(`http://backoffice-api.lsmlocal.ru/blog/posts/form`, {
+    method: 'GET',
+    params: {
+      id: item.value.id,
+    },
+  })
 
+  $modal.load('blog/form', {
+    title: 'Редактирование статьи',
+    formResponse
+  }).then(() => {
+    browserEl.value.reset()
+    $notification.push({type: 'success', message: 'Статья отредактирована'})
+  })
+}
+
+const onClickCreate = async () => {
+  const formResponse = await $authFetch(`http://backoffice-api.lsmlocal.ru/blog/posts/form`, {
+    method: 'GET',
+    params: {
+      id: item.value.id,
+    },
+  })
+
+  $modal.load('blog/form', {
+    title: 'Создание статьи',
+    formResponse
+  }).then(() => {
+    browserEl.value.reset()
+    $notification.push({type: 'success', message: 'Статья добавлена'})
+  })
 }
 </script>
 
@@ -115,6 +145,11 @@ const onClickEdit = () => {
       detail-page-url-prefix="blog"
       @itemUpdated="onItemUpdated"
   >
+    <template #rightSide>
+      <div class="btn__group">
+        <Button @click="onClickCreate" :classes="['--small --primary']">Добавить</Button>
+      </div>
+    </template>
     <template #browserDetailHeader>
       <div class="btn__group">
         <Button @click="onClickEdit" :classes="['--big --outline-primary']">Изменить</Button>
