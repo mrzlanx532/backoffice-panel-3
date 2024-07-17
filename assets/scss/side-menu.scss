@@ -109,6 +109,13 @@
     user-select: none;
     z-index: 1;
     position: relative;
+
+    a {
+      font-family: "FiraSansExtraCondensed";
+      text-decoration: none;
+      color: black;
+    }
+
     &:hover {
       cursor: pointer;
       color: #606060;

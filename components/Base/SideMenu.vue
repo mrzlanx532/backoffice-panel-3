@@ -33,7 +33,9 @@
                     v-for="child in menuItem.children"
                     @click="onSubSectionMenuItemClick(menuItem, child)"
                 >
-                  {{ child.name }}
+                  <NuxtLink :to="child.link">
+                    {{ child.name }}
+                  </NuxtLink>
                 </li>
               </ul>
             </template>
