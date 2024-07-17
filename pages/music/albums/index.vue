@@ -1,8 +1,11 @@
 <script setup lang="ts">
   import { definePageMeta, useNuxtApp } from '#imports'
   import { type Ref } from 'vue'
-  import Button from '@/components/Base/Button'
-  import Browser from '@/components/Base/Browser/Browser'
+  import Button from '~/components/Base/Button.vue'
+  import Browser from '~/components/Base/Browser/Browser.vue'
+  import Tabs from '~/components/Base/Tabs.vue'
+  import TabMain from '~/pages/music/albums/ignore/tabs/main.vue'
+  import TabTracks from '~/pages/music/albums/ignore/tabs/tracks.vue'
 
   definePageMeta({
     middleware: ['auth']
@@ -23,6 +26,19 @@
     'ident',
     'tracks_counter',
     'created_at'
+  ])
+
+  const selectedTab = ref(0)
+
+  const tabs = shallowRef([
+    {
+      title: 'Инфо',
+      component: TabMain
+    },
+    {
+      title: 'Треки',
+      component: TabTracks
+    },
   ])
 
   const columns = shallowRef([
@@ -121,6 +137,10 @@
     item.value = val
     id.value = val.id
   }
+
+  const onTabChange = (tab) => {
+    selectedTab.value = tab
+  }
 </script>
 
 <template>
@@ -145,7 +165,11 @@
         <Button @click="onClickEdit" :classes="['--big --outline-primary']">Изменить</Button>
         <Button @click="onClickDelete" :classes="['--big --outline-danger']">Удалить</Button>
       </div>
+      <Tabs :tabs="tabs" @change="onTabChange"/>
     </template>
 
+    <template #browserDetailContent>
+      <component :is="tabs[selectedTab].component" :item="item"/>
+    </template>
   </Browser>
 </template>
