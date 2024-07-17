@@ -57,7 +57,6 @@
               class="browser__table-container"
               :class="[
                 {'browser__table-container_loading': loadingIsActive},
-                {'browser__table-container_is-empty': items.length === 0}
               ]"
           >
             <table v-if="items.length" class="browser__table">
@@ -91,8 +90,10 @@
               </tr>
               </tbody>
             </table>
-            <div v-else class="browser__table-is-empty-message">
-              Записей нет
+          </div>
+          <div class="browser__label-empty-container" v-if="items.length === 0">
+            <div class="browser__label-empty">
+              Нет записей
             </div>
           </div>
         </div>
