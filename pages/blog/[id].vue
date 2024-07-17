@@ -12,16 +12,25 @@
       </div>
     </template>
     <template v-slot:content>
-      <transition name="fade">
-        <Section v-if="Object.keys(item).length > 0">
-          <template v-slot:header>
-            Основное
-          </template>
-          <template v-slot:content>
-            <FlexTable :item="item" :config="detailOptions"/>
-          </template>
-        </Section>
-      </transition>
+        <div class="section__group">
+          <Section>
+            <template v-slot:header>
+              Краткое содержание
+            </template>
+            <template v-slot:content>
+              {{ item.name }}
+            </template>
+          </Section>
+          <Section>
+            <template v-slot:header>
+              Полное содержание
+            </template>
+            <template v-slot:content>
+              <div v-html="item.content"/>
+            </template>
+          </Section>
+          <FlexTable :config="detailOptions" :item="item"/>
+        </div>
     </template>
   </Detail>
 </template>
@@ -54,29 +63,11 @@ export default {
       item: {},
       detailOptions: [
         {
-          name: 'id',
-          title: 'ID',
-          columnClass: 6
-        },
-        {
-          name: 'name',
-          title: 'Заголовок',
-          columnClass: 6
-        },
-        {
           name: 'category',
-          title: 'Рубрика',
+          title: 'Категория',
           columnClass: 6,
           toFormat(item) {
             return item?.category?.name_ru
-          }
-        },
-        {
-          name: 'locale',
-          title: 'Локаль',
-          columnClass: 6,
-          toFormat(item) {
-            return item?.locale?.title
           }
         },
         {
@@ -86,7 +77,15 @@ export default {
         },
         {
           name: 'created_at',
-          title: 'Дата создания',
+          title: 'Добавлен',
+          columnClass: 6,
+          preset: {
+            name: 'timestampToFormatPreset',
+          }
+        },
+        {
+          name: 'updated_at',
+          title: 'Изменен',
           columnClass: 6,
           preset: {
             name: 'timestampToFormatPreset',
