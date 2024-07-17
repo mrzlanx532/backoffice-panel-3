@@ -12,25 +12,29 @@
       </div>
     </template>
     <template v-slot:content>
-        <div class="section__group">
-          <Section>
-            <template v-slot:header>
-              Краткое содержание
-            </template>
-            <template v-slot:content>
-              {{ item.name }}
-            </template>
-          </Section>
-          <Section>
-            <template v-slot:header>
-              Полное содержание
-            </template>
-            <template v-slot:content>
-              <div v-html="item.content"/>
-            </template>
-          </Section>
-          <FlexTable :config="detailOptions" :item="item"/>
-        </div>
+      <ClientOnly>
+        <Transition name="fade" mode="out-in">
+          <div class="section__group">
+            <Section>
+              <template v-slot:header>
+                Краткое содержание
+              </template>
+              <template v-slot:content>
+                {{ item.name }}
+              </template>
+            </Section>
+            <Section>
+              <template v-slot:header>
+                Полное содержание
+              </template>
+              <template v-slot:content>
+                <div v-html="item.content"/>
+              </template>
+            </Section>
+            <FlexTable :config="detailOptions" :item="item"/>
+          </div>
+        </Transition>
+      </ClientOnly>
     </template>
   </Detail>
 </template>
@@ -106,3 +110,15 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .3s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
