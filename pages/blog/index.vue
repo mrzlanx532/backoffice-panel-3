@@ -1,16 +1,20 @@
 <script setup lang="ts">
+import { definePageMeta, useNuxtApp } from '#imports'
+import type { Ref } from 'vue'
 import Button from '@/components/Base/Button.vue'
 import Section from '@/components/Base/Section.vue'
 import Browser from '@/components/Base/Browser/Browser.vue';
-
-import { definePageMeta, useNuxtApp } from '#imports'
-import type { Ref } from 'vue'
+import FlexTable from '@/components/Base/FlexTable.vue'
 
 definePageMeta({
   middleware: ['auth']
 })
 
-const { $modal, $notification, $authFetch } = useNuxtApp()
+const {
+  $modal,
+  $notification,
+  $authFetch
+} = useNuxtApp()
 
 const item: Ref<{}|null> = ref({})
 
@@ -76,6 +80,34 @@ const requestProperties = ref([
   'subscription_type'
 ])
 
+const config = shallowRef([
+  {
+    name: 'category_id',
+    title: 'Категория',
+    columnClass: 6,
+    toFormat(item) {
+        return `${item?.category?.name_ru}`
+    },
+  },
+  {
+    name: 'date',
+    title: 'Дата',
+    columnClass: 6,
+  },
+  {
+    name: 'created_at',
+    title: 'Добавлен',
+    columnClass: 6,
+    preset: { name: 'timestampToFormatPreset' },
+  },
+  {
+    name: 'updated_at',
+    title: 'Изменен',
+    columnClass: 6,
+    preset: { name: 'timestampToFormatPreset' },
+  },
+])
+
 const onItemUpdated = (newItem) => {
     item.value = newItem
 }
@@ -108,6 +140,7 @@ const onClickEdit = async () => {
 
   $modal.load('blog/form', {
     title: 'Редактирование статьи',
+    id: item.value.id,
     formResponse
   }).then(() => {
     browserEl.value.reset()
@@ -160,7 +193,7 @@ const onClickCreate = async () => {
       <div class="section__group">
         <Section>
           <template v-slot:header>
-            Основное
+            Краткое содержание
           </template>
           <template v-slot:content>
             {{ item.name }}
@@ -168,12 +201,13 @@ const onClickCreate = async () => {
         </Section>
         <Section>
           <template v-slot:header>
-            Дополнительное
+            Полное содержание
           </template>
           <template v-slot:content>
             <div v-html="item.content"/>
           </template>
         </Section>
+        <FlexTable :config="config" :item="item"/>
       </div>
     </template>
   </Browser>
