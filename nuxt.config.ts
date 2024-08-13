@@ -5,7 +5,7 @@ export default defineNuxtConfig({
     }
   },
 
-  devtools: { enabled: true },
+  devtools: { enabled: false },
 
   laravelAuth: {
     domain: 'http://backoffice-api.lsmlocal.ru',

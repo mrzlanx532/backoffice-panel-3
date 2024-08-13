@@ -5,6 +5,7 @@
         class="login__input"
         :type="type"
         :name="name"
+        :id="name"
         v-model="localValue"
         @change="onChange"
     >
