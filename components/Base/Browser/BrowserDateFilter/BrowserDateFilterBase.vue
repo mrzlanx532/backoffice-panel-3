@@ -305,7 +305,7 @@ const onKeydownEnter = () => {
     />
     <div class="date__input-remove-icon" @click="onClickRemove" v-if="pickedDate !== null">
       <svg>
-        <use xlink:href="/img/sprite.svg#cancel_cross_bold"/>
+        <use xlink:href="/img/temp_sprite.svg#min_cross"/>
       </svg>
     </div>
     <div class="date__input-icon" @click="onClick">
