@@ -44,8 +44,8 @@ const props = defineProps({
     <label :for="filter.id" class="browser__filter-name">{{ filter.title }}</label>
     <div class="browser__filter-container date">
       <template v-if="filter.config.range">
-        <BrowserDateFilterBase @change="onFilterValueChanged" :filter="filter" :range-index="0" type-of="datetime"/>
-        <BrowserDateFilterBase @change="onFilterValueChanged" :filter="filter" :range-index="1" type-of="datetime" :style="{'marginTop': '2px'}"/>
+        <BrowserDateFilterBase @change="onFilterValueChanged" :filter="filter" :range-index="0" type-of="date"/>
+        <BrowserDateFilterBase @change="onFilterValueChanged" :filter="filter" :range-index="1" type-of="date" :style="{'marginTop': '2px'}"/>
       </template>
       <BrowserDateFilterBase v-else @change="onFilterValueChanged" :filter="filter" type-of="datetime"/>
     </div>

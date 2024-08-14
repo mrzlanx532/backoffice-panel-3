@@ -10,8 +10,7 @@
   >
     <template #rightSide>
       <div class="btn__group">
-        <Button @click="onClickEdit" :classes="['--small --primary']">Выгрузка .xlsx</Button>
-        <Button @click="onClickEdit" :classes="['--small --primary']">Еще действие</Button>
+        <Button @click="onClickEdit" :classes="['--small --success']">Добавить</Button>
       </div>
     </template>
 
