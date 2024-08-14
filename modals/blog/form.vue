@@ -139,7 +139,7 @@ onMounted(async () => {
   formResponse.categories.forEach((category) => {
     formData[1].componentData.options.push({
       id: category.id,
-      title: `${category.name_en} (${category.name_ru}})`
+      title: `${category.name_en} (${category.name_ru})`
     })
   })
 
