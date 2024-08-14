@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css'
 import moment from 'moment'
 import 'moment/dist/locale/ru'
+import BrowserDateFilterBase from '~/components/Base/Browser/BrowserDateFilter/BrowserDateFilterBase.vue'
 
 const emit = defineEmits(['update:modelValue'])
 
@@ -64,29 +63,12 @@ const prepareValue = (data: Moment|null) => {
 const onUpdate = () => {
   emit('update:modelValue', prepareValue(selectedDate.value))
 }
-
-let altPosition = null;
-
-if (props?.componentData?.altPosition) {
-  altPosition =  props?.componentData.altPosition
-}
 </script>
 
 <template>
   <div>
     <div class="label">{{ label }}</div>
-    <VueDatePicker
-        v-model="selectedDate"
-        class="dp__theme_form date"
-        locale="ru"
-        format="dd.MM.yyyy"
-        select-text="Выбрать"
-        :alt-position="altPosition"
-        cancel-text="Отмена"
-        :enable-time-picker="false"
-        @update:model-value="onUpdate()"
-        model-type="dd.MM.yyyy"
-    />
+    <BrowserDateFilterBase @change="onUpdate" type-of="date"/>
     <div class="input__error">{{ errors && errors[0] ? errors[0] : null }}</div>
   </div>
 </template>

@@ -540,4 +540,314 @@
     font-weight: normal;
     font-size: 14px;
   }
+
+  .date {
+
+    &__input-container {
+      display: flex;
+      border-radius: 5px;
+      border: 1px solid var(--color-2, #dbdbdb);
+      position: relative;
+      margin-top: 12px;
+
+      input {
+        display: block;
+        outline: none;
+        border-radius: 5px;
+        border: none;
+        height: 32px;
+        padding: 8px 0 8px 8px;
+        width: 0;
+        flex: 1 30px;
+        font-size: 14px;
+      }
+    }
+
+    &__input-icon {
+      height: 32px;
+      padding: 7px 0;
+      border-left: 1px solid var(--color-2, #dbdbdb);
+      cursor: pointer;
+
+      svg {
+        height: 20px;
+        width: 26px;
+        color: var(--color-4, #dbdbdb);
+      }
+    }
+
+    &__input-remove-icon {
+      height: 32px;
+      padding: 9px 7px;
+      cursor: pointer;
+
+      svg {
+        width: 12px;
+        height: 12px;
+        color: var(--color-6, #959595);
+
+        &:hover {
+          color: var(--color-gradient-2, orange);
+        }
+      }
+    }
+
+    &__multiple-label {
+      font-size: 14px;
+      display: inline-block;
+      padding: 5px 0 5px 5px;
+      color: var(--color-4, #757575);
+      user-select: none;
+    }
+
+    &__dropdown {
+      max-width: 200px;
+      position: absolute;
+      top: 36px;
+      width: calc(100% + 2px);
+      border: 1px solid var(--color-2, #dbdbdb);
+      left: -1px;
+      background: var(--color-1, #ffffff);
+      border-radius: 5px;
+      z-index: 1;
+
+      &.--inverse {
+        top: auto;
+        bottom: 28px;
+        border-radius: 5px 5px 0 0;
+      }
+    }
+
+    &__nav {
+      display: flex;
+      height: 28px;
+
+      >div {
+        cursor: pointer;
+
+        :hover {
+          fill: currentColor;
+          cursor: pointer;
+          color: var(--color-gradient-intermediate);
+        }
+
+        svg {
+
+        }
+      }
+
+      svg:hover {
+        color: var(--color-gradient-intermediate);
+      }
+    }
+
+    &__arrow-container {
+      padding: 6px;
+      width: 15%;
+      flex-basis: 28px;
+
+      svg {
+        height: 16px;
+        width: 16px;
+      }
+    }
+
+    &__nav-month {
+      display: inline-block;
+      padding: 6px;
+      text-align: center;
+      font-size: 14px;
+      user-select: none;
+      text-transform: capitalize;
+
+      &:hover {
+        color: var(--color-gradient-intermediate);
+      }
+    }
+
+    &__nav-year {
+      display: inline-block;
+      width: 35%;
+      padding: 6px;
+      text-align: center;
+      font-size: 14px;
+      user-select: none;
+
+      &:hover {
+        color: var(--color-gradient-intermediate);
+      }
+    }
+
+    &__nav-time {
+      padding: 6px;
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+    &__nav-center {
+      flex-basis: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    &__calendar {
+      padding-bottom: 10px;
+
+      hr {
+        border: none;
+        border-bottom: 1px solid var(--color-3);
+        margin: 5px 10px;
+      }
+    }
+
+    &__calendar-row {
+      display: flex;
+      justify-content: space-evenly;
+      font-size: 14px;
+
+      &.--days {
+        user-select: none;
+        color: var(--color-4, #dbdbdb);
+        margin-top: 5px;
+
+        .date__calendar-cell {
+          cursor: default;
+          font-size: 12px;
+
+          &:hover {
+            color: var(--color-4, #dbdbdb);
+          }
+        }
+      }
+    }
+
+    &__calendar-cell {
+      display: inline-block;
+      width: 20px;
+      text-align: center;
+      user-select: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      margin: 1px 0;
+
+      &:hover {
+        color: #ff6e00;
+      }
+
+      &.--today {
+        border: 1px solid orange;
+      }
+
+      &.--selected {
+        border: 1px solid orange;
+        background: orange;
+        color: var(--color-gradient-1);
+        color: var(--color-1, #ffffff);
+      }
+
+      &.--not-current {
+        color: var(--color-4, #dbdbdb);
+
+        &:hover {
+          color: #ff6e00;
+        }
+      }
+    }
+
+    &__months, &__years {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      grid-gap: 1px;
+      padding-bottom: 5px;
+    }
+
+    &__years {
+      height: 160px;
+      position: relative;
+      top: 0;
+    }
+
+    &__year {
+      text-align: center;
+      padding: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      user-select: none;
+      font-size: 14px;
+
+      &.--is-selected {
+        border: 1px solid var(--color-gradient-2);
+      }
+
+      &:hover {
+        color: var(--color-gradient-1);
+      }
+    }
+
+    &__month {
+      text-align: center;
+      padding: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      user-select: none;
+      font-size: 14px;
+
+      &.--is-selected {
+        border: 1px solid var(--color-gradient-2);
+      }
+
+      &:hover {
+        color: var(--color-gradient-1);
+      }
+    }
+
+    &__time {
+      font-size: 14px;
+      padding-top: 10px;
+      display: flex;
+      justify-content: center;
+      grid-gap: 5px;
+
+      input {
+        display: inline-block;
+        flex: none;
+        width: 32px;
+        border: 1px solid var(--color-2, #dbdbdb);
+        padding: 8px;
+      }
+    }
+
+    &__time-label {
+      padding: 8px 0;
+      margin-right: 10px;
+      color: var(--color-4);
+      font-size: 12px;
+      user-select: none;
+      height: 28px;
+    }
+
+    &__time-icon {
+      padding: 6px 0;
+      margin-left: 10px;
+      height: 28px;
+
+      svg {
+        color: var(--color-4, #dbdbdb);
+        height: 16px;
+        width: 16px;
+      }
+    }
+
+    &__time-delimiter {
+      padding: 5px 0;
+      height: 28px;
+    }
+  }
 }
