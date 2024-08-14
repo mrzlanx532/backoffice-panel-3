@@ -188,6 +188,23 @@
       }
     }
 
+    &__active-select-remove-button {
+      width: 15px;
+      padding: 6px 0 6px 0;
+      position: relative;
+
+      svg {
+        width: 12px;
+        height: 12px;
+        color: var(--color-6, #959595);
+
+        &:hover {
+          cursor: pointer;
+          color: var(--color-gradient-2, orange);
+        }
+      }
+    }
+
     &__selected-container {
       display: flex;
       height: 32px;

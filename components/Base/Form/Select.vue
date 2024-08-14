@@ -40,11 +40,19 @@ const emit = defineEmits(['update:modelValue'])
 watch(
     () => props.modelValue,
     (value) => {
-      props.componentData.options.forEach(option => {
-        if (option.id === value) {
-          selectedItemOrItems.value = option
-        }
-      })
+      if (props.componentData.isMultiple) {
+        props.componentData.options.forEach(option => {
+          if (option.id === value) {
+            selectedItemOrItems.value = option
+          }
+        })
+        return
+      }
+
+      if (props.modelValue === null) {
+        selectedItemOrItems.value = null
+        selectedId.value = null
+      }
     }
 )
 
@@ -60,7 +68,11 @@ const onClickCancel = (index) => {
     delete selectedItems.value[index]
 
     emit('update:modelValue', Object.values(selectedItems).map(item => item.id).filter(id => id !== undefined))
+
+    return
   }
+
+  emit('update:modelValue', null)
 }
 const onMouseDownOnDropdownOption = (option, index) => {
   if (props.componentData.isMultiple) {
@@ -164,7 +176,16 @@ watch(
             </div>
           </transition-group>
         </div>
-        <div class="select__active-select" v-else>{{ selectedItemOrItems.title }}</div>
+        <div class="select__active-select" v-else>{{ selectedItemOrItems?.title }}</div>
+        <div
+            class="select__active-select-remove-button"
+            v-if="selectedId !== null"
+            @click.stop="onClickCancel()"
+        >
+          <svg>
+            <use xlink:href="/img/temp_sprite.svg#min_cross"/>
+          </svg>
+        </div>
         <div
             class="select__dropdown-icon-container"
             :class="{'select__dropdown-icon-container_open': isSelecting}"
