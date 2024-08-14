@@ -603,7 +603,7 @@
     &__dropdown {
       max-width: 200px;
       position: absolute;
-      top: 36px;
+      top: 41px;
       width: calc(100% + 2px);
       border: 1px solid var(--color-2, #dbdbdb);
       left: -1px;
@@ -616,6 +616,18 @@
         bottom: 28px;
         border-radius: 5px 5px 0 0;
       }
+    }
+
+    &__dropdown-arrow {
+      left: 100px;
+      top: 0;
+      height: 12px;
+      width: 12px;
+      background-color: white;
+      position: absolute;
+      border-inline-end: 1px solid var(--color-2, #dbdbdb);
+      border-top: 1px solid var(--color-2, #dbdbdb);
+      transform: translate(-50%, -50%) rotate(-45deg);
     }
 
     &__nav {
