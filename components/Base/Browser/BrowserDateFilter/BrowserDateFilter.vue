@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Пока что сохранил код
 
-import BrowserDateFilterBase from './BrowserDateFilterBase.vue'
+import DatePicker from './DatePicker.vue'
 
 import { defineEmits } from 'vue'
 import moment from 'moment'
@@ -44,10 +44,10 @@ const props = defineProps({
     <label :for="filter.id" class="browser__filter-name">{{ filter.title }}</label>
     <div class="browser__filter-container date">
       <template v-if="filter.config.range">
-        <BrowserDateFilterBase @change="onFilterValueChanged" :filter="filter" :range-index="0" type-of="date"/>
-        <BrowserDateFilterBase @change="onFilterValueChanged" :filter="filter" :range-index="1" type-of="date" :style="{'marginTop': '2px'}"/>
+        <DatePicker @change="onFilterValueChanged" :filter="filter" :range-index="0" type-of="date"/>
+        <DatePicker @change="onFilterValueChanged" :filter="filter" :range-index="1" type-of="date" :style="{'marginTop': '2px'}"/>
       </template>
-      <BrowserDateFilterBase v-else @change="onFilterValueChanged" :filter="filter" type-of="datetime"/>
+      <DatePicker v-else @change="onFilterValueChanged" :filter="filter" type-of="date"/>
     </div>
   </div>
 </template>

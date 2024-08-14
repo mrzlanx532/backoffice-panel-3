@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import moment from 'moment'
 import 'moment/dist/locale/ru'
-import BrowserDateFilterBase from '~/components/Base/Browser/BrowserDateFilter/BrowserDateFilterBase.vue'
+import DatePicker from '~/components/Base/Browser/BrowserDateFilter/DatePicker.vue'
 
 const emit = defineEmits(['update:modelValue'])
 
@@ -68,7 +68,7 @@ const onUpdate = () => {
 <template>
   <div>
     <div class="label">{{ label }}</div>
-    <BrowserDateFilterBase @change="onUpdate" type-of="date"/>
+    <DatePicker @change="onUpdate" :force-inverse="props?.componentData?.forceInverse" type-of="date"/>
     <div class="input__error">{{ errors && errors[0] ? errors[0] : null }}</div>
   </div>
 </template>

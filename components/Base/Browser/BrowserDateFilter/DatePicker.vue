@@ -10,10 +10,6 @@ moment.locale('ru')
 const emit = defineEmits(['change'])
 
 const props = defineProps({
-  filter: {
-    type: Object,
-    required: true
-  },
   rangeIndex: {
     type: Number,
     required: false
@@ -22,7 +18,12 @@ const props = defineProps({
     type: String,
     required: true,
     default: 'date'
-  }
+  },
+  forceInverse: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 })
 
 const secondsToCorrectTimezone = ((new Date().getTimezoneOffset() * -1) * 60)
@@ -69,6 +70,13 @@ watch(
     isOpen,
     ((newVal) => {
       nextTick(() => {
+
+        if (props?.forceInverse) {
+          isNeedToInverse.value = true
+
+          return
+        }
+
         if (newVal) {
           const rect = dropdownEl.value.getBoundingClientRect()
 
