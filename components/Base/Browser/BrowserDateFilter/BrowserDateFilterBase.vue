@@ -319,7 +319,7 @@ const onKeydownEnter = () => {
         :class="{'--inverse': isNeedToInverse}"
         ref="dropdownEl"
     >
-      <div class="date__dropdown-arrow"/>
+      <div class="date__dropdown-arrow" :class="{'--inverse': isNeedToInverse}"/>
       <div class="date__nav">
         <div class="date__arrow-container --left" @click="onClickPrev">
           <svg height="28px"><use xlink:href="/img/sprite.svg#left_single_arrow"/></svg>

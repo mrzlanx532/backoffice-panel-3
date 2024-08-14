@@ -125,6 +125,14 @@ export default {
             class: '--full',
             component: FormSwitcher,
           },
+          {
+            name: 'subscription_till',
+            label: 'Дата истечения',
+            component: FormDate,
+            componentData: {
+              returnFormat: 'DD.MM.yyyy'
+            }
+          },
         ]
       },
       {
@@ -233,7 +241,7 @@ export default {
             label: 'Отключить подписку на эксклюзивные треки',
             component: FormInput,
             class: '--full'
-          },
+          }
         ]
       }
     ])
