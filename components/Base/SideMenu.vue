@@ -16,7 +16,10 @@
                     ]"
                   @click="onSectionMenuItemClick(menuItem)"
               >
-                <div class="side-menu__sections-list-item-title">
+                <NuxtLink v-if="menuItem.link" :to="menuItem.link">
+                  {{ menuItem.name }}
+                </NuxtLink>
+                <div v-else class="side-menu__sections-list-item-title">
                   <div>{{ menuItem.name }}</div>
                 </div>
               </li>
