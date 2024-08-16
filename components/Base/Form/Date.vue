@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import moment from 'moment'
 import 'moment/dist/locale/ru'
-import DatePicker from '~/components/Base/Browser/BrowserDateFilter/DatePicker.vue'
+import DatePicker from '~/components/Base/Datepicker/DatePicker.vue'
 
 const emit = defineEmits(['update:modelValue'])
 

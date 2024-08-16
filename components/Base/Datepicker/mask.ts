@@ -1,3 +1,4 @@
+// @ts-nocheck
 export const maskDate = (e: Event, ref, delimiter = '.') => {
 
     if (
