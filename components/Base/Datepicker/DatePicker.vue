@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import { type IRow, type IMonth, type IYear, type IPayload } from './types'
-import { nextTick, onMounted, onUnmounted, defineEmits, type Ref } from 'vue'
+import { nextTick, onMounted, onUnmounted, type Ref } from 'vue'
 import moment, { type Moment } from 'moment'
 import 'moment/dist/locale/ru'
 import { maskDate } from './mask'
 
 moment.locale('ru')
 
-const emit = defineEmits(['change'])
+const emit = defineEmits(['update:modelValue'])
 
 const props = defineProps({
+  modelValue: {
+    required: false,
+    type: [Number, String, Array]
+  },
   rangeIndex: {
     type: Number,
     required: false
@@ -25,8 +29,6 @@ const props = defineProps({
     default: false,
   },
 })
-
-const secondsToCorrectTimezone = ((new Date().getTimezoneOffset() * -1) * 60)
 
 const navMonthsIsOpen = ref(false)
 const navYearsIsOpen = ref(false)
@@ -65,6 +67,19 @@ const monthDays = ref([
   'cб',
   'вс'
 ])
+
+watch(
+    () => props.modelValue,
+    ((value) => {
+      if (value === null) {
+        return;
+      }
+
+      const selectedDate = moment(props.modelValue as moment.MomentInput, 'X')
+
+      selectDate(selectedDate, true)
+    })
+)
 
 watch(
     isOpen,
@@ -133,7 +148,7 @@ const selectDate = (moment: Moment, isNeedClose: boolean = true) => {
 
   buildCalendar()
 
-  emit('change', {'value': pickedDateMoment.unix() + secondsToCorrectTimezone, 'rangeIndex': props.rangeIndex} as IPayload)
+  emit('update:modelValue', {'value': pickedDateMoment.unix(), 'rangeIndex': props.rangeIndex} as IPayload)
 }
 
 const onClickPrev = () => {
@@ -277,7 +292,7 @@ const onClickTimeInput = () => {
 const onClickRemove = () => {
   pickedDate.value = null
 
-  emit('change', {'value': null, 'rangeIndex': props.rangeIndex})
+  emit('update:modelValue', {'value': null, 'rangeIndex': props.rangeIndex})
 }
 
 onMounted(() => {

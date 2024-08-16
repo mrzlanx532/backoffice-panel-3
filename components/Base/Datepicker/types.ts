@@ -21,6 +21,6 @@ export interface IYear {
 }
 
 export interface IPayload {
-    value: Number,
-    rangeIndex: Number|undefined
+    value: number|null,
+    rangeIndex: number|undefined
 }

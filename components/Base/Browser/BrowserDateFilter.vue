@@ -1,30 +1,30 @@
 <script setup lang="ts">
-// Пока что сохранил код
-
 import DatePicker from '../Datepicker/DatePicker.vue'
 
-import { defineEmits } from 'vue'
 import moment from 'moment'
 import 'moment/dist/locale/ru'
+import type { IPayload } from '~/components/Base/Datepicker/types'
 
 moment.locale('ru')
 
 const emit = defineEmits(['filterValueChanged'])
 
-const value = []
+const secondsToCorrectTimezone = ((new Date().getTimezoneOffset() * -1) * 60)
 
-const onFilterValueChanged = (payload) => {
+const value: (number|null|undefined)[] = []
+
+const onFilterValueChanged = (payload: IPayload) => {
 
   if (payload.rangeIndex === undefined) {
     emit('filterValueChanged', {
       id: props.filter.id,
-      value: payload.value,
+      value: payload.value !== null ? payload.value + secondsToCorrectTimezone : null,
     })
 
     return
   }
 
-  value[payload.rangeIndex] = payload.value
+  value[payload.rangeIndex] = payload.value !== null ? payload.value + secondsToCorrectTimezone : null
 
   emit('filterValueChanged', {
     id: props.filter.id,
@@ -44,8 +44,8 @@ const props = defineProps({
     <label :for="filter.id" class="browser__filter-name">{{ filter.title }}</label>
     <div class="browser__filter-container date">
       <template v-if="filter.config.range">
-        <DatePicker @change="onFilterValueChanged" :filter="filter" :range-index="0" type-of="date"/>
-        <DatePicker @change="onFilterValueChanged" :filter="filter" :range-index="1" type-of="date" :style="{'marginTop': '2px'}"/>
+        <DatePicker @update:modelValue="onFilterValueChanged" :filter="filter" :range-index="0" type-of="date"/>
+        <DatePicker @update:modelValue="onFilterValueChanged" :filter="filter" :range-index="1" type-of="date" :style="{'marginTop': '2px'}"/>
       </template>
       <DatePicker v-else @change="onFilterValueChanged" :filter="filter" type-of="date"/>
     </div>

@@ -147,7 +147,7 @@ onMounted(async () => {
     Object.keys(formDataValues).map((key) => {
 
       if (key === 'date') {
-        formDataValues[key] = formResponse.entity.date === null ? null : moment(formResponse.entity.date, 'X').format('DD.MM.yyyy')
+        formDataValues[key] = formResponse.entity.date !== null ? moment(formResponse.entity.date, 'DD.MM.yyyy').format('X') : null
         return
       }
 
