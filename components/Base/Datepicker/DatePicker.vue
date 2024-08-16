@@ -39,7 +39,7 @@ const endYearMoment = moment().add(100, 'year')
 let currentDate = moment()
 let currentDateStartOfDay = moment().startOf('day')
 let calendarNavMoment = currentDate.clone()
-let pickedDateMoment = null
+let pickedDateMoment: Moment|null = null
 
 const calendarNavMonth = ref(calendarNavMoment.format('MMMM'))
 const calendarNavYear = ref(calendarNavMoment.format('YYYY'))
@@ -78,7 +78,7 @@ watch(
         }
 
         if (newVal) {
-          const rect = dropdownEl.value.getBoundingClientRect()
+          const rect = dropdownEl.value!.getBoundingClientRect()
 
           isNeedToInverse.value = window.innerHeight < rect.height + rect.top
           return
@@ -267,10 +267,10 @@ const onDocumentVisibilityChange = () => {
 }
 
 const onClickTimeInput = () => {
-  if (timeInputEl.value.selectionStart < 3) {
-    timeInputEl.value.setSelectionRange(0, 2)
+  if (timeInputEl.value!.selectionStart < 3) {
+    timeInputEl.value!.setSelectionRange(0, 2)
   } else {
-    timeInputEl.value.setSelectionRange(3, 5)
+    timeInputEl.value!.setSelectionRange(3, 5)
   }
 }
 
@@ -292,7 +292,7 @@ onUnmounted(() => {
   document.removeEventListener('visibilitychange', onDocumentVisibilityChange)
 })
 
-const onKeydown = (e) => {
+const onKeydown = (e: Event) => {
   maskDate(e, pickedDate)
 }
 

@@ -60,15 +60,15 @@ const prepareValue = (data: Moment|null) => {
   return Number(momentDate.format('X')) + secondsToCorrectTimezone
 }
 
-const onUpdate = () => {
-  emit('update:modelValue', prepareValue(selectedDate.value))
+const onChange = (payload) => {
+  emit('update:modelValue', payload.value)
 }
 </script>
 
 <template>
   <div>
     <div class="label">{{ label }}</div>
-    <DatePicker @change="onUpdate" :force-inverse="props?.componentData?.forceInverse" type-of="date"/>
+    <DatePicker @change="onChange" :force-inverse="props?.componentData?.forceInverse" type-of="date"/>
     <div class="input__error">{{ errors && errors[0] ? errors[0] : null }}</div>
   </div>
 </template>
