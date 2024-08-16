@@ -49,26 +49,14 @@ watch(
         return
       }
 
-      selectedDate.value = moment(value, props.componentData.returnFormat).format(props.componentData.returnFormat)
+
     }
 )
 
-const prepareValue = (data: Moment|null) => {
-  const momentDate = moment(data, 'DD.MM.YYYY')
-
-  if (data === null) {
-    return null
-  }
-
-  if (props?.componentData?.returnFormat) {
-    return momentDate.format(props.componentData.returnFormat)
-  }
-
-  return Number(momentDate.format('X')) + secondsToCorrectTimezone
-}
-
 const onChange = (payload: IPayload) => {
-  emit('update:modelValue', payload.value)
+  const returnFormat = props.componentData?.returnFormat ? props.componentData.returnFormat : 'X'
+
+  emit('update:modelValue', moment(payload.value as moment.MomentInput, 'X').format(returnFormat))
 }
 </script>
 

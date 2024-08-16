@@ -61,7 +61,7 @@ const formData = [
     label: 'Дата',
     component: FormDate,
     componentData: {
-      options: []
+      returnFormat: 'DD.MM.YYYY',
     }
   },
   {
