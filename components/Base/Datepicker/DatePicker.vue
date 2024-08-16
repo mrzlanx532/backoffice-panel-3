@@ -45,13 +45,13 @@ const calendarNavMonth = ref(calendarNavMoment.format('MMMM'))
 const calendarNavYear = ref(calendarNavMoment.format('YYYY'))
 
 const months = ref([] as IMonth[])
-const years = ref([])
+const years = ref([] as IYear[])
 
-const calendarNumbersRows = ref([]);
+const calendarNumbersRows = ref([] as IRow[][]);
 
 const pickedDate: Ref<null|string> = ref(null)
 
-const yearSelectedEl: Ref<null|HTMLElement> = ref(null)
+const yearSelectedEl: Ref<null|HTMLElement[]> = ref(null)
 const yearContainerEl: Ref<null|HTMLElement> = ref(null)
 const dropdownEl: Ref<null|HTMLElement> = ref(null)
 const timeInputEl: Ref<null|HTMLElement> = ref(null)
@@ -232,8 +232,8 @@ const onClickNavYear = () => {
   navMonthsIsOpen.value = false
 
   nextTick(() => {
-    yearContainerEl.value.scrollTo({
-      top: yearSelectedEl.value[0].offsetTop,
+    yearContainerEl.value!.scrollTo({
+      top: yearSelectedEl.value![0].offsetTop,
     })
   })
 }
@@ -248,7 +248,7 @@ const onSelectMonth = (month: IMonth) => {
   navMonthsIsOpen.value = false
 }
 
-const onSelectYear = (year) => {
+const onSelectYear = (year: IYear) => {
 
   calendarNavMoment = year.moment
   calendarNavYear.value = year.moment.format('YYYY')
@@ -354,7 +354,7 @@ const onKeydownEnter = () => {
                       '--today': calendarNumber.isToday
                     }"
               v-for="calendarNumber in calendarNumberRow"
-              @click="selectDate(calendarNumber.moment, false, props.typeOf === 'datetime')"
+              @click="selectDate(calendarNumber.moment, false)"
           >
             {{ calendarNumber.value }}
           </div>

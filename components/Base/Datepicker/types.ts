@@ -11,11 +11,11 @@ export interface IRow {
 export interface IMonth {
     value: string,
     moment: Moment,
-    isCurrentMonth: boolean,
+    isCalendarNavMonth: boolean,
 }
 
 export interface IYear {
     value: string,
     moment: Moment,
-    isCurrentYear: boolean,
+    isCalendarNavYear: boolean
 }
