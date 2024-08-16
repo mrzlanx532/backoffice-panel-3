@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {type IRow, type IMonth, type IYear} from './types'
+import { type IRow, type IMonth, type IYear, type IPayload } from './types'
 import { nextTick, onMounted, onUnmounted, defineEmits, type Ref } from 'vue'
 import moment, { type Moment } from 'moment'
 import 'moment/dist/locale/ru'
@@ -133,7 +133,7 @@ const selectDate = (moment: Moment, isNeedClose: boolean = true) => {
 
   buildCalendar()
 
-  emit('change', {'value': pickedDateMoment.unix() + secondsToCorrectTimezone, 'rangeIndex': props.rangeIndex})
+  emit('change', {'value': pickedDateMoment.unix() + secondsToCorrectTimezone, 'rangeIndex': props.rangeIndex} as IPayload)
 }
 
 const onClickPrev = () => {

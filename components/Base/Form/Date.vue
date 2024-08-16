@@ -1,13 +1,20 @@
 <script setup lang="ts">
-import moment from 'moment'
+import moment, { type Moment } from 'moment'
 import 'moment/dist/locale/ru'
-import DatePicker from '~/components/Base/Datepicker/DatePicker.vue'
+import DatePicker from '@/components/Base/Datepicker/DatePicker.vue'
+import type { IPayload } from '@/components/Base/Datepicker/types'
+import type { PropType } from 'vue'
 
 const emit = defineEmits(['update:modelValue'])
 
 const selectedDate = ref();
 
 const secondsToCorrectTimezone = ((new Date().getTimezoneOffset() * -1) * 60)
+
+interface IComponentData {
+  forceInverse?: boolean,
+  returnFormat?: string
+}
 
 const props = defineProps({
   label: {
@@ -28,7 +35,7 @@ const props = defineProps({
     default: []
   },
   componentData: {
-    type: Object,
+    type: Object as PropType<IComponentData>,
     required: false
   }
 })
@@ -60,7 +67,7 @@ const prepareValue = (data: Moment|null) => {
   return Number(momentDate.format('X')) + secondsToCorrectTimezone
 }
 
-const onChange = (payload) => {
+const onChange = (payload: IPayload) => {
   emit('update:modelValue', payload.value)
 }
 </script>

@@ -19,3 +19,8 @@ export interface IYear {
     moment: Moment,
     isCalendarNavYear: boolean
 }
+
+export interface IPayload {
+    value: Number,
+    rangeIndex: Number|undefined
+}

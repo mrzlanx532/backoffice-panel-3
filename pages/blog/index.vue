@@ -126,7 +126,7 @@ const onClickDelete = () => {
     })
 
     $notification.push({type: 'success', message: 'Статья удалена'})
-    browserEl.value.reset()
+    browserEl.value!.reset()
   })
 }
 
@@ -143,7 +143,7 @@ const onClickEdit = async () => {
     id: item.value.id,
     formResponse
   }).then(() => {
-    browserEl.value.reset()
+    browserEl.value!.reset()
     $notification.push({type: 'success', message: 'Статья отредактирована'})
   })
 }
@@ -160,7 +160,7 @@ const onClickCreate = async () => {
     title: 'Создание статьи',
     formResponse
   }).then(() => {
-    browserEl.value.reset()
+    browserEl.value!.reset()
     $notification.push({type: 'success', message: 'Статья добавлена'})
   })
 }
