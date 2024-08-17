@@ -8,7 +8,7 @@ const emit = defineEmits(['update:modelValue'])
 
 interface IComponentData {
   forceInverse?: boolean,
-  returnFormat?: string
+  format?: string
 }
 
 const props = defineProps({
@@ -43,7 +43,13 @@ const onUpdateModelValue = (payload: IPayload) => {
 <template>
   <div>
     <div class="label">{{ label }}</div>
-    <DatePicker :model-value="props.modelValue" @update:model-value="onUpdateModelValue" :force-inverse="props?.componentData?.forceInverse" type-of="date"/>
+    <DatePicker
+        :model-value="props.modelValue"
+        @update:model-value="onUpdateModelValue"
+        :force-inverse="props?.componentData?.forceInverse"
+        :format="props?.componentData?.format"
+        type-of="date"
+    />
     <div class="input__error">{{ errors && errors[0] ? errors[0] : null }}</div>
   </div>
 </template>

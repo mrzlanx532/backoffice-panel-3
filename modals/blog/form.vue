@@ -61,7 +61,7 @@ const formData = [
     label: 'Дата',
     component: FormDate,
     componentData: {
-      returnFormat: 'DD.MM.YYYY',
+      format: 'DD.MM.YYYY',
     }
   },
   {
@@ -114,10 +114,6 @@ const onClickSave = async () => {
 
     const preparedFormData = JSON.parse(JSON.stringify(formData))
 
-    if (formData.date !== null) {
-      preparedFormData.date = moment(preparedFormData.date, 'X').format('DD.MM.YYYY HH:mm')
-    }
-
     await $authFetch(`http://backoffice-api.lsmlocal.ru/blog/posts/${method}`, {
       method: 'POST',
       body: preparedFormData,
@@ -152,13 +148,6 @@ onMounted(async () => {
 
   if (props.data.id !== undefined) {
     Object.keys(formDataValues).map((key) => {
-
-      if (key === 'date') {
-        formDataValues[key] = moment(formResponse.entity.date, 'DD.MM.YYYY').format('X')
-
-        return
-      }
-
       formDataValues[key] = formResponse.entity[key]
     })
   }

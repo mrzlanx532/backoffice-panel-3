@@ -28,6 +28,11 @@ const props = defineProps({
     required: false,
     default: false,
   },
+  format: {
+    type: String,
+    required: false,
+    default: 'X'
+  }
 })
 
 const navMonthsIsOpen = ref(false)
@@ -78,7 +83,7 @@ watch(
         return
       }
 
-      localDateMoment = moment(value as moment.MomentInput, 'X')
+      localDateMoment = moment(value as moment.MomentInput, props.format)
       localDate.value = localDateMoment.format('DD.MM.YYYY')
 
       calendarNavMoment = localDateMoment.clone()
@@ -130,7 +135,7 @@ const selectDate = (moment: Moment, isNeedClose: boolean = true) => {
     isOpen.value = false
   }
 
-  emit('update:modelValue', {'value': moment.unix(), 'rangeIndex': props.rangeIndex} as IPayload)
+  emit('update:modelValue', {'value': moment.format(props.format), 'rangeIndex': props.rangeIndex})
 }
 
 const onClickPrev = () => {
@@ -283,19 +288,17 @@ const onKeydown = (e: Event) => {
   maskDate(e, localDate)
 
   if (localDate.value) {
-    if (localDate.value.length === 10) {
-      const localDateMoment = moment(localDate.value, 'DD.MM.YYYY')
+    const localDateMoment = moment(localDate.value, 'DD.MM.YYYY')
 
-      if (localDateMoment.isValid()) {
-        emit('update:modelValue', {'value': localDateMoment.unix(), 'rangeIndex': props.rangeIndex} as IPayload)
-      }
+    if (localDate.value.length === 10 && localDateMoment.isValid()) {
+      emit('update:modelValue', {'value': localDateMoment.format(props.format), 'rangeIndex': props.rangeIndex})
 
       return
     }
   }
 
   if (!localDate.value) {
-    emit('update:modelValue', {'value': null, 'rangeIndex': props.rangeIndex} as IPayload)
+    emit('update:modelValue', {'value': null, 'rangeIndex': props.rangeIndex})
   }
 }
 
