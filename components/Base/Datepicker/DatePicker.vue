@@ -41,7 +41,9 @@ const endYearMoment = moment().add(100, 'year')
 let currentDate = moment()
 let currentDateStartOfDay = moment().startOf('day')
 let calendarNavMoment = currentDate.clone()
-let pickedDateMoment: Moment|null = null
+
+let localDateMoment: Moment|null = null
+const localDate: Ref<null|string> = ref(null)
 
 const calendarNavMonth = ref(calendarNavMoment.format('MMMM'))
 const calendarNavYear = ref(calendarNavMoment.format('YYYY'))
@@ -50,8 +52,6 @@ const months = ref([] as IMonth[])
 const years = ref([] as IYear[])
 
 const calendarNumbersRows = ref([] as IRow[][]);
-
-const pickedDate: Ref<null|string> = ref(null)
 
 const yearSelectedEl: Ref<null|HTMLElement[]> = ref(null)
 const yearContainerEl: Ref<null|HTMLElement> = ref(null)
@@ -72,18 +72,29 @@ watch(
     () => props.modelValue,
     ((value) => {
       if (value === null) {
-        return;
+        localDateMoment = null
+        localDate.value = null
+
+        buildCalendar()
+        return
       }
 
-      const selectedDate = moment(props.modelValue as moment.MomentInput, 'X')
+      localDateMoment = moment(value as moment.MomentInput, 'X')
+      localDate.value = localDateMoment.format('DD.MM.YYYY')
 
-      selectDate(selectedDate, true)
+      calendarNavMoment = localDateMoment.clone()
+      calendarNavMonth.value = localDateMoment.format('MMMM')
+      calendarNavYear.value = localDateMoment.format('YYYY')
+
+      buildCalendar()
+
+      isOpen.value = false
     })
 )
 
 watch(
     isOpen,
-    ((newVal) => {
+    ((value) => {
       nextTick(() => {
 
         if (props?.forceInverse) {
@@ -92,7 +103,7 @@ watch(
           return
         }
 
-        if (newVal) {
+        if (value) {
           const rect = dropdownEl.value!.getBoundingClientRect()
 
           isNeedToInverse.value = window.innerHeight < rect.height + rect.top
@@ -101,24 +112,6 @@ watch(
 
         isNeedToInverse.value = false
       })
-    })
-)
-
-watch(
-    pickedDate,
-    ((newVal) => {
-      if (newVal === null) {
-        return
-      }
-
-      if (newVal.length === 10) {
-
-        if (!moment(newVal, 'DD.MM.YYYY').isValid()) {
-          return;
-        }
-
-        selectDate(moment(newVal, 'DD.MM.YYYY'), false)
-      }
     })
 )
 
@@ -134,21 +127,11 @@ const onClickOutside = () => {
 }
 
 const selectDate = (moment: Moment, isNeedClose: boolean = true) => {
-
-  pickedDateMoment = moment
-  pickedDate.value = moment.format('DD.MM.YYYY')
-
   if (isNeedClose) {
     isOpen.value = false
   }
 
-  calendarNavMoment = moment
-  calendarNavMonth.value = moment.format('MMMM')
-  calendarNavYear.value = moment.format('YYYY')
-
-  buildCalendar()
-
-  emit('update:modelValue', {'value': pickedDateMoment.unix(), 'rangeIndex': props.rangeIndex} as IPayload)
+  emit('update:modelValue', {'value': moment.unix(), 'rangeIndex': props.rangeIndex} as IPayload)
 }
 
 const onClickPrev = () => {
@@ -226,7 +209,7 @@ const buildCalendar = () => {
         value: moment.format('D'),
         moment: moment,
         isCurrentMonth: firstDayOfMonth.format('M') === moment.format('M'),
-        isSelectedValue: pickedDateMoment !== null && pickedDateMoment.isSame(moment),
+        isSelectedValue: localDateMoment !== null && localDateMoment.isSame(moment),
         isToday: currentDateStartOfDay.isSame(moment)
       })
     }
@@ -290,8 +273,6 @@ const onClickTimeInput = () => {
 }
 
 const onClickRemove = () => {
-  pickedDate.value = null
-
   emit('update:modelValue', {'value': null, 'rangeIndex': props.rangeIndex})
 }
 
@@ -308,7 +289,23 @@ onUnmounted(() => {
 })
 
 const onKeydown = (e: Event) => {
-  maskDate(e, pickedDate)
+  maskDate(e, localDate)
+
+  if (localDate.value) {
+    if (localDate.value.length === 10) {
+      const localDateMoment = moment(localDate.value, 'DD.MM.YYYY')
+
+      if (localDateMoment.isValid()) {
+        emit('update:modelValue', {'value': localDateMoment.unix(), 'rangeIndex': props.rangeIndex} as IPayload)
+      }
+
+      return
+    }
+  }
+
+  if (!localDate.value) {
+    emit('update:modelValue', {'value': null, 'rangeIndex': props.rangeIndex} as IPayload)
+  }
 }
 
 const onKeydownEnter = () => {
@@ -322,11 +319,11 @@ const onKeydownEnter = () => {
     <input
         @keydown.enter="onKeydownEnter"
         @keydown="onKeydown"
-        :value="pickedDate"
+        :value="localDate"
         @click="onClick"
         ref="input"
     />
-    <div class="date__input-remove-icon" @click="onClickRemove" v-if="pickedDate !== null">
+    <div class="date__input-remove-icon" @click="onClickRemove" v-if="localDate !== null">
       <svg>
         <use xlink:href="/img/temp_sprite.svg#min_cross"/>
       </svg>

@@ -152,6 +152,13 @@ onMounted(async () => {
 
   if (props.data.id !== undefined) {
     Object.keys(formDataValues).map((key) => {
+
+      if (key === 'date') {
+        formDataValues[key] = moment(formResponse.entity.date, 'DD.MM.YYYY').format('X')
+
+        return
+      }
+
       formDataValues[key] = formResponse.entity[key]
     })
   }
