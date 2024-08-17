@@ -825,47 +825,5 @@
         color: var(--color-gradient-1);
       }
     }
-
-    &__time {
-      font-size: 14px;
-      padding-top: 10px;
-      display: flex;
-      justify-content: center;
-      grid-gap: 5px;
-
-      input {
-        display: inline-block;
-        flex: none;
-        width: 32px;
-        border: 1px solid var(--color-2, #dbdbdb);
-        padding: 8px;
-      }
-    }
-
-    &__time-label {
-      padding: 8px 0;
-      margin-right: 10px;
-      color: var(--color-4);
-      font-size: 12px;
-      user-select: none;
-      height: 28px;
-    }
-
-    &__time-icon {
-      padding: 6px 0;
-      margin-left: 10px;
-      height: 28px;
-
-      svg {
-        color: var(--color-4, #dbdbdb);
-        height: 16px;
-        width: 16px;
-      }
-    }
-
-    &__time-delimiter {
-      padding: 5px 0;
-      height: 28px;
-    }
   }
 }

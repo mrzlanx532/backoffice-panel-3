@@ -56,7 +56,6 @@ const calendarNumbersRows = ref([] as IRow[][]);
 const yearSelectedEl: Ref<null|HTMLElement[]> = ref(null)
 const yearContainerEl: Ref<null|HTMLElement> = ref(null)
 const dropdownEl: Ref<null|HTMLElement> = ref(null)
-const timeInputEl: Ref<null|HTMLElement> = ref(null)
 
 const monthDays = ref([
   'пн',
@@ -264,14 +263,6 @@ const onDocumentVisibilityChange = () => {
   isOpen.value = false
 }
 
-const onClickTimeInput = () => {
-  if (timeInputEl.value!.selectionStart < 3) {
-    timeInputEl.value!.setSelectionRange(0, 2)
-  } else {
-    timeInputEl.value!.setSelectionRange(3, 5)
-  }
-}
-
 const onClickRemove = () => {
   emit('update:modelValue', {'value': null, 'rangeIndex': props.rangeIndex})
 }
@@ -369,19 +360,6 @@ const onKeydownEnter = () => {
               @click="selectDate(calendarNumber.moment, false)"
           >
             {{ calendarNumber.value }}
-          </div>
-        </div>
-        <div class="date__time" v-if="typeOf === 'datetime'">
-          <div class="date__time-label">
-            Время
-          </div>
-          <input type="text" ref="timeInputEl" value="23" @click="onClickTimeInput">
-          <div class="date__time-delimiter">:</div>
-          <input type="text" ref="timeInputEl" value="59" @click="onClickTimeInput">
-          <div class="date__time-icon">
-            <svg>
-              <use xlink:href="/img/temp_sprite.svg#time"/>
-            </svg>
           </div>
         </div>
       </div>
