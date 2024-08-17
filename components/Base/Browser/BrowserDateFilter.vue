@@ -9,8 +9,6 @@ moment.locale('ru')
 
 const emit = defineEmits(['filterValueChanged'])
 
-const secondsToCorrectTimezone = ((new Date().getTimezoneOffset() * -1) * 60)
-
 const value: (number|null|undefined)[] = []
 
 const onFilterValueChanged = (payload: IPayload) => {
@@ -18,13 +16,13 @@ const onFilterValueChanged = (payload: IPayload) => {
   if (payload.rangeIndex === undefined) {
     emit('filterValueChanged', {
       id: props.filter.id,
-      value: payload.value !== null ? payload.value + secondsToCorrectTimezone : null,
+      value: payload.value,
     })
 
     return
   }
 
-  value[payload.rangeIndex] = payload.value !== null ? payload.value + secondsToCorrectTimezone : null
+  value[payload.rangeIndex] = payload.value
 
   emit('filterValueChanged', {
     id: props.filter.id,
