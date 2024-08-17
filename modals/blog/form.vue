@@ -111,9 +111,16 @@ const onClickSave = async () => {
   }
 
   try {
+
+    const preparedFormData = JSON.parse(JSON.stringify(formData))
+
+    if (formData.date !== null) {
+      preparedFormData.date = moment(preparedFormData.date, 'X').format('DD.MM.YYYY HH:mm')
+    }
+
     await $authFetch(`http://backoffice-api.lsmlocal.ru/blog/posts/${method}`, {
       method: 'POST',
-      body: formData,
+      body: preparedFormData,
     })
 
     emit('modal:resolve')
@@ -145,12 +152,6 @@ onMounted(async () => {
 
   if (props.data.id !== undefined) {
     Object.keys(formDataValues).map((key) => {
-
-      if (key === 'date') {
-        formDataValues[key] = formResponse.entity.date !== null ? moment(formResponse.entity.date, 'DD.MM.yyyy').format('X') : null
-        return
-      }
-
       formDataValues[key] = formResponse.entity[key]
     })
   }
