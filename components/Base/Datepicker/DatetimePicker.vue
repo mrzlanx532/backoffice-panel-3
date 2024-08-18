@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type IRow, type IMonth, type IYear, type IPayload, type IHour, type IMinute } from './types'
+import { type IRow, type IMonth, type IYear, type IHour, type IMinute } from './types'
 import { nextTick, onMounted, onUnmounted, type Ref } from 'vue'
 import moment, { type Moment } from 'moment'
 import 'moment/dist/locale/ru'
@@ -511,7 +511,7 @@ const onClickMinute = (value: number) => {
       <div class="date__dropdown-arrow" :class="{'--inverse': isNeedToInverse}"/>
       <div class="date__nav">
         <div class="date__arrow-container --left" @click="onClickPrev">
-          <svg height="28px"><use xlink:href="/img/sprite.svg#left_single_arrow"/></svg>
+          <svg><use xlink:href="/img/sprite.svg#left_single_arrow"/></svg>
         </div>
         <div class="date__nav-center">
           <div class="date__nav-month" @click="onClickNavMonth">{{ calendarNavMonth }}</div>
@@ -528,7 +528,7 @@ const onClickMinute = (value: number) => {
           </div>
         </div>
         <div class="date__arrow-container --right" @click="onClickNext">
-          <svg height="28px"><use xlink:href="/img/sprite.svg#right_single_arrow"/></svg>
+          <svg><use xlink:href="/img/sprite.svg#right_single_arrow"/></svg>
         </div>
       </div>
       <div class="date__calendar" v-if="!monthsIsOpen && !yearsIsOpen && !timeIsOpen">
@@ -595,7 +595,7 @@ const onClickMinute = (value: number) => {
       <div class="date__enums" v-if="monthsIsOpen">
         <div
             v-for="month in months"
-            class="date__month"
+            class="date__enum"
             :class="{'--is-selected': month.isCalendarNavMonth}"
             @click="onSelectMonth(month)"
         >
@@ -606,7 +606,7 @@ const onClickMinute = (value: number) => {
         <template v-for="year in years">
           <div
               v-if="year.isCalendarNavYear"
-              class="date__year --is-selected"
+              class="date__enum --is-selected"
               ref="yearSelectedEl"
               @click="onSelectYear(year)"
           >
@@ -614,7 +614,7 @@ const onClickMinute = (value: number) => {
           </div>
           <div
               v-else
-              class="date__year"
+              class="date__enum"
               @click="onSelectYear(year)"
           >
             {{ year.value }}

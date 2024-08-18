@@ -336,14 +336,14 @@ const onKeydownEnter = () => {
       <div class="date__dropdown-arrow" :class="{'--inverse': isNeedToInverse}"/>
       <div class="date__nav">
         <div class="date__arrow-container --left" @click="onClickPrev">
-          <svg height="28px"><use xlink:href="/img/sprite.svg#left_single_arrow"/></svg>
+          <svg><use xlink:href="/img/sprite.svg#left_single_arrow"/></svg>
         </div>
         <div class="date__nav-center">
           <div class="date__nav-month" v-if="!navMonthsIsOpen" @click="onClickNavMonth">{{ calendarNavMonth }}</div>
           <div class="date__nav-year" v-if="!navYearsIsOpen" @click="onClickNavYear">{{ calendarNavYear }}</div>
         </div>
         <div class="date__arrow-container --right" @click="onClickNext">
-          <svg height="28px"><use xlink:href="/img/sprite.svg#right_single_arrow"/></svg>
+          <svg><use xlink:href="/img/sprite.svg#right_single_arrow"/></svg>
         </div>
       </div>
       <div class="date__calendar" v-if="!navMonthsIsOpen && !navYearsIsOpen">
@@ -369,7 +369,7 @@ const onKeydownEnter = () => {
       <div class="date__enums" v-if="navMonthsIsOpen">
         <div
             v-for="month in months"
-            class="date__month"
+            class="date__enum"
             :class="{'--is-selected': month.isCalendarNavMonth}"
             @click="onSelectMonth(month)"
         >
@@ -380,7 +380,7 @@ const onKeydownEnter = () => {
         <template v-for="year in years">
           <div
               v-if="year.isCalendarNavYear"
-              class="date__year --is-selected"
+              class="date__enum --is-selected"
               ref="yearSelectedEl"
               @click="onSelectYear(year)"
           >
@@ -388,7 +388,7 @@ const onKeydownEnter = () => {
           </div>
           <div
               v-else
-              class="date__year"
+              class="date__enum"
               @click="onSelectYear(year)"
           >
             {{ year.value }}
