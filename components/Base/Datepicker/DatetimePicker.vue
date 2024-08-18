@@ -3,7 +3,7 @@ import { type IRow, type IMonth, type IYear, type IPayload } from './types'
 import { nextTick, onMounted, onUnmounted, type Ref } from 'vue'
 import moment, { type Moment } from 'moment'
 import 'moment/dist/locale/ru'
-import { maskDate } from './mask'
+import { maskDatetime } from './mask'
 import Button from '~/components/Base/Button.vue'
 
 moment.locale('ru')
@@ -347,12 +347,12 @@ onUnmounted(() => {
 })
 
 const onKeydown = (e: Event) => {
-  maskDate(e, localDate)
+  maskDatetime(e, localDate)
 
   if (localDate.value) {
-    const localDateMoment = moment(localDate.value, 'DD.MM.YYYY')
+    const localDateMoment = moment(localDate.value, 'DD.MM.YYYY HH:mm')
 
-    if (localDate.value.length === 10 && localDateMoment.isValid()) {
+    if (localDate.value.length === 16 && localDateMoment.isValid()) {
       emit('update:modelValue', {'value': localDateMoment.format(props.format), 'rangeIndex': props.rangeIndex})
 
       return

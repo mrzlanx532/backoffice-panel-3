@@ -27,7 +27,7 @@ export const maskDate = (e: Event, ref, delimiter = '.') => {
     }
 }
 
-export const maskDateTime = (e: Event, ref, delimiterDate = '.', delimiterTime = ':') => {
+export const maskDatetime = (e: Event, ref, delimiterDate = '.', delimiterTime = ':') => {
 
     if (
         e.key === 'Esc' ||
@@ -43,7 +43,7 @@ export const maskDateTime = (e: Event, ref, delimiterDate = '.', delimiterTime =
     e.preventDefault()
 
     if (e.key === 'Backspace') {
-        handleBackspaceDateTime(e, ref, delimiterDate)
+        handleBackspaceDatetime(e, ref, delimiterDate)
     }
 
     if (e.key === ' ' || e.key === 'Spacebar') {
@@ -70,7 +70,7 @@ const handleBackspace = (e, ref, delimiter) => {
     ref.value = ref.value === null ? ref.value : ref.value.slice(0, -1)
 }
 
-const handleBackspaceDateTime = (e, ref, delimiter) => {
+const handleBackspaceDatetime = (e, ref, delimiter) => {
     if (e.target.selectionStart !== e.target.selectionEnd) {
         ref.value = ref.value.substring(0, e.target.selectionStart) + ref.value.substring(e.target.selectionEnd)
 
@@ -148,6 +148,22 @@ const handleNumbersDateTime = (e, ref, delimiter) => {
         return;
     }
 
+    if ((ref.value?.length === 10) && e.key.match(/[3-9]/)) {
+        ref.value = ref.value + ' 0' + e.key
+        return;
+    }
+
+    if ((ref.value?.length === 13)) {
+
+        if (e.key.match(/[6-9]/)) {
+            ref.value = ref.value + ':0' + e.key
+            return
+        }
+
+        ref.value = ref.value + ':' + e.key
+        return;
+    }
+
     if ((ref.value === null || ref.value === '') && e.key.match(/[4-9]/)) {
         ref.value = '0' + e.key
 
@@ -157,6 +173,10 @@ const handleNumbersDateTime = (e, ref, delimiter) => {
     if (ref.value?.length === 10) {
 
         ref.value = ref.value + ' ' + e.key
+        return
+    }
+
+    if (ref.value?.length === 16) {
         return
     }
 
