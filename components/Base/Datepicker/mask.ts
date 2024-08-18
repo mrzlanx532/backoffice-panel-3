@@ -1,56 +1,58 @@
 // @ts-nocheck
 export const maskDate = (e: Event, ref, delimiter = '.') => {
+    const key = e.key
 
     if (
-        e.key === 'Esc' ||
-        e.key.match(/F[1-9]|F1[0-2]/) ||
-        e.key === 'Tab' ||
-        e.key === 'ArrowLeft' ||
-        e.key === 'ArrowRight' ||
-        (e.ctrlKey === true && e.key === 'a')
+        key === 'Esc' ||
+        key.match(/F[1-9]|F1[0-2]/) ||
+        key === 'Tab' ||
+        key === 'ArrowLeft' ||
+        key === 'ArrowRight' ||
+        (e.ctrlKey === true && key === 'a')
     ) {
         return
     }
 
     e.preventDefault()
 
-    if (e.key === 'Backspace') {
+    if (key === 'Backspace') {
         handleBackspace(e, ref, delimiter)
     }
 
-    if (e.key === ' ' || e.key === 'Spacebar') {
+    if (key === ' ' || key === 'Spacebar') {
         return
     }
 
-    if (Number(e.key) >= 0 && Number(e.key) <= 9) {
+    if (Number(key) >= 0 && Number(key) <= 9) {
         handleNumbers(e, ref, delimiter)
     }
 }
 
 export const maskDatetime = (e: Event, ref, delimiterDate = '.', delimiterTime = ':') => {
+    const key = e.key
 
     if (
-        e.key === 'Esc' ||
-        e.key.match(/F[1-9]|F1[0-2]/) ||
-        e.key === 'Tab' ||
-        e.key === 'ArrowLeft' ||
-        e.key === 'ArrowRight' ||
-        (e.ctrlKey === true && e.key === 'a')
+        key === 'Esc' ||
+        key.match(/F[1-9]|F1[0-2]/) ||
+        key === 'Tab' ||
+        key === 'ArrowLeft' ||
+        key === 'ArrowRight' ||
+        (e.ctrlKey === true && key === 'a')
     ) {
         return
     }
 
     e.preventDefault()
 
-    if (e.key === 'Backspace') {
+    if (key === 'Backspace') {
         handleBackspaceDatetime(e, ref, delimiterDate)
     }
 
-    if (e.key === ' ' || e.key === 'Spacebar') {
+    if (key === ' ' || key === 'Spacebar') {
         return
     }
 
-    if (Number(e.key) >= 0 && Number(e.key) <= 9) {
+    if (Number(key) >= 0 && Number(key) <= 9) {
         handleNumbersDateTime(e, ref, delimiterDate)
     }
 }
