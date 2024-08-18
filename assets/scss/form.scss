@@ -705,6 +705,15 @@
       }
     }
 
+    &__nav-calendar {
+      padding: 6px;
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
     &__nav-center {
       flex-basis: 100%;
       display: flex;
@@ -824,6 +833,100 @@
       &:hover {
         color: var(--color-gradient-1);
       }
+    }
+
+    &__actions {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 10px;
+    }
+
+    &__information {
+      color: var(--color-4);
+      font-size: 14px;
+      padding-top: 3px;
+      user-select: none;
+    }
+
+    &__button {
+      padding: 4px;
+      font-size: 12px;
+      background: transparent;
+      outline: none;
+      border: 1px solid var(--color-2);
+      border-radius: 5px;
+      cursor: pointer;
+      user-select: none;
+      transition: border .2s;
+
+      &:hover {
+        border: 1px solid var(--color-gradient-2);
+      }
+    }
+
+    &__time {
+      height: 100px;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    &__time_hours {
+      width: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+    }
+
+    &__time_minutes {
+      width: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+    }
+
+    &__time_arrow {
+      height: 18px;
+      cursor: pointer;
+
+      svg {
+        color: grey;
+        fill: currentColor;
+      }
+
+      &:hover svg {
+        color: var(--color-gradient-intermediate);
+        fill: currentColor;
+      }
+
+      &.--top {
+        transform: rotate(270deg);
+      }
+
+      &.--bottom {
+        transform: rotate(90deg);
+      }
+
+      svg {
+        height: 18px;
+        width: 18px;
+      }
+    }
+
+    &__time_label {
+      text-align: center;
+      cursor: pointer;
+      font-size: 24px;
+      user-select: none;
+    }
+
+    &__time_divider {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 10px;
+      font-size: 24px;
+      user-select: none;
     }
   }
 }

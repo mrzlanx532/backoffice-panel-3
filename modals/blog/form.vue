@@ -4,7 +4,7 @@ import { onMounted } from 'vue'
 import Form from '@/components/Base/Form'
 import FormInput from '@/components/Base/Form/Input.jsx'
 import FormSelect from '@/components/Base/Form/Select'
-import FormDate from '@/components/Base/Form/Date'
+import FormDatetime from '@/components/Base/Form/Datetime.vue'
 import FormTextArea from '@/components/Base/Form/TextArea'
 import FormInputFile from '@/components/Base/Form/InputFile'
 import moment from 'moment'
@@ -59,9 +59,9 @@ const formData = [
   {
     name: 'date',
     label: 'Дата',
-    component: FormDate,
+    component: FormDatetime,
     componentData: {
-      format: 'DD.MM.YYYY',
+      format: 'DD.MM.YYYY HH:mm',
     }
   },
   {
