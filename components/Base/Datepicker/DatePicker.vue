@@ -366,7 +366,7 @@ const onKeydownEnter = () => {
           </div>
         </div>
       </div>
-      <div class="date__months" v-if="navMonthsIsOpen">
+      <div class="date__enums" v-if="navMonthsIsOpen">
         <div
             v-for="month in months"
             class="date__month"
@@ -376,7 +376,7 @@ const onKeydownEnter = () => {
           {{ month.value }}
         </div>
       </div>
-      <div class="date__years" ref="yearContainerEl" v-scrollable="{classes: ['--without-track']}" v-if="navYearsIsOpen">
+      <div class="date__enums --years" ref="yearContainerEl" v-scrollable="{classes: ['--without-track']}" v-if="navYearsIsOpen">
         <template v-for="year in years">
           <div
               v-if="year.isCalendarNavYear"

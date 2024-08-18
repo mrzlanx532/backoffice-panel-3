@@ -8,6 +8,18 @@ export interface IRow {
     isToday: boolean
 }
 
+export interface IHour {
+    value: number,
+    valueFormatted: string,
+    isSelected: boolean
+}
+
+export interface IMinute {
+    value: number,
+    valueFormatted: string,
+    isSelected: boolean
+}
+
 export interface IMonth {
     value: string,
     moment: Moment,

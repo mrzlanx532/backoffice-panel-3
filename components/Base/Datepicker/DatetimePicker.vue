@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type IRow, type IMonth, type IYear, type IPayload } from './types'
+import { type IRow, type IMonth, type IYear, type IPayload, type IHour, type IMinute } from './types'
 import { nextTick, onMounted, onUnmounted, type Ref } from 'vue'
 import moment, { type Moment } from 'moment'
 import 'moment/dist/locale/ru'
@@ -36,10 +36,13 @@ const props = defineProps({
   }
 })
 
-const navMonthsIsOpen = ref(false)
-const navYearsIsOpen = ref(false)
-const navTimeIsOpen = ref(false)
-const navCalendarIsOpen = ref(true)
+const calendarIsOpen = ref(true)
+const monthsIsOpen = ref(false)
+const yearsIsOpen = ref(false)
+const timeIsOpen = ref(false)
+const hoursIsOpen = ref(false)
+const minutesIsOpen = ref(false)
+
 const isOpen = ref(false)
 const isNeedToInverse = ref(false)
 
@@ -72,6 +75,8 @@ const calendarNavYear = ref(calendarNavMoment.format('YYYY'))
 
 const months = ref([] as IMonth[])
 const years = ref([] as IYear[])
+const hours = ref([] as IHour[])
+const minutes = ref([] as IMinute[])
 
 const calendarNumbersRows = ref([] as IRow[][]);
 
@@ -92,9 +97,6 @@ const monthDays = ref([
 watch(
     () => props.modelValue,
     ((value) => {
-
-      console.log(value)
-
       if (value === null) {
         localDateMoment = null
         localDate.value = null
@@ -159,10 +161,10 @@ const onClick = () => {
 const onClickOutside = () => {
   isOpen.value = false
 
-  navMonthsIsOpen.value = false
-  navYearsIsOpen.value = false
-  navTimeIsOpen.value = false
-  navCalendarIsOpen.value = true
+  monthsIsOpen.value = false
+  yearsIsOpen.value = false
+  timeIsOpen.value = false
+  calendarIsOpen.value = true
 
   localDateUnconfirmedMoment = localDateMoment === null ? null : localDateMoment.clone()
   localDateUnconfirmed.value = localDate.value
@@ -238,6 +240,34 @@ const buildNavMonths = () => {
       })
 }
 
+const buildHours = () => {
+  const _hours: IHour[] = []
+
+  for (let i = 0; i < 24; i++) {
+    _hours.push({
+      value: i,
+      valueFormatted: i < 10 ? '0' + i : i.toString(),
+      isSelected: localHours.value === i
+    })
+  }
+
+  hours.value = _hours as IHour[]
+}
+
+const buildMinutes = () => {
+  const _minutes: IMinute[] = []
+
+  for (let i = 0; i < 60; i++) {
+    _minutes.push({
+      value: i,
+      valueFormatted: i < 10 ? '0' + i : i.toString(),
+      isSelected: localMinutes.value === i
+    })
+  }
+
+  minutes.value = _minutes as IMinute[]
+}
+
 const buildCalendar = () => {
   const _calendarNumbersRows = []
 
@@ -269,17 +299,17 @@ const buildCalendar = () => {
 }
 
 const onClickNavMonth = () => {
-  navYearsIsOpen.value = false
-  navTimeIsOpen.value = false
-  navCalendarIsOpen.value = true
-  navMonthsIsOpen.value = true
+  yearsIsOpen.value = false
+  timeIsOpen.value = false
+  calendarIsOpen.value = true
+  monthsIsOpen.value = true
 }
 
 const onClickNavYear = () => {
-  navMonthsIsOpen.value = false
-  navTimeIsOpen.value = false
-  navCalendarIsOpen.value = true
-  navYearsIsOpen.value = true
+  monthsIsOpen.value = false
+  timeIsOpen.value = false
+  calendarIsOpen.value = true
+  yearsIsOpen.value = true
 
   nextTick(() => {
     yearContainerEl.value!.scrollTo({
@@ -289,17 +319,19 @@ const onClickNavYear = () => {
 }
 
 const onClickNavTime = () => {
-  navYearsIsOpen.value = false
-  navMonthsIsOpen.value = false
-  navCalendarIsOpen.value = false
-  navTimeIsOpen.value = true
+  yearsIsOpen.value = false
+  monthsIsOpen.value = false
+  calendarIsOpen.value = false
+  timeIsOpen.value = true
 }
 
 const onClickNavCalendar = () => {
-  navYearsIsOpen.value = false
-  navMonthsIsOpen.value = false
-  navTimeIsOpen.value = false
-  navCalendarIsOpen.value = true
+  yearsIsOpen.value = false
+  monthsIsOpen.value = false
+  timeIsOpen.value = false
+  hoursIsOpen.value = false
+  minutesIsOpen.value = false
+  calendarIsOpen.value = true
 }
 
 const onSelectMonth = (month: IMonth) => {
@@ -309,7 +341,7 @@ const onSelectMonth = (month: IMonth) => {
   buildNavMonths()
   buildCalendar()
 
-  navMonthsIsOpen.value = false
+  monthsIsOpen.value = false
 }
 
 const onSelectYear = (year: IYear) => {
@@ -320,13 +352,13 @@ const onSelectYear = (year: IYear) => {
   buildNavYears()
   buildCalendar()
 
-  navYearsIsOpen.value = false
-  navMonthsIsOpen.value = false
+  yearsIsOpen.value = false
+  monthsIsOpen.value = false
 }
 
 const onDocumentVisibilityChange = () => {
-  navYearsIsOpen.value = false
-  navMonthsIsOpen.value = false
+  yearsIsOpen.value = false
+  monthsIsOpen.value = false
   isOpen.value = false
 }
 
@@ -370,8 +402,8 @@ const onKeydownEnter = () => {
 
 const apply = () => {
   isOpen.value = false
-  navCalendarIsOpen.value = true
-  navTimeIsOpen.value = false
+  calendarIsOpen.value = true
+  timeIsOpen.value = false
 
   emit('update:modelValue', {'value': localDateUnconfirmedMoment === null ? null : localDateUnconfirmedMoment.format(props.format), 'rangeIndex': props.rangeIndex})
 }
@@ -410,10 +442,43 @@ const decreaseMinute = () => {
   localMinutes.value = localMinutes.value === 0 ? 59 : localMinutes.value - 1
 
   if (localDateUnconfirmedMoment) {
-
     localDateUnconfirmedMoment.minute(localMinutes.value)
     localDateUnconfirmed.value = localDateUnconfirmedMoment.format('DD.MM.YYYY HH:mm')
   }
+}
+
+const onClickHours = () => {
+  buildHours()
+  hoursIsOpen.value = true
+}
+
+const onClickMinutes = () => {
+  buildMinutes()
+  minutesIsOpen.value = true
+}
+
+const onClickHour = (value: number) => {
+  localHours.value = value
+
+  if (localDateUnconfirmedMoment) {
+    localDateUnconfirmedMoment.hour(localHours.value)
+    localDateUnconfirmed.value = localDateUnconfirmedMoment.format('DD.MM.YYYY HH:mm')
+  }
+
+  hoursIsOpen.value = false
+  timeIsOpen.value = true
+}
+
+const onClickMinute = (value: number) => {
+  localMinutes.value = value
+
+  if (localDateUnconfirmedMoment) {
+    localDateUnconfirmedMoment.minute(localMinutes.value)
+    localDateUnconfirmed.value = localDateUnconfirmedMoment.format('DD.MM.YYYY HH:mm')
+  }
+
+  minutesIsOpen.value = false
+  timeIsOpen.value = true
 }
 </script>
 
@@ -449,14 +514,14 @@ const decreaseMinute = () => {
           <svg height="28px"><use xlink:href="/img/sprite.svg#left_single_arrow"/></svg>
         </div>
         <div class="date__nav-center">
-          <div class="date__nav-month" :class="{'--active': navMonthsIsOpen}" @click="onClickNavMonth">{{ calendarNavMonth }}</div>
-          <div class="date__nav-year" :class="{'--active': navMonthsIsOpen}" @click="onClickNavYear">{{ calendarNavYear }}</div>
-          <div v-if="navCalendarIsOpen" class="date__nav-time" @click="onClickNavTime">
+          <div class="date__nav-month" @click="onClickNavMonth">{{ calendarNavMonth }}</div>
+          <div class="date__nav-year" @click="onClickNavYear">{{ calendarNavYear }}</div>
+          <div v-if="calendarIsOpen" class="date__nav-time" @click="onClickNavTime">
             <svg>
               <use xlink:href="/img/temp_sprite.svg#time"/>
             </svg>
           </div>
-          <div v-if="navTimeIsOpen" class="date__nav-calendar" :class="{'--active': navTimeIsOpen}" @click="onClickNavCalendar">
+          <div v-if="timeIsOpen" class="date__nav-calendar" :class="{'--active': timeIsOpen}" @click="onClickNavCalendar">
             <svg>
               <use xlink:href="/img/temp_sprite.svg#calendar_bold"/>
             </svg>
@@ -466,7 +531,7 @@ const decreaseMinute = () => {
           <svg height="28px"><use xlink:href="/img/sprite.svg#right_single_arrow"/></svg>
         </div>
       </div>
-      <div class="date__calendar" v-if="!navMonthsIsOpen && !navYearsIsOpen && !navTimeIsOpen">
+      <div class="date__calendar" v-if="!monthsIsOpen && !yearsIsOpen && !timeIsOpen">
         <div class="date__calendar-row --days">
           <div class="date__calendar-cell" v-for="monthDay in monthDays">{{ monthDay }}</div>
         </div>
@@ -486,28 +551,48 @@ const decreaseMinute = () => {
           </div>
         </div>
       </div>
-      <div class="date__time" v-if="navTimeIsOpen">
-        <div class="date__time_hours">
-          <div class="date__time_arrow --top" @click="increaseHour">
-            <svg height="28px"><use xlink:href="/img/sprite.svg#right_single_arrow"/></svg>
+      <div class="date__time" v-if="timeIsOpen && !hoursIsOpen && !minutesIsOpen">
+          <div class="date__time_parts">
+            <div class="date__time_arrow --top" @click="increaseHour">
+              <svg><use xlink:href="/img/sprite.svg#right_single_arrow"/></svg>
+            </div>
+            <div class="date__time_label" @click="onClickHours">{{ localHoursFormatted }}</div>
+            <div class="date__time_arrow --bottom" @click="decreaseHour">
+              <svg><use xlink:href="/img/sprite.svg#right_single_arrow"/></svg>
+            </div>
           </div>
-          <div class="date__time_label">{{ localHoursFormatted }}</div>
-          <div class="date__time_arrow --bottom" @click="decreaseHour">
-            <svg height="28px"><use xlink:href="/img/sprite.svg#right_single_arrow"/></svg>
+          <div class="date__time_divider">:</div>
+          <div class="date__time_parts">
+            <div class="date__time_arrow --top" @click="increaseMinute">
+              <svg><use xlink:href="/img/sprite.svg#right_single_arrow"/></svg>
+            </div>
+            <div class="date__time_label" @click="onClickMinutes">{{ localMinutesFormatted }}</div>
+            <div class="date__time_arrow --bottom" @click="decreaseMinute">
+              <svg><use xlink:href="/img/sprite.svg#right_single_arrow"/></svg>
+            </div>
           </div>
-        </div>
-        <div class="date__time_divider">:</div>
-        <div class="date__time_minutes">
-          <div class="date__time_arrow --top" @click="increaseMinute">
-            <svg height="28px"><use xlink:href="/img/sprite.svg#right_single_arrow"/></svg>
-          </div>
-          <div class="date__time_label">{{ localMinutesFormatted }}</div>
-          <div class="date__time_arrow --bottom" @click="decreaseMinute">
-            <svg height="28px"><use xlink:href="/img/sprite.svg#right_single_arrow"/></svg>
-          </div>
+      </div>
+      <div class="date__enums --hours" v-if="hoursIsOpen" v-scrollable="{classes: ['--without-track']}">
+        <div
+            v-for="hour in hours"
+            class="date__enum"
+            :class="{'--is-selected': hour.isSelected}"
+            @click="onClickHour(hour.value)"
+        >
+          {{ hour.valueFormatted }}
         </div>
       </div>
-      <div class="date__months" v-if="navMonthsIsOpen">
+      <div class="date__enums --minutes" v-if="minutesIsOpen" v-scrollable="{classes: ['--without-track']}">
+        <div
+            v-for="minute in minutes"
+            class="date__enum"
+            :class="{'--is-selected': minute.isSelected}"
+            @click="onClickMinute(minute.value)"
+        >
+          {{ minute.valueFormatted }}
+        </div>
+      </div>
+      <div class="date__enums" v-if="monthsIsOpen">
         <div
             v-for="month in months"
             class="date__month"
@@ -517,7 +602,7 @@ const decreaseMinute = () => {
           {{ month.value }}
         </div>
       </div>
-      <div class="date__years" ref="yearContainerEl" v-scrollable="{classes: ['--without-track']}" v-if="navYearsIsOpen">
+      <div class="date__enums --years" ref="yearContainerEl" v-scrollable="{classes: ['--without-track']}" v-if="yearsIsOpen">
         <template v-for="year in years">
           <div
               v-if="year.isCalendarNavYear"

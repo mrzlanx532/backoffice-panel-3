@@ -785,18 +785,38 @@
       }
     }
 
-    &__months, &__years {
+    &__enums {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(4, 1fr);
       grid-gap: 1px;
       padding-bottom: 5px;
+
+      &.--years, &.--hours, &.--minutes {
+        height: 155px;
+        position: relative;
+        top: 0;
+      }
     }
 
-    &__years {
-      height: 155px;
-      position: relative;
-      top: 0;
+    &__enum {
+      text-align: center;
+      padding: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+      font-size: 14px;
+
+      &.--is-selected {
+        border: 1px solid var(--color-gradient-2);
+      }
+
+      &:hover {
+        color: var(--color-gradient-1);
+      }
     }
 
     &__year {
@@ -865,20 +885,12 @@
     }
 
     &__time {
-      height: 100px;
       padding: 10px 20px;
       display: flex;
       justify-content: center;
     }
 
-    &__time_hours {
-      width: 28px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-    }
-
-    &__time_minutes {
+    &__time_parts {
       width: 28px;
       display: flex;
       flex-direction: column;
@@ -886,7 +898,7 @@
     }
 
     &__time_arrow {
-      height: 18px;
+      height: 22px;
       cursor: pointer;
 
       svg {
@@ -908,8 +920,8 @@
       }
 
       svg {
-        height: 18px;
-        width: 18px;
+        height: 22px;
+        width: 22px;
       }
     }
 
@@ -918,6 +930,11 @@
       cursor: pointer;
       font-size: 24px;
       user-select: none;
+      border-radius: 5px;
+
+      &:hover {
+        box-shadow: rgba(50, 50, 93, 0.25) 0 2px 5px -1px, rgba(0, 0, 0, 0.3) 0 1px 3px -1px;
+      }
     }
 
     &__time_divider {
