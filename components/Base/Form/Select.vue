@@ -1,5 +1,15 @@
-<script setup>
-import { onMounted, onUnmounted, watch, nextTick } from 'vue'
+<script setup lang="ts">
+import { onMounted, onUnmounted, watch, nextTick, type PropType } from 'vue'
+
+interface IOption {
+  id: number,
+  title: string
+}
+
+interface IComponentData {
+  options: IOption[]
+  isMultiple: boolean
+}
 
 const props = defineProps({
   label: {
@@ -20,7 +30,7 @@ const props = defineProps({
     default: []
   },
   componentData: {
-    type: Object,
+    type: Object as PropType<IComponentData>,
     required: true
   }
 })
@@ -53,6 +63,12 @@ watch(
         selectedItemOrItems.value = null
         selectedId.value = null
       }
+
+      props.componentData.options.forEach(option => {
+        if (option.id === value) {
+          selectedItemOrItems.value = option
+        }
+      })
     }
 )
 
