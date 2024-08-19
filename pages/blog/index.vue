@@ -5,6 +5,7 @@ import Button from '@/components/Base/Button.vue'
 import Section from '@/components/Base/Section.vue'
 import Browser from '@/components/Base/Browser/Browser.vue';
 import FlexTable from '@/components/Base/FlexTable.vue'
+import Badge from '@/components/Base/Browser/ColumnComponents/Badge.vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -16,7 +17,9 @@ const {
   $authFetch
 } = useNuxtApp()
 
-const item: Ref<{}|null> = ref({})
+type IItem = {[key: string]: any}
+
+const item: Ref<IItem> = ref({})
 
 const browserEl: Ref<HTMLElement|null> = ref(null)
 
@@ -36,21 +39,22 @@ const columns = shallowRef([
   {
     name: 'category',
     title: 'Рубрика',
-    toFormat(item) {
+    toFormat(item: IItem) {
       return item?.category?.name_ru
     }
   },
   {
     name: 'locale',
     title: 'Локаль',
-    toFormat(item) {
+    toFormat(item: IItem) {
       return item?.locale?.title
     }
   },
   {
     name: 'state',
     title: 'Статус',
-    toFormat(item) {
+    component: Badge,
+    toFormat(item: IItem) {
       return item?.state?.title
     }
   },

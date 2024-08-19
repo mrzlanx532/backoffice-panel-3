@@ -1,6 +1,6 @@
 <template>
   <Page h1="Главная | UI KIT">
-    <div style="max-height: 200px; padding: 20px;" v-scrollable class="v-scrollable">
+    <div style="height: 200px; padding: 20px;" v-scrollable class="v-scrollable">
       <div style="height: 400px;  background: aquamarine;">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem corporis, cupiditate excepturi facere fuga harum, ipsum, laudantium non quia quisquam rem repellat soluta. Aliquid consequuntur eveniet harum nisi non, saepe.
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem corporis, cupiditate excepturi facere fuga harum, ipsum, laudantium non quia quisquam rem repellat soluta. Aliquid consequuntur eveniet harum nisi non, saepe.
@@ -38,6 +38,11 @@
           @change="onChangeStateButton"
       />
     </div>
+
+    <div :style="style">Badge</div>
+    <template v-for="(btnClass, index) in btnClasses">
+      <Badge label="some text" :class="btnClass"/>
+    </template>
 
     <div :style="style">Shadow-rounded</div>
     <div>
@@ -111,8 +116,9 @@
 
 import Page from "@/components/Base/Page"
 import Button from "@/components/Base/Button"
-import StateButton from "@/components/Base/StateButton"
-import BaseLink from "@/components/Base/BaseLink"
+import StateButton from '@/components/Base/StateButton'
+import BaseLink from '@/components/Base/BaseLink'
+import Badge from '@/components/Base/Badge.vue'
 
 export default {
   setup() {
@@ -122,6 +128,7 @@ export default {
   },
   name: 'UsersPage',
   components: {
+    Badge,
     Page,
     Button,
     StateButton,
