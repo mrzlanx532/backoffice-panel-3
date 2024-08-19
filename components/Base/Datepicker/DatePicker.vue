@@ -12,7 +12,7 @@ const emit = defineEmits(['update:modelValue'])
 const props = defineProps({
   modelValue: {
     required: false,
-    type: [Number, String, Array]
+    type: [Number, String]
   },
   rangeIndex: {
     type: Number,
@@ -75,6 +75,9 @@ const monthDays = ref([
 watch(
     () => props.modelValue,
     ((value) => {
+
+      console.log(value)
+
       if (value === null) {
         localDateMoment = null
         localDate.value = null

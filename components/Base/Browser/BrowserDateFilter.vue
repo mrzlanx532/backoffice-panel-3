@@ -10,20 +10,28 @@ moment.locale('ru')
 
 const emit = defineEmits(['filterValueChanged'])
 
-const localValue: Ref<null|number> = ref(null)
+const localValue: Ref<null|number|string> = ref(null)
 
 const value: (number|null|undefined)[] = []
 
-const props = defineProps({
-  modelValue: {
-    required: false,
-    type: [Number, String, Array]
-  },
-  filter: {
-    type: Object,
-    required: true
+interface IFilter {
+  id: string,
+  type: string
+  title: string,
+  options?: [],
+  config: {
+    filter: boolean,
+    hidden: false,
+    mask: null|string,
+    multiple: boolean,
+    range: boolean,
   }
-})
+}
+
+const props = defineProps<{
+  modelValue?: number|string|[number]|[number,number],
+  filter: IFilter
+}>()
 
 watch(
     () => props.modelValue,
@@ -33,7 +41,9 @@ watch(
         return
       }
 
-      localValue.value = value[0]
+      if (Array.isArray(value)) {
+        localValue.value = value[0]
+      }
     }
 )
 
@@ -66,7 +76,7 @@ const onFilterValueChanged = (payload: IPayload) => {
       </template>
       <DatePicker
           v-else
-          :model-value="localValue"
+          :model-value="localValue!"
           @update:modelValue="onFilterValueChanged"
           :filter="filter"
           type-of="date"
