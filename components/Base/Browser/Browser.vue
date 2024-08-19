@@ -35,6 +35,7 @@
               <component
                   :is="filterMapper[filter.type]"
                   :filter="filter"
+                  :model-value="activeFilters[filter.id]"
                   @filterValueChanged="onFilterValueChanged"
               ></component>
             </template>
