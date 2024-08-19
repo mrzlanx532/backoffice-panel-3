@@ -209,7 +209,7 @@ const onClickCreate = async () => {
             Краткое содержание
           </template>
           <template v-slot:content>
-            {{ item.name }}
+            {{ item.content_short }}
           </template>
         </Section>
         <Section>
