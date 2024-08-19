@@ -1,18 +1,13 @@
 <script setup lang="ts">
-import DatePicker from '../Datepicker/DatePicker.vue'
-
-import moment from 'moment'
-import 'moment/dist/locale/ru'
-import type { IPayload } from '~/components/Base/Datepicker/types'
 import type { Ref } from 'vue'
+import type { IPayload } from '~/components/Base/Datepicker/types'
+import DatePicker from '../Datepicker/DatePicker.vue'
+import 'moment/dist/locale/ru'
+import moment from 'moment'
 
 moment.locale('ru')
 
 const emit = defineEmits(['filterValueChanged'])
-
-const localValue: Ref<null|number|string> = ref(null)
-
-const value: (number|null|undefined)[] = []
 
 interface IFilter {
   id: string,
@@ -33,9 +28,16 @@ const props = defineProps<{
   filter: IFilter
 }>()
 
+const localValue: Ref<null|number|string> = ref(null)
+
 watch(
     () => props.modelValue,
     (value) => {
+
+      if (props.filter.config.range) {
+        return
+      }
+
       if (value === undefined) {
         localValue.value = null
         return
@@ -49,6 +51,10 @@ watch(
 
 const onFilterValueChanged = (payload: IPayload) => {
 
+  if (props.filter.config.range) {
+    return
+  }
+
   if (payload.rangeIndex === undefined) {
     emit('filterValueChanged', {
       id: props.filter.id,
@@ -57,13 +63,6 @@ const onFilterValueChanged = (payload: IPayload) => {
 
     return
   }
-
-  value[payload.rangeIndex] = payload.value
-
-  emit('filterValueChanged', {
-    id: props.filter.id,
-    value: value
-  })
 }
 </script>
 <template>
@@ -71,8 +70,19 @@ const onFilterValueChanged = (payload: IPayload) => {
     <label :for="filter.id" class="browser__filter-name">{{ filter.title }}</label>
     <div class="browser__filter-container date">
       <template v-if="filter.config.range">
-        <DatePicker @update:modelValue="onFilterValueChanged" :filter="filter" :range-index="0" type-of="date"/>
-        <DatePicker @update:modelValue="onFilterValueChanged" :filter="filter" :range-index="1" type-of="date" :style="{'marginTop': '2px'}"/>
+        <DatePicker
+            @update:modelValue="onFilterValueChanged"
+            :filter="filter"
+            :range-index="0"
+            type-of="date"
+        />
+        <DatePicker
+            @update:modelValue="onFilterValueChanged"
+            :filter="filter"
+            :range-index="1"
+            type-of="date"
+            :style="{'marginTop': '2px'}"
+        />
       </template>
       <DatePicker
           v-else
