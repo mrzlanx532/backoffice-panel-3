@@ -55,7 +55,16 @@ const columns = shallowRef([
     title: 'Статус',
     component: Badge,
     toFormat(item: IItem) {
-      return item?.state?.title
+
+      const mapper: {[key: string]: string} = {
+        DRAFT: '--default',
+        PUBLISHED: '--success'
+      }
+
+      return {
+        title: item?.state?.title,
+        class: mapper[item?.state?.id]
+      }
     }
   },
   {

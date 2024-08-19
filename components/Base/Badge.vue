@@ -1,11 +1,11 @@
 <script setup lang="ts">
 const props = defineProps<{
-  label: string
+  title: string
 }>()
 </script>
 
 <template>
   <div class="badge">
-    {{ label }}
+    {{ title }}
   </div>
 </template>

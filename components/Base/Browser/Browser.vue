@@ -76,7 +76,7 @@
               <tr v-for="item in items" @click="onClickRow(item)">
                 <td v-for="column in columns">
                   <template v-if="column.hasOwnProperty('component')">
-                    <component :is="column.component" :item="item"/>
+                    <component :is="column.component" :item="item" :column="column"/>
                   </template>
                   <template v-else-if="column.hasOwnProperty('preset')">
                     {{ handleByPreset(column, item)}}
