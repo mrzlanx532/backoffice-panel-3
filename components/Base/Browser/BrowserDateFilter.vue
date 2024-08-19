@@ -24,17 +24,28 @@ interface IFilter {
 }
 
 const props = defineProps<{
-  modelValue?: number|string|[number]|[number,number],
+  modelValue?: number|string|[number|string]|[(number|string),(number|string)],
   filter: IFilter
 }>()
 
 const localValue: Ref<null|number|string> = ref(null)
+const localValues: Ref<[(null|number|string)]|[(null|number|string),(null|number|string)]> = ref([null, null])
 
 watch(
     () => props.modelValue,
     (value) => {
 
       if (props.filter.config.range) {
+
+        if (value === undefined) {
+          localValues.value = [null, null]
+          return
+        }
+
+        if (Array.isArray(value)) {
+          localValues.value[0] = value[0] === '' ? null : value[0]
+          localValues.value[1] = value[1] === '' ? null : value[1]
+        }
         return
       }
 
@@ -52,6 +63,16 @@ watch(
 const onFilterValueChanged = (payload: IPayload) => {
 
   if (props.filter.config.range) {
+    let preparedValue = props.modelValue ? props.modelValue : [null, null]
+
+    // @ts-ignore
+    preparedValue[payload.rangeIndex] = payload.value ? Number(payload.value) : payload.value
+
+    emit('filterValueChanged', {
+      id: props.filter.id,
+      value: preparedValue,
+    })
+
     return
   }
 
@@ -72,12 +93,14 @@ const onFilterValueChanged = (payload: IPayload) => {
       <template v-if="filter.config.range">
         <DatePicker
             @update:modelValue="onFilterValueChanged"
+            :model-value="localValues[0]!"
             :filter="filter"
             :range-index="0"
             type-of="date"
         />
         <DatePicker
             @update:modelValue="onFilterValueChanged"
+            :model-value="localValues[1]!"
             :filter="filter"
             :range-index="1"
             type-of="date"
