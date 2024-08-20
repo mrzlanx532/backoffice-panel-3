@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRoute } from '#imports';
+import { useRoute, useNuxtApp } from '#imports';
+import { useAsyncData } from '#app'
+
 import Section from '@/components/Base/Section'
 import Detail from '@/components/Base/Detail'
 import Button from '@/components/Base/Button'
 import FlexTable from '@/components/Base/FlexTable'
 
-type IItem = {[key: string]: any}
-
+const { $authFetch } = useNuxtApp()
 const route = useRoute()
+const runtimeConfig = useRuntimeConfig()
 
-const entityId = route.params.id
-const item: IItem = ref({})
-const h1 = ref('Пост ' + entityId)
+type IItem = {[key: string]: any}
 
 const detailOptions = ref([
   {
@@ -46,17 +46,24 @@ const detailOptions = ref([
   },
 ])
 
-const onItemUpdated = (newItem: IItem) => {
-  item.value = newItem
-}
+const response = await useAsyncData(
+    'blog_detail',
+    () => $authFetch(`${runtimeConfig.public.laravelAuth.domain}/blog/posts/detail`, {
+      params: {
+        id: route.params.id,
+      }
+    })
+)
+
+const entityId = route.params.id
+const item: IItem = ref(response.data)
+const h1 = ref('Пост ' + entityId)
 </script>
 
 <template>
   <Detail
       :h1="h1"
       :data-id="entityId"
-      @itemUpdated="onItemUpdated"
-      url-prefix="blog/posts"
   >
     <template v-slot:header>
       <div class="btn__group">
@@ -65,29 +72,25 @@ const onItemUpdated = (newItem: IItem) => {
       </div>
     </template>
     <template v-slot:content>
-      <ClientOnly>
-        <Transition name="fade" mode="out-in">
-          <div class="section__group">
-            <Section>
-              <template v-slot:header>
-                Краткое содержание
-              </template>
-              <template v-slot:content>
-                {{ item.content_short }}
-              </template>
-            </Section>
-            <Section>
-              <template v-slot:header>
-                Полное содержание
-              </template>
-              <template v-slot:content>
-                <div v-html="item.content"/>
-              </template>
-            </Section>
-            <FlexTable :config="detailOptions" :item="item"/>
-          </div>
-        </Transition>
-      </ClientOnly>
+      <div class="section__group">
+        <Section>
+          <template v-slot:header>
+            Краткое содержание
+          </template>
+          <template v-slot:content>
+            {{ item.content_short ?? '[Не заполнено]' }}
+          </template>
+        </Section>
+        <Section>
+          <template v-slot:header>
+            Полное содержание
+          </template>
+          <template v-slot:content>
+            {{ item.content ?? '[Не заполнено]' }}
+          </template>
+        </Section>
+        <FlexTable :config="detailOptions" :item="item"/>
+      </div>
     </template>
   </Detail>
 </template>

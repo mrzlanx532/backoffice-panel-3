@@ -1,6 +1,58 @@
+<script setup lang="ts">
+import moment from 'moment/moment'
+
+type IItem = {[key: string]: any}
+
+interface IConfigItem {
+  columnClass: number,
+  title: string,
+  name: string,
+  toFormat?: (item: {[key: string]: any}) => {},
+  component: {}
+  preset?: {
+    name: string,
+    locale?: string ,
+    format?: string
+  }
+}
+
+interface Props {
+  config: IConfigItem[],
+  item: IItem,
+  emptySymbol?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  emptySymbol: '–'
+})
+
+const dynamicMethods: {[key: string]: (configItem: IConfigItem, item: IItem) => string | null} = {
+  timestampToFormatPreset: (configItem: IConfigItem, item: IItem) => {
+
+    const date = moment(item[configItem.name] * 1000)
+
+    if (!date.isValid()) {
+      return null;
+    }
+
+    if (configItem.preset?.hasOwnProperty('locale')) {
+      date.locale(configItem.preset.locale!)
+    } else {
+      date.locale('ru')
+    }
+
+    return configItem.preset?.hasOwnProperty('format') ? date.format(configItem.preset.format) : date.format('L')
+  }
+}
+
+const callPreset = (methodName: string, configItem: IConfigItem, item: IItem) => {
+  return dynamicMethods[methodName](configItem, item)
+}
+</script>
+
 <template>
   <div class="detail__flex-table flex-table" v-if="item">
-    <div class="flex-table__item" v-for="configItem in config" :class="[
+    <div class="flex-table__item" v-for="configItem in props.config" :class="[
         {'--col-12': configItem.columnClass === 12},
         {'--col-6': configItem.columnClass === 6},
         {'--col-4': configItem.columnClass === 4},
@@ -15,10 +67,10 @@
           <component :is="configItem.component" :item="item[configItem.name]"/>
         </template>
         <template v-else-if="configItem.hasOwnProperty('preset')">
-          {{ handleByPreset(configItem, item)}}
+          {{ callPreset(configItem.preset!.name, configItem, item)}}
         </template>
         <template v-else-if="configItem.hasOwnProperty('toFormat')">
-          {{ configItem.toFormat(item) }}
+          {{ configItem.toFormat!(item) }}
         </template>
         <template v-else>
           {{ item[configItem.name] !== null ? item[configItem.name] : emptySymbol }}
@@ -27,29 +79,3 @@
     </div>
   </div>
 </template>
-<script>
-import browserPresetsMethodsMixin from "@/helpers/browser-presets-methods-mixin"
-
-export default {
-  name: "FlexTable",
-  props: {
-    config: {
-      type: Array,
-      required: true
-    },
-    item: {
-      type: Object,
-      default() {
-        return null;
-      }
-    },
-    emptySymbol: {
-      type: String,
-      default: '–'
-    }
-  },
-  methods: {
-    ...browserPresetsMethodsMixin,
-  }
-}
-</script>
