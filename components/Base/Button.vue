@@ -1,6 +1,6 @@
 <template>
   <button
-      :class="['btn', ...classes]"
+      class="btn"
       :type="type"
   >
     <slot/>
@@ -14,12 +14,6 @@ export default {
       type: String,
       default() {
         return 'button'
-      }
-    },
-    classes: {
-      type: Array,
-      default() {
-        return []
       }
     },
   },

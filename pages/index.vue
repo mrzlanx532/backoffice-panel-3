@@ -41,64 +41,64 @@
 
     <div :style="style">Badge</div>
     <template v-for="(btnClass, index) in btnClasses">
-      <Badge label="some text" :class="btnClass"/>
+      <Badge title="Example Text" :class="btnClass"/>
     </template>
 
     <div :style="style">Shadow-rounded</div>
     <div>
       <template v-for="(btnClass, index) in btnClasses">
-        <Button v-if="btnClass !== '--special'" :classes="['--rounded --shadow ' + btnClass]" :key="index">Отправить</Button>
+        <Button v-if="btnClass !== '--special'" :class="['--rounded --shadow ' + btnClass]" :key="index">Отправить</Button>
       </template>
     </div>
 
     <div :style="style">Shadow</div>
     <div>
       <template v-for="(btnClass, index) in btnClasses">
-        <Button v-if="btnClass !== '--special'" :classes="['--shadow ' + btnClass]" :key="index">Отправить</Button>
+        <Button v-if="btnClass !== '--special'" :class="['--shadow ' + btnClass]" :key="index">Отправить</Button>
       </template>
     </div>
 
     <div :style="style">Rounded</div>
     <div>
       <template v-for="(btnClass, index) in btnClasses">
-        <Button  v-if="btnClass !== '--special'" :classes="['--rounded ' + btnClass]" :key="index">Отправить</Button>
+        <Button  v-if="btnClass !== '--special'" :class="['--rounded ' + btnClass]" :key="index">Отправить</Button>
       </template>
     </div>
 
     <div :style="style">Большие кнопки</div>
     <div class="btn__group">
-      <Button v-for="(btnClass, index) in btnClasses" :classes="['--big ' + btnClass]" :key="index">Отправить</Button>
+      <Button v-for="(btnClass, index) in btnClasses" :class="['--big ' + btnClass]" :key="index">Отправить</Button>
     </div>
     <div :style="style">Средние кнопки</div>
     <div class="btn__group">
-      <Button v-for="(btnClass, index) in btnClasses" :classes="[btnClass]" :key="index">Отправить</Button>
+      <Button v-for="(btnClass, index) in btnClasses" :class="[btnClass]" :key="index">Отправить</Button>
     </div>
     <div :style="style">Маленькие кнопки</div>
     <div class="btn__group">
-      <Button v-for="(btnClass, index) in btnClasses" :classes="['--small ' + btnClass]" :key="index">Отправить</Button>
+      <Button v-for="(btnClass, index) in btnClasses" :class="['--small ' + btnClass]" :key="index">Отправить</Button>
     </div>
 
     <div :style="style">Большие кнопки (outline)</div>
     <div class="btn__group">
-      <Button v-for="(btnClass, index) in btnClassesOutline" :classes="['--big ' + btnClass]" :key="index">Отправить</Button>
+      <Button v-for="(btnClass, index) in btnClassesOutline" :class="['--big ' + btnClass]" :key="index">Отправить</Button>
     </div>
     <div :style="style">Средние кнопки (outline)</div>
     <div class="btn__group">
-      <Button v-for="(btnClass, index) in btnClassesOutline" :classes="[btnClass]" :key="index">Отправить</Button>
+      <Button v-for="(btnClass, index) in btnClassesOutline" :class="[btnClass]" :key="index">Отправить</Button>
     </div>
     <div :style="style">Маленькие кнопки (outline)</div>
     <div class="btn__group">
-      <Button v-for="(btnClass, index) in btnClassesOutline" :classes="['--small ' + btnClass]" :key="index">Отправить</Button>
+      <Button v-for="(btnClass, index) in btnClassesOutline" :class="['--small ' + btnClass]" :key="index">Отправить</Button>
     </div>
 
     <div :style="style">Кнопки (outline-contrast)</div>
     <div class="btn__group">
-      <Button v-for="(btnClass, index) in btnClassesOutlineContrast" :classes="[btnClass]" :key="index">Отправить</Button>
+      <Button v-for="(btnClass, index) in btnClassesOutlineContrast" :class="[btnClass]" :key="index">Отправить</Button>
     </div>
 
     <div :style="style">Кнопка --full-size</div>
     <div :style="style">
-      <Button :classes="['--full-width --success']">Отправить</Button>
+      <Button :class="['--full-width --success']">Отправить</Button>
     </div>
 
     <div :style="style">Ссылки</div>

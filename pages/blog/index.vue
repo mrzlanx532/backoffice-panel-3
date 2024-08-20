@@ -184,6 +184,29 @@ const onClickCreate = async () => {
     $notification.push({type: 'success', message: 'Статья добавлена'})
   })
 }
+
+const onChangeState = async () => {
+
+  $modal.confirm({
+    question: item.value.state.id === 'DRAFT' ? 'Опубликовать?' : 'Снять с публикации?'
+  }).then(async (isAgree) => {
+    if (!isAgree) {
+      return
+    }
+
+    const prefix = item.value.state.id === 'DRAFT' ? 'publish' : 'withdraw'
+
+    await $authFetch(`http://backoffice-api.lsmlocal.ru/blog/posts/${prefix}`, {
+      method: 'POST',
+      body: {
+        id: item.value.id,
+      },
+    })
+
+    $notification.push({type: 'success', message: 'Статус обновлен'})
+    browserEl.value!.reset(true)
+  })
+}
 </script>
 
 <template>
@@ -200,13 +223,23 @@ const onClickCreate = async () => {
   >
     <template #rightSide>
       <div class="btn__group">
-        <Button @click="onClickCreate" :classes="['--small --primary']">Добавить</Button>
+        <Button @click="onClickCreate" :class="['--small --primary']">Добавить</Button>
       </div>
     </template>
     <template #browserDetailHeader>
       <div class="btn__group">
-        <Button @click="onClickEdit" :classes="['--big --outline-primary']">Изменить</Button>
-        <Button @click="onClickDelete" :classes="['--big --outline-danger']">Удалить</Button>
+        <Button @click="onClickEdit" :class="['--big --outline-primary']">Изменить</Button>
+        <Button @click="onClickDelete" :class="['--big --outline-danger']">Удалить</Button>
+      </div>
+      <div class="btn__group ml_10">
+        <Button
+            @click="onChangeState"
+            :class="{
+              '--big': true,
+              '--outline-contrast-success': item.state?.id === 'DRAFT',
+              '--outline-contrast-warning': item.state?.id === 'PUBLISHED'
+            }"
+        >{{ item.state && item.state.id === 'DRAFT' ? 'Опубликовать' : 'Снять с публикации' }}</Button>
       </div>
     </template>
     <template #browserDetailContent>
