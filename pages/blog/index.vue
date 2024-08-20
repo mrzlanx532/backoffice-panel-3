@@ -21,7 +21,11 @@ type IItem = {[key: string]: any}
 
 const item: Ref<IItem> = ref({})
 
-const browserEl: Ref<HTMLElement|null> = ref(null)
+interface IBrowserEl {
+  reset: (isUpdateItem?: boolean) => void
+}
+
+const browserEl: Ref<IBrowserEl|null> = ref(null)
 
 const columns = shallowRef([
   {
@@ -156,7 +160,7 @@ const onClickEdit = async () => {
     id: item.value.id,
     formResponse
   }).then(() => {
-    browserEl.value!.reset()
+    browserEl.value!.reset(true)
     $notification.push({type: 'success', message: 'Статья отредактирована'})
   })
 }

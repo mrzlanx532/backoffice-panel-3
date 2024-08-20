@@ -101,6 +101,7 @@
       </Transition>
     </ClientOnly>
     <BrowserDetail
+        ref="browserDetail"
         :data-id="id"
         :title-property="detailTitleProperty"
         :subtitle-property="detailSubtitleProperty"
@@ -324,7 +325,7 @@ export default {
         this.fetchErrorStatusCode = 500
       }
     },
-    reset() {
+    reset(isUpdateItem = false) {
       this.currentPage = 1
       this.selectedPaginationItemsCount = 20
       this.activeFilters = {}
@@ -335,6 +336,10 @@ export default {
       })
 
       this.fetchData()
+
+      if (isUpdateItem) {
+        this.$refs.browserDetail.fetchData()
+      }
     },
     setFilters(filters) {
       const preparedFilters = [];
