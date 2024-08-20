@@ -216,7 +216,7 @@ const onClickCreate = async () => {
             Краткое содержание
           </template>
           <template v-slot:content>
-            {{ item.content_short }}
+            {{ item.content_short ?? '[Не заполнено]' }}
           </template>
         </Section>
         <Section>
@@ -224,7 +224,7 @@ const onClickCreate = async () => {
             Полное содержание
           </template>
           <template v-slot:content>
-            <div v-html="item.content"/>
+            {{ item.content ?? '[Не заполнено]'}}
           </template>
         </Section>
         <FlexTable :config="config" :item="item"/>
