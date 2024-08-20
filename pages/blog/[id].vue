@@ -1,3 +1,56 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useRoute } from '#imports';
+import Section from '@/components/Base/Section'
+import Detail from '@/components/Base/Detail'
+import Button from '@/components/Base/Button'
+import FlexTable from '@/components/Base/FlexTable'
+
+type IItem = {[key: string]: any}
+
+const route = useRoute()
+
+const entityId = route.params.id
+const item: IItem = ref({})
+const h1 = ref('Пост ' + entityId)
+
+const detailOptions = ref([
+  {
+    name: 'category',
+    title: 'Категория',
+    columnClass: 6,
+    toFormat(item: IItem) {
+      return item?.category?.name_ru
+    }
+  },
+  {
+    name: 'date',
+    title: 'Дата',
+    columnClass: 6
+  },
+  {
+    name: 'created_at',
+    title: 'Добавлен',
+    columnClass: 6,
+    preset: {
+      name: 'timestampToFormatPreset',
+    }
+  },
+  {
+    name: 'updated_at',
+    title: 'Изменен',
+    columnClass: 6,
+    preset: {
+      name: 'timestampToFormatPreset',
+    }
+  },
+])
+
+const onItemUpdated = (newItem: IItem) => {
+  item.value = newItem
+}
+</script>
+
 <template>
   <Detail
       :h1="h1"
@@ -7,8 +60,8 @@
   >
     <template v-slot:header>
       <div class="btn__group">
-        <Button :classes="['--big --outline-primary']">Изменить</Button>
-        <Button :classes="['--big --outline-danger']">Удалить</Button>
+        <Button :class="['--big --outline-primary']">Изменить</Button>
+        <Button :class="['--big --outline-danger']">Удалить</Button>
       </div>
     </template>
     <template v-slot:content>
@@ -20,7 +73,7 @@
                 Краткое содержание
               </template>
               <template v-slot:content>
-                {{ item.name }}
+                {{ item.content_short }}
               </template>
             </Section>
             <Section>
@@ -38,78 +91,6 @@
     </template>
   </Detail>
 </template>
-<script>
-import Section from "@/components/Base/Section"
-import Detail from "@/components/Base/Detail"
-import Button from "@/components/Base/Button"
-import FlexTable from "@/components/Base/FlexTable";
-import {useRoute} from "#imports";
-
-export default {
-  setup() {
-    const route = useRoute()
-
-    const entityId = route.params.id
-
-    return {
-      entityId
-    }
-  },
-  name: 'BlogDetail',
-  components: {
-    Section,
-    Detail,
-    Button,
-    FlexTable
-  },
-  data() {
-    return {
-      item: {},
-      detailOptions: [
-        {
-          name: 'category',
-          title: 'Категория',
-          columnClass: 6,
-          toFormat(item) {
-            return item?.category?.name_ru
-          }
-        },
-        {
-          name: 'date',
-          title: 'Дата',
-          columnClass: 6
-        },
-        {
-          name: 'created_at',
-          title: 'Добавлен',
-          columnClass: 6,
-          preset: {
-            name: 'timestampToFormatPreset',
-          }
-        },
-        {
-          name: 'updated_at',
-          title: 'Изменен',
-          columnClass: 6,
-          preset: {
-            name: 'timestampToFormatPreset',
-          }
-        },
-      ],
-    }
-  },
-  computed: {
-    h1: function () {
-      return 'Пост ' + this.entityId
-    }
-  },
-  methods: {
-    onItemUpdated(item) {
-      this.item = item
-    }
-  }
-}
-</script>
 
 <style scoped>
 .fade-enter-active,
