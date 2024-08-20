@@ -73,7 +73,7 @@
                 </tr>
               </thead>
               <tbody>
-              <tr v-for="item in items" @click="onClickRow(item)">
+              <tr v-for="item in items" :key="item[itemPrimaryKeyPropertyName]" @click="onClickRow(item)">
                 <td v-for="column in columns">
                   <template v-if="column.hasOwnProperty('component')">
                     <component :is="column.component" :item="item" :column="column"/>
@@ -167,6 +167,11 @@ export default {
   name: 'Browser',
   expose: ['reset', 'closeDetail'],
   props: {
+    itemPrimaryKeyPropertyName: {
+      required: false,
+      type: String,
+      default: 'id'
+    },
     columns: {
       type: Array,
       required: true
