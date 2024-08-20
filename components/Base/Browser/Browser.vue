@@ -165,7 +165,7 @@ export default {
     }
   },
   name: 'Browser',
-  expose: ['reset'],
+  expose: ['reset', 'closeDetail'],
   props: {
     columns: {
       type: Array,
@@ -483,6 +483,9 @@ export default {
       this.id = item.id
 
       this.$emit('clickRow', this.id)
+    },
+    closeDetail() {
+      this.onCloseDetail()
     },
     onCloseBrowserDetail() {
       this.openItem = {}

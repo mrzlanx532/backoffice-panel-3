@@ -22,7 +22,8 @@ type IItem = {[key: string]: any}
 const item: Ref<IItem> = ref({})
 
 interface IBrowserEl {
-  reset: (isUpdateItem?: boolean) => void
+  reset: (isUpdateItem?: boolean) => void,
+  closeDetail: () => void
 }
 
 const browserEl: Ref<IBrowserEl|null> = ref(null)
@@ -143,7 +144,9 @@ const onClickDelete = () => {
     })
 
     $notification.push({type: 'success', message: 'Статья удалена'})
+    item.value = {}
     browserEl.value!.reset()
+    browserEl.value!.closeDetail()
   })
 }
 
