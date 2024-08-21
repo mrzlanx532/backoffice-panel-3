@@ -910,4 +910,49 @@
       user-select: none;
     }
   }
+
+  .checkbox {
+    input[type="checkbox"] {
+      -webkit-appearance: none;
+      appearance: none;
+      background-color: #fff;
+      margin: 0;
+    }
+
+    &__fake {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--color-2, #dbdbdb);
+      border-radius: 5px;
+
+      &.--has-errors {
+        border: 1px solid #ff5252;
+      }
+
+      svg {
+        display: inline;
+        width: 15px;
+        height: 19px;
+        margin-left: 2px;
+        color: var(--color-gradient-intermediate, #DE4020);
+        font-size: 14px;
+      }
+    }
+
+    &__label {
+      user-select: none;
+      display: inline-block;
+      position: absolute;
+      top: 2px;
+      left: 25px;
+      font-size: 14px;
+    }
+
+    &__container {
+      cursor: pointer;
+      height: 25px;
+      position: relative;
+    }
+  }
 }

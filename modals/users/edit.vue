@@ -38,6 +38,7 @@ import FormSelect from "@/components/Base/Form/Select";
 import FormInputFile from "@/components/Base/Form/InputFile"
 import FormDate from "@/components/Base/Form/Date"
 import FormSwitcher from "@/components/Base/Form/Switcher"
+import FormCheckbox from "@/components/Base/Form/Checkbox.vue"
 
 export default {
   setup() {
@@ -120,18 +121,10 @@ export default {
             }
           },
           {
-            name: 'test',
-            label: 'Отключить подписку на эксклюзивные треки',
+            name: 'is_checked',
+            label: 'Согласен с условиями пользовательского соглашения',
             class: '--full',
-            component: FormSwitcher,
-          },
-          {
-            name: 'subscription_till',
-            label: 'Дата истечения',
-            component: FormDate,
-            componentData: {
-              returnFormat: 'DD.MM.yyyy'
-            }
+            component: FormCheckbox,
           },
         ]
       },
@@ -267,28 +260,8 @@ export default {
   data() {
     return {
       selectedTab: 0,
-      formData: {
-        first_name: '',
-        last_name: '',
-        email: '',
-        phone: '',
-        locale_id: '',
-        about: '',
-        picture: '',
-        company_name: '',
-        company_business_type_id: '',
-        job_title: '',
-        company_url: '',
-        company_index: '',
-        company_country_id: '',
-        company_city: '',
-        subscription_type_id: '',
-        subscription_till: '',
-        subscription_till_for_exclusive_tracks: '',
-        subscription_labels: '',
-        test: false,
-      },
-      errors: [],
+      formData: {},
+      errors: {},
     }
   },
   methods: {
