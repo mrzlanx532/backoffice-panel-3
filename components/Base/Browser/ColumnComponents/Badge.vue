@@ -13,7 +13,14 @@ const props = defineProps<{
   }
 }>()
 
-const data = props.column.toFormat(props.item)
+const data = ref(props.column.toFormat(props.item))
+
+watch(
+    () => props.item,
+    (value) => {
+      data.value = props.column.toFormat(value)
+    }
+)
 </script>
 
 <template>
