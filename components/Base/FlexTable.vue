@@ -41,7 +41,7 @@ const dynamicMethods: {[key: string]: (configItem: IConfigItem, item: IItem) => 
       date.locale('ru')
     }
 
-    return configItem.preset?.hasOwnProperty('format') ? date.format(configItem.preset.format) : date.format('L')
+    return configItem.preset?.format ? date.format(configItem.preset.format) : date.format('DD.MM.YYYY')
   }
 }
 
@@ -63,13 +63,13 @@ const callPreset = (methodName: string, configItem: IConfigItem, item: IItem) =>
         {{ configItem.title }}
       </div>
       <div class="flex-table__item-content">
-        <template v-if="configItem.hasOwnProperty('component')">
+        <template v-if="configItem.component">
           <component :is="configItem.component" :item="item[configItem.name]"/>
         </template>
-        <template v-else-if="configItem.hasOwnProperty('preset')">
+        <template v-else-if="configItem.preset">
           {{ callPreset(configItem.preset!.name, configItem, item)}}
         </template>
-        <template v-else-if="configItem.hasOwnProperty('toFormat')">
+        <template v-else-if="configItem.toFormat">
           {{ configItem.toFormat!(item) }}
         </template>
         <template v-else>
