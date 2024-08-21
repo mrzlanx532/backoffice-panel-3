@@ -103,7 +103,7 @@ const config = shallowRef([
     name: 'category_id',
     title: 'Категория',
     columnClass: 6,
-    toFormat(item) {
+    toFormat(item: IItem) {
         return `${item?.category?.name_ru}`
     },
   },
