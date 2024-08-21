@@ -88,7 +88,7 @@ const onFilterValueChanged = (payload: IPayload) => {
 </script>
 <template>
   <div class="browser__filter">
-    <label :for="filter.id" class="browser__filter-name">{{ filter.title }}</label>
+    <div :for="filter.id" class="browser__filter-name">{{ filter.title }}</div>
     <div class="browser__filter-container date">
       <template v-if="filter.config.range">
         <DatePicker
