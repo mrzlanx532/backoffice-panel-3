@@ -23,13 +23,13 @@ const props = defineProps({
 })
 
 const formDataValues = reactive({
-  'locale_id': '',
-  'category_id': '',
-  'name': '',
-  'date': '',
-  'cover': '',
-  'content_short': '',
-  'content': '',
+  'locale_id': undefined,
+  'category_id': undefined,
+  'name': undefined,
+  'date': undefined,
+  'cover': undefined,
+  'content_short': undefined,
+  'content': undefined,
 })
 
 const formData = [
