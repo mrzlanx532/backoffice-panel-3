@@ -237,7 +237,7 @@ const onChangeState = async () => {
             :class="{
               '--big': true,
               '--outline-contrast-success': item.state?.id === 'DRAFT',
-              '--outline-contrast-warning': item.state?.id === 'PUBLISHED'
+              '--outline-contrast-default': item.state?.id === 'PUBLISHED'
             }"
         >{{ item.state && item.state.id === 'DRAFT' ? 'Опубликовать' : 'Снять с публикации' }}</Button>
       </div>
