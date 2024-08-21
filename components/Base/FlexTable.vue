@@ -3,12 +3,12 @@ import moment from 'moment/moment'
 
 type IItem = {[key: string]: any}
 
-interface IConfigItem {
+export interface IConfigItem {
   columnClass: number,
   title: string,
   name: string,
   toFormat?: (item: {[key: string]: any}) => {},
-  component: {}
+  component?: {}
   preset?: {
     name: string,
     locale?: string ,
@@ -18,7 +18,7 @@ interface IConfigItem {
 
 interface Props {
   config: IConfigItem[],
-  item: IItem,
+  item?: IItem,
   emptySymbol?: string
 }
 
