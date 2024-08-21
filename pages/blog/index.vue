@@ -126,7 +126,7 @@ const config = shallowRef([
   },
 ])
 
-const onItemUpdated = (newItem) => {
+const onItemUpdated = (newItem: IItem) => {
     item.value = newItem
 }
 

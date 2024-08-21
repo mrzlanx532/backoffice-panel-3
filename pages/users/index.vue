@@ -43,15 +43,15 @@ const tabs = [
   },
   {
     title: 'Скачанное (музыка)',
-    componentName: 'subscription'
+    componentName: 'downloaded_music'
   },
   {
     title: 'Скачанное (шумы)',
-    componentName: 'subscription'
+    componentName: 'downloaded_sounds'
   },
   {
     title: 'Отчеты',
-    componentName: 'subscription'
+    componentName: 'reports'
   },
 ]
 
@@ -106,8 +106,8 @@ const onChangeSelectedTab = (tabIndex: number) => {
   selectedTab.value = tabIndex;
 }
 
-const onItemUpdated = (item: IItem) => {
-  item.value = item
+const onItemUpdated = (newItem: IItem) => {
+  item.value = newItem
 }
 
 const onClickEdit = () => {

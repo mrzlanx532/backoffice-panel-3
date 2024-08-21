@@ -2,19 +2,14 @@
 import Section from '@/components/Base/Section'
 import FlexTable from '@/components/Base/FlexTable';
 
+type IItem = {[key: string]: any}
+
 const props = defineProps({
   item: {
     type: Object,
     required: false
   }
 })
-
-watch(
-  () => props.item,
-  (value) => {
-    item.value = value
-  }
-)
 
 const detailConfigInfo = ref([
   {
@@ -49,7 +44,7 @@ const detailConfigCompany = ref([
     name: 'company_business_type',
     title: 'Направление работы компании',
     columnClass: 6,
-    toFormat(item) {
+    toFormat(item: IItem) {
       return item?.company_business_type?.name_ru
     }
   },
@@ -72,7 +67,7 @@ const detailConfigCompany = ref([
     name: 'company_country',
     title: 'Страна',
     columnClass: 6,
-    toFormat(item) {
+    toFormat(item: IItem) {
       return item?.company_country?.name_ru;
     }
   },
