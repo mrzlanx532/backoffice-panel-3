@@ -1,3 +1,134 @@
+<script setup lang="ts">
+import { defineAsyncComponent, type Ref } from 'vue'
+import { definePageMeta, useNuxtApp } from '#imports'
+
+import Browser from '@/components/Base/Browser/Browser';
+import Tabs from '@/components/Base/Tabs';
+import SubscriptionRow from '@/components/CustomRows/users/SubscriptionRow'
+import Button from '@/components/Base/Button';
+
+definePageMeta({
+  middleware: ['auth']
+})
+
+type IItem = {[key: string]: any}
+
+const id: Ref<number|null> = ref(null)
+const item: Ref<IItem> = ref({})
+
+const requestProperties = ref([
+  'id',
+  'name',
+  'subscription_till',
+  'subscription_till_for_exclusive_tracks',
+  'subscription_type_id',
+  'subscription_type',
+  'downloads_counter',
+  'views_counter',
+  'created_at'
+])
+
+const { $modal } = useNuxtApp()
+
+const selectedTab = shallowRef(0)
+
+const tabs = [
+  {
+    title: 'Инфо',
+    componentName: 'main'
+  },
+  {
+    title: 'Подписка',
+    componentName: 'subscription'
+  },
+  {
+    title: 'Скачанное (музыка)',
+    componentName: 'subscription'
+  },
+  {
+    title: 'Скачанное (шумы)',
+    componentName: 'subscription'
+  },
+  {
+    title: 'Отчеты',
+    componentName: 'subscription'
+  },
+]
+
+const columns = shallowRef([
+  {
+    name: 'id',
+    title: 'ID'
+  },
+  {
+    name: 'name',
+    title: 'Имя'
+  },
+  {
+    name: 'company',
+    title: 'Подписка (Срок действия)',
+    component: SubscriptionRow
+  },
+  {
+    name: 'downloads_counter',
+    title: 'Скач.'
+  },
+  {
+    name: 'views_counter',
+    title: 'Просмотр'
+  },
+  {
+    name: 'created_at',
+    title: 'Дата создания',
+    preset: {
+      name: 'timestampToFormatPreset',
+    }
+  },
+])
+
+const getAsyncComponent = () => {
+  return defineAsyncComponent(() => {
+    const componentName = tabs[selectedTab.value].componentName
+    return import(`@/pages/users/ignore/tabs/${componentName}.vue`)
+  })
+}
+
+let selectedTabMap = shallowRef(getAsyncComponent())
+
+watch(
+    selectedTab,
+    () => {
+      selectedTabMap.value = getAsyncComponent()
+    }
+)
+
+const onChangeSelectedTab = (tabIndex: number) => {
+  selectedTab.value = tabIndex;
+}
+
+const onItemUpdated = (item: IItem) => {
+  item.value = item
+}
+
+const onClickEdit = () => {
+  $modal.load('users/edit', {
+    title: 'Создание пользователя'
+  }).then(res => {
+    console.log(res)
+  })
+}
+
+const onClickDelete = () => {
+  $modal.confirm({
+    'question': 'Вы уверены?',
+  }).then(confirm => {
+    if (confirm) {
+      console.log('Удаляем!!')
+    }
+  })
+}
+</script>
+
 <template>
   <Browser
       h1="Каталог пользователей"
@@ -29,149 +160,6 @@
     </template>
   </Browser>
 </template>
-<script>
-
-import { defineAsyncComponent } from 'vue'
-import Section from "@/components/Base/Section"
-import SubscriptionRow from "@/components/CustomRows/users/SubscriptionRow"
-import Button from "@/components/Base/Button";
-import Tabs from "@/components/Base/Tabs";
-import StateButton from "@/components/Base/StateButton"
-import PageWithBrowserMixin from "@/mixins/pages/browser.js"
-
-export default {
-  setup() {
-    const columns = shallowRef([
-      {
-        name: 'id',
-        title: 'ID'
-      },
-      {
-        name: 'name',
-        title: 'Имя'
-      },
-      {
-        name: 'company',
-        title: 'Подписка (Срок действия)',
-        component: SubscriptionRow
-      },
-      {
-        name: 'downloads_counter',
-        title: 'Скач.'
-      },
-      {
-        name: 'views_counter',
-        title: 'Просмотр'
-      },
-      {
-        name: 'created_at',
-        title: 'Дата создания',
-        preset: {
-          name: 'timestampToFormatPreset',
-        }
-      },
-    ])
-
-    const tabs = [
-      {
-        title: 'Инфо',
-        componentName: 'main'
-      },
-      {
-        title: 'Подписка',
-        componentName: 'subscription'
-      },
-      {
-        title: 'Скачанное (музыка)',
-        componentName: 'subscription'
-      },
-      {
-        title: 'Скачанное (шумы)',
-        componentName: 'subscription'
-      },
-      {
-        title: 'Отчеты',
-        componentName: 'subscription'
-      },
-    ]
-
-    const selectedTab = shallowRef(0)
-
-    const getAsyncComponent = () => {
-
-      return defineAsyncComponent(() => {
-
-        const componentName = tabs[selectedTab.value].componentName
-        return import(`@/pages/users/ignore/tabs/${componentName}.vue`)
-      })
-    }
-
-    let selectedTabMap = shallowRef(getAsyncComponent())
-
-    watch(
-        selectedTab,
-        () => {
-          selectedTabMap.value = getAsyncComponent()
-        }
-    )
-
-    const onChangeSelectedTab = (tabIndex) => {
-      selectedTab.value = tabIndex;
-    }
-
-    return {
-      selectedTab,
-      selectedTabMap,
-      columns,
-      tabs,
-
-      onChangeSelectedTab
-    }
-  },
-  name: 'UsersPage',
-  mixins: [PageWithBrowserMixin],
-  components: {
-    Button,
-    SubscriptionRow,
-    Section,
-    Tabs,
-    StateButton
-  },
-  data() {
-    return {
-      requestProperties: [
-        'id',
-        'name',
-        'subscription_till',
-        'subscription_till_for_exclusive_tracks',
-        'subscription_type_id',
-        'subscription_type',
-        'downloads_counter',
-        'views_counter',
-        'created_at'
-      ]
-    }
-  },
-  methods: {
-    onClickEdit() {
-      this.$modal.load('users/edit', {
-        title: 'Создание пользователя'
-      }).then(res => {
-        console.log(res)
-      })
-    },
-    async onClickDelete() {
-      this.$modal.confirm({
-        'question': 'Вы уверены?',
-      }).then(confirm => {
-        if (confirm) {
-          console.log('Удаляем!!')
-        }
-      })
-    },
-  }
-}
-</script>
 
 <style scoped>
 .fade-enter-active,
