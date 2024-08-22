@@ -1,3 +1,431 @@
+<script setup lang="ts">
+import BrowserSelectFilter from "@/components/Base/Browser/BrowserSelectFilter.vue"
+import BrowserSelectSearchFilter from "@/components/Base/Browser/BrowserSelectSearchFilter.vue"
+import BrowserInputFilter from "@/components/Base/Browser/BrowserInputFilter.vue"
+import BrowserDateFilter from "@/components/Base/Browser/BrowserDateFilter.vue"
+import BrowserBooleanFilter from "@/components/Base/Browser/BrowserBooleanFilter.vue"
+import BrowserSearchString from "@/components/Base/Browser/BrowserSearchString.vue"
+import BrowserPagination from "@/components/Base/Browser/BrowserPagination.vue"
+import BrowserPaginationCountSelect from "@/components/Base/Browser/BrowserPaginationCountSelect.vue"
+import BrowserTHeadTh from "@/components/Base/Browser/BrowserTHeadTh.vue";
+import Spinner from "@/components/Base/Spinner.vue"
+import BrowserDetail from "@/components/Base/Browser/BrowserDetail.vue";
+import browserPresetsMethodsMixin from "@/helpers/browser-presets-methods-mixin";
+
+import isEmpty from "lodash.isempty"
+import debounce from "lodash.debounce"
+import moment from "moment";
+
+import { useSlots } from "vue";
+import { useNuxtApp } from '#imports'
+
+const { $authFetch } = useNuxtApp()
+
+type IItem = {[key: string]: any}
+
+const emit = defineEmits([
+  'clickRow',
+  'itemUpdated'
+])
+
+onMounted(() => {
+  fetchData().then(() => {
+    firstLoadingIsActive.value = false
+  })
+})
+
+const props = defineProps({
+  itemPrimaryKeyPropertyName: {
+    required: false,
+    type: String,
+    default: 'id'
+  },
+  columns: {
+    type: Array,
+    required: true
+  },
+  urlPrefix: {
+    type: String,
+    required: false
+  },
+  requestProperties: {
+    type: Array,
+    required: false
+  },
+  h1: {
+    type: String,
+    required: false
+  },
+  browserFetchUrl: {
+    type: String,
+    required: false,
+  },
+  browserDetailFetchUrl: {
+    type: String,
+    required: false,
+  },
+  detailPageUrlPrefix: {
+    type: String,
+    required: false
+  },
+  detailTitleProperty: {
+    type: String,
+    required: false,
+    default: 'id'
+  },
+  detailSubtitleProperty: {
+    type: String,
+    required: false
+  }
+})
+
+const browserDetail = ref(null)
+
+const state = reactive({
+  id: null,
+  item: {},
+  localColumns: props.columns,
+  localRequestProperties: props.requestProperties ? props.requestProperties.reduce((acc, value) => {
+    return {...acc, [value]: value}
+  }, {}) : null,
+  localColumnsByName: props.columns.reduce((acc, value) => {
+    return {...acc, [value.name]: value}
+  }, {}),
+  filters: [],
+  filtersByName: [],
+  activeFilters: {},
+  items: [],
+  firstLoadingIsActive: true,
+  loadingIsActive: false,
+  searchString: '',
+  fetchErrorStatusCode: null,
+  fetchErrorMessage: null,
+  openItem: {},
+  paginationItemsCountOptions: [
+    20, 50, 100
+  ],
+  selectedPaginationItemsCount: 20,
+  totalItems: 0,
+  currentPage: 1,
+  sorts: {},
+  activeSort: null,
+  debouncedFetchDataFunction: null
+})
+
+const {
+  id,
+  item,
+  localColumns,
+  localRequestProperties,
+  localColumnsByName,
+  filters,
+  filtersByName,
+  activeFilters,
+  items,
+  firstLoadingIsActive,
+  loadingIsActive,
+  searchString,
+  fetchErrorStatusCode,
+  fetchErrorMessage,
+  openItem,
+  paginationItemsCountOptions,
+  selectedPaginationItemsCount,
+  totalItems,
+  currentPage,
+  sorts,
+  activeSort,
+  debouncedFetchDataFunction
+} = toRefs(state)
+
+const fetchURL = computed(() => {
+  return `${runtimeConfig.public.laravelAuth.domain}/${props.urlPrefix}/browse`
+})
+
+const detailPageUrl = computed(() => {
+  return '/' + (props.detailPageUrlPrefix ? `${props.detailPageUrlPrefix}/${state.id}` : `${props.urlPrefix}/${state.id}`)
+})
+
+const fetchData = async () => {
+
+  loadingIsActive.value = true
+
+  const config = {}
+
+  if (activeFilters.value) {
+    const requestData = {};
+
+    if (!isEmpty(activeFilters.value)) {
+      requestData.filters = activeFilters.value
+    }
+
+    if (searchString.value !== '') {
+      requestData.search_string = searchString.value
+    }
+
+    if (activeSort.value && sorts.value[activeSort.value]) {
+      requestData.sort = {
+        field: activeSort.value,
+        direction: sorts.value[activeSort.value]
+      }
+    }
+
+    if (selectedPaginationItemsCount.value !== 20) {
+      requestData.per_page = selectedPaginationItemsCount.value
+    }
+
+    if (currentPage.value > 1) {
+      requestData.page = currentPage.value
+    }
+
+    config.params = requestData
+  }
+
+  try {
+
+    const data = await $authFetch(unref(fetchURL.value), config)
+
+    fetchErrorStatusCode.value = null
+    fetchErrorMessage.value = null
+
+    totalItems.value = data.meta.count
+
+    setItems(data.items)
+
+    if (firstLoadingIsActive.value) {
+
+      setFilters(data.filters)
+      sorts.value = data.meta.sort.reduce((acc, value) => {
+        return {...acc, [value]: null}
+      }, {})
+    }
+
+    loadingIsActive.value = false
+
+  } catch (err) {
+    fetchErrorMessage.value = err.message
+    fetchErrorStatusCode.value = 500
+  }
+}
+
+const slots = useSlots()
+
+const isSlotRightSideExists = () => {
+  return !!slots.rightSide
+}
+
+const filterMapper = shallowRef({
+  SELECT: BrowserSelectFilter,
+  SELECT_SEARCH: BrowserSelectSearchFilter,
+  INPUT: BrowserInputFilter,
+  DATE: BrowserDateFilter,
+  BOOLEAN: BrowserBooleanFilter
+})
+
+const runtimeConfig = useRuntimeConfig()
+
+watch(
+    selectedPaginationItemsCount,
+    () => {
+      fetchData()
+    }
+)
+
+const onClickRow = (item: IItem) => {
+
+  if (id.value === item.id) {
+    id.value = null
+
+    emit('clickRow', id.value)
+
+    return
+  }
+
+  id.value = item.id
+
+  emit('clickRow', id.value)
+}
+
+const closeDetail = () => {
+  onCloseDetail()
+}
+
+const onCloseBrowserDetail = () => {
+  openItem.value = {}
+}
+
+const onCloseDetail = () => {
+  id.value = null
+}
+
+const onItemUpdated = (item: IItem) => {
+  item.value = item
+
+  emit('itemUpdated', item)
+}
+
+const onSearchStringInput = (value) => {
+  currentPage.value = 1
+  searchString.value = value
+
+  fetchData()
+}
+
+const onChangePaginationItemsCount = (value) => {
+  selectedPaginationItemsCount.value = value
+  currentPage.value = 1
+}
+
+const onChangePage = (page: number) => {
+  currentPage.value = page
+
+  fetchData()
+}
+
+const onSortChanged = (name, value) => {
+
+  if (activeSort.value !== name) {
+    activeSort.value = name
+
+    for (let sort in sorts.value) {
+      sorts.value[sort] = null
+    }
+  }
+
+  sorts.value[name] = value
+
+  fetchData()
+}
+
+const setItems = (_items: IItem[]) => {
+  const preparedItems = [];
+
+  _items.forEach((item: IItem) => {
+
+    const filteredItem = {};
+
+    for (let value in item) {
+
+      if (!item.hasOwnProperty(value)) {
+        continue;
+      }
+
+      if (localRequestProperties.value !== null && !localRequestProperties.value.hasOwnProperty(value)) {
+        continue;
+      }
+
+      filteredItem[value] = item[value]
+    }
+
+    preparedItems.push(filteredItem)
+  })
+
+  items.value = preparedItems
+}
+
+const setFilters = (_filters) => {
+  const preparedFilters = [];
+  const preparedFiltersByName = {};
+
+  _filters.forEach((filter) => {
+    preparedFilters.push(filter)
+    preparedFiltersByName[filter.id] = filter
+  })
+
+  filters.value = preparedFilters
+  filtersByName.value = preparedFiltersByName
+}
+
+const onFilterValueChanged = (filter) => {
+  prepareFilterValue(filter)
+  currentPage.value = 1
+
+  if (debouncedFetchDataFunction.value) {
+    debouncedFetchDataFunction.value.cancel()
+  }
+
+  debouncedFetchDataFunction.value = debounce(fetchData, 100)
+  debouncedFetchDataFunction.value()
+}
+
+const prepareFilterValue = (filter) => {
+  if (filtersByName.value[filter.id].config.range) {
+
+    if (filter.value === null) {
+      delete activeFilters.value[filter.id]
+
+      return
+    }
+
+    const preparedFirstValue = filter.value[0] === null ? "" : filter.value[0]
+    const preparedSecondValue = filter.value[1] === null ? "" : filter.value[1]
+
+    if (preparedFirstValue === "" && preparedSecondValue === "") {
+      delete activeFilters.value[filter.id]
+
+      return
+    }
+
+    activeFilters.value[filter.id] = [preparedFirstValue, preparedSecondValue]
+
+    return
+  }
+
+  if (filtersByName.value[filter.id].config.multiple) {
+
+    filter.value.length ? activeFilters.value[filter.id] = filter.value : delete activeFilters.value[filter.id]
+
+    return
+  }
+
+  if (filter.value === null || filter.value === '') {
+    delete activeFilters.value[filter.id]
+
+    return
+  }
+
+  activeFilters.value[filter.id] = [filter.value]
+}
+
+const reset = (isUpdateItem = false) => {
+  currentPage.value = 1
+  selectedPaginationItemsCount.value = 20
+  activeFilters.value = {}
+  activeSort.value = null
+
+  Object.keys(sorts.value).map((key) => {
+    sorts.value[key] = null
+  })
+
+  fetchData()
+
+  if (isUpdateItem) {
+    browserDetail.value.fetchData()
+  }
+}
+
+const timestampToFormatPreset = (column, rowItem) => {
+
+  const date = moment(rowItem[column.name] * 1000)
+
+  if (!date.isValid()) {
+    return null;
+  }
+
+  if (column.preset.hasOwnProperty('locale')) {
+    date.locale(column.preset.locale)
+  } else {
+    date.locale('ru')
+  }
+
+  return column.preset.hasOwnProperty('format') ? date.format(column.preset.format) : date.format('DD.MM.YYYY')
+}
+
+defineExpose({
+  reset,
+  closeDetail
+})
+</script>
+
 <template>
   <div class="browser">
     <ClientOnly>
@@ -79,7 +507,7 @@
                     <component :is="column.component" :item="item" :column="column"/>
                   </template>
                   <template v-else-if="column.hasOwnProperty('preset')">
-                    {{ handleByPreset(column, item)}}
+                    {{ 'Тут должен быть handleByPreset' }}
                   </template>
                   <template v-else-if="column.hasOwnProperty('toFormat')">
                     {{ column.toFormat(item) }}
@@ -122,388 +550,3 @@
     </BrowserDetail>
   </div>
 </template>
-<script>
-import isEmpty from "lodash.isempty"
-import debounce from "lodash.debounce"
-import moment from "moment";
-import Spinner from "@/components/Base/Spinner"
-import BrowserSelectFilter from "@/components/Base/Browser/BrowserSelectFilter"
-import BrowserSelectSearchFilter from "@/components/Base/Browser/BrowserSelectSearchFilter"
-import BrowserInputFilter from "@/components/Base/Browser/BrowserInputFilter"
-import BrowserDateFilter from "@/components/Base/Browser/BrowserDateFilter.vue"
-import BrowserBooleanFilter from "@/components/Base/Browser/BrowserBooleanFilter.vue"
-import BrowserSearchString from "@/components/Base/Browser/BrowserSearchString"
-import BrowserPagination from "@/components/Base/Browser/BrowserPagination"
-import BrowserPaginationCountSelect from "@/components/Base/Browser/BrowserPaginationCountSelect"
-import BrowserTHeadTh from "@/components/Base/Browser/BrowserTHeadTh";
-import browserPresetsMethodsMixin from "@/helpers/browser-presets-methods-mixin";
-import BrowserDetail from "@/components/Base/Browser/BrowserDetail";
-import { useSlots } from "vue";
-
-export default {
-  setup() {
-    const slots = useSlots()
-
-    const isSlotRightSideExists = () => {
-      return !!slots.rightSide
-    }
-
-    const filterMapper = shallowRef({
-      SELECT: BrowserSelectFilter,
-      SELECT_SEARCH: BrowserSelectSearchFilter,
-      INPUT: BrowserInputFilter,
-      DATE: BrowserDateFilter,
-      BOOLEAN: BrowserBooleanFilter
-    })
-
-    const runtimeConfig = useRuntimeConfig()
-
-    return {
-      isSlotRightSideExists,
-      filterMapper,
-      runtimeConfig
-    }
-  },
-  name: 'Browser',
-  expose: ['reset', 'closeDetail'],
-  props: {
-    itemPrimaryKeyPropertyName: {
-      required: false,
-      type: String,
-      default: 'id'
-    },
-    columns: {
-      type: Array,
-      required: true
-    },
-    urlPrefix: {
-      type: String,
-      required: false
-    },
-    requestProperties: {
-      type: Array,
-      required: false
-    },
-    h1: {
-      type: String,
-      required: false
-    },
-    browserFetchUrl: {
-      type: String,
-      required: false,
-    },
-    browserDetailFetchUrl: {
-      type: String,
-      required: false,
-    },
-    detailPageUrlPrefix: {
-      type: String,
-      required: false
-    },
-    detailTitleProperty: {
-      type: String,
-      required: false,
-      default: 'id'
-    },
-    detailSubtitleProperty: {
-      type: String,
-      required: false
-    }
-  },
-  components: {
-    Spinner,
-    BrowserTHeadTh,
-    BrowserSearchString,
-    BrowserPagination,
-    BrowserPaginationCountSelect,
-    BrowserDetail,
-  },
-  computed: {
-    fetchURL: function () {
-      return `${this.runtimeConfig.public.laravelAuth.domain}/${this.urlPrefix}/browse`
-    },
-    detailPageUrl: function () {
-      return '/' + (this.detailPageUrlPrefix ? `${this.detailPageUrlPrefix}/${this.id}` : `${this.urlPrefix}/${this.id}`)
-    }
-  },
-  data () {
-    return {
-      id: null,
-      item: {},
-      localColumns: this.columns,
-      localRequestProperties: this.requestProperties ? this.requestProperties.reduce((acc, value) => {
-        return {...acc, [value]: value}
-      }, {}) : null,
-      localColumnsByName: this.columns.reduce((acc, value) => {
-        return {...acc, [value.name]: value}
-      }, {}),
-      filters: [],
-      filtersByName: [],
-      activeFilters: {},
-      items: [],
-      firstLoadingIsActive: true,
-      loadingIsActive: false,
-      searchString: '',
-      fetchErrorStatusCode: null,
-      fetchErrorMessage: null,
-      openItem: {},
-      paginationItemsCountOptions: [
-        20, 50, 100
-      ],
-      selectedPaginationItemsCount: 20,
-      totalItems: 0,
-      currentPage: 1,
-      sorts: {},
-      activeSort: null,
-      debouncedFetchDataFunction: null
-    }
-  },
-  watch: {
-    selectedPaginationItemsCount: function () {
-      this.fetchData()
-    },
-  },
-  created() {
-    this.fetchData().then(() => {
-      this.firstLoadingIsActive = false
-    })
-  },
-  methods: {
-    ...browserPresetsMethodsMixin,
-    async fetchData() {
-
-      this.loadingIsActive = true
-
-      const config = {}
-
-      if (this.activeFilters) {
-        const requestData = {};
-
-        if (!isEmpty(this.activeFilters)) {
-          requestData.filters = this.activeFilters
-        }
-
-        if (this.searchString !== '') {
-          requestData.search_string = this.searchString
-        }
-
-        if (this.activeSort && this.sorts[this.activeSort]) {
-          requestData.sort = {
-            field: this.activeSort,
-            direction: this.sorts[this.activeSort]
-          }
-        }
-
-        if (this.selectedPaginationItemsCount !== 20) {
-          requestData.per_page = this.selectedPaginationItemsCount
-        }
-
-        if (this.currentPage > 1) {
-          requestData.page = this.currentPage
-        }
-
-        config.params = requestData
-      }
-
-      try {
-
-        const data = await this.$authFetch(unref(this.fetchURL), config)
-
-        this.fetchErrorStatusCode = null
-        this.fetchErrorMessage = null
-
-        this.totalItems = data.meta.count
-        this.setItems(data.items)
-
-        if (this.firstLoadingIsActive) {
-
-          this.setFilters(data.filters)
-          this.sorts = data.meta.sort.reduce((acc, value) => {
-            return {...acc, [value]: null}
-          }, {})
-        }
-
-        this.loadingIsActive = false
-
-      } catch (err) {
-        this.fetchErrorMessage = err.message
-        this.fetchErrorStatusCode = 500
-      }
-    },
-    reset(isUpdateItem = false) {
-      this.currentPage = 1
-      this.selectedPaginationItemsCount = 20
-      this.activeFilters = {}
-      this.activeSort = null
-
-      Object.keys(this.sorts).map((key) => {
-        this.sorts[key] = null
-      })
-
-      this.fetchData()
-
-      if (isUpdateItem) {
-        this.$refs.browserDetail.fetchData()
-      }
-    },
-    setFilters(filters) {
-      const preparedFilters = [];
-      const preparedFiltersByName = {};
-
-      filters.forEach((filter) => {
-        preparedFilters.push(filter)
-        preparedFiltersByName[filter.id] = filter
-      })
-
-      this.filters = preparedFilters
-      this.filtersByName = preparedFiltersByName
-    },
-    setItems(items) {
-      const preparedItems = [];
-
-      items.forEach((item) => {
-
-        const filteredItem = {};
-
-        for (let value in item) {
-
-          if (!item.hasOwnProperty(value)) {
-            continue;
-          }
-
-          if (this.localRequestProperties !== null && !this.localRequestProperties.hasOwnProperty(value)) {
-            continue;
-          }
-
-          filteredItem[value] = item[value]
-        }
-
-        preparedItems.push(filteredItem)
-      })
-
-      this.items = preparedItems
-    },
-    onFilterValueChanged(filter) {
-      this.prepareFilterValue(filter)
-      this.currentPage = 1
-
-      if (this.debouncedFetchDataFunction) {
-        this.debouncedFetchDataFunction.cancel()
-      }
-
-      this.debouncedFetchDataFunction = debounce(this.fetchData, 100)
-      this.debouncedFetchDataFunction()
-    },
-    prepareFilterValue(filter) {
-      if (this.filtersByName[filter.id].config.range) {
-
-        if (filter.value === null) {
-          delete this.activeFilters[filter.id]
-
-          return
-        }
-
-        const preparedFirstValue = filter.value[0] === null ? "" : filter.value[0]
-        const preparedSecondValue = filter.value[1] === null ? "" : filter.value[1]
-
-        if (preparedFirstValue === "" && preparedSecondValue === "") {
-          delete this.activeFilters[filter.id]
-
-          return
-        }
-
-        this.activeFilters[filter.id] = [preparedFirstValue, preparedSecondValue]
-
-        return
-      }
-
-      if (this.filtersByName[filter.id].config.multiple) {
-
-        filter.value.length ? this.activeFilters[filter.id] = filter.value : delete this.activeFilters[filter.id]
-
-        return
-      }
-
-      if (filter.value === null || filter.value === '') {
-        delete this.activeFilters[filter.id]
-
-        return
-      }
-
-      this.activeFilters[filter.id] = [filter.value]
-    },
-    timestampToFormatPreset(column, rowItem) {
-
-      const date = moment(rowItem[column.name] * 1000)
-
-      if (!date.isValid()) {
-        return null;
-      }
-
-      if (column.preset.hasOwnProperty('locale')) {
-        date.locale(column.preset.locale)
-      } else {
-        date.locale('ru')
-      }
-
-      return column.preset.hasOwnProperty('format') ? date.format(column.preset.format) : date.format('L')
-    },
-    onSearchStringInput(value) {
-      this.currentPage = 1
-      this.searchString = value
-      this.fetchData()
-    },
-    onChangePaginationItemsCount(value) {
-      this.selectedPaginationItemsCount = value
-      this.currentPage = 1
-    },
-    onChangePage(page) {
-      this.currentPage = page
-      this.fetchData()
-    },
-    onSortChanged(name, value) {
-
-      if (this.activeSort !== name) {
-        this.activeSort = name
-
-        for (let sort in this.sorts) {
-          this.sorts[sort] = null
-        }
-      }
-
-      this.sorts[name] = value
-
-      this.fetchData()
-    },
-    onClickRow(item) {
-
-      if (this.id === item.id) {
-        this.id = null
-
-        this.$emit('clickRow', this.id)
-
-        return
-      }
-
-      this.id = item.id
-
-      this.$emit('clickRow', this.id)
-    },
-    closeDetail() {
-      this.onCloseDetail()
-    },
-    onCloseBrowserDetail() {
-      this.openItem = {}
-    },
-    onCloseDetail() {
-      this.id = null
-      this.selectedState = {}
-    },
-    onItemUpdated(item) {
-      this.item = item
-
-      this.$emit('itemUpdated', item)
-    }
-  }
-}
-</script>
