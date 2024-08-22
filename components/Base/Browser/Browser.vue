@@ -10,13 +10,12 @@ import BrowserPaginationCountSelect from "@/components/Base/Browser/BrowserPagin
 import BrowserTHeadTh from "@/components/Base/Browser/BrowserTHeadTh.vue";
 import Spinner from "@/components/Base/Spinner.vue"
 import BrowserDetail from "@/components/Base/Browser/BrowserDetail.vue";
-import browserPresetsMethodsMixin from "@/helpers/browser-presets-methods-mixin";
 
 import isEmpty from "lodash.isempty"
 import debounce from "lodash.debounce"
 import moment from "moment";
 
-import { useSlots } from "vue";
+import { type Ref, useSlots } from "vue";
 import { useNuxtApp } from '#imports'
 
 const { $authFetch } = useNuxtApp()
@@ -27,12 +26,6 @@ const emit = defineEmits([
   'clickRow',
   'itemUpdated'
 ])
-
-onMounted(() => {
-  fetchData().then(() => {
-    firstLoadingIsActive.value = false
-  })
-})
 
 const props = defineProps({
   itemPrimaryKeyPropertyName: {
@@ -79,10 +72,17 @@ const props = defineProps({
   }
 })
 
+onMounted(() => {
+  fetchData().then(() => {
+    firstLoadingIsActive.value = false
+  })
+})
+
 const browserDetail = ref(null)
 
+const id: Ref<number|null> = ref(null)
+
 const state = reactive({
-  id: null,
   item: {},
   localColumns: props.columns,
   localRequestProperties: props.requestProperties ? props.requestProperties.reduce((acc, value) => {
@@ -113,7 +113,6 @@ const state = reactive({
 })
 
 const {
-  id,
   item,
   localColumns,
   localRequestProperties,
@@ -420,6 +419,29 @@ const timestampToFormatPreset = (column, rowItem) => {
   return column.preset.hasOwnProperty('format') ? date.format(column.preset.format) : date.format('DD.MM.YYYY')
 }
 
+const dynamicMethods: {[key: string]: (configItem: IConfigItem, item: IItem) => string | null} = {
+  timestampToFormatPreset: (configItem: IConfigItem, item: IItem) => {
+
+    const date = moment(item[configItem.name] * 1000)
+
+    if (!date.isValid()) {
+      return null;
+    }
+
+    if (configItem.preset?.hasOwnProperty('locale')) {
+      date.locale(configItem.preset.locale!)
+    } else {
+      date.locale('ru')
+    }
+
+    return configItem.preset?.format ? date.format(configItem.preset.format) : date.format('DD.MM.YYYY')
+  }
+}
+
+const callPreset = (methodName: string, configItem: IConfigItem, item: IItem) => {
+  return dynamicMethods[methodName](configItem, item)
+}
+
 defineExpose({
   reset,
   closeDetail
@@ -507,7 +529,7 @@ defineExpose({
                     <component :is="column.component" :item="item" :column="column"/>
                   </template>
                   <template v-else-if="column.hasOwnProperty('preset')">
-                    {{ 'Тут должен быть handleByPreset' }}
+                    {{ callPreset(column.preset!.name, column, item)}}
                   </template>
                   <template v-else-if="column.hasOwnProperty('toFormat')">
                     {{ column.toFormat(item) }}
