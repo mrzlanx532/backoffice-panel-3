@@ -15,61 +15,51 @@ import isEmpty from "lodash.isempty"
 import debounce from "lodash.debounce"
 import moment from "moment";
 
-import { type Ref, useSlots } from "vue";
 import { useNuxtApp } from '#imports'
+import {
+  type Ref,
+  type Component,
+  useSlots
+} from "vue";
 
 const { $authFetch } = useNuxtApp()
-
-type IItem = {[key: string]: any}
 
 const emit = defineEmits([
   'clickRow',
   'itemUpdated'
 ])
 
-const props = defineProps({
-  itemPrimaryKeyPropertyName: {
-    required: false,
-    type: String,
-    default: 'id'
-  },
-  columns: {
-    type: Array,
-    required: true
-  },
-  urlPrefix: {
-    type: String,
-    required: false
-  },
-  requestProperties: {
-    type: Array,
-    required: false
-  },
-  h1: {
-    type: String,
-    required: false
-  },
-  browserFetchUrl: {
-    type: String,
-    required: false,
-  },
-  browserDetailFetchUrl: {
-    type: String,
-    required: false,
-  },
-  detailPageUrlPrefix: {
-    type: String,
-    required: false
-  },
-  detailTitleProperty: {
-    type: String,
-    required: false,
-    default: 'id'
-  },
-  detailSubtitleProperty: {
-    type: String,
-    required: false
+type IItem = {[key: string]: any}
+
+interface IFilter {
+
+}
+
+interface IColumn {
+  name: string,
+  title: string,
+  component?: Component,
+  preset?: {
+    name: string
   }
+}
+
+interface Props {
+  itemPrimaryKeyPropertyName?: string,
+  columns: IColumn[],
+  urlPrefix?: string
+  requestProperties?: string[],
+  h1?: string,
+  browserFetchUrl?: string,
+  browserDetailFetchUrl?: string,
+  detailPageUrlPrefix?: string,
+  detailTitleProperty?: string,
+  detailSubtitleProperty?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  itemPrimaryKeyPropertyName: 'id',
+  detailTitleProperty: 'id'
 })
 
 onMounted(() => {
@@ -78,70 +68,45 @@ onMounted(() => {
   })
 })
 
-const browserDetail = ref(null)
+const browserDetail: Ref<Component|null> = ref(null)
 
 const id: Ref<number|null> = ref(null)
-
-const state = reactive({
-  item: {},
-  localColumns: props.columns,
-  localRequestProperties: props.requestProperties ? props.requestProperties.reduce((acc, value) => {
-    return {...acc, [value]: value}
-  }, {}) : null,
-  localColumnsByName: props.columns.reduce((acc, value) => {
+const item: Ref<IItem> = ref({})
+const items: Ref<IItem[]> = ref([])
+const localColumns: Ref<IColumn[]> = ref(props.columns)
+const localRequestProperties: Ref<{} | null> = ref(
+    props.requestProperties ?
+    props.requestProperties.reduce((acc, value) => {
+        return {...acc, [value]: value}
+    }, {}) :
+    null
+)
+const localColumnsByName = props.columns.reduce((acc, value) => {
     return {...acc, [value.name]: value}
-  }, {}),
-  filters: [],
-  filtersByName: [],
-  activeFilters: {},
-  items: [],
-  firstLoadingIsActive: true,
-  loadingIsActive: false,
-  searchString: '',
-  fetchErrorStatusCode: null,
-  fetchErrorMessage: null,
-  openItem: {},
-  paginationItemsCountOptions: [
-    20, 50, 100
-  ],
-  selectedPaginationItemsCount: 20,
-  totalItems: 0,
-  currentPage: 1,
-  sorts: {},
-  activeSort: null,
-  debouncedFetchDataFunction: null
-})
-
-const {
-  item,
-  localColumns,
-  localRequestProperties,
-  localColumnsByName,
-  filters,
-  filtersByName,
-  activeFilters,
-  items,
-  firstLoadingIsActive,
-  loadingIsActive,
-  searchString,
-  fetchErrorStatusCode,
-  fetchErrorMessage,
-  openItem,
-  paginationItemsCountOptions,
-  selectedPaginationItemsCount,
-  totalItems,
-  currentPage,
-  sorts,
-  activeSort,
-  debouncedFetchDataFunction
-} = toRefs(state)
+}, {})
+const filters: Ref<IFilter[]> = ref([])
+const filtersByName = ref([])
+const activeFilters = ref({})
+const firstLoadingIsActive = ref(true)
+const loadingIsActive = ref(false)
+const searchString = ref('')
+const fetchErrorStatusCode = ref(null)
+const fetchErrorMessage = ref(null)
+const openItem = ref({})
+const paginationItemsCountOptions = ref([20, 50, 100])
+const selectedPaginationItemsCount = ref(20)
+const totalItems = ref(0)
+const currentPage = ref(1)
+const sorts = ref({})
+const activeSort = ref(null)
+const debouncedFetchDataFunction = ref(null)
 
 const fetchURL = computed(() => {
   return `${runtimeConfig.public.laravelAuth.domain}/${props.urlPrefix}/browse`
 })
 
 const detailPageUrl = computed(() => {
-  return '/' + (props.detailPageUrlPrefix ? `${props.detailPageUrlPrefix}/${state.id}` : `${props.urlPrefix}/${state.id}`)
+  return '/' + (props.detailPageUrlPrefix ? `${props.detailPageUrlPrefix}/${id.value}` : `${props.urlPrefix}/${id.value}`)
 })
 
 const fetchData = async () => {
@@ -262,14 +227,14 @@ const onItemUpdated = (item: IItem) => {
   emit('itemUpdated', item)
 }
 
-const onSearchStringInput = (value) => {
+const onSearchStringInput = (value: string) => {
   currentPage.value = 1
   searchString.value = value
 
   fetchData()
 }
 
-const onChangePaginationItemsCount = (value) => {
+const onChangePaginationItemsCount = (value: number) => {
   selectedPaginationItemsCount.value = value
   currentPage.value = 1
 }
@@ -296,7 +261,7 @@ const onSortChanged = (name, value) => {
 }
 
 const setItems = (_items: IItem[]) => {
-  const preparedItems = [];
+  const preparedItems: IItem[] = [];
 
   _items.forEach((item: IItem) => {
 
