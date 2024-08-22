@@ -30,6 +30,14 @@ const emit = defineEmits([
   'itemUpdated'
 ])
 
+enum FilterType {
+  SELECT = 'SELECT',
+  SELECT_SEARCH = 'SELECT_SEARCH',
+  INPUT = 'INPUT',
+  DATE = 'DATE',
+  BOOLEAN = 'BOOLEAN',
+}
+
 type IItem = {[key: string]: any}
 
 interface IRequestParams {
@@ -46,7 +54,7 @@ interface IRequestParams {
 interface IFilter {
   id: string,
   title: string,
-  type: string,
+  type: typeof FilterType,
   options?: {
     id: string,
     title: string,
