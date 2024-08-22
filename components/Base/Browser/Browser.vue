@@ -21,6 +21,7 @@ import {
   type Component,
   useSlots
 } from "vue";
+import { FetchError } from 'ofetch'
 
 const { $authFetch } = useNuxtApp()
 
@@ -43,7 +44,21 @@ interface IRequestParams {
 }
 
 interface IFilter {
-
+  id: string,
+  title: string,
+  type: string,
+  options?: {
+    id: string,
+    title: string,
+  }[]
+  config: {
+    filter: boolean,
+    hidden: boolean,
+    mask: string|null,
+    multiple: boolean,
+    range: boolean,
+    url: string
+  }
 }
 
 interface IColumn {
@@ -85,32 +100,38 @@ const id: Ref<number|null> = ref(null)
 const item: Ref<IItem> = ref({})
 const items: Ref<IItem[]> = ref([])
 const localColumns: Ref<IColumn[]> = ref(props.columns)
-const localRequestProperties: Ref<{} | null> = ref(
-    props.requestProperties ?
-    props.requestProperties.reduce((acc, value) => {
-        return {...acc, [value]: value}
-    }, {}) :
-    null
-)
-const localColumnsByName = props.columns.reduce((acc, value) => {
-    return {...acc, [value.name]: value}
-}, {})
+
+/** filters */
 const filters: Ref<IFilter[]> = ref([])
-const filtersByName = ref([])
-const activeFilters = ref({})
+const filtersByName: Ref<{[key: string]: IFilter}> = ref({})
+const activeFilters: Ref<{[key: string]: any[]}> = ref({})
+
 const firstLoadingIsActive = ref(true)
 const loadingIsActive = ref(false)
 const searchString = ref('')
-const fetchErrorStatusCode = ref(null)
-const fetchErrorMessage = ref(null)
+const fetchError: Ref<FetchError|null> = ref(null)
 const openItem = ref({})
 const paginationItemsCountOptions = ref([20, 50, 100])
 const selectedPaginationItemsCount = ref(20)
 const totalItems = ref(0)
 const currentPage = ref(1)
-const sorts = ref({})
-const activeSort = ref(null)
+
+/** sorts */
+const sorts: Ref<{[key: string]: any}> = ref({})
+const activeSort: Ref<string|null> = ref(null)
+
 const debouncedFetchDataFunction = ref(null)
+
+const localRequestProperties: Ref<{} | null> = ref(
+    props.requestProperties ?
+        props.requestProperties.reduce((acc, value) => {
+          return {...acc, [value]: value}
+        }, {}) :
+        null
+)
+const localColumnsByName = props.columns.reduce((acc, value) => {
+  return {...acc, [value.name]: value}
+}, {})
 
 const fetchURL = computed(() => {
   return `${runtimeConfig.public.laravelAuth.domain}/${props.urlPrefix}/browse`
@@ -159,9 +180,7 @@ const fetchData = async () => {
 
     const data = await $authFetch(unref(fetchURL.value), config)
 
-    fetchErrorStatusCode.value = null
-    fetchErrorMessage.value = null
-
+    fetchError.value = null
     totalItems.value = data.meta.count
 
     setItems(data.items)
@@ -169,16 +188,17 @@ const fetchData = async () => {
     if (firstLoadingIsActive.value) {
 
       setFilters(data.filters)
-      sorts.value = data.meta.sort.reduce((acc, value) => {
+      sorts.value = data.meta.sort.reduce((acc: {[key: string]: any}, value: string) => {
         return {...acc, [value]: null}
       }, {})
     }
 
     loadingIsActive.value = false
 
-  } catch (err) {
-    fetchErrorMessage.value = err.message
-    fetchErrorStatusCode.value = 500
+  } catch (err: unknown) {
+    if (err instanceof FetchError) {
+      fetchError.value = err
+    }
   }
 }
 
@@ -256,7 +276,7 @@ const onChangePage = (page: number) => {
   fetchData()
 }
 
-const onSortChanged = (name, value) => {
+const onSortChanged = (name: string, value: string) => {
 
   if (activeSort.value !== name) {
     activeSort.value = name
@@ -276,7 +296,7 @@ const setItems = (_items: IItem[]) => {
 
   _items.forEach((item: IItem) => {
 
-    const filteredItem = {};
+    const filteredItem: {[key: string]: any} = {};
 
     for (let value in item) {
 
@@ -297,9 +317,9 @@ const setItems = (_items: IItem[]) => {
   items.value = preparedItems
 }
 
-const setFilters = (_filters) => {
-  const preparedFilters = [];
-  const preparedFiltersByName = {};
+const setFilters = (_filters: IFilter[]) => {
+  const preparedFilters: IFilter[] = [];
+  const preparedFiltersByName: {[key: string]: IFilter} = {};
 
   _filters.forEach((filter) => {
     preparedFilters.push(filter)
@@ -374,25 +394,8 @@ const reset = (isUpdateItem = false) => {
   fetchData()
 
   if (isUpdateItem) {
-    browserDetail.value.fetchData()
+    browserDetail.value!.fetchData()
   }
-}
-
-const timestampToFormatPreset = (column, rowItem) => {
-
-  const date = moment(rowItem[column.name] * 1000)
-
-  if (!date.isValid()) {
-    return null;
-  }
-
-  if (column.preset.hasOwnProperty('locale')) {
-    date.locale(column.preset.locale)
-  } else {
-    date.locale('ru')
-  }
-
-  return column.preset.hasOwnProperty('format') ? date.format(column.preset.format) : date.format('DD.MM.YYYY')
 }
 
 const dynamicMethods: {[key: string]: (configItem: IConfigItem, item: IItem) => string | null} = {
@@ -468,14 +471,14 @@ defineExpose({
           </div>
           <div
               class="browser__error-container"
-              v-if="fetchErrorStatusCode !== null"
+              v-if="fetchError !== null"
           >
             <div class="browser__error">
               <div class="browser__error-status-code">
-                Error code: {{ fetchErrorStatusCode }}
+                Error code: {{ fetchError.statusCode }}
               </div>
               <div class="browser__error-message">
-                {{ fetchErrorMessage }}
+                {{ fetchError.message }}
               </div>
             </div>
           </div>
