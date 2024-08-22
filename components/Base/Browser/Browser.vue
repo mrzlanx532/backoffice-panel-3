@@ -31,6 +31,17 @@ const emit = defineEmits([
 
 type IItem = {[key: string]: any}
 
+interface IRequestParams {
+  filters?: {},
+  search_string?: string,
+  sort?: {
+    field: string,
+    direction: string
+  }
+  per_page: number,
+  page: number
+}
+
 interface IFilter {
 
 }
@@ -113,10 +124,10 @@ const fetchData = async () => {
 
   loadingIsActive.value = true
 
-  const config = {}
+  const config: { params?: IRequestParams } = {}
 
   if (activeFilters.value) {
-    const requestData = {};
+    const requestData = {} as IRequestParams;
 
     if (!isEmpty(activeFilters.value)) {
       requestData.filters = activeFilters.value
