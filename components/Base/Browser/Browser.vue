@@ -1,5 +1,11 @@
 <script setup lang="ts">
+import { type Ref, type Component, useSlots } from "vue";
 import type { DebouncedFunc } from "lodash-es"
+import isEmpty from "lodash.isempty"
+import debounce from "lodash.debounce"
+import moment from "moment";
+import { useNuxtApp } from '#imports'
+import { FetchError } from 'ofetch'
 
 import BrowserSelectFilter from "@/components/Base/Browser/BrowserSelectFilter.vue"
 import BrowserSelectSearchFilter from "@/components/Base/Browser/BrowserSelectSearchFilter.vue"
@@ -12,18 +18,6 @@ import BrowserPaginationCountSelect from "@/components/Base/Browser/BrowserPagin
 import BrowserTHeadTh from "@/components/Base/Browser/BrowserTHeadTh.vue";
 import Spinner from "@/components/Base/Spinner.vue"
 import BrowserDetail from "@/components/Base/Browser/BrowserDetail.vue";
-
-import isEmpty from "lodash.isempty"
-import debounce from "lodash.debounce"
-import moment from "moment";
-
-import { useNuxtApp } from '#imports'
-import {
-  type Ref,
-  type Component,
-  useSlots
-} from "vue";
-import { FetchError } from 'ofetch'
 
 const { $authFetch } = useNuxtApp()
 
@@ -41,6 +35,19 @@ enum FilterType {
 }
 
 type IItem = {[key: string]: any}
+
+export interface IConfigItem {
+  columnClass: number,
+  title: string,
+  name: string,
+  toFormat?: (item: {[key: string]: any}) => {},
+  component?: {}
+  preset?: {
+    name: string,
+    locale?: string ,
+    format?: string
+  }
+}
 
 interface IRequestParams {
   filters?: {},
@@ -79,6 +86,7 @@ interface IUnpreparedFilterValue {
 interface IColumn {
   name: string,
   title: string,
+  toFormat?: (item: {[key: string]: any}) => {}
   component?: Component,
   preset?: {
     name: string
