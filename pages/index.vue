@@ -104,6 +104,7 @@
     <div :style="style">Ссылки</div>
     <div style="display: flex;">
       <BaseLink
+          to="/"
           v-for="(btnClass, index) in btnClasses"
           :class="btnClass"
           :key="index"

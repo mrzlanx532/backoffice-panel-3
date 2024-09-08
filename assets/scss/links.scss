@@ -1,101 +1,28 @@
 .link {
-
-  &__container {
-    display: inline-block;
-  }
-
-  &__underline {
-    height: 1px;
-    background: black;
-    width: 100%;
-    opacity: 0.5;
-    transition-property: opacity;
-    transition-duration: 0.3s;
-  }
-
-  a {
-    text-decoration: none;
-    opacity: 0.75;
-    transition-property: opacity;
-    transition-duration: 0.3s;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
-
-    &:hover {
-      opacity: 1;
-      cursor: pointer;
-
-      & + .link__underline {
-        opacity: 1;
-      }
-    }
-  }
+  text-underline-offset: 5px;
+  text-decoration: underline;
 
   &.--special {
-    a, a:hover {
-      color: var(--color-1, #ffffff);
-      border: none;
-      background: linear-gradient(to right, var(--color-gradient-1, #DE4020) 0%, var(--color-gradient-2, orange) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .link__underline, .link__underline:hover {
-      background: linear-gradient(to right, var(--color-gradient-1, #DE4020) 0%, var(--color-gradient-2, orange) 100%);
-    }
+    color: var(--color-gradient-intermediate, #ff6e00);
   }
 
   &.--default {
-
-    a, a:hover {
-      color: var(--default-btn-color, #6c757d);
-    }
-
-    .link__underline, .link__underline:hover {
-      background: var(--default-btn-color, #6c757d);
-    }
+    color: var(--default-btn-color, #6c757d);
   }
 
   &.--primary {
-    a, a:hover {
-      color: var(--primary-btn-color, #0d6efd);
-    }
-
-    .link__underline, .link__underline:hover {
-      background: var(--primary-btn-color, #0d6efd);
-    }
+    color: var(--primary-btn-color, #0d6efd);
   }
 
   &.--success {
-    a, a:hover {
-      color: var(--success-btn-color, #198754);
-    }
-
-    .link__underline, .link__underline:hover {
-      background: var(--success-btn-color, #198754);
-    }
+    color: var(--success-btn-color, #198754);
   }
 
   &.--danger {
-
-    a, a:hover {
-      color: var(--danger-btn-color, #dc3545);
-    }
-
-    .link__underline, .link__underline:hover {
-      background: var(--danger-btn-color, #dc3545);
-    }
+    color: var(--danger-btn-color, #dc3545);
   }
 
   &.--warning {
-
-    a, a:hover {
-      color: var(--warning-btn-color, #ffc107);
-    }
-
-    .link__underline, .link__underline:hover {
-      background: var(--warning-btn-color, #ffc107);
-    }
+    color: var(--warning-btn-color, #ffc107);
   }
 }
