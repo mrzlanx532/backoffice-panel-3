@@ -23,7 +23,7 @@ const emit = defineEmits(['itemUpdated'])
 
 <template>
   <div class="detail">
-    <RouterLink :to="'/' + props.urlPrefix" class="detail__link-back --danger">Вернутся назад</RouterLink>
+    <BaseLink :to="'/' + props.urlPrefix" class="detail__link-back --special">Вернуться назад</BaseLink>
     <div class="detail__header">
       <h1 class="detail__title">{{ h1 }}</h1>
       <div class="detail__control">
