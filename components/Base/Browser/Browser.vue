@@ -27,6 +27,7 @@ const emit = defineEmits([
 ])
 
 enum FilterType {
+  // noinspection JSUnusedGlobalSymbols
   SELECT = 'SELECT',
   SELECT_SEARCH = 'SELECT_SEARCH',
   INPUT = 'INPUT',
@@ -63,7 +64,7 @@ interface IRequestParams {
 interface IFilter {
   id: string,
   title: string,
-  type: typeof FilterType,
+  type: keyof typeof FilterType,
   options?: {
     id: string,
     title: string,
@@ -122,7 +123,6 @@ const browserDetail: Ref<Component|null> = ref(null)
 const id: Ref<number|null> = ref(null)
 const item: Ref<IItem> = ref({})
 const items: Ref<IItem[]> = ref([])
-const localColumns: Ref<IColumn[]> = ref(props.columns)
 
 /** filters */
 const filters: Ref<IFilter[]> = ref([])
@@ -152,9 +152,6 @@ const localRequestProperties: Ref<{} | null> = ref(
         }, {}) :
         null
 )
-const localColumnsByName = props.columns.reduce((acc, value) => {
-  return {...acc, [value.name]: value}
-}, {})
 
 const fetchURL = computed(() => {
   return `${runtimeConfig.public.laravelAuth.domain}/${props.urlPrefix}/browse`
