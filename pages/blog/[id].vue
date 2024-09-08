@@ -3,10 +3,10 @@ import { ref } from 'vue'
 import { useRoute, useNuxtApp } from '#imports';
 import { useAsyncData } from '#app'
 
-import Section from '@/components/Base/Section'
-import Detail from '@/components/Base/Detail'
-import Button from '@/components/Base/Button'
-import FlexTable from '@/components/Base/FlexTable'
+import Section from '@/components/Base/Section.vue'
+import Detail from '@/components/Base/Detail.vue'
+import Button from '@/components/Base/Button.vue'
+import FlexTable from '@/components/Base/FlexTable.vue'
 
 const { $authFetch } = useNuxtApp()
 const route = useRoute()
@@ -62,6 +62,7 @@ const h1 = ref('Пост ' + entityId)
 
 <template>
   <Detail
+      url-prefix="blog"
       :h1="h1"
       :data-id="entityId"
   >

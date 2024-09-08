@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import Section from "@/components/Base/Section"
-import Detail from "@/components/Base/Detail"
-import Button from "@/components/Base/Button"
-import KeyValueTable from "@/components/Base/KeyValueTable";
-import { detailConfig } from "@/parts/reports"
-import { useRoute } from '#imports'
-import { ref, type Ref } from 'vue'
+import Section from '@/components/Base/Section.vue'
+import Detail from '@/components/Base/Detail.vue'
+import Button from '@/components/Base/Button.vue'
+import { useNuxtApp, useRoute } from '#imports'
+import { ref } from 'vue'
 import { useAsyncData } from '#app'
-
-type IItem = {[key: string]: any}
+import Tabs from '@/components/Base/Tabs.vue'
+import TabMain from '@/pages/reports/ignore/tabs/main.vue'
+import TabTracks from '@/pages/reports/ignore/tabs/tracks.vue'
 
 const route = useRoute()
+
+const { $authFetch } = useNuxtApp()
 
 const response = await useAsyncData(
     'report_detail',
@@ -21,15 +22,34 @@ const response = await useAsyncData(
     })
 )
 
+const selectedTab = ref(0)
+const entityId = route.params.id
+const item: IItem = ref(response.data)
+const h1 = ref('Отчет ' + entityId)
+
+type IItem = {[key: string]: any}
+
+const runtimeConfig = useRuntimeConfig()
+
 const onItemUpdated = (item: IItem) => {
   item.value = item
 }
 
-const entityId = route.params.id
-const item: IItem = ref(response.data)
-const h1 = ref('Отчет ' + entityId)
-</script>
+const onChangeTab = (index: number) => {
+  selectedTab.value = index
+}
 
+const tabs = shallowRef([
+  {
+    title: 'Инфо',
+    component: TabMain
+  },
+  {
+    title: 'Треки',
+    component: TabTracks
+  },
+])
+</script>
 <template>
   <Detail
       :h1="h1"
@@ -45,10 +65,10 @@ const h1 = ref('Отчет ' + entityId)
     <template #content>
       <Section>
         <template v-slot:header>
-          Основное
+          <Tabs :tabs="tabs" @change="onChangeTab"/>
         </template>
         <template v-slot:content>
-          <KeyValueTable :item="item" :config="detailConfig" class="--with-border"/>
+          <component :is="tabs[selectedTab].component" :item="item"/>
         </template>
       </Section>
     </template>

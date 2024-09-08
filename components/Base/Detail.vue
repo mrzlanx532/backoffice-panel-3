@@ -5,25 +5,25 @@ import { useRouter } from '#imports'
 const router = useRouter()
 
 const props = defineProps({
+  urlPrefix: {
+    required: true,
+    type: String,
+  },
   h1: {
     type: String,
     required: false
   },
   dataId: {
     required: false
-  },
+  }
 })
 
 const emit = defineEmits(['itemUpdated'])
-
-const onClickBack = () => {
-  router.back()
-}
 </script>
 
 <template>
   <div class="detail">
-    <BaseLink @click="onClickBack" class="detail__link-back --danger">Вернуться назад</BaseLink>
+    <RouterLink :to="'/' + props.urlPrefix" class="detail__link-back --danger">Вернутся назад</RouterLink>
     <div class="detail__header">
       <h1 class="detail__title">{{ h1 }}</h1>
       <div class="detail__control">
