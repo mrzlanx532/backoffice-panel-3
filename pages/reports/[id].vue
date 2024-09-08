@@ -1,3 +1,35 @@
+<script setup lang="ts">
+import Section from "@/components/Base/Section"
+import Detail from "@/components/Base/Detail"
+import Button from "@/components/Base/Button"
+import KeyValueTable from "@/components/Base/KeyValueTable";
+import { detailConfig } from "@/parts/reports"
+import { useRoute } from '#imports'
+import { ref, type Ref } from 'vue'
+import { useAsyncData } from '#app'
+
+type IItem = {[key: string]: any}
+
+const route = useRoute()
+
+const response = await useAsyncData(
+    'report_detail',
+    () => $authFetch(`${runtimeConfig.public.laravelAuth.domain}/reports/detail`, {
+      params: {
+        id: route.params.id,
+      }
+    })
+)
+
+const onItemUpdated = (item: IItem) => {
+  item.value = item
+}
+
+const entityId = route.params.id
+const item: IItem = ref(response.data)
+const h1 = ref('Отчет ' + entityId)
+</script>
+
 <template>
   <Detail
       :h1="h1"
@@ -7,68 +39,18 @@
   >
     <template #header>
       <div class="btn__group">
-        <Button :classes="['--big --outline-primary']">Изменить</Button>
-        <Button :classes="['--big --outline-danger']">Удалить</Button>
+        <Button :class="['--big --outline-danger']">Удалить</Button>
       </div>
     </template>
     <template #content>
-      <ClientOnly>
-        <Transition name="fade">
-          <Section v-if="Object.keys(item).length > 0">
-            <template v-slot:header>
-              Основное
-            </template>
-            <template v-slot:content>
-              <KeyValueTable :item="item" :config="detailConfig" class="--with-border"/>
-            </template>
-          </Section>
-        </Transition>
-      </ClientOnly>
+      <Section>
+        <template v-slot:header>
+          Основное
+        </template>
+        <template v-slot:content>
+          <KeyValueTable :item="item" :config="detailConfig" class="--with-border"/>
+        </template>
+      </Section>
     </template>
   </Detail>
 </template>
-<script>
-import Section from "@/components/Base/Section"
-import Detail from "@/components/Base/Detail"
-import Button from "@/components/Base/Button"
-import KeyValueTable from "@/components/Base/KeyValueTable";
-import { detailConfig } from "@/parts/reports"
-import Spinner from "@/components/Base/Spinner";
-import { useRoute } from '#imports'
-
-export default {
-  setup() {
-    const route = useRoute()
-
-    const entityId = route.params.id
-
-    return {
-      entityId
-    }
-  },
-  name: 'UserDetail',
-  components: {
-    Section,
-    Detail,
-    Button,
-    KeyValueTable,
-    Spinner
-  },
-  computed: {
-    h1: function () {
-      return 'Отчет #' + this.entityId
-    }
-  },
-  data() {
-    return {
-      detailConfig,
-      item: {}
-    }
-  },
-  methods: {
-    onItemUpdated(item) {
-      this.item = item
-    }
-  }
-}
-</script>
