@@ -22,10 +22,12 @@
               </div>
             </div>
             <div class="browser-detail__header-buttons">
-              <div class="browser-detail__header-more-button" @click="onClickMoreButton">
-                <svg stroke="currentColor" class="feather feather-external-link">
-                  <use xlink:href="/img/sprite.svg#more_button"/>
-                </svg>
+              <div class="browser-detail__header-more-button">
+                <NuxtLink :to="detailPageUrlPrefix">
+                  <svg stroke="currentColor" class="feather feather-external-link">
+                    <use xlink:href="/img/sprite.svg#more_button"/>
+                  </svg>
+                </NuxtLink>
               </div>
               <div class="browser-detail__header-close-button" @click="onClickCloseButton">
                 <svg>
@@ -136,12 +138,6 @@ export default {
   methods: {
     onClickCloseButton() {
       this.$emit('close');
-    },
-    onClickMoreButton() {
-      if (this.detailPageUrlPrefix && this.dataId !== null) {
-
-        this.router.push({path: this.detailPageUrlPrefix})
-      }
     },
     async fetchData() {
       this.isLoading = true
