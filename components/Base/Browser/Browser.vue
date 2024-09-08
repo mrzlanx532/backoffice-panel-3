@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { DebouncedFunc } from "lodash-es"
+
 import BrowserSelectFilter from "@/components/Base/Browser/BrowserSelectFilter.vue"
 import BrowserSelectSearchFilter from "@/components/Base/Browser/BrowserSelectSearchFilter.vue"
 import BrowserInputFilter from "@/components/Base/Browser/BrowserInputFilter.vue"
@@ -69,6 +71,11 @@ interface IFilter {
   }
 }
 
+interface IUnpreparedFilterValue {
+  id: string,
+  value: string[]|number[]|null[]|null|string
+}
+
 interface IColumn {
   name: string,
   title: string,
@@ -128,7 +135,7 @@ const currentPage = ref(1)
 const sorts: Ref<{[key: string]: any}> = ref({})
 const activeSort: Ref<string|null> = ref(null)
 
-const debouncedFetchDataFunction = ref(null)
+const debouncedFetchDataFunction: Ref<null|DebouncedFunc<() => Promise<void>>> = ref(null)
 
 const localRequestProperties: Ref<{} | null> = ref(
     props.requestProperties ?
@@ -211,10 +218,6 @@ const fetchData = async () => {
 }
 
 const slots = useSlots()
-
-const isSlotRightSideExists = () => {
-  return !!slots.rightSide
-}
 
 const filterMapper = shallowRef({
   SELECT: BrowserSelectFilter,
@@ -338,8 +341,8 @@ const setFilters = (_filters: IFilter[]) => {
   filtersByName.value = preparedFiltersByName
 }
 
-const onFilterValueChanged = (filter) => {
-  prepareFilterValue(filter)
+const onFilterValueChanged = (unpreparedFilterValue: IUnpreparedFilterValue) => {
+  prepareFilterValue(unpreparedFilterValue)
   currentPage.value = 1
 
   if (debouncedFetchDataFunction.value) {
@@ -350,7 +353,7 @@ const onFilterValueChanged = (filter) => {
   debouncedFetchDataFunction.value()
 }
 
-const prepareFilterValue = (filter) => {
+const prepareFilterValue = (filter: IUnpreparedFilterValue) => {
   if (filtersByName.value[filter.id].config.range) {
 
     if (filter.value === null) {
@@ -373,7 +376,7 @@ const prepareFilterValue = (filter) => {
     return
   }
 
-  if (filtersByName.value[filter.id].config.multiple) {
+  if (filtersByName.value[filter.id].config.multiple && filter.value instanceof Array) {
 
     filter.value.length ? activeFilters.value[filter.id] = filter.value : delete activeFilters.value[filter.id]
 
@@ -456,7 +459,7 @@ defineExpose({
                 :options="paginationItemsCountOptions"
                 :selected-value="selectedPaginationItemsCount"
             />
-            <div class="browser__control-panel-right-actions" v-if="isSlotRightSideExists">
+            <div class="browser__control-panel-right-actions" v-if="slots.rightSide">
               <slot name="rightSide"/>
             </div>
           </div>
