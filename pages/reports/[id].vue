@@ -9,9 +9,13 @@ import Tabs from '@/components/Base/Tabs.vue'
 import TabMain from '@/pages/reports/ignore/tabs/main.vue'
 import TabTracks from '@/pages/reports/ignore/tabs/tracks.vue'
 
+type IItem = {[key: string]: any}
+
 const route = useRoute()
 
 const { $authFetch } = useNuxtApp()
+
+const runtimeConfig = useRuntimeConfig()
 
 const response = await useAsyncData(
     'report_detail',
@@ -26,10 +30,6 @@ const selectedTab = ref(0)
 const entityId = route.params.id
 const item: IItem = ref(response.data)
 const h1 = ref('Отчет ' + entityId)
-
-type IItem = {[key: string]: any}
-
-const runtimeConfig = useRuntimeConfig()
 
 const onItemUpdated = (item: IItem) => {
   item.value = item
