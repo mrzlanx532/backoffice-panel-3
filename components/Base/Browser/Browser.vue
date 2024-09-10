@@ -19,6 +19,24 @@ import BrowserTHeadTh from "@/components/Base/Browser/BrowserTHeadTh.vue";
 import Spinner from "@/components/Base/Spinner.vue"
 import BrowserDetail from "@/components/Base/Browser/BrowserDetail.vue";
 
+interface Props {
+  itemPrimaryKeyPropertyName?: string,
+  columns: IColumn[],
+  urlPrefix: string
+  requestProperties?: string[],
+  h1?: string,
+  browserFetchUrl?: string,
+  browserDetailFetchUrl?: string,
+  detailPageUrlPrefix?: string,
+  detailTitleProperty?: string,
+  detailSubtitleProperty?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  itemPrimaryKeyPropertyName: 'id',
+  detailTitleProperty: 'id'
+})
+
 const { $authFetch } = useNuxtApp()
 
 const emit = defineEmits([
@@ -93,24 +111,6 @@ interface IColumn {
     name: string
   }
 }
-
-interface Props {
-  itemPrimaryKeyPropertyName?: string,
-  columns: IColumn[],
-  urlPrefix: string
-  requestProperties?: string[],
-  h1?: string,
-  browserFetchUrl?: string,
-  browserDetailFetchUrl?: string,
-  detailPageUrlPrefix?: string,
-  detailTitleProperty?: string,
-  detailSubtitleProperty?: string
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  itemPrimaryKeyPropertyName: 'id',
-  detailTitleProperty: 'id'
-})
 
 onMounted(() => {
   fetchData().then(() => {

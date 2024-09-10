@@ -1,3 +1,62 @@
+<script setup lang="ts">
+import Browser from '@/components/Base/Browser/Browser.vue';
+
+import { definePageMeta } from '#imports'
+
+definePageMeta({
+  middleware: ['auth']
+})
+
+type IITem = {[key: string]: any}
+const item: Ref<IITem|null> = ref(null)
+
+const onItemUpdated = (item: IITem) => {
+  item.value = item
+}
+
+const requestProperties = ref([
+  'id',
+  'name_ru',
+  'ident',
+  'tracks_counter',
+  'author',
+  'created_at'
+])
+
+const columns = ref([
+  {
+    name: 'id',
+    title: 'ID'
+  },
+  {
+    name: 'name_ru',
+    title: 'Название'
+  },
+  {
+    name: 'ident',
+    title: 'Идентификатор',
+  },
+  {
+    name: 'tracks_counter',
+    title: 'Треки',
+  },
+  {
+    name: 'author',
+    title: 'Автор',
+    toFormat(item: IITem) {
+      return item.author?.name_ru
+    }
+  },
+  {
+    name: 'created_at',
+    title: 'Создан',
+    preset: {
+      name: 'timestampToFormatPreset',
+    }
+  },
+])
+</script>
+
 <template>
   <Browser
       h1="Библиотеки шумов"
@@ -10,55 +69,3 @@
       @itemUpdated="onItemUpdated"
   />
 </template>
-
-<script>
-import PageWithBrowserMixin from "@/mixins/pages/browser.js"
-
-export default {
-  mixins: [PageWithBrowserMixin],
-  data() {
-    return {
-      requestProperties: [
-        'id',
-        'name_ru',
-        'ident',
-        'tracks_counter',
-        'author',
-        'created_at'
-      ],
-      columns: [
-        {
-          name: 'id',
-          title: 'ID'
-        },
-        {
-          name: 'name_ru',
-          title: 'Название'
-        },
-        {
-          name: 'ident',
-          title: 'Идентификатор',
-        },
-        {
-          name: 'tracks_counter',
-          title: 'Треки',
-        },
-        {
-          name: 'author',
-          title: 'Автор',
-          toFormat(item) {
-            return item.author?.name_ru
-          }
-        },
-        {
-          name: 'created_at',
-          title: 'Создан',
-          preset: {
-            name: 'timestampToFormatPreset',
-          }
-        },
-      ],
-    }
-  }
-}
-</script>
