@@ -7,12 +7,26 @@ import Button from "@/components/Base/Button.vue"
 
 import TabMain from '~/pages/reports/ignore/tabs/main.vue'
 import TabTracks from '~/pages/reports/ignore/tabs/tracks.vue'
+import { useNuxtApp } from '#imports'
 
 type IITem = {[key: string]: any}
 
 definePageMeta({
   middleware: ['auth'],
 })
+
+const {
+  $modal,
+  $notification,
+  $authFetch
+} = useNuxtApp()
+
+interface IBrowserEl {
+  reset: (isUpdateItem?: boolean) => void,
+  closeDetail: () => void
+}
+
+const browserEl: Ref<IBrowserEl|null> = ref(null)
 
 const id: Ref<number|null> = ref(null)
 const item: Ref<IITem|null> = ref(null)
@@ -74,7 +88,23 @@ const onItemUpdated = (newItem: IITem) => {
 }
 
 const onClickDelete = () => {
-  console.log('Удаляем')
+  $modal.confirm().then(async (isAgree) => {
+    if (!isAgree) {
+      return
+    }
+
+    await $authFetch(`http://backoffice-api.lsmlocal.ru/reports/delete`, {
+      method: 'POST',
+      body: {
+        id: item.value.id,
+      },
+    })
+
+    $notification.push({type: 'success', message: 'Отчет удален'})
+    item.value = {}
+    browserEl.value!.reset()
+    browserEl.value!.closeDetail()
+  })
 }
 
 const onChangeTab = (index: number) => {
@@ -84,6 +114,7 @@ const onChangeTab = (index: number) => {
 
 <template>
   <Browser
+      ref="browserEl"
       h1="Отчеты"
       url-prefix="reports"
       :columns="columns"
