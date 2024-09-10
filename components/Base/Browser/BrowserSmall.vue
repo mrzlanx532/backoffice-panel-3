@@ -1,30 +1,20 @@
 <script setup lang="ts">
-import { type Ref, type Component, useSlots } from "vue";
-import type { DebouncedFunc } from "lodash-es"
-import isEmpty from "lodash.isempty"
-import debounce from "lodash.debounce"
-import moment from "moment";
-import { useNuxtApp } from '#imports'
+import type { Component, Ref } from 'vue'
 import { FetchError } from 'ofetch'
+import { useNuxtApp } from '#imports'
+import isEmpty from 'lodash.isempty'
+import Spinner from '~/components/Base/Spinner.vue'
+import BrowserTHeadTh from '~/components/Base/Browser/BrowserTHeadTh.vue'
+import BrowserSelectFilter from '~/components/Base/Browser/BrowserSelectFilter.vue'
+import BrowserSelectSearchFilter from '~/components/Base/Browser/BrowserSelectSearchFilter.vue'
+import BrowserInputFilter from '~/components/Base/Browser/BrowserInputFilter.vue'
+import BrowserDateFilter from '~/components/Base/Browser/BrowserDateFilter.vue'
+import BrowserBooleanFilter from '~/components/Base/Browser/BrowserBooleanFilter.vue'
+import debounce from 'lodash.debounce'
+import type { DebouncedFunc } from 'lodash-es'
+import moment from 'moment/moment'
 
-import BrowserSelectFilter from "@/components/Base/Browser/BrowserSelectFilter.vue"
-import BrowserSelectSearchFilter from "@/components/Base/Browser/BrowserSelectSearchFilter.vue"
-import BrowserInputFilter from "@/components/Base/Browser/BrowserInputFilter.vue"
-import BrowserDateFilter from "@/components/Base/Browser/BrowserDateFilter.vue"
-import BrowserBooleanFilter from "@/components/Base/Browser/BrowserBooleanFilter.vue"
-import BrowserSearchString from "@/components/Base/Browser/BrowserSearchString.vue"
-import BrowserPagination from "@/components/Base/Browser/BrowserPagination.vue"
-import BrowserPaginationCountSelect from "@/components/Base/Browser/BrowserPaginationCountSelect.vue"
-import BrowserTHeadTh from "@/components/Base/Browser/BrowserTHeadTh.vue";
-import Spinner from "@/components/Base/Spinner.vue"
-import BrowserDetail from "@/components/Base/Browser/BrowserDetail.vue";
-
-const { $authFetch } = useNuxtApp()
-
-const emit = defineEmits([
-  'clickRow',
-  'itemUpdated'
-])
+type IItem = {[key: string]: any}
 
 enum FilterType {
   // noinspection JSUnusedGlobalSymbols
@@ -35,7 +25,38 @@ enum FilterType {
   BOOLEAN = 'BOOLEAN',
 }
 
-type IItem = {[key: string]: any}
+interface IUnpreparedFilterValue {
+  id: string,
+  value: string[]|number[]|null[]|null|string
+}
+
+interface IColumn {
+  name: string,
+  title: string,
+  toFormat?: (item: {[key: string]: any}) => {}
+  component?: Component,
+  preset?: {
+    name: string
+  }
+}
+
+interface IRequestParams {
+  filters?: {},
+  search_string?: string,
+  sort?: {
+    field: string,
+    direction: string
+  }
+  per_page: number,
+  page: number
+}
+
+interface Props {
+  itemPrimaryKeyPropertyName?: string,
+  columns: IColumn[],
+  urlPrefix: string,
+  requestProperties?: string[],
+}
 
 export interface IConfigItem {
   columnClass: number,
@@ -50,16 +71,9 @@ export interface IConfigItem {
   }
 }
 
-interface IRequestParams {
-  filters?: {},
-  search_string?: string,
-  sort?: {
-    field: string,
-    direction: string
-  }
-  per_page: number,
-  page: number
-}
+const props = withDefaults(defineProps<Props>(), {
+  itemPrimaryKeyPropertyName: 'id',
+})
 
 interface IFilter {
   id: string,
@@ -79,71 +93,38 @@ interface IFilter {
   }
 }
 
-interface IUnpreparedFilterValue {
-  id: string,
-  value: string[]|number[]|null[]|null|string
-}
+const runtimeConfig = useRuntimeConfig()
+const { $authFetch } = useNuxtApp()
 
-interface IColumn {
-  name: string,
-  title: string,
-  toFormat?: (item: {[key: string]: any}) => {}
-  component?: Component,
-  preset?: {
-    name: string
-  }
-}
-
-interface Props {
-  itemPrimaryKeyPropertyName?: string,
-  columns: IColumn[],
-  urlPrefix: string
-  requestProperties?: string[],
-  h1?: string,
-  browserFetchUrl?: string,
-  browserDetailFetchUrl?: string,
-  detailPageUrlPrefix?: string,
-  detailTitleProperty?: string,
-  detailSubtitleProperty?: string
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  itemPrimaryKeyPropertyName: 'id',
-  detailTitleProperty: 'id'
-})
-
-onMounted(() => {
-  fetchData().then(() => {
-    firstLoadingIsActive.value = false
-  })
-})
-
-const browserDetail: Ref<Component|null> = ref(null)
-
-const id: Ref<number|null> = ref(null)
-const item: Ref<IItem> = ref({})
-const items: Ref<IItem[]> = ref([])
-
-/** filters */
 const filters: Ref<IFilter[]> = ref([])
-const filtersByName: Ref<{[key: string]: IFilter}> = ref({})
 const activeFilters: Ref<{[key: string]: any[]}> = ref({})
-
+const filtersByName: Ref<{[key: string]: IFilter}> = ref({})
 const firstLoadingIsActive = ref(true)
 const loadingIsActive = ref(false)
 const searchString = ref('')
-const fetchError: Ref<FetchError|null> = ref(null)
-const openItem = ref({})
-const paginationItemsCountOptions = ref([20, 50, 100])
 const selectedPaginationItemsCount = ref(20)
+const paginationItemsCountOptions = ref([20, 50, 100])
 const totalItems = ref(0)
 const currentPage = ref(1)
+const fetchError: Ref<FetchError|null> = ref(null)
+const items: Ref<IItem[]> = ref([])
+const debouncedFetchDataFunction: Ref<null|DebouncedFunc<() => Promise<void>>> = ref(null)
+
+const filterMapper = shallowRef({
+  SELECT: BrowserSelectFilter,
+  SELECT_SEARCH: BrowserSelectSearchFilter,
+  INPUT: BrowserInputFilter,
+  DATE: BrowserDateFilter,
+  BOOLEAN: BrowserBooleanFilter
+})
 
 /** sorts */
 const sorts: Ref<{[key: string]: any}> = ref({})
 const activeSort: Ref<string|null> = ref(null)
 
-const debouncedFetchDataFunction: Ref<null|DebouncedFunc<() => Promise<void>>> = ref(null)
+const fetchURL = computed(() => {
+  return `${runtimeConfig.public.laravelAuth.domain}/${props.urlPrefix}/browse`
+})
 
 const localRequestProperties: Ref<{} | null> = ref(
     props.requestProperties ?
@@ -153,17 +134,46 @@ const localRequestProperties: Ref<{} | null> = ref(
         null
 )
 
-const fetchURL = computed(() => {
-  return `${runtimeConfig.public.laravelAuth.domain}/${props.urlPrefix}/browse`
-})
+const setItems = (_items: IItem[]) => {
+  const preparedItems: IItem[] = [];
 
-const detailPageUrl = computed(() => {
-  return '/' + (props.detailPageUrlPrefix ? `${props.detailPageUrlPrefix}/${id.value}` : `${props.urlPrefix}/${id.value}`)
-})
+  _items.forEach((item: IItem) => {
+
+    const filteredItem: {[key: string]: any} = {};
+
+    for (let value in item) {
+
+      if (!item.hasOwnProperty(value)) {
+        continue;
+      }
+
+      if (localRequestProperties.value !== null && !localRequestProperties.value.hasOwnProperty(value)) {
+        continue;
+      }
+
+      filteredItem[value] = item[value]
+    }
+
+    preparedItems.push(filteredItem)
+  })
+
+  items.value = preparedItems
+}
+
+const setFilters = (_filters: IFilter[]) => {
+  const preparedFilters: IFilter[] = [];
+  const preparedFiltersByName: {[key: string]: IFilter} = {};
+
+  _filters.forEach((filter) => {
+    preparedFilters.push(filter)
+    preparedFiltersByName[filter.id] = filter
+  })
+
+  filters.value = preparedFilters
+  filtersByName.value = preparedFiltersByName
+}
 
 const fetchData = async () => {
-
-  loadingIsActive.value = true
 
   const config: { params?: IRequestParams } = {}
 
@@ -208,6 +218,7 @@ const fetchData = async () => {
     if (firstLoadingIsActive.value) {
 
       setFilters(data.filters)
+
       sorts.value = data.meta.sort.reduce((acc: {[key: string]: any}, value: string) => {
         return {...acc, [value]: null}
       }, {})
@@ -220,76 +231,6 @@ const fetchData = async () => {
       fetchError.value = err
     }
   }
-}
-
-const slots = useSlots()
-
-const filterMapper = shallowRef({
-  SELECT: BrowserSelectFilter,
-  SELECT_SEARCH: BrowserSelectSearchFilter,
-  INPUT: BrowserInputFilter,
-  DATE: BrowserDateFilter,
-  BOOLEAN: BrowserBooleanFilter
-})
-
-const runtimeConfig = useRuntimeConfig()
-
-watch(
-    selectedPaginationItemsCount,
-    () => {
-      fetchData()
-    }
-)
-
-const onClickRow = (item: IItem) => {
-
-  if (id.value === item.id) {
-    id.value = null
-
-    emit('clickRow', id.value)
-
-    return
-  }
-
-  id.value = item.id
-
-  emit('clickRow', id.value)
-}
-
-const closeDetail = () => {
-  onCloseDetail()
-}
-
-const onCloseBrowserDetail = () => {
-  openItem.value = {}
-}
-
-const onCloseDetail = () => {
-  id.value = null
-}
-
-const onItemUpdated = (item: IItem) => {
-  item.value = item
-
-  emit('itemUpdated', item)
-}
-
-const onSearchStringInput = (value: string) => {
-  currentPage.value = 1
-  searchString.value = value
-
-  fetchData()
-}
-
-const onChangePaginationItemsCount = (value: number) => {
-  selectedPaginationItemsCount.value = value
-  currentPage.value = 1
-}
-
-const onChangePage = (page: number) => {
-  currentPage.value = page
-
-  fetchData()
 }
 
 const onSortChanged = (name: string, value: string) => {
@@ -305,45 +246,6 @@ const onSortChanged = (name: string, value: string) => {
   sorts.value[name] = value
 
   fetchData()
-}
-
-const setItems = (_items: IItem[]) => {
-  const preparedItems: IItem[] = [];
-
-  _items.forEach((item: IItem) => {
-
-    const filteredItem: {[key: string]: any} = {};
-
-    for (let value in item) {
-
-      if (!item.hasOwnProperty(value)) {
-        continue;
-      }
-
-      if (localRequestProperties.value !== null && !localRequestProperties.value.hasOwnProperty(value)) {
-        continue;
-      }
-
-      filteredItem[value] = item[value]
-    }
-
-    preparedItems.push(filteredItem)
-  })
-
-  items.value = preparedItems
-}
-
-const setFilters = (_filters: IFilter[]) => {
-  const preparedFilters: IFilter[] = [];
-  const preparedFiltersByName: {[key: string]: IFilter} = {};
-
-  _filters.forEach((filter) => {
-    preparedFilters.push(filter)
-    preparedFiltersByName[filter.id] = filter
-  })
-
-  filters.value = preparedFilters
-  filtersByName.value = preparedFiltersByName
 }
 
 const onFilterValueChanged = (unpreparedFilterValue: IUnpreparedFilterValue) => {
@@ -397,23 +299,6 @@ const prepareFilterValue = (filter: IUnpreparedFilterValue) => {
   activeFilters.value[filter.id] = [filter.value]
 }
 
-const reset = (isUpdateItem = false) => {
-  currentPage.value = 1
-  selectedPaginationItemsCount.value = 20
-  activeFilters.value = {}
-  activeSort.value = null
-
-  Object.keys(sorts.value).map((key) => {
-    sorts.value[key] = null
-  })
-
-  fetchData()
-
-  if (isUpdateItem) {
-    browserDetail.value!.fetchData()
-  }
-}
-
 const dynamicMethods: {[key: string]: (configItem: IConfigItem, item: IItem) => string | null} = {
   timestampToFormatPreset: (configItem: IConfigItem, item: IItem) => {
 
@@ -437,39 +322,31 @@ const callPreset = (methodName: string, configItem: IConfigItem, item: IItem) =>
   return dynamicMethods[methodName](configItem, item)
 }
 
-defineExpose({
-  reset,
-  closeDetail
+const onClickRow = (item: IItem) => {
+
+  /*if (id.value === item.id) {
+    id.value = null
+
+    emit('clickRow', id.value)
+
+    return
+  }
+
+  id.value = item.id
+
+  emit('clickRow', id.value)*/
+}
+
+onMounted(() => {
+  fetchData().then(() => {
+    firstLoadingIsActive.value = false
+  })
 })
 </script>
 
 <template>
   <div class="browser">
     <ClientOnly>
-      <TransitionGroup name="fade">
-        <div class="browser__control-panel" v-if="!firstLoadingIsActive">
-          <div class="page__title-container">
-            <div class="page__title">{{ h1 }}</div>
-          </div>
-          <BrowserSearchString @search="onSearchStringInput"/>
-          <div class="browser__control-panel-right">
-            <BrowserPagination
-                :page="currentPage"
-                :total="totalItems"
-                :per-page="selectedPaginationItemsCount"
-                @changePage="onChangePage"
-            />
-            <BrowserPaginationCountSelect
-                @change="onChangePaginationItemsCount"
-                :options="paginationItemsCountOptions"
-                :selected-value="selectedPaginationItemsCount"
-            />
-            <div class="browser__control-panel-right-actions" v-if="slots.rightSide">
-              <slot name="rightSide"/>
-            </div>
-          </div>
-        </div>
-      </TransitionGroup>
       <div class="browser__spinner-container" v-if="firstLoadingIsActive">
         <Spinner class="--half-opacity"/>
       </div>
@@ -507,15 +384,15 @@ defineExpose({
           >
             <table v-if="items.length" class="browser__table">
               <thead>
-                <tr>
-                  <BrowserTHeadTh
-                      @sortChanged="onSortChanged"
-                      v-for="column in columns"
-                      :key="column.name"
-                      :sorts="sorts"
-                      :column="column"
-                  />
-                </tr>
+              <tr>
+                <BrowserTHeadTh
+                    @sortChanged="onSortChanged"
+                    v-for="column in columns"
+                    :key="column.name"
+                    :sorts="sorts"
+                    :column="column"
+                />
+              </tr>
               </thead>
               <tbody>
               <tr v-for="item in items" :key="item[itemPrimaryKeyPropertyName]" @click="onClickRow(item)">
@@ -545,25 +422,5 @@ defineExpose({
         </div>
       </Transition>
     </ClientOnly>
-    <BrowserDetail
-        ref="browserDetail"
-        :data-id="id"
-        :title-property="detailTitleProperty"
-        :subtitle-property="detailSubtitleProperty"
-        :url-prefix="urlPrefix"
-        :browser-detail-fetch-url="browserDetailFetchUrl"
-        :detail-page-url-prefix="detailPageUrl"
-        @close="onCloseDetail"
-        @itemUpdated="onItemUpdated"
-    >
-      <template #header>
-        <slot name="browserDetailHeader"/>
-      </template>
-
-      <template #content>
-        <slot name="browserDetailContent"/>
-      </template>
-
-    </BrowserDetail>
   </div>
 </template>

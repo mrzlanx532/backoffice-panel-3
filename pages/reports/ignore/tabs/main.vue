@@ -57,7 +57,7 @@ const detailConfig: Ref<IConfigItem[]> = ref([
         Пользователь
       </template>
       <template #content>
-        <BaseLink class="--primary">
+        <BaseLink class="--primary" :to="'/'">
           {{ item?.user?.name }}
         </BaseLink>
       </template>
