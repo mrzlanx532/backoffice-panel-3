@@ -2,7 +2,7 @@
 import Section from '@/components/Base/Section.vue'
 import FlexTable from '@/components/Base/FlexTable.vue'
 
-const config = [
+const config = ref([
   {
     name: 'description',
     title: 'Описание',
@@ -25,7 +25,7 @@ const config = [
     title: 'Кол-во треков',
     columnClass: 6,
   },
-]
+])
 
 const props = defineProps({
     item: {
@@ -44,7 +44,3 @@ const props = defineProps({
     </template>
   </Section>
 </template>
-
-<style scoped>
-
-</style>

@@ -1,14 +1,13 @@
 <script setup lang="ts">
+import type { Ref } from 'vue'
 import { definePageMeta } from '#imports'
 
-import Browser from '@/components/Base/Browser/Browser.vue'
-import type { Ref } from 'vue'
+import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue'
 
 definePageMeta({
   middleware: ['auth']
 })
 
-type IItem = {[key: string]: any}
 const item: Ref<IItem|null> = ref(null)
 
 const requestProperties = ref([
@@ -20,7 +19,7 @@ const requestProperties = ref([
   'created_at'
 ])
 
-const columns = shallowRef([
+const columns = ref([
   {
     name: 'id',
     title: 'ID'

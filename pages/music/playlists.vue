@@ -1,3 +1,41 @@
+<script setup lang="ts">
+import type { Ref } from 'vue'
+import { definePageMeta } from '#imports'
+
+import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue';
+
+definePageMeta({
+  middleware: ['auth']
+})
+
+const item: Ref<IItem|null> = ref(null)
+
+const requestProperties = ref([
+  'id',
+  'name_ru',
+  'tracks_counter'
+])
+
+const columns = ref([
+  {
+    name: 'id',
+    title: 'ID'
+  },
+  {
+    name: 'name_ru',
+    title: 'Название'
+  },
+  {
+    name: 'tracks_counter',
+    title: 'Кол-во треков',
+  },
+])
+
+const onItemUpdated = (item: IItem) => {
+  item.value = item
+}
+</script>
+
 <template>
   <Browser
       h1="Плейлисты музыкальных треков"
@@ -9,44 +47,3 @@
       @itemUpdated="onItemUpdated"
   />
 </template>
-<script>
-
-import Browser from "@/components/Base/Browser/Browser";
-
-export default {
-  middleware: 'auth',
-  components: {
-    Browser,
-  },
-  data() {
-    return {
-      id: null,
-      item: null,
-      requestProperties: [
-        'id',
-        'name_ru',
-        'tracks_counter'
-      ],
-      columns: [
-        {
-          name: 'id',
-          title: 'ID'
-        },
-        {
-          name: 'name_ru',
-          title: 'Название'
-        },
-        {
-          name: 'tracks_counter',
-          title: 'Кол-во треков',
-        },
-      ],
-    }
-  },
-  methods: {
-    onItemUpdated(item) {
-      this.item = item
-    }
-  }
-}
-</script>

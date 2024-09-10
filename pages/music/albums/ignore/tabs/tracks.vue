@@ -5,7 +5,3 @@
 <template>
   <div>** Необходимо сделать BrowserSmall **</div>
 </template>
-
-<style scoped>
-
-</style>
