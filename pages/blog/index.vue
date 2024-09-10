@@ -3,7 +3,7 @@ import { definePageMeta, useNuxtApp } from '#imports'
 import type { Ref } from 'vue'
 import Button from '@/components/Base/Button.vue'
 import Section from '@/components/Base/Section.vue'
-import Browser from '@/components/Base/Browser/Browser.vue';
+import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue';
 import FlexTable from '@/components/Base/FlexTable.vue'
 import Badge from '@/components/Base/Browser/ColumnComponents/Badge.vue'
 
@@ -16,8 +16,6 @@ const {
   $notification,
   $authFetch
 } = useNuxtApp()
-
-type IItem = {[key: string]: any}
 
 const item: Ref<IItem> = ref({})
 

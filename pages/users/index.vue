@@ -2,14 +2,14 @@
 import { defineAsyncComponent, type Ref } from 'vue'
 import { definePageMeta, useNuxtApp } from '#imports'
 
-definePageMeta({
-  middleware: ['auth']
-})
-
 import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue';
 import Tabs from '@/components/Base/Tabs.vue';
 import SubscriptionRow from '@/components/CustomRows/users/SubscriptionRow.vue'
 import Button from '@/components/Base/Button.vue';
+
+definePageMeta({
+  middleware: ['auth']
+})
 
 const item: Ref<IItem|null> = ref(null)
 

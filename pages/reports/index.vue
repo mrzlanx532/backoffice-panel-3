@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
+import { useNuxtApp } from '#imports'
 
 import Tabs from '~/components/Base/Tabs.vue'
-import Browser from "@/components/Base/Browser/Browser.vue";
+import Browser, { type IItem } from "@/components/Base/Browser/Browser.vue";
 import Button from "@/components/Base/Button.vue"
 
 import TabMain from '~/pages/reports/ignore/tabs/main.vue'
 import TabTracks from '~/pages/reports/ignore/tabs/tracks.vue'
-import { useNuxtApp } from '#imports'
-
-type IITem = {[key: string]: any}
 
 definePageMeta({
   middleware: ['auth'],
@@ -29,7 +27,7 @@ interface IBrowserEl {
 const browserEl: Ref<IBrowserEl|null> = ref(null)
 
 const id: Ref<number|null> = ref(null)
-const item: Ref<IITem|null> = ref(null)
+const item: Ref<IItem|null> = ref(null)
 
 const selectedTab = ref(0)
 
@@ -83,7 +81,7 @@ const columns = ref([
   },
 ])
 
-const onItemUpdated = (newItem: IITem) => {
+const onItemUpdated = (newItem: IItem) => {
   item.value = newItem
 }
 
