@@ -1,3 +1,77 @@
+<script setup lang="ts">
+import { definePageMeta } from '#imports'
+
+import Page from '@/components/Base/Page.vue'
+import Button from '@/components/Base/Button.vue'
+import StateButton from '@/components/Base/StateButton.vue'
+import BaseLink from '@/components/Base/BaseLink.vue'
+import Badge from '@/components/Base/Badge.vue'
+import type { Ref } from 'vue'
+
+definePageMeta({
+  middleware: ['auth']
+})
+
+interface IStateButtonOption {
+  id: string,
+  title: string,
+  class: string
+}
+
+const style = ref('margin: 15px 0;')
+const selectedOption: Ref<IStateButtonOption> = ref({
+  id: 'PUBLISHED',
+  title: 'Опубликован',
+  class: '--success'
+})
+const stateButtonOptions = ref([
+  {
+    id: 'PUBLISHED',
+    title: 'Опубликован',
+    class: '--success'
+  },
+  {
+    id: 'DRAFT',
+    title: 'Черновик',
+    class: '--default'
+  },
+  {
+    id: 'DISABLED',
+    title: 'Отключен',
+    class: '--danger'
+  }
+])
+
+const btnClassesOutline = ref([
+  '--outline-default',
+  '--outline-primary',
+  '--outline-success',
+  '--outline-danger',
+  '--outline-warning',
+])
+
+const btnClassesOutlineContrast = ref([
+  '--outline-contrast-default',
+  '--outline-contrast-primary',
+  '--outline-contrast-success',
+  '--outline-contrast-danger',
+  '--outline-contrast-warning',
+])
+
+const btnClasses = ref([
+  '--special',
+  '--default',
+  '--primary',
+  '--success',
+  '--danger',
+  '--warning',
+])
+
+const onChangeStateButton = (_selectedOption: IStateButtonOption) => {
+  selectedOption.value = _selectedOption
+}
+</script>
+
 <template>
   <Page h1="Главная | UI KIT">
     <div style="height: 200px; padding: 20px;" v-scrollable class="v-scrollable">
@@ -32,7 +106,7 @@
     <div>
       <StateButton
           :data-id="24600"
-          :options="stateOptions"
+          :options="stateButtonOptions"
           :selectedOption="selectedOption"
           url="music/tracks/state-update"
           @change="onChangeStateButton"
@@ -113,108 +187,3 @@
     </div>
   </Page>
 </template>
-<script>
-
-import Page from "@/components/Base/Page"
-import Button from "@/components/Base/Button"
-import StateButton from '@/components/Base/StateButton'
-import BaseLink from '@/components/Base/BaseLink'
-import Badge from '@/components/Base/Badge.vue'
-
-export default {
-  setup() {
-    definePageMeta({
-      middleware: ['auth']
-    })
-  },
-  name: 'UsersPage',
-  components: {
-    Badge,
-    Page,
-    Button,
-    StateButton,
-    BaseLink
-  },
-  data() {
-    return {
-      style: 'margin: 15px 0;',
-      selectedOption: {
-        id: 'PUBLISHED',
-        title: 'Опубликован',
-        class: '--success'
-      },
-      stateOptions: [
-        {
-          id: 'PUBLISHED',
-          title: 'Опубликован',
-          class: '--success'
-        },
-        {
-          id: 'DRAFT',
-          title: 'Черновик',
-          class: '--default'
-        },
-        {
-          id: 'DISABLED',
-          title: 'Отключен',
-          class: '--danger'
-        }
-      ],
-      options: [
-        {
-          id: 2,
-          title: 'Отправить',
-          class: '--default'
-        },
-        {
-          id: 3,
-          title: 'Отправить',
-          class: '--primary'
-        },
-        {
-          id: 4,
-          title: 'Отправить',
-          class: '--success'
-        },
-        {
-          id: 5,
-          title: 'Отправить',
-          class: '--danger'
-        },
-        {
-          id: 6,
-          title: 'Отправить',
-          class: '--warning'
-        },
-      ],
-      btnClassesOutline: [
-        '--outline-default',
-        '--outline-primary',
-        '--outline-success',
-        '--outline-danger',
-        '--outline-warning',
-      ],
-      btnClassesOutlineContrast: [
-        '--outline-contrast-default',
-        '--outline-contrast-primary',
-        '--outline-contrast-success',
-        '--outline-contrast-danger',
-        '--outline-contrast-warning',
-      ],
-      btnClasses: [
-        '--special',
-        '--default',
-        '--primary',
-        '--success',
-        '--danger',
-        '--warning',
-      ],
-    }
-  },
-  methods: {
-    onChangeStateButton(selectedOption) {
-      this.selectedOption = selectedOption
-    }
-  }
-}
-</script>

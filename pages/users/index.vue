@@ -13,7 +13,6 @@ definePageMeta({
 
 type IItem = {[key: string]: any}
 
-const id: Ref<number|null> = ref(null)
 const item: Ref<IItem|null> = ref(null)
 
 const requestProperties = ref([
