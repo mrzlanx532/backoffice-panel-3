@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Browser from '@/components/Base/Browser/Browser.vue';
+import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue';
 
 import { definePageMeta } from '#imports'
 
@@ -7,12 +7,7 @@ definePageMeta({
   middleware: ['auth']
 })
 
-type IITem = {[key: string]: any}
-const item: Ref<IITem|null> = ref(null)
-
-const onItemUpdated = (item: IITem) => {
-  item.value = item
-}
+const item: Ref<IItem|null> = ref(null)
 
 const requestProperties = ref([
   'id',
@@ -43,7 +38,7 @@ const columns = ref([
   {
     name: 'author',
     title: 'Автор',
-    toFormat(item: IITem) {
+    toFormat(item: IItem) {
       return item.author?.name_ru
     }
   },
@@ -55,6 +50,10 @@ const columns = ref([
     }
   },
 ])
+
+const onItemUpdated = (item: IItem) => {
+  item.value = item
+}
 </script>
 
 <template>

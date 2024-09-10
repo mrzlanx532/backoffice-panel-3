@@ -53,7 +53,7 @@ enum FilterType {
   BOOLEAN = 'BOOLEAN',
 }
 
-type IItem = {[key: string]: any}
+export type IItem = {[key: string]: any}
 
 export interface IConfigItem {
   columnClass: number,
@@ -121,7 +121,7 @@ onMounted(() => {
 const browserDetail: Ref<Component|null> = ref(null)
 
 const id: Ref<number|null> = ref(null)
-const item: Ref<IItem> = ref({})
+const item: Ref<IItem|null> = ref(null)
 const items: Ref<IItem[]> = ref([])
 
 /** filters */

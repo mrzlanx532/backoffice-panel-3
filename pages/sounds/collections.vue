@@ -1,3 +1,40 @@
+<script setup lang="ts">
+import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue';
+
+import { definePageMeta } from '#imports'
+
+const item: Ref<IItem|null> = ref(null)
+
+definePageMeta({
+  middleware: ['auth']
+})
+
+const requestProperties = ref([
+  'id',
+  'description_ru',
+  'tracks_counter',
+])
+
+const columns = ref([
+  {
+    name: 'id',
+    title: 'ID'
+  },
+  {
+    name: 'description_ru',
+    title: 'Описание'
+  },
+  {
+    name: 'tracks_counter',
+    title: 'Кол-во треков',
+  },
+])
+
+const onItemUpdated = (item: IItem) => {
+  item.value = item
+}
+</script>
+
 <template>
   <Browser
       h1="Коллекции шумов"
@@ -10,34 +47,3 @@
       @itemUpdated="onItemUpdated"
   />
 </template>
-<script>
-import PageWithBrowserMixin from "@/mixins/pages/browser.js"
-
-export default {
-  middleware: 'auth',
-  mixins: [PageWithBrowserMixin],
-  data() {
-    return {
-      requestProperties: [
-        'id',
-        'description_ru',
-        'tracks_counter',
-      ],
-      columns: [
-        {
-          name: 'id',
-          title: 'ID'
-        },
-        {
-          name: 'description_ru',
-          title: 'Описание'
-        },
-        {
-          name: 'tracks_counter',
-          title: 'Кол-во треков',
-        },
-      ],
-    }
-  },
-}
-</script>

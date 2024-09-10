@@ -6,12 +6,10 @@ definePageMeta({
   middleware: ['auth']
 })
 
-import Browser from '@/components/Base/Browser/Browser.vue';
+import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue';
 import Tabs from '@/components/Base/Tabs.vue';
 import SubscriptionRow from '@/components/CustomRows/users/SubscriptionRow.vue'
 import Button from '@/components/Base/Button.vue';
-
-type IItem = {[key: string]: any}
 
 const item: Ref<IItem|null> = ref(null)
 
