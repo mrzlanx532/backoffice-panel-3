@@ -1,3 +1,84 @@
+<script setup lang="ts">
+import { defineAsyncComponent, ref } from 'vue'
+import { useNuxtApp, useRoute } from '#imports'
+
+import Detail from '@/components/Base/Detail.vue'
+import Button from '@/components/Base/Button.vue'
+import Tabs from '@/components/Base/Tabs.vue'
+import { useAsyncData } from '#app'
+
+const { $authFetch } = useNuxtApp()
+
+type IItem = {[key: string]: any}
+
+const route = useRoute()
+const runtimeConfig = useRuntimeConfig()
+
+const selectedTab = ref(0)
+
+const tabs = [
+  {
+    title: 'Инфо',
+    componentName: 'main'
+  },
+  {
+    title: 'Подписка',
+    componentName: 'subscription'
+  },
+  {
+    title: 'Скачанное (музыка)',
+    componentName: 'subscription'
+  },
+  {
+    title: 'Скачанное (шумы)',
+    componentName: 'subscription'
+  },
+  {
+    title: 'Отчеты',
+    componentName: 'subscription'
+  },
+]
+
+const getAsyncComponent = () => {
+
+  return defineAsyncComponent(() => {
+    const componentName = tabs[selectedTab.value].componentName
+
+    return import(`@/pages/users/ignore/tabs/${componentName}.vue`)
+  })
+}
+
+let selectedTabMap = shallowRef(getAsyncComponent())
+
+watch(
+    selectedTab,
+    () => {
+      selectedTabMap.value = getAsyncComponent()
+    }
+)
+
+const onChangeSelectedTab = (tabIndex: number) => {
+  selectedTab.value = tabIndex;
+}
+
+const onItemUpdated = (item: IItem) => {
+  item.value = item
+}
+
+const response = await useAsyncData(
+    'blog_detail',
+    () => $authFetch(`${runtimeConfig.public.laravelAuth.domain}/users/detail`, {
+      params: {
+        id: route.params.id,
+      }
+    })
+)
+
+const entityId = route.params.id
+const item: IItem = ref(response.data)
+const h1 = ref('Пользователь ' + entityId)
+</script>
+
 <template>
   <Detail
       :h1="h1"
@@ -21,111 +102,11 @@
     </template>
   </Detail>
 </template>
-<script>
-import { defineAsyncComponent } from 'vue'
-import Section from "@/components/Base/Section"
-import Detail from "@/components/Base/Detail"
-import Button from "@/components/Base/Button"
-import Tabs from "@/components/Base/Tabs"
-import MainTab from "@/pages/users/ignore/tabs/main"
-import SubscriptionTab from "@/pages/users/ignore/tabs/subscription"
-import { useRoute } from '#imports'
-
-export default {
-  setup() {
-    const route = useRoute()
-
-    const entityId = route.params.id
-
-    const tabs = [
-      {
-        title: 'Инфо',
-        componentName: 'main'
-      },
-      {
-        title: 'Подписка',
-        componentName: 'subscription'
-      },
-      {
-        title: 'Скачанное (музыка)',
-        componentName: 'subscription'
-      },
-      {
-        title: 'Скачанное (шумы)',
-        componentName: 'subscription'
-      },
-      {
-        title: 'Отчеты',
-        componentName: 'subscription'
-      },
-    ]
-
-    const selectedTab = shallowRef(0)
-    const item = shallowRef({})
-
-    const getAsyncComponent = () => {
-
-      return defineAsyncComponent(() => {
-        const componentName = tabs[selectedTab.value].componentName
-
-        return import(`@/pages/users/ignore/tabs/${componentName}.vue`)
-      })
-    }
-
-    let selectedTabMap = shallowRef(getAsyncComponent())
-
-    watch(
-        selectedTab,
-        () => {
-          selectedTabMap.value = getAsyncComponent()
-        }
-    )
-
-    const onChangeSelectedTab = (tabIndex) => {
-      selectedTab.value = tabIndex;
-    }
-
-    const onItemUpdated = (item) => {
-      item.value = item
-    }
-
-    return {
-      selectedTab,
-      selectedTabMap,
-      entityId,
-      tabs,
-      item,
-
-      onChangeSelectedTab,
-      onItemUpdated
-    }
-  },
-  name: 'UserDetail',
-  components: {
-    Section,
-    Detail,
-    Button,
-    Tabs,
-    MainTab,
-    SubscriptionTab
-  },
-  computed: {
-    h1: function () {
-      return 'Пользователь ' + this.entityId
-    },
-  },
-  methods: {
-    onItemUpdated(item) {
-      this.item = item
-    }
-  }
-}
-</script>
 
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity .3s;
+  transition: opacity .2s;
 }
 
 .fade-enter-from,
