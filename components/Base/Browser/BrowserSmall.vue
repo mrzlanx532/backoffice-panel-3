@@ -16,6 +16,20 @@ import moment from 'moment/moment'
 
 type IItem = {[key: string]: any}
 
+interface Props {
+  filters?: {
+    [key: string]: any[]
+  }
+  itemPrimaryKeyPropertyName?: string,
+  columns: IColumn[],
+  urlPrefix: string,
+  requestProperties?: string[],
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  itemPrimaryKeyPropertyName: 'id',
+})
+
 enum FilterType {
   // noinspection JSUnusedGlobalSymbols
   SELECT = 'SELECT',
@@ -51,13 +65,6 @@ interface IRequestParams {
   page: number
 }
 
-interface Props {
-  itemPrimaryKeyPropertyName?: string,
-  columns: IColumn[],
-  urlPrefix: string,
-  requestProperties?: string[],
-}
-
 export interface IConfigItem {
   columnClass: number,
   title: string,
@@ -70,10 +77,6 @@ export interface IConfigItem {
     format?: string
   }
 }
-
-const props = withDefaults(defineProps<Props>(), {
-  itemPrimaryKeyPropertyName: 'id',
-})
 
 interface IFilter {
   id: string,
@@ -177,34 +180,36 @@ const fetchData = async () => {
 
   const config: { params?: IRequestParams } = {}
 
-  if (activeFilters.value) {
-    const requestData = {} as IRequestParams;
+  const requestData = {} as IRequestParams;
 
-    if (!isEmpty(activeFilters.value)) {
-      requestData.filters = activeFilters.value
-    }
-
-    if (searchString.value !== '') {
-      requestData.search_string = searchString.value
-    }
-
-    if (activeSort.value && sorts.value[activeSort.value]) {
-      requestData.sort = {
-        field: activeSort.value,
-        direction: sorts.value[activeSort.value]
-      }
-    }
-
-    if (selectedPaginationItemsCount.value !== 20) {
-      requestData.per_page = selectedPaginationItemsCount.value
-    }
-
-    if (currentPage.value > 1) {
-      requestData.page = currentPage.value
-    }
-
-    config.params = requestData
+  if (props.filters) {
+    requestData.filters = props.filters
   }
+
+  if (!isEmpty(activeFilters.value)) {
+    requestData.filters = Object.assign(activeFilters.value, requestData.filters)
+  }
+
+  if (searchString.value !== '') {
+    requestData.search_string = searchString.value
+  }
+
+  if (activeSort.value && sorts.value[activeSort.value]) {
+    requestData.sort = {
+      field: activeSort.value,
+      direction: sorts.value[activeSort.value]
+    }
+  }
+
+  if (selectedPaginationItemsCount.value !== 20) {
+    requestData.per_page = selectedPaginationItemsCount.value
+  }
+
+  if (currentPage.value > 1) {
+    requestData.page = currentPage.value
+  }
+
+  config.params = requestData
 
   try {
 
@@ -352,16 +357,6 @@ onMounted(() => {
       </div>
       <Transition name="fade">
         <div class="browser__container" v-if="!firstLoadingIsActive">
-          <div class="browser__filters" v-if="filters.length">
-            <template v-for="filter in filters">
-              <component
-                  :is="filterMapper[filter.type]"
-                  :filter="filter"
-                  :model-value="activeFilters[filter.id]"
-                  @filterValueChanged="onFilterValueChanged"
-              ></component>
-            </template>
-          </div>
           <div
               class="browser__error-container"
               v-if="fetchError !== null"

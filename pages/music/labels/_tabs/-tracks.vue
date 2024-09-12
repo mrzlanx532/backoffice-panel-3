@@ -22,10 +22,15 @@ const columns = [
 
   },
 ]
+
+const filters = ref({
+  'label_id': [props.item!.id]
+})
 </script>
 
 <template>
   <BrowserSmall
+      :filters="filters"
       :columns="columns"
       url-prefix="music/labels/tracks"
   />
