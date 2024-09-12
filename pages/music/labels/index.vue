@@ -60,7 +60,7 @@ const selectedTab = ref(0)
 const getAsyncComponent = () => {
   return defineAsyncComponent(() => {
     const componentName = tabs[selectedTab.value].componentName
-    return import(`@/pages/music/labels/tabs/${componentName}.vue`)
+    return import(`@/pages/music/labels/_tabs/${componentName}.vue`)
   })
 }
 

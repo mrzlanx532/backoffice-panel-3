@@ -5,8 +5,8 @@ import { type Ref } from 'vue'
 import Button from '~/components/Base/Button.vue'
 import Browser, { type IItem } from '~/components/Base/Browser/Browser.vue'
 import Tabs from '~/components/Base/Tabs.vue'
-import TabMain from '~/pages/music/albums/ignore/tabs/main.vue'
-import TabTracks from '~/pages/music/albums/ignore/tabs/tracks.vue'
+import TabMain from '~/pages/music/albums/_tabs/-main.vue'
+import TabTracks from '~/pages/music/albums/_tabs/-tracks.vue'
 
 definePageMeta({
   middleware: ['auth']

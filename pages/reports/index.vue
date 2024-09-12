@@ -3,11 +3,11 @@ import type { Ref } from 'vue'
 import { useNuxtApp } from '#imports'
 
 import Tabs from '~/components/Base/Tabs.vue'
-import Browser, { type IItem } from "@/components/Base/Browser/Browser.vue";
-import Button from "@/components/Base/Button.vue"
+import Browser, { type IItem } from '~/components/Base/Browser/Browser.vue';
+import Button from '~/components/Base/Button.vue'
 
-import TabMain from '~/pages/reports/ignore/tabs/main.vue'
-import TabTracks from '~/pages/reports/ignore/tabs/tracks.vue'
+import TabMain from '~/pages/reports/_tabs/-main.vue'
+import TabTracks from '~/pages/reports/_tabs/-tracks.vue'
 
 definePageMeta({
   middleware: ['auth'],

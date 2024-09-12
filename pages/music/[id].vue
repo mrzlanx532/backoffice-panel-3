@@ -7,8 +7,8 @@
   >
     <template #header>
       <div class="btn__group">
-        <Button :classes="['--big --outline-primary']">Изменить</Button>
-        <Button :classes="['--big --outline-danger']">Удалить</Button>
+        <Button :class="['--big --outline-primary']">Изменить</Button>
+        <Button :class="['--big --outline-danger']">Удалить</Button>
         <StateButton
             class="ml_10"
             :data-id="item.id"
@@ -41,7 +41,7 @@ import Detail from "@/components/Base/Detail"
 import Button from "@/components/Base/Button"
 import { detailConfig } from "@/parts/reports"
 import Spinner from "@/components/Base/Spinner";
-import MainTab from "@/pages/music/ignore/tabs/main"
+import MainTab from "~/pages/music/_tabs/-main"
 import Tabs from "@/components/Base/Tabs";
 import StateButton from "@/components/Base/StateButton";
 import { useRoute } from '#imports'

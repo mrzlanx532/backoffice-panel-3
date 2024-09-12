@@ -11,14 +11,14 @@
   >
     <template #rightSide>
       <div class="btn__group">
-        <Button @click="onClickAdd" :classes="['--small --success']">Добавить</Button>
+        <Button @click="onClickAdd" :class="['--small --success']">Добавить</Button>
       </div>
     </template>
 
     <template #browserDetailHeader>
       <div class="btn__group">
-        <Button :classes="['--big --outline-primary']">Изменить</Button>
-        <Button :classes="['--big --outline-danger']">Удалить</Button>
+        <Button :class="['--big --outline-primary']">Изменить</Button>
+        <Button :class="['--big --outline-danger']">Удалить</Button>
         <StateButton
             class="ml_10"
             :data-id="item.id"
@@ -44,14 +44,14 @@
 </template>
 <script>
 
-import PageWithBrowserMixin from "@/mixins/pages/browser.js"
-import { getMethods } from "@/mixins/browser";
-import { prepareDuration } from "@/helpers/functions-for-table-columns";
-import Section from "@/components/Base/Section";
-import Button from "@/components/Base/Button";
-import Tabs from "@/components/Base/Tabs";
-import MainTab from "@/pages/music/ignore/tabs/main"
-import StateButton from "@/components/Base/StateButton";
+import PageWithBrowserMixin from '~/mixins/pages/browser.js'
+import { getMethods } from '~/mixins/browser';
+import { prepareDuration } from '~/helpers/functions-for-table-columns';
+import Section from '~/components/Base/Section';
+import Button from '~/components/Base/Button';
+import Tabs from '~/components/Base/Tabs';
+import MainTab from '~/pages/music/_tabs/-main.vue'
+import StateButton from '~/components/Base/StateButton';
 
 export default {
   name: "MusicTracks",

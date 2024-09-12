@@ -44,7 +44,7 @@ const getAsyncComponent = () => {
   return defineAsyncComponent(() => {
     const componentName = tabs[selectedTab.value].componentName
 
-    return import(`@/pages/users/tabs/${componentName}.vue`)
+    return import(`@/pages/users/_tabs/${componentName}.vue`)
   })
 }
 

@@ -2,7 +2,7 @@
 import type { Ref } from 'vue'
 import { definePageMeta } from '#imports'
 
-import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue'
+import Browser, { type IItem } from '~/components/Base/Browser/Browser.vue'
 
 definePageMeta({
   middleware: ['auth']
