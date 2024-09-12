@@ -151,21 +151,7 @@ const onClickDelete = () => {
     </template>
 
     <template #browserDetailContent>
-      <Transition name="fade" mode="out-in">
         <component :is="selectedTabMap" :item="item"/>
-      </Transition>
     </template>
   </Browser>
 </template>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity .3s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue';
+import Browser, { type IItem } from '~/components/Base/Browser/Browser.vue';
 
+import type { Ref } from 'vue'
 import { definePageMeta } from '#imports'
 
 definePageMeta({
@@ -14,7 +15,7 @@ const requestProperties = ref([
   'name_ru',
   'ident',
   'tracks_counter',
-  'author',
+  'libraries_counter',
   'created_at'
 ])
 
@@ -25,7 +26,7 @@ const columns = ref([
   },
   {
     name: 'name_ru',
-    title: 'Название'
+    title: 'Имя'
   },
   {
     name: 'ident',
@@ -36,17 +37,14 @@ const columns = ref([
     title: 'Треки',
   },
   {
-    name: 'author',
-    title: 'Автор',
-    toFormat(item: IItem) {
-      return item.author?.name_ru
-    }
+    name: 'libraries_counter',
+    title: 'Библиотеки',
   },
   {
     name: 'created_at',
     title: 'Создан',
     preset: {
-      name: 'timestampToFormatPreset',
+      name: 'timestampToFormatPreset'
     }
   },
 ])
@@ -58,13 +56,13 @@ const onItemUpdated = (item: IItem) => {
 
 <template>
   <Browser
-      h1="Библиотеки шумов"
-      url-prefix="sound/libraries"
+      h1="Авторы шумовых треков"
+      url-prefix="sound/authors"
       :columns="columns"
       :request-properties="requestProperties"
       detail-title-property="id"
       detail-subtitle-property="name_ru"
-      detail-page-url-prefix="sounds/libraries"
+      detail-page-url-prefix="sounds/authors"
       @itemUpdated="onItemUpdated"
   />
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue';
+import Browser, { type IItem } from '~/components/Base/Browser/Browser.vue';
 
 import { definePageMeta } from '#imports'
 
