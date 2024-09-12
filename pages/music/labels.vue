@@ -55,6 +55,8 @@ const columns = ref([
   },
 ])
 
+const selectedTab = ref(0)
+
 const getAsyncComponent = () => {
   return defineAsyncComponent(() => {
     const componentName = tabs[selectedTab.value].componentName
@@ -64,20 +66,25 @@ const getAsyncComponent = () => {
 
 let selectedTabMap = shallowRef(getAsyncComponent())
 
-const selectedTab = ref(0)
+watch(
+    selectedTab,
+    () => {
+      selectedTabMap.value = getAsyncComponent()
+    }
+)
 
 const tabs = [
   {
     title: 'Инфо',
-    componentName: 'main'
+    componentName: '-main'
   },
   {
     title: 'Треки',
-    componentName: 'tracks'
+    componentName: '-tracks'
   },
   {
     title: 'Альбомы',
-    componentName: 'albums'
+    componentName: '-albums'
   },
 ]
 

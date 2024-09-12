@@ -32,23 +32,23 @@ const selectedTab = ref(0)
 const tabs = [
   {
     title: 'Инфо',
-    componentName: 'main'
+    componentName: '-main'
   },
   {
     title: 'Подписка',
-    componentName: 'subscription'
+    componentName: '-subscription'
   },
   {
     title: 'Скачанное (музыка)',
-    componentName: 'downloaded_music'
+    componentName: '-downloaded_music'
   },
   {
     title: 'Скачанное (шумы)',
-    componentName: 'downloaded_sounds'
+    componentName: '-downloaded_sounds'
   },
   {
     title: 'Отчеты',
-    componentName: 'reports'
+    componentName: '-reports'
   },
 ]
 
@@ -86,7 +86,7 @@ const columns = shallowRef([
 const getAsyncComponent = () => {
   return defineAsyncComponent(() => {
     const componentName = tabs[selectedTab.value].componentName
-    return import(`@/pages/users/ignore/tabs/${componentName}.vue`)
+    return import(`@/pages/users/tabs/${componentName}.vue`)
   })
 }
 

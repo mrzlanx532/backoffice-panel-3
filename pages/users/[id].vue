@@ -19,23 +19,23 @@ const selectedTab = ref(0)
 const tabs = [
   {
     title: 'Инфо',
-    componentName: 'main'
+    componentName: '-main'
   },
   {
     title: 'Подписка',
-    componentName: 'subscription'
+    componentName: '-subscription'
   },
   {
     title: 'Скачанное (музыка)',
-    componentName: 'subscription'
+    componentName: '-subscription'
   },
   {
     title: 'Скачанное (шумы)',
-    componentName: 'subscription'
+    componentName: '-subscription'
   },
   {
     title: 'Отчеты',
-    componentName: 'subscription'
+    componentName: '-subscription'
   },
 ]
 
@@ -44,7 +44,7 @@ const getAsyncComponent = () => {
   return defineAsyncComponent(() => {
     const componentName = tabs[selectedTab.value].componentName
 
-    return import(`@/pages/users/ignore/tabs/${componentName}.vue`)
+    return import(`@/pages/users/tabs/${componentName}.vue`)
   })
 }
 
