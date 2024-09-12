@@ -30,10 +30,16 @@ const columns = [
   {
     name: '_',
     title: '',
+    toFormat: (item: IItem) => {
+      return '*Прослушать*';
+    }
   },
   {
     name: '_',
     title: '',
+    toFormat: (item: IItem) => {
+      return '*Перейти по ссылке*';
+    }
   },
 ]
 
