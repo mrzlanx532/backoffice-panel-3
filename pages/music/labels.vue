@@ -1,8 +1,14 @@
 <script setup lang="ts">
-import type { Ref } from 'vue'
-import { definePageMeta } from '#imports'
+import { defineAsyncComponent, type Ref } from 'vue'
+import { definePageMeta, useNuxtApp } from '#imports'
 
-import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue'
+import Browser, { type IItem } from '~/components/Base/Browser/Browser.vue'
+import Tabs from '~/components/Base/Tabs.vue'
+import Button from '~/components/Base/Button.vue'
+
+const {
+  $modal
+} = useNuxtApp()
 
 definePageMeta({
   middleware: ['auth']
@@ -49,8 +55,57 @@ const columns = ref([
   },
 ])
 
-const onItemUpdated = (item: IItem) => {
-  item.value = item
+const getAsyncComponent = () => {
+  return defineAsyncComponent(() => {
+    const componentName = tabs[selectedTab.value].componentName
+    return import(`@/pages/music/labels/tabs/${componentName}.vue`)
+  })
+}
+
+let selectedTabMap = shallowRef(getAsyncComponent())
+
+const selectedTab = ref(0)
+
+const tabs = [
+  {
+    title: 'Инфо',
+    componentName: 'main'
+  },
+  {
+    title: 'Треки',
+    componentName: 'tracks'
+  },
+  {
+    title: 'Альбомы',
+    componentName: 'albums'
+  },
+]
+
+const onClickEdit = () => {
+  $modal.load('users/edit', {
+    title: 'Создание пользователя'
+  }).then(res => {
+    console.log(res)
+  })
+}
+
+const onClickDelete = () => {
+  $modal.confirm({
+    'question': 'Вы уверены?',
+  }).then(confirm => {
+    if (confirm) {
+      console.log('Удаляем!!')
+    }
+  })
+}
+
+const onChangeSelectedTab = (tabIndex: number) => {
+  selectedTab.value = tabIndex;
+}
+
+
+const onItemUpdated = (_item: IItem) => {
+  item.value = _item
 }
 </script>
 
@@ -63,5 +118,17 @@ const onItemUpdated = (item: IItem) => {
       detail-title-property="id"
       detail-subtitle-property="name_ru"
       @itemUpdated="onItemUpdated"
-  />
+  >
+    <template #browserDetailHeader>
+      <div class="btn__group">
+        <Button @click="onClickEdit" :class="['--big --outline-primary']">Изменить</Button>
+        <Button @click="onClickDelete" :class="['--big --outline-danger']">Удалить</Button>
+      </div>
+      <Tabs @change="onChangeSelectedTab" :tabs="tabs"/>
+    </template>
+
+    <template #browserDetailContent>
+      <component :is="selectedTabMap" :item="item"/>
+    </template>
+  </Browser>
 </template>

@@ -27,7 +27,7 @@ const requestProperties = ref([
 
 const { $modal } = useNuxtApp()
 
-const selectedTab = shallowRef(0)
+const selectedTab = ref(0)
 
 const tabs = [
   {

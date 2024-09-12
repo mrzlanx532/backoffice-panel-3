@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import moment from 'moment/moment'
 
-type IItem = {[key: string]: any}
+export type IItem = {[key: string]: any}
 
 export interface IConfigItem {
   columnClass: number,
