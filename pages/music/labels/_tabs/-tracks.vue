@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Component, PropType } from 'vue'
 import BrowserSmall from '~/components/Base/Browser/BrowserSmall.vue'
+import { prepareDuration } from '~/helpers/functions-for-table-columns';
 
 type IItem = {[key: string]: any}
 
@@ -13,13 +14,26 @@ const props = defineProps({
 
 const columns = [
   {
-    name: 'name_en',
-    title: 'Трек',
+    name: 'title',
+    title: 'Название',
+    toFormat: (item: IItem) => {
+      return item.title_en + (item.title_ru ? ` (${item.title_ru})` : '')
+    }
   },
   {
     name: 'duration',
-    title: 'Трек',
-
+    title: 'Продолжительность',
+    toFormat: (item: IItem) => {
+      return prepareDuration(item.variation?.duration)
+    }
+  },
+  {
+    name: '_',
+    title: '',
+  },
+  {
+    name: '_',
+    title: '',
   },
 ]
 

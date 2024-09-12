@@ -350,11 +350,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="browser">
+  <div class="browser-small">
     <ClientOnly>
-      <div class="browser__spinner-container" v-if="firstLoadingIsActive">
-        <Spinner class="--half-opacity"/>
-      </div>
       <Transition name="fade">
         <div class="browser__container" v-if="!firstLoadingIsActive">
           <div
@@ -377,7 +374,7 @@ onMounted(() => {
                 {'browser__table-container_loading': loadingIsActive},
               ]"
           >
-            <table v-if="items.length" class="browser__table">
+            <table v-if="items.length" class="browser-small__table">
               <thead>
               <tr>
                 <BrowserTHeadTh
