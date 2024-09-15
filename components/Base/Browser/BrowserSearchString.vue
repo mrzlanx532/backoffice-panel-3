@@ -1,3 +1,23 @@
+<script setup lang="ts">
+const emit = defineEmits(['search'])
+
+const searchString = ref('')
+
+const onInput = () => {
+  if (searchString.value === '') {
+    emit('search', searchString.value)
+  }
+}
+
+const onSearch = () => {
+  if (searchString.value === '') {
+    return;
+  }
+
+  emit('search', searchString.value)
+}
+</script>
+
 <template>
   <div class="browser__search-string-container">
     <input
@@ -16,27 +36,3 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  name: 'BrowserSearchString',
-  data() {
-    return {
-      searchString: ''
-    }
-  },
-  methods: {
-    onInput() {
-      if (this.searchString === '') {
-        this.$emit('search', this.searchString)
-      }
-    },
-    onSearch() {
-      if (this.searchString === '') {
-        return;
-      }
-
-      this.$emit('search', this.searchString)
-    }
-  }
-}
-</script>

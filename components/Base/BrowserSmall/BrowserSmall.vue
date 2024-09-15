@@ -179,6 +179,8 @@ const setFilters = (_filters: IFilter[]) => {
 
 const fetchData = async () => {
 
+  loadingIsActive.value = true
+
   const config: { params?: IRequestParams } = {}
 
   const requestData = {} as IRequestParams;
@@ -349,6 +351,13 @@ const onChangePage = (page: number) => {
   fetchData()
 }
 
+const onSearchStringInput = (value: string) => {
+  currentPage.value = 1
+  searchString.value = value
+
+  fetchData()
+}
+
 onMounted(() => {
   fetchData().then(() => {
     firstLoadingIsActive.value = false
@@ -366,12 +375,6 @@ onMounted(() => {
             v-if="!firstLoadingIsActive"
         >
           <div
-              v-if="items.length === 0"
-              class="browser-small__empty-list"
-          >
-            Список пуст
-          </div>
-          <div
               class="browser__error-container"
               v-if="fetchError !== null"
           >
@@ -387,19 +390,25 @@ onMounted(() => {
           <div
               v-else
               class="browser__table-container"
-              :class="[
-                {'browser__table-container_loading': loadingIsActive},
-              ]"
           >
+            <BrowserSearchString
+                @search="onSearchStringInput"
+                class="--in-small-browser"
+            />
+            <BrowserPagination
+                :page="currentPage"
+                :total="totalItems"
+                :per-page="selectedPaginationItemsCount"
+                @changePage="onChangePage"
+            />
+            <div
+                v-if="items.length === 0"
+                class="browser-small__empty-list"
+            >
+              Список пуст
+            </div>
             <template v-if="items.length">
-              <BrowserSearchString class="--in-small-browser"/>
-              <BrowserPagination
-                  :page="currentPage"
-                  :total="totalItems"
-                  :per-page="selectedPaginationItemsCount"
-                  @changePage="onChangePage"
-              />
-              <table class="browser-small__table">
+              <table class="browser-small__table" :class="{'--loading': loadingIsActive}">
                 <thead>
                 <tr>
                   <BrowserTHeadTh

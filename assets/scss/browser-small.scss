@@ -46,6 +46,11 @@
     border-collapse: collapse;
     border: 1px solid var(--color-3, #f3f3f3);
 
+    &.--loading {
+      opacity: 60%;
+      filter: blur(1px);
+    }
+
     thead {
       tr {
         text-align: left;
