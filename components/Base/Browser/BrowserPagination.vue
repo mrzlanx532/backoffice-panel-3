@@ -1,3 +1,103 @@
+<script setup lang="ts">
+import  { type Component, type Ref, nextTick } from 'vue'
+
+const emit = defineEmits(['changePage'])
+
+const props = withDefaults(defineProps<{
+  total: number,
+  page?: number,
+  perPage: number
+}>(), {
+  page: 1
+})
+
+const paginatorInputEl: Ref<Component|null> = ref(null)
+const isSelecting = ref(false)
+const value = ref('')
+
+const totalPages = computed(() => {
+  /* @ts-ignore */
+  let int = parseInt(props.total / props.perPage)
+
+  if (int === 0) {
+    return 1
+  }
+
+  return int + (props.total % props.perPage > 0 ? 1 : 0)
+})
+
+const leftArrowsIsDisabled = computed(() => {
+  return props.page === 1;
+})
+
+const rightArrowsIsDisabled = computed(() => {
+  return props.page === totalPages.value;
+})
+
+const leftDoubleArrowClick = () => {
+  emit('changePage', 1)
+}
+const leftSingleArrowClick = () => {
+  if (props.page === 1) {
+    return
+  }
+
+  emit('changePage', props.page - 1)
+}
+
+const rightSingleArrowClick = () => {
+  if (props.page === totalPages.value) {
+    return
+  }
+
+  emit('changePage', props.page + 1)
+}
+
+const rightDoubleArrowClick = () => {
+  emit('changePage', totalPages.value)
+}
+
+const onClickPaginatorInputLabel = () => {
+  isSelecting.value = true
+
+  nextTick(() => {
+    /* @ts-ignore */
+    paginatorInputEl.value.focus()
+  })
+}
+
+const onKeypress = (e: KeyboardEvent) => {
+  if (e.key.match(/[0-9]+/) === null)  {
+    e.preventDefault()
+  }
+}
+
+const onKeyUp = (e: KeyboardEvent) => {
+  if (e.key === 'Enter') {
+
+    /* @ts-ignore */
+    if (e.target!.value === '') {
+      isSelecting.value = false
+      return
+    }
+
+    /* @ts-ignore */
+    let value = parseInt(e.target.value)
+
+    if (value > totalPages.value) {
+      value = totalPages.value
+    }
+
+    if (value === 0) {
+      value = 1
+    }
+
+    emit('changePage', value)
+    isSelecting.value = false
+  }
+}
+</script>
+
 <template>
   <div class="browser__paginator">
     <div
@@ -20,10 +120,10 @@
     </div>
     <div>
       <input
+          ref="paginatorInputEl"
           :value="value"
           @keyup="onKeyUp"
           @keypress="onKeypress"
-          ref="paginatorInput"
           v-if="isSelecting"
           class="browser__paginator-input"
           type="text"
@@ -51,102 +151,3 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  name: 'BrowserPagination',
-  props: {
-    total: {
-      type: Number,
-      required: true
-    },
-    page: {
-      type: Number,
-      required: false,
-      default: 1
-    },
-    perPage: {
-      type: Number,
-      required: true
-    }
-  },
-  data() {
-    return {
-      isSelecting: false,
-      value: ''
-    }
-  },
-  computed: {
-    totalPages: function () {
-
-      let int = parseInt(this.total / this.perPage)
-
-      if (int === 0) {
-        return 1
-      }
-
-      return int + (this.total % this.perPage > 0 ? 1 : 0)
-    },
-    leftArrowsIsDisabled: function () {
-      return this.page === 1;
-    },
-    rightArrowsIsDisabled: function () {
-      return this.page === this.totalPages;
-    }
-  },
-  methods: {
-    leftDoubleArrowClick() {
-      this.$emit('changePage', 1)
-    },
-    leftSingleArrowClick() {
-      if (this.page === 1) {
-        return
-      }
-
-      this.$emit('changePage', this.page - 1)
-    },
-    rightSingleArrowClick() {
-      if (this.page === this.totalPages) {
-        return
-      }
-
-      this.$emit('changePage', this.page + 1)
-    },
-    rightDoubleArrowClick() {
-      this.$emit('changePage', this.totalPages)
-    },
-    onClickPaginatorInputLabel() {
-      this.isSelecting = true
-
-      this.$nextTick(() => {
-        this.$refs.paginatorInput.focus()
-      })
-    },
-    onKeyUp(e) {
-      if (e.keyCode === 13) {
-        if (e.target.value === '') {
-          this.isSelecting = false
-          return
-        }
-
-        let value = parseInt(e.target.value)
-
-        if (value > this.totalPages) {
-          value = this.totalPages
-        }
-
-        if (value === 0) {
-          value = 1
-        }
-
-        this.$emit('changePage', value)
-        this.isSelecting = false
-      }
-    },
-    onKeypress(e) {
-      if (e.key.match(/[0-9]+/) === null)  {
-        e.preventDefault()
-      }
-    }
-  }
-}
-</script>
