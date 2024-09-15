@@ -5,6 +5,9 @@ import { definePageMeta, useNuxtApp } from '#imports'
 import Browser, { type IItem } from '~/components/Base/Browser/Browser.vue'
 import Tabs from '~/components/Base/Tabs.vue'
 import Button from '~/components/Base/Button.vue'
+import MainTab from '~/pages/music/labels/_tabs/-main.vue'
+import TracksTab from '~/pages/music/labels/_tabs/-tracks.vue'
+import AlbumsTab from '~/pages/music/labels/_tabs/-albums.vue'
 
 const {
   $modal
@@ -57,36 +60,29 @@ const columns = ref([
 
 const selectedTab = ref(0)
 
-const getAsyncComponent = () => {
-  return defineAsyncComponent(() => {
-    const componentName = tabs[selectedTab.value].componentName
-    return import(`@/pages/music/labels/_tabs/${componentName}.vue`)
-  })
-}
+const tabs = [
+  {
+    title: 'Инфо',
+    component: MainTab
+  },
+  {
+    title: 'Треки',
+    component: TracksTab
+  },
+  {
+    title: 'Альбомы',
+    component: AlbumsTab
+  },
+]
 
-let selectedTabMap = shallowRef(getAsyncComponent())
+let selectedTabComponent = shallowRef(tabs[selectedTab.value].component)
 
 watch(
     selectedTab,
     () => {
-      selectedTabMap.value = getAsyncComponent()
+      selectedTabComponent.value = tabs[selectedTab.value].component
     }
 )
-
-const tabs = [
-  {
-    title: 'Инфо',
-    componentName: '-main'
-  },
-  {
-    title: 'Треки',
-    componentName: '-tracks'
-  },
-  {
-    title: 'Альбомы',
-    componentName: '-albums'
-  },
-]
 
 const onClickEdit = () => {
   $modal.load('users/edit', {
@@ -135,7 +131,7 @@ const onItemUpdated = (_item: IItem) => {
     </template>
 
     <template #browserDetailContent>
-      <component :is="selectedTabMap" :item="item"/>
+      <component :is="selectedTabComponent" :item="item"/>
     </template>
   </Browser>
 </template>

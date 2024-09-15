@@ -13,6 +13,8 @@ import BrowserBooleanFilter from '~/components/Base/Browser/BrowserBooleanFilter
 import debounce from 'lodash.debounce'
 import type { DebouncedFunc } from 'lodash-es'
 import moment from 'moment/moment'
+import BrowserSearchString from '~/components/Base/Browser/BrowserSearchString.vue'
+import BrowserPagination from '~/components/Base/BrowserSmall/BrowserPagination.vue'
 
 type IItem = {[key: string]: any}
 
@@ -353,7 +355,17 @@ onMounted(() => {
   <div class="browser-small">
     <ClientOnly>
       <Transition name="fade">
-        <div class="browser__container" v-if="!firstLoadingIsActive">
+        <div
+            class="browser-small__container"
+            :class="{'--empty': items.length === 0}"
+            v-if="!firstLoadingIsActive"
+        >
+          <div
+              v-if="items.length === 0"
+              class="browser-small__empty-list"
+          >
+            Список пуст
+          </div>
           <div
               class="browser__error-container"
               v-if="fetchError !== null"
@@ -374,42 +386,41 @@ onMounted(() => {
                 {'browser__table-container_loading': loadingIsActive},
               ]"
           >
-            <table v-if="items.length" class="browser-small__table">
-              <thead>
-              <tr>
-                <BrowserTHeadTh
-                    @sortChanged="onSortChanged"
-                    v-for="column in columns"
-                    :key="column.name"
-                    :sorts="sorts"
-                    :column="column"
-                />
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="item in items" :key="item[itemPrimaryKeyPropertyName]" @click="onClickRow(item)">
-                <td v-for="column in columns">
-                  <template v-if="column.hasOwnProperty('component')">
-                    <component :is="column.component" :item="item" :column="column"/>
-                  </template>
-                  <template v-else-if="column.hasOwnProperty('preset')">
-                    {{ callPreset(column.preset!.name, column as IConfigItem, item)}}
-                  </template>
-                  <template v-else-if="column.toFormat">
-                    {{ column.toFormat(item) }}
-                  </template>
-                  <template v-else>
-                    {{ item[column.name] }}
-                  </template>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="browser__label-empty-container" v-if="items.length === 0">
-            <div class="browser__label-empty">
-              Нет записей
-            </div>
+            <template v-if="items.length">
+              <BrowserSearchString class="--in-small-browser"/>
+              <BrowserPagination/>
+              <table class="browser-small__table">
+                <thead>
+                <tr>
+                  <BrowserTHeadTh
+                      @sortChanged="onSortChanged"
+                      v-for="column in columns"
+                      :key="column.name"
+                      :sorts="sorts"
+                      :column="column"
+                  />
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="item in items" :key="item[itemPrimaryKeyPropertyName]" @click="onClickRow(item)">
+                  <td v-for="column in columns">
+                    <template v-if="column.hasOwnProperty('component')">
+                      <component :is="column.component" :item="item" :column="column"/>
+                    </template>
+                    <template v-else-if="column.hasOwnProperty('preset')">
+                      {{ callPreset(column.preset!.name, column as IConfigItem, item)}}
+                    </template>
+                    <template v-else-if="column.toFormat">
+                      {{ column.toFormat(item) }}
+                    </template>
+                    <template v-else>
+                      {{ item[column.name] }}
+                    </template>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </template>
           </div>
         </div>
       </Transition>

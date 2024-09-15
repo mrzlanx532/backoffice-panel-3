@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Component, PropType } from 'vue'
-import BrowserSmall from '~/components/Base/Browser/BrowserSmall.vue'
+import BrowserSmall from '~/components/Base/BrowserSmall/BrowserSmall.vue'
 import { prepareDuration } from '~/helpers/functions-for-table-columns';
 
 type IItem = {[key: string]: any}

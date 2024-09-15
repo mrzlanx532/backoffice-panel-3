@@ -1,6 +1,23 @@
 .browser-small {
   min-height: 100%;
 
+  &__container {
+    position: relative;
+    display: flex;
+    padding-top: 10px;
+
+    &.--empty {
+      display: block;
+    }
+  }
+
+  &__empty-list {
+    text-align: center;
+    font-size: 22px;
+    margin-top: 20px;
+    color: var(--color-4, #757575);
+  }
+
   &__spinner-container {
     display: flex;
     justify-content: center;
@@ -9,6 +26,7 @@
   }
 
   &__table {
+    margin-top: 10px;
     width: 100%;
     padding: 20px 0;
     border-spacing: 0;
@@ -80,6 +98,10 @@
           font-family: "Roboto";
           font-size: 13px;
           padding: 12px;
+
+          &.--min {
+            width: 1px;
+          }
         }
 
         td div {
