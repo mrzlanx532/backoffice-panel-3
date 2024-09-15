@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import BrowserPagination from '~/components/Base/Browser/BrowserPagination.vue'
+
 const props = withDefaults(defineProps<{
   total?: number
 }>(), {
@@ -11,8 +13,10 @@ const props = withDefaults(defineProps<{
     <div class="browser-small__total">
       Всего: {{props.total}}
     </div>
-    <div class="browser-small__pagination">
-
-    </div>
+    <BrowserPagination
+        :per-page="20"
+        :total="props.total"
+        style="margin-top: 6px;"
+    />
   </div>
 </template>

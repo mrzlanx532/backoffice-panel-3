@@ -3,9 +3,11 @@
 
   &__paginator {
     display: flex;
+    justify-content: space-between;
   }
 
   &__total {
+    user-select: none;
     margin-top: 10px;
     margin-left: 1px;
     font-size: 14px;

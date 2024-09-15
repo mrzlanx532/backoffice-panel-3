@@ -344,6 +344,12 @@ const onClickRow = (item: IItem) => {
   emit('clickRow', id.value)*/
 }
 
+const onChangePage = (page: number) => {
+  currentPage.value = page
+
+  fetchData()
+}
+
 onMounted(() => {
   fetchData().then(() => {
     firstLoadingIsActive.value = false
@@ -388,7 +394,12 @@ onMounted(() => {
           >
             <template v-if="items.length">
               <BrowserSearchString class="--in-small-browser"/>
-              <BrowserPagination/>
+              <BrowserPagination
+                  :page="currentPage"
+                  :total="totalItems"
+                  :per-page="selectedPaginationItemsCount"
+                  @changePage="onChangePage"
+              />
               <table class="browser-small__table">
                 <thead>
                 <tr>

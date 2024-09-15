@@ -32,6 +32,13 @@
     display: flex;
     border: 1px solid var(--color-2, #dbdbdb);
     border-radius: 5px;
+
+    &.--in-small-browser {
+      .browser__search-string {
+        width: 100%;
+        font-size: 14px;
+      }
+    }
   }
 
   &__search-string {
