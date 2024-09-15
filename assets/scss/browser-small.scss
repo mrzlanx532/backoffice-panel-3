@@ -1,6 +1,17 @@
 .browser-small {
   min-height: 100%;
 
+  &__paginator {
+    display: flex;
+  }
+
+  &__total {
+    margin-top: 10px;
+    margin-left: 1px;
+    font-size: 14px;
+    color: var(--color-4);
+  }
+
   &__container {
     position: relative;
     display: flex;
