@@ -17,7 +17,9 @@ definePageMeta({
   middleware: ['auth']
 })
 
-const item: Ref<IItem|null> = ref(null)
+const browserEl: Ref<HTMLElement|null> = ref(null)
+
+const item: Ref<IItem|undefined> = ref()
 
 const requestProperties = ref([
   'id',
@@ -85,10 +87,18 @@ watch(
 )
 
 const onClickEdit = () => {
-  $modal.load('users/edit', {
-    title: 'Создание пользователя'
+  $modal.load('music/labels/form', {
+    title: 'Изменение лейбла'
   }).then(res => {
-    console.log(res)
+    browserEl.value!.reset();
+  })
+}
+
+const onClickCreate = () => {
+  $modal.load('music/labels/form', {
+    title: 'Создание лейбла'
+  }).then(res => {
+    browserEl.value!.reset();
   })
 }
 
@@ -106,7 +116,6 @@ const onChangeSelectedTab = (tabIndex: number) => {
   selectedTab.value = tabIndex;
 }
 
-
 const onItemUpdated = (_item: IItem) => {
   item.value = _item
 }
@@ -114,6 +123,7 @@ const onItemUpdated = (_item: IItem) => {
 
 <template>
   <Browser
+      ref="browserEl"
       h1="Музыкальные лейблы"
       url-prefix="music/labels"
       :columns="columns"
@@ -122,6 +132,11 @@ const onItemUpdated = (_item: IItem) => {
       detail-subtitle-property="name_ru"
       @itemUpdated="onItemUpdated"
   >
+    <template #rightSide>
+      <div class="btn__group">
+        <Button @click="onClickCreate" :class="['--small --success']">Создать</Button>
+      </div>
+    </template>
     <template #browserDetailHeader>
       <div class="btn__group">
         <Button @click="onClickEdit" :class="['--big --outline-primary']">Изменить</Button>

@@ -1,16 +1,12 @@
 <script setup lang="ts">
-import type { Component, PropType } from 'vue'
 import BrowserSmall from '~/components/Base/BrowserSmall/BrowserSmall.vue'
 import { prepareDuration } from '~/helpers/functions-for-table-columns';
 
 type IItem = {[key: string]: any}
 
-const props = defineProps({
-  item: {
-    type: Object as PropType<IItem>,
-    required: false
-  }
-})
+const props = defineProps<{
+  item?: IItem,
+}>()
 
 const columns = [
   {

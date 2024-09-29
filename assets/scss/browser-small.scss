@@ -29,6 +29,7 @@
     font-size: 22px;
     margin-top: 20px;
     color: var(--color-4, #757575);
+    user-select: none;
   }
 
   &__spinner-container {

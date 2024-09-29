@@ -1,14 +1,9 @@
 <script setup lang="ts">
-import type { PropType } from 'vue'
-
 import FlexTable, { type IItem } from '~/components/Base/FlexTable.vue'
 
-const props = defineProps({
-  item: {
-    type: Object as PropType<IItem>,
-    required: false
-  }
-})
+const props = defineProps<{
+  item?: IItem,
+}>()
 
 const config = ref([
   {
