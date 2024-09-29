@@ -8,7 +8,10 @@ import FormDatetime from '@/components/Base/Form/Datetime.vue'
 import FormTextArea from '@/components/Base/Form/TextArea'
 import FormInputFile from '@/components/Base/Form/InputFile'
 
-const emit = defineEmits(['modal:resolve'])
+const emit = defineEmits([
+    'modal:resolve',
+    'modal:close'
+])
 
 const { $authFetch } = useNuxtApp()
 
@@ -175,7 +178,7 @@ onMounted(async () => {
     <template #footer>
       <div class="btn__group">
         <button class="btn --primary --big" @click="onClickSave()">Сохранить</button>
-        <button class="btn --outline-primary --big" @click="$emit('modal:close')">Отмена</button>
+        <button class="btn --outline-primary --big" @click="emit('modal:close')">Отмена</button>
       </div>
     </template>
   </Form>

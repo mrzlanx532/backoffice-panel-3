@@ -115,7 +115,7 @@ const onClickCreate = async () => {
     method: 'GET',
   })
 
-  $modal.load('users/edit', {
+  $modal.load('users/form', {
     title: 'Создание пользователя',
     formResponse
   }).then(res => {
@@ -126,10 +126,14 @@ const onClickCreate = async () => {
 const onClickEdit = async () => {
   const formResponse = await $authFetch(`http://backoffice-api.lsmlocal.ru/users/form`, {
     method: 'GET',
+    params: {
+      id: item.value!.id
+    }
   })
 
-  $modal.load('users/edit', {
+  $modal.load('users/form', {
     title: 'Изменение пользователя',
+    id: item.value!.id,
     formResponse
   }).then(res => {
     console.log(res)
