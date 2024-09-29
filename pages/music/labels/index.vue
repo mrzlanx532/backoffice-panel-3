@@ -10,7 +10,8 @@ import TracksTab from '~/pages/music/labels/_tabs/-tracks.vue'
 import AlbumsTab from '~/pages/music/labels/_tabs/-albums.vue'
 
 const {
-  $modal
+  $modal,
+  $authFetch
 } = useNuxtApp()
 
 definePageMeta({
@@ -86,9 +87,18 @@ watch(
     }
 )
 
-const onClickEdit = () => {
+const onClickEdit = async () => {
+  const formResponse = await $authFetch(`http://backoffice-api.lsmlocal.ru/music/labels/form`, {
+    method: 'GET',
+    params: {
+      id: item.value!.id,
+    },
+  })
+
   $modal.load('music/labels/form', {
-    title: 'Изменение лейбла'
+    title: 'Изменение лейбла',
+    id: item.value!.id,
+    formResponse
   }).then(res => {
     browserEl.value!.reset();
   })
@@ -96,7 +106,7 @@ const onClickEdit = () => {
 
 const onClickCreate = () => {
   $modal.load('music/labels/form', {
-    title: 'Создание лейбла'
+    title: 'Создание лейбла',
   }).then(res => {
     browserEl.value!.reset();
   })

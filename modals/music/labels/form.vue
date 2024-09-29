@@ -26,7 +26,7 @@ const formDataValues = reactive({
   'ident': '',
   'description_ru': '',
   'description_en': '',
-  'picture': '',
+  'logo': '',
 })
 
 const formData = [
@@ -67,7 +67,7 @@ const formData = [
     class: '--full',
   },
   {
-    name: 'picture',
+    name: 'logo',
     label: 'Изображение',
     component: FormInputFile,
     class: '--full',
@@ -80,7 +80,7 @@ const formData = [
 const onClickSave = async () => {
   let formData = formDataValues
 
-  if (formData.picture instanceof File) {
+  if (formData.logo instanceof File) {
 
     formData = new FormData()
 

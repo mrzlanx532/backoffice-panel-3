@@ -42,6 +42,15 @@ const columns = [
 const filters = ref({
   'label_id': [props.item!.id]
 })
+
+watch(
+    () => props.item,
+    (value) => {
+      filters.value = {
+        'label_id': [value!.id]
+      }
+    }
+)
 </script>
 
 <template>

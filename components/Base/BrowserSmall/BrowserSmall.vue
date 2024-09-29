@@ -358,6 +358,13 @@ const onSearchStringInput = (value: string) => {
   fetchData()
 }
 
+watch(
+    () => props.filters,
+    () => {
+      fetchData()
+    }
+)
+
 onMounted(() => {
   fetchData().then(() => {
     firstLoadingIsActive.value = false
