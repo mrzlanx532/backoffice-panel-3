@@ -8,6 +8,7 @@ import FormDate from '@/components/Base/Form/Date'
 import FormTextArea from '@/components/Base/Form/TextArea'
 import FormInputFile from '@/components/Base/Form/InputFile'
 import moment from 'moment'
+import { getFormDataValues, formRequestBody } from '~/helpers/common.ts'
 
 const emit = defineEmits(['modal:resolve'])
 
@@ -22,16 +23,16 @@ const props = defineProps({
   }
 })
 
-const formDataValues = reactive({
-  'name_ru': '',
-  'name_en': '',
-  'author_id': '',
-  'label_id': '',
-  'release_date': '',
-  'description_ru': '',
-  'description_en': '',
-  'picture': '',
-})
+const formDataValues = getFormDataValues([
+  'name_ru',
+  'name_en',
+  'author_id',
+  'label_id',
+  'release_date',
+  'description_ru',
+  'description_en',
+  'picture',
+])
 
 const formData = [
   {
@@ -68,7 +69,7 @@ const formData = [
     component: FormDate,
     class: '--full',
     componentData: {
-      returnFormat: 'DD.MM.yyyy',
+      format: 'DD.MM.yyyy',
     }
   },
   {
@@ -95,27 +96,9 @@ const formData = [
 ]
 
 const onClickSave = async () => {
-  let formData = formDataValues
+  let formData = formRequestBody(formDataValues, props.data.id)
 
-  if (formData.picture instanceof File) {
-
-    formData = new FormData()
-
-    if (props.data.id !== undefined) {
-      formData.append('id', props.data.id)
-    }
-
-    Object.entries(formDataValues).map(([key, value]) => {
-      formData.append(key, value)
-    })
-  }
-
-  let method = 'create'
-
-  if (props.data.id !== undefined) {
-    method = 'update'
-    formData.id = props.data.id
-  }
+  const method = props.data.id === undefined ? 'create' : 'update'
 
   try {
     await $authFetch(`http://backoffice-api.lsmlocal.ru/music/albums/${method}`, {
