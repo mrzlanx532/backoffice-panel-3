@@ -7,6 +7,7 @@ import FormSelect from '@/components/Base/Form/Select'
 import FormDatetime from '@/components/Base/Form/Datetime.vue'
 import FormTextArea from '@/components/Base/Form/TextArea'
 import FormInputFile from '@/components/Base/Form/InputFile'
+import { formRequestBody } from '~/helpers/common.ts'
 
 const emit = defineEmits([
     'modal:resolve',
@@ -90,35 +91,19 @@ const formData = [
 ]
 
 const onClickSave = async () => {
-  let formData = formDataValues
-
-  if (formData.cover instanceof File) {
-
-    formData = new FormData()
-
-    if (props.data.id !== undefined) {
-      formData.append('id', props.data.id)
-    }
-
-    Object.entries(formDataValues).map(([key, value]) => {
-      formData.append(key, value)
-    })
-  }
+  let formData = formRequestBody(formDataValues, props.data.id)
 
   let method = 'create'
 
   if (props.data.id !== undefined) {
     method = 'update'
-    formData.id = props.data.id
   }
 
   try {
 
-    const preparedFormData = JSON.parse(JSON.stringify(formData))
-
     await $authFetch(`http://backoffice-api.lsmlocal.ru/blog/posts/${method}`, {
       method: 'POST',
-      body: preparedFormData,
+      body: formData,
     })
 
     emit('modal:resolve')
