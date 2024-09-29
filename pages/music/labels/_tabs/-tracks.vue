@@ -2,6 +2,10 @@
 import BrowserSmall from '~/components/Base/BrowserSmall/BrowserSmall.vue'
 import { prepareDuration } from '~/helpers/functions-for-table-columns';
 
+import { useRouter } from '#imports'
+
+const router = useRouter()
+
 type IItem = {[key: string]: any}
 
 const props = defineProps<{
@@ -51,10 +55,15 @@ watch(
       }
     }
 )
+
+const onClickRow = (item: IItem) => {
+  router.push('/music/' + item.id)
+}
 </script>
 
 <template>
   <BrowserSmall
+      @click-row="onClickRow"
       :filters="filters"
       :columns="columns"
       url-prefix="music/labels/tracks"

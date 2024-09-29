@@ -98,6 +98,10 @@ interface IFilter {
   }
 }
 
+const emit = defineEmits([
+  'clickRow',
+])
+
 const runtimeConfig = useRuntimeConfig()
 const { $authFetch } = useNuxtApp()
 
@@ -331,18 +335,7 @@ const callPreset = (methodName: string, configItem: IConfigItem, item: IItem) =>
 }
 
 const onClickRow = (item: IItem) => {
-
-  /*if (id.value === item.id) {
-    id.value = null
-
-    emit('clickRow', id.value)
-
-    return
-  }
-
-  id.value = item.id
-
-  emit('clickRow', id.value)*/
+  emit('clickRow', item)
 }
 
 const onChangePage = (page: number) => {

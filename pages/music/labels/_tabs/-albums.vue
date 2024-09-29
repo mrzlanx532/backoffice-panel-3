@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { useRouter } from '#imports'
+
+const router = useRouter()
+
 import BrowserSmall from '~/components/Base/BrowserSmall/BrowserSmall.vue'
 
 type IItem = {[key: string]: any}
@@ -40,10 +44,15 @@ watch(
       }
     }
 )
+
+const onClickRow = (item: IItem) => {
+  router.push('/music/albums/' + item.id)
+}
 </script>
 
 <template>
   <BrowserSmall
+      @click-row="onClickRow"
       :filters="filters"
       :columns="columns"
       url-prefix="music/labels/albums"

@@ -1,7 +1,7 @@
 <template>
   <Detail
       :h1="h1"
-      url-prefix="music/tracks"
+      url-prefix="music"
       :data-id="entityId"
       @itemUpdated="onItemUpdated"
   >
