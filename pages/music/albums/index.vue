@@ -159,14 +159,14 @@ const onTabChange = (tab: number) => {
   >
     <template #rightSide>
       <div class="btn__group">
-        <Button @click="onClickCreate" :classes="['--small --primary']">Добавить</Button>
+        <Button @click="onClickCreate" :class="['--small --success']">Добавить</Button>
       </div>
     </template>
 
     <template #browserDetailHeader>
       <div class="btn__group">
-        <Button @click="onClickEdit" :classes="['--big --outline-primary']">Изменить</Button>
-        <Button @click="onClickDelete" :classes="['--big --outline-danger']">Удалить</Button>
+        <Button @click="onClickEdit" :class="['--big --outline-primary']">Изменить</Button>
+        <Button @click="onClickDelete" :class="['--big --outline-danger']">Удалить</Button>
       </div>
       <Tabs :tabs="tabs" @change="onTabChange"/>
     </template>
