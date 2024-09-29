@@ -25,7 +25,10 @@ const requestProperties = ref([
   'created_at'
 ])
 
-const { $modal } = useNuxtApp()
+const {
+  $modal,
+  $authFetch,
+} = useNuxtApp()
 
 const selectedTab = ref(0)
 
@@ -107,9 +110,27 @@ const onItemUpdated = (newItem: IItem) => {
   item.value = newItem
 }
 
-const onClickEdit = () => {
+const onClickCreate = async () => {
+  const formResponse = await $authFetch(`http://backoffice-api.lsmlocal.ru/users/form`, {
+    method: 'GET',
+  })
+
   $modal.load('users/edit', {
-    title: 'Создание пользователя'
+    title: 'Создание пользователя',
+    formResponse
+  }).then(res => {
+    console.log(res)
+  })
+}
+
+const onClickEdit = async () => {
+  const formResponse = await $authFetch(`http://backoffice-api.lsmlocal.ru/users/form`, {
+    method: 'GET',
+  })
+
+  $modal.load('users/edit', {
+    title: 'Изменение пользователя',
+    formResponse
   }).then(res => {
     console.log(res)
   })
@@ -138,7 +159,7 @@ const onClickDelete = () => {
   >
     <template #rightSide>
       <div class="btn__group">
-        <Button @click="onClickEdit" :class="['--small --success']">Добавить</Button>
+        <Button @click="onClickCreate" :class="['--small --success']">Добавить</Button>
       </div>
     </template>
 

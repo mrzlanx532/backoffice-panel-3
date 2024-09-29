@@ -141,8 +141,11 @@ export default {
           {
             name: 'company_business_type_id',
             label: 'Направление работы компании',
-            component: FormInput,
-            class: '--full'
+            component: FormSelect,
+            class: '--full',
+            componentData: {
+              options: []
+            }
           },
           {
             name: 'job_title',
@@ -164,7 +167,10 @@ export default {
           {
             name: 'company_country_id',
             label: 'Страна',
-            component: FormInput,
+            component: FormSelect,
+            componentData: {
+              options: []
+            }
           },
           {
             name: 'company_city',
