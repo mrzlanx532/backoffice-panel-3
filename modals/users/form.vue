@@ -11,6 +11,7 @@ import Tabs from '~/components/Base/Tabs.vue'
 import Form from '~/components/Base/Form.vue'
 import { useNuxtApp } from '#app'
 import { onMounted } from 'vue'
+import { getFormDataValues, formRequestBody } from '~/helpers/common.ts'
 
 const emit = defineEmits([
     'modal:resolve',
@@ -30,27 +31,27 @@ const selectedTab = ref(0)
 
 const errors = ref([])
 
-const formDataValues = reactive({
-  'first_name': '',
-  'last_name': '',
-  'email': '',
-  'phone': '',
-  'locale_id': '',
-  'about': '',
-  'picture': '',
-  'is_checked': '',
-  'company_name': '',
-  'company_business_type_id': '',
-  'job_title': '',
-  'company_url': '',
-  'company_index': '',
-  'company_country_id': '',
-  'company_city': '',
-  'subscription_type_id': '',
-  'subscription_till': '',
-  'subscription_till_for_exclusive_tracks': '',
-  'subscription_labels': '',
-})
+const formDataValues = getFormDataValues([
+  'first_name',
+  'last_name',
+  'email',
+  'phone',
+  'locale_id',
+  'about',
+  'picture',
+  'is_checked',
+  'company_name',
+  'company_business_type_id',
+  'job_title',
+  'company_url',
+  'company_index',
+  'company_country_id',
+  'company_city',
+  'subscription_type_id',
+  'subscription_till',
+  'subscription_till_for_exclusive_tracks',
+  'subscription_labels',
+])
 
 const tabs = shallowRef([
   {
@@ -266,26 +267,12 @@ const onChangeFormData = (param, value) => {
 
 const onClickSave = async () => {
 
-  let formData = formDataValues
+  let formData = formRequestBody(formDataValues, props.data!.id)
 
-  if (formData.picture instanceof File) {
-
-    formData = new FormData()
-
-    Object.entries(formData).map(([key, value]) => {
-      formData.append(key, value)
-    })
-  }
-
-  let method = 'create'
-
-  if (props.data!.id !== undefined) {
-    method = 'update'
-    formData.id = props.data!.id
-  }
+  const method = props.data!.id === undefined ? 'create' : 'update'
 
   try {
-    const response = await $authFetch(`http://backoffice-api.lsmlocal.ru/users/${method}`, {
+    await $authFetch(`http://backoffice-api.lsmlocal.ru/users/${method}`, {
       method: 'POST',
       body: formData,
     })
@@ -317,7 +304,7 @@ onMounted(async () => {
     })
   })
 
-  if (props.data.id !== undefined) {
+  if (props.data!.id !== undefined) {
     Object.keys(formDataValues).map((key) => {
       formDataValues[key] = formResponse.entity[key]
     })

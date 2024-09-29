@@ -5,6 +5,7 @@ import Form from '@/components/Base/Form'
 import FormInput from '@/components/Base/Form/Input.jsx'
 import FormTextArea from '@/components/Base/Form/TextArea'
 import FormInputFile from '@/components/Base/Form/InputFile'
+import { getFormDataValues, formRequestBody } from '~/helpers/common.ts'
 
 const emit = defineEmits(['modal:resolve'])
 
@@ -19,15 +20,15 @@ const props = defineProps({
   }
 })
 
-const formDataValues = reactive({
-  'name_ru': '',
-  'name_en': '',
-  'subtitle': '',
-  'ident': '',
-  'description_ru': '',
-  'description_en': '',
-  'logo': '',
-})
+const formDataValues = getFormDataValues([
+  'name_ru',
+  'name_en',
+  'subtitle',
+  'ident',
+  'description_ru',
+  'description_en',
+  'logo',
+])
 
 const formData = [
   {
@@ -78,27 +79,9 @@ const formData = [
 ]
 
 const onClickSave = async () => {
-  let formData = formDataValues
+  let formData = formRequestBody(formDataValues, props.data.id)
 
-  if (formData.logo instanceof File) {
-
-    formData = new FormData()
-
-    if (props.data.id !== undefined) {
-      formData.append('id', props.data.id)
-    }
-
-    Object.entries(formDataValues).map(([key, value]) => {
-      formData.append(key, value)
-    })
-  }
-
-  let method = 'create'
-
-  if (props.data.id !== undefined) {
-    method = 'update'
-    formData.id = props.data.id
-  }
+  const method = props.data.id === undefined ? 'create' : 'update'
 
   try {
     await $authFetch(`http://backoffice-api.lsmlocal.ru/music/labels/${method}`, {
