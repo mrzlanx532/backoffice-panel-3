@@ -11,7 +11,8 @@ import AlbumsTab from '~/pages/music/labels/_tabs/-albums.vue'
 
 const {
   $modal,
-  $authFetch
+  $authFetch,
+  $notification
 } = useNuxtApp()
 
 definePageMeta({
@@ -99,7 +100,7 @@ const onClickEdit = async () => {
     title: 'Изменение лейбла',
     id: item.value!.id,
     formResponse
-  }).then(res => {
+  }).then(() => {
     browserEl.value!.reset();
   })
 }
@@ -107,7 +108,7 @@ const onClickEdit = async () => {
 const onClickCreate = () => {
   $modal.load('music/labels/form', {
     title: 'Создание лейбла',
-  }).then(res => {
+  }).then(() => {
     browserEl.value!.reset();
   })
 }
@@ -115,9 +116,17 @@ const onClickCreate = () => {
 const onClickDelete = () => {
   $modal.confirm({
     'question': 'Вы уверены?',
-  }).then(confirm => {
+  }).then(async confirm => {
     if (confirm) {
-      console.log('Удаляем!!')
+      await $authFetch('http://backoffice-api.lsmlocal.ru/music/labels/delete', {
+        method: 'POST',
+        body: {
+          id: item.value!.id
+        }
+      })
+
+      browserEl.value!.reset()
+      $notification.push({type: 'success', message: 'Лейбл удален'})
     }
   })
 }
