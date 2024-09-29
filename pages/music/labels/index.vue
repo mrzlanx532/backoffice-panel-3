@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineAsyncComponent, type Ref } from 'vue'
+import { type Ref } from 'vue'
 import { definePageMeta, useNuxtApp } from '#imports'
 
 import Browser, { type IItem } from '~/components/Base/Browser/Browser.vue'
@@ -153,7 +153,7 @@ const onItemUpdated = (_item: IItem) => {
   >
     <template #rightSide>
       <div class="btn__group">
-        <Button @click="onClickCreate" :class="['--small --success']">Создать</Button>
+        <Button @click="onClickCreate" :class="['--small --success']">Добавить</Button>
       </div>
     </template>
     <template #browserDetailHeader>
