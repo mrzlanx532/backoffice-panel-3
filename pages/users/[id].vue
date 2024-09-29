@@ -88,8 +88,8 @@ const h1 = ref('Пользователь ' + entityId)
   >
     <template #header>
       <div class="btn__group">
-        <Button :classes="['--big --outline-primary']">Изменить</Button>
-        <Button :classes="['--big --outline-danger']">Удалить</Button>
+        <Button :class="['--big --outline-primary']">Изменить</Button>
+        <Button :class="['--big --outline-danger']">Удалить</Button>
       </div>
     </template>
     <template #content>
