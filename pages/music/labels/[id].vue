@@ -76,7 +76,7 @@ const onClickEdit = async () => {
     id: item.value!.id,
     formResponse
   }).then(() => {
-    browserEl.value!.reset();
+    $notification.push({type: 'success', message: 'Лейбл изменен'})
   })
 }
 
@@ -91,8 +91,6 @@ const onClickDelete = () => {
           id: item.value!.id
         }
       })
-
-      browserEl.value!.reset()
       $notification.push({type: 'success', message: 'Лейбл удален'})
     }
   })
