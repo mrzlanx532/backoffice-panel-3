@@ -1,8 +1,19 @@
 import { cloneDeep } from 'lodash-es'
+import type { Reactive } from 'vue'
 
 type IItem = {[key: string]: any}
 
-export const formRequestBody = (formDataValues: IItem, id: number|undefined = undefined) => {
+export const getFormDataValues = (formDataPropertyNames: string[]): Reactive<IItem> => {
+    const preparedFormDataValues: IItem = {}
+
+    formDataPropertyNames.map((propertyName) => {
+        preparedFormDataValues[propertyName] = undefined
+    })
+
+    return reactive(preparedFormDataValues)
+}
+
+export const formRequestBody = (formDataValues: IItem, id: number|undefined = undefined): IItem|FormData => {
 
     const _formDataValues = cloneDeep(formDataValues)
 

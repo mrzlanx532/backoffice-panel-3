@@ -7,7 +7,7 @@ import FormSelect from '@/components/Base/Form/Select'
 import FormDatetime from '@/components/Base/Form/Datetime.vue'
 import FormTextArea from '@/components/Base/Form/TextArea'
 import FormInputFile from '@/components/Base/Form/InputFile'
-import { formRequestBody } from '~/helpers/common.ts'
+import { getFormDataValues, formRequestBody } from '~/helpers/common.ts'
 
 const emit = defineEmits([
     'modal:resolve',
@@ -25,15 +25,15 @@ const props = defineProps({
   }
 })
 
-const formDataValues = reactive({
-  'locale_id': undefined,
-  'category_id': undefined,
-  'name': undefined,
-  'date': undefined,
-  'cover': undefined,
-  'content_short': undefined,
-  'content': undefined,
-})
+const formDataValues = getFormDataValues([
+    'locale_id',
+    'category_id',
+    'name',
+    'date',
+    'cover',
+    'content_short',
+    'content'
+])
 
 const formData = [
   {
@@ -91,19 +91,15 @@ const formData = [
 ]
 
 const onClickSave = async () => {
-  let formData = formRequestBody(formDataValues, props.data.id)
+  let requestBody = formRequestBody(formDataValues, props.data.id)
 
-  let method = 'create'
-
-  if (props.data.id !== undefined) {
-    method = 'update'
-  }
+  const method = props.data.id === undefined ? 'create' : 'update'
 
   try {
 
     await $authFetch(`http://backoffice-api.lsmlocal.ru/blog/posts/${method}`, {
       method: 'POST',
-      body: formData,
+      body: requestBody,
     })
 
     emit('modal:resolve')
