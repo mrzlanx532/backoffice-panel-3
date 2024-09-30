@@ -1,8 +1,92 @@
+<script setup lang="ts">
+import Section from '@/components/Base/Section.vue'
+import Detail from '@/components/Base/Detail.vue'
+import Button from '@/components/Base/Button.vue'
+import Tabs from '@/components/Base/Tabs.vue';
+import StateButton from '@/components/Base/StateButton.vue';
+import MainTab from '@/pages/music/_tabs/-main.vue'
+
+import { useRoute } from '#imports'
+
+type IItem = {[key: string]: any}
+
+const route = useRoute()
+
+const item: IItem = ref({})
+const selectedTab = ref(0)
+const selectedState = ref({})
+
+const tabs = ref([
+  {
+    title: 'Инфо',
+    content: MainTab
+  },
+  {
+    title: 'Правообладатели',
+    content: MainTab
+  },
+  {
+    title: 'Вариации',
+    content: MainTab
+  },
+  {
+    title: 'Стемы',
+    content: MainTab
+  },
+  {
+    title: 'Лирика',
+    content: MainTab
+  },
+  {
+    title: 'Плейлисты',
+    content: MainTab
+  },
+  {
+    title: 'Еще раздел',
+    content: MainTab
+  },
+  {
+    title: 'И еще раздел',
+    content: MainTab
+  },
+],)
+
+const stateOptions = ref([
+  {
+    id: 'PUBLISHED',
+    title: 'Опубликован',
+    class: '--success'
+  },
+  {
+    id: 'DRAFT',
+    title: 'Черновик',
+    class: '--default'
+  },
+  {
+    id: 'DISABLED',
+    title: 'Отключен',
+    class: '--danger'
+  }
+])
+
+const onItemUpdated = (_item: IItem) => {
+  item.value = _item
+}
+
+const onChangeTab = (index: number) => {
+  selectedTab.value = index
+}
+
+const onChangeStateButton = (option) => {
+  selectedState.value = option
+}
+</script>
+
 <template>
   <Detail
-      :h1="h1"
+      :h1="'Трек #' + route.params.id"
       url-prefix="music"
-      :data-id="entityId"
+      :data-id="route.params.id"
       @itemUpdated="onItemUpdated"
   >
     <template #header>
@@ -27,7 +111,7 @@
               <Tabs :tabs="tabs"/>
             </template>
             <template v-slot:content>
-              <component :is="{...selectedTabMap.content}" :item="item"/>
+
             </template>
           </Section>
         </Transition>
@@ -35,138 +119,3 @@
     </template>
   </Detail>
 </template>
-<script>
-import Section from "@/components/Base/Section"
-import Detail from "@/components/Base/Detail"
-import Button from "@/components/Base/Button"
-import { detailConfig } from "@/parts/reports"
-import Spinner from "@/components/Base/Spinner";
-import MainTab from "~/pages/music/_tabs/-main"
-import Tabs from "@/components/Base/Tabs";
-import StateButton from "@/components/Base/StateButton";
-import { useRoute } from '#imports'
-
-export default {
-  setup() {
-    const route = useRoute()
-
-    const entityId = route.params.id
-
-    return {
-      entityId
-    }
-  },
-  name: 'UserDetail',
-  components: {
-    Section,
-    Detail,
-    Button,
-    Spinner,
-    MainTab,
-    Tabs,
-    StateButton
-  },
-  computed: {
-    h1: function () {
-      return 'Трек #' + this.entityId
-    },
-    selectedTabMap: function () {
-      return this.tabs[this.selectedTab]
-    }
-  },
-  asyncData({params}) {
-    return {
-      entityId: params.id
-    }
-  },
-  watch: {
-    item: function () {
-      if (Object.keys(this.item).length === 0) {
-        return {}
-      }
-
-      const classesByState = {
-        PUBLISHED: '--success',
-        DRAFT: '--default',
-        DISABLED: '--danger',
-      }
-
-      this.selectedState = {
-        'id': this.item.state.id,
-        'title': this.item.state.title,
-        'class': classesByState[this.item.state.id]
-      }
-    }
-  },
-  data() {
-    return {
-      detailConfig,
-      selectedTab: 0,
-      item: {},
-      selectedState: {},
-      stateOptions: [
-        {
-          id: 'PUBLISHED',
-          title: 'Опубликован',
-          class: '--success'
-        },
-        {
-          id: 'DRAFT',
-          title: 'Черновик',
-          class: '--default'
-        },
-        {
-          id: 'DISABLED',
-          title: 'Отключен',
-          class: '--danger'
-        }
-      ],
-      tabs: [
-        {
-          title: 'Инфо',
-          content: MainTab
-        },
-        {
-          title: 'Правообладатели',
-          content: MainTab
-        },
-        {
-          title: 'Вариации',
-          content: MainTab
-        },
-        {
-          title: 'Стемы',
-          content: MainTab
-        },
-        {
-          title: 'Лирика',
-          content: MainTab
-        },
-        {
-          title: 'Плейлисты',
-          content: MainTab
-        },
-        {
-          title: 'Еще раздел',
-          content: MainTab
-        },
-        {
-          title: 'И еще раздел',
-          content: MainTab
-        },
-      ],
-    }
-  },
-  methods: {
-    onItemUpdated(item) {
-      this.item = item
-    },
-    onChangeTab(index) {
-      this.selectedTab = index
-    },
-    onChangeStateButton(option) {
-      this.selectedState = option
-    }
-  }
-}
-</script>
