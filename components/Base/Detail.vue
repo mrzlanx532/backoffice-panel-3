@@ -1,8 +1,7 @@
 <script setup>
 import BaseLink from "@/components/Base/BaseLink"
-import { useRouter } from '#imports'
 
-const router = useRouter()
+const emit = defineEmits(['itemUpdated'])
 
 const props = defineProps({
   urlPrefix: {
@@ -17,8 +16,6 @@ const props = defineProps({
     required: false
   }
 })
-
-const emit = defineEmits(['itemUpdated'])
 </script>
 
 <template>

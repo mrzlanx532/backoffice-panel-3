@@ -6,6 +6,6 @@ const props = defineProps<{
 
 <template>
   <div class="badge">
-    {{ title }}
+    {{ props.title }}
   </div>
 </template>
