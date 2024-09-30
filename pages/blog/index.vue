@@ -2,10 +2,9 @@
 import { definePageMeta, useNuxtApp } from '#imports'
 import type { Ref } from 'vue'
 import Button from '@/components/Base/Button.vue'
-import Section from '@/components/Base/Section.vue'
 import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue';
-import FlexTable from '@/components/Base/FlexTable.vue'
 import Badge from '@/components/Base/Browser/ColumnComponents/Badge.vue'
+import Content from '@/pages/blog/_parts/content.vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -94,34 +93,6 @@ const requestProperties = ref([
   'company_country',
   'company_city',
   'subscription_type'
-])
-
-const config = shallowRef([
-  {
-    name: 'category_id',
-    title: 'Категория',
-    columnClass: 6,
-    toFormat(item: IItem) {
-        return `${item?.category?.name_ru}`
-    },
-  },
-  {
-    name: 'date',
-    title: 'Дата',
-    columnClass: 6,
-  },
-  {
-    name: 'created_at',
-    title: 'Добавлен',
-    columnClass: 6,
-    preset: { name: 'timestampToFormatPreset' },
-  },
-  {
-    name: 'updated_at',
-    title: 'Изменен',
-    columnClass: 6,
-    preset: { name: 'timestampToFormatPreset' },
-  },
 ])
 
 const onItemUpdated = (newItem: IItem) => {
@@ -241,25 +212,7 @@ const onChangeState = async () => {
       </div>
     </template>
     <template #browserDetailContent>
-      <div class="section__group">
-        <Section>
-          <template v-slot:header>
-            Краткое содержание
-          </template>
-          <template v-slot:content>
-            {{ item.content_short ?? '[Не заполнено]' }}
-          </template>
-        </Section>
-        <Section>
-          <template v-slot:header>
-            Полное содержание
-          </template>
-          <template v-slot:content>
-            {{ item.content ?? '[Не заполнено]'}}
-          </template>
-        </Section>
-        <FlexTable :config="config" :item="item"/>
-      </div>
+      <Content :item="item"/>
     </template>
   </Browser>
 </template>
