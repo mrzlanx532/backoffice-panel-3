@@ -1,10 +1,9 @@
+<script setup lang="ts">
+
+</script>
+
 <template>
   <div id="app">
-    <slot />
+    <slot/>
   </div>
 </template>
-<script>
-export default {
-  name: "empty"
-}
-</script>

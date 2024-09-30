@@ -1,10 +1,14 @@
+<script setup lang="ts">
+import SideMenu from '@/components/Base/SideMenu.vue'
+</script>
+
 <template>
   <div id="app">
     <div class="container">
       <SideMenu/>
       <div class="page">
         <div class="page__container">
-          <slot />
+          <slot/>
         </div>
       </div>
     </div>
@@ -12,14 +16,3 @@
     <Notification/>
   </div>
 </template>
-<script>
-
-import SideMenu from "@/components/Base/SideMenu"
-
-export default {
-  name: 'default',
-  components: {
-    SideMenu,
-  }
-}
-</script>

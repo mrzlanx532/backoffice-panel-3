@@ -11,7 +11,7 @@ import Tabs from '~/components/Base/Tabs.vue'
 import Form from '~/components/Base/Form.vue'
 import { useNuxtApp } from '#app'
 import { onMounted } from 'vue'
-import { getFormDataValues, formRequestBody } from '~/helpers/common.ts'
+import { getFormDataValues, formRequestBody } from '~/helpers/common'
 
 const emit = defineEmits([
     'modal:resolve',
