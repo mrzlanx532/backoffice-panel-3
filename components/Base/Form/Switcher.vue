@@ -41,8 +41,8 @@
         <input type="checkbox" v-model="checked" hidden="hidden">
         <span class="switch__slider round" @click="onClick"></span>
       </div>
-      <span class="switch__label" @click="onClick">{{ label }}</span>
+      <span class="switch__label" @click="onClick">{{ props.label }}</span>
     </div>
-    <div class="input__error">{{ errors && errors[0] ? errors[0] : null }}</div>
+    <div class="input__error">{{ props.errors && props.errors[0] ? props.errors[0] : null }}</div>
   </div>
 </template>

@@ -3,7 +3,7 @@ import { nextTick } from 'vue'
 
 const emit = defineEmits(['update:modelValue'])
 
-const textareaEl: Ref<HTMLElement, null> = ref(null)
+const textareaEl: Ref<HTMLElement|null> = ref(null)
 
 const internalValue = ref('')
 
@@ -55,8 +55,8 @@ const onInput = () => {
 
 <template>
   <div>
-    <label class="label">{{ label }}</label>
+    <label class="label">{{ props.label }}</label>
     <textarea class="textarea" @input="onInput" ref="textareaEl" v-model="internalValue"/>
-    <div class="input__error">{{ errors && errors[0] ? errors[0] : null }}</div>
+    <div class="input__error">{{ props.errors && props.errors[0] ? props.errors[0] : null }}</div>
   </div>
 </template>
