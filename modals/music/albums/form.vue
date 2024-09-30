@@ -101,7 +101,7 @@ const onClickSave = async () => {
   const method = props.data.id === undefined ? 'create' : 'update'
 
   try {
-    await $authFetch(`http://backoffice-api.lsmlocal.ru/music/albums/${method}`, {
+    await $authFetch(`music/albums/${method}`, {
       method: 'POST',
       body: formData,
     })

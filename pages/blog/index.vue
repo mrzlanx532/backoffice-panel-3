@@ -134,7 +134,7 @@ const onClickDelete = () => {
       return
     }
 
-    await $authFetch(`http://backoffice-api.lsmlocal.ru/blog/posts/delete`, {
+    await $authFetch('blog/posts/delete', {
       method: 'POST',
       body: {
         id: item.value.id,
@@ -149,7 +149,7 @@ const onClickDelete = () => {
 }
 
 const onClickEdit = async () => {
-  const formResponse = await $authFetch(`http://backoffice-api.lsmlocal.ru/blog/posts/form`, {
+  const formResponse = await $authFetch(`blog/posts/form`, {
     method: 'GET',
     params: {
       id: item.value.id,
@@ -167,7 +167,7 @@ const onClickEdit = async () => {
 }
 
 const onClickCreate = async () => {
-  const formResponse = await $authFetch(`http://backoffice-api.lsmlocal.ru/blog/posts/form`, {
+  const formResponse = await $authFetch(`blog/posts/form`, {
     method: 'GET',
     params: {
       id: item.value.id,
@@ -194,7 +194,7 @@ const onChangeState = async () => {
 
     const prefix = item.value.state.id === 'DRAFT' ? 'publish' : 'withdraw'
 
-    await $authFetch(`http://backoffice-api.lsmlocal.ru/blog/posts/${prefix}`, {
+    await $authFetch(`blog/posts/${prefix}`, {
       method: 'POST',
       body: {
         id: item.value.id,

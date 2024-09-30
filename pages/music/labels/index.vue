@@ -89,7 +89,7 @@ watch(
 )
 
 const onClickEdit = async () => {
-  const formResponse = await $authFetch(`http://backoffice-api.lsmlocal.ru/music/labels/form`, {
+  const formResponse = await $authFetch(`music/labels/form`, {
     method: 'GET',
     params: {
       id: item.value!.id,
@@ -118,7 +118,7 @@ const onClickDelete = () => {
     'question': 'Вы уверены?',
   }).then(async confirm => {
     if (confirm) {
-      await $authFetch('http://backoffice-api.lsmlocal.ru/music/labels/delete', {
+      await $authFetch('music/labels/delete', {
         method: 'POST',
         body: {
           id: item.value!.id

@@ -18,7 +18,6 @@ const {
 type IItem = {[key: string]: any}
 
 const route = useRoute()
-const runtimeConfig = useRuntimeConfig()
 
 const selectedTab = ref(0)
 
@@ -56,7 +55,7 @@ const onItemUpdated = (item: IItem) => {
 
 const response = await useAsyncData(
     'blog_detail',
-    () => $authFetch(`${runtimeConfig.public.laravelAuth.domain}/music/labels/detail`, {
+    () => $authFetch('music/labels/detail', {
       params: {
         id: route.params.id,
       }
@@ -64,7 +63,7 @@ const response = await useAsyncData(
 )
 
 const onClickEdit = async () => {
-  const formResponse = await $authFetch(`http://backoffice-api.lsmlocal.ru/music/labels/form`, {
+  const formResponse = await $authFetch('music/labels/form', {
     method: 'GET',
     params: {
       id: item.value!.id,
@@ -85,7 +84,7 @@ const onClickDelete = () => {
     'question': 'Вы уверены?',
   }).then(async confirm => {
     if (confirm) {
-      await $authFetch('http://backoffice-api.lsmlocal.ru/music/labels/delete', {
+      await $authFetch('music/labels/delete', {
         method: 'POST',
         body: {
           id: item.value!.id

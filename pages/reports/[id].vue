@@ -15,11 +15,9 @@ const route = useRoute()
 
 const { $authFetch } = useNuxtApp()
 
-const runtimeConfig = useRuntimeConfig()
-
 const response = await useAsyncData(
     'report_detail',
-    () => $authFetch(`${runtimeConfig.public.laravelAuth.domain}/reports/detail`, {
+    () => $authFetch('reports/detail', {
       params: {
         id: route.params.id,
       }

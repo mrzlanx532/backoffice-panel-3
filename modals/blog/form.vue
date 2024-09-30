@@ -97,7 +97,7 @@ const onClickSave = async () => {
 
   try {
 
-    await $authFetch(`http://backoffice-api.lsmlocal.ru/blog/posts/${method}`, {
+    await $authFetch(`blog/posts/${method}`, {
       method: 'POST',
       body: requestBody,
     })

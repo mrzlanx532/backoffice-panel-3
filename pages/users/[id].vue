@@ -12,7 +12,6 @@ const { $authFetch } = useNuxtApp()
 type IItem = {[key: string]: any}
 
 const route = useRoute()
-const runtimeConfig = useRuntimeConfig()
 
 const selectedTab = ref(0)
 
@@ -67,7 +66,7 @@ const onItemUpdated = (item: IItem) => {
 
 const response = await useAsyncData(
     'blog_detail',
-    () => $authFetch(`${runtimeConfig.public.laravelAuth.domain}/users/detail`, {
+    () => $authFetch('users/detail', {
       params: {
         id: route.params.id,
       }

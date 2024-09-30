@@ -91,7 +91,7 @@ const onClickDelete = () => {
       return
     }
 
-    await $authFetch(`http://backoffice-api.lsmlocal.ru/reports/delete`, {
+    await $authFetch('reports/delete', {
       method: 'POST',
       body: {
         id: item.value.id,

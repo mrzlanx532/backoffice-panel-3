@@ -10,7 +10,6 @@ import FlexTable from '@/components/Base/FlexTable.vue'
 
 const { $authFetch } = useNuxtApp()
 const route = useRoute()
-const runtimeConfig = useRuntimeConfig()
 
 type IItem = {[key: string]: any}
 
@@ -48,7 +47,7 @@ const detailOptions = ref([
 
 const response = await useAsyncData(
     'blog_detail',
-    () => $authFetch(`${runtimeConfig.public.laravelAuth.domain}/blog/posts/detail`, {
+    () => $authFetch('blog/posts/detail', {
       params: {
         id: route.params.id,
       }

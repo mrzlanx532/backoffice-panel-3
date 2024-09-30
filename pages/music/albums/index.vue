@@ -86,7 +86,7 @@ const columns = shallowRef([
 ])
 
 const onClickCreate = async () => {
-  const formResponse = await $authFetch('http://backoffice-api.lsmlocal.ru/music/albums/form', {
+  const formResponse = await $authFetch('music/albums/form', {
     method: 'GET',
   })
 
@@ -101,7 +101,7 @@ const onClickCreate = async () => {
 
 const onClickEdit = async () => {
 
-  const formResponse = await $authFetch('http://backoffice-api.lsmlocal.ru/music/albums/form', {
+  const formResponse = await $authFetch('music/albums/form', {
     method: 'GET',
     params: {
       id: item.value!.id
@@ -121,7 +121,7 @@ const onClickEdit = async () => {
 const onClickDelete = () => {
   $modal.confirm().then( async (isAgree) => {
     if (isAgree) {
-      await $authFetch('http://backoffice-api.lsmlocal.ru/music/albums/delete', {
+      await $authFetch('music/albums/delete', {
         method: 'POST',
         body: {
           id: item.value!.id

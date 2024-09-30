@@ -111,7 +111,7 @@ const onItemUpdated = (newItem: IItem) => {
 }
 
 const onClickCreate = async () => {
-  const formResponse = await $authFetch(`http://backoffice-api.lsmlocal.ru/users/form`, {
+  const formResponse = await $authFetch('users/form', {
     method: 'GET',
   })
 
@@ -124,7 +124,7 @@ const onClickCreate = async () => {
 }
 
 const onClickEdit = async () => {
-  const formResponse = await $authFetch(`http://backoffice-api.lsmlocal.ru/users/form`, {
+  const formResponse = await $authFetch('users/form', {
     method: 'GET',
     params: {
       id: item.value!.id
