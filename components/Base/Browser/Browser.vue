@@ -19,6 +19,11 @@ import BrowserTHeadTh from "@/components/Base/Browser/BrowserTHeadTh.vue";
 import Spinner from "@/components/Base/Spinner.vue"
 import BrowserDetail from "@/components/Base/Browser/BrowserDetail.vue";
 
+export interface IBrowser {
+  reset: (isUpdateItem?: boolean) => void,
+  closeDetail: () => void
+}
+
 interface Props {
   itemPrimaryKeyPropertyName?: string,
   columns: IColumn[],

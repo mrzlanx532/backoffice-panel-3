@@ -5,6 +5,7 @@ import Button from '@/components/Base/Button.vue'
 import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue';
 import Badge from '@/components/Base/Browser/ColumnComponents/Badge.vue'
 import Content from '@/pages/blog/_parts/content.vue'
+import { type IBrowser } from '~/components/Base/Browser/Browser.vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -18,12 +19,7 @@ const {
 
 const item: Ref<IItem> = ref({})
 
-interface IBrowserEl {
-  reset: (isUpdateItem?: boolean) => void,
-  closeDetail: () => void
-}
-
-const browserEl: Ref<IBrowserEl|null> = ref(null)
+const browserEl: Ref<IBrowser|null> = ref(null)
 
 const columns = shallowRef([
   {
