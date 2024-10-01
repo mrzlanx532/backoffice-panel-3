@@ -3,7 +3,7 @@ import { definePageMeta, useNuxtApp } from '#imports'
 import { type Ref } from 'vue'
 
 import Button from '~/components/Base/Button.vue'
-import Browser, { type IItem } from '~/components/Base/Browser/Browser.vue'
+import Browser, { type IBrowser, type IItem } from '~/components/Base/Browser/Browser.vue'
 import Tabs from '~/components/Base/Tabs.vue'
 import TabMain from '~/pages/music/albums/_tabs/-main.vue'
 import TabTracks from '~/pages/music/albums/_tabs/-tracks.vue'
@@ -20,7 +20,7 @@ const {
 
 const item: Ref<IItem|null> = ref(null)
 
-const browserEl: Ref<HTMLElement|null> = ref(null)
+const browserEl: Ref<IBrowser|null> = ref(null)
 
 const requestProperties = ref([
   'id',
@@ -94,7 +94,7 @@ const onClickCreate = async () => {
     title: 'Создание альбома',
     formResponse
   }).then(() => {
-    browserEl.value.reset()
+    browserEl.value!.reset()
     $notification.push({type: 'success', message: 'Альбом добавлен'})
   })
 }
@@ -113,7 +113,7 @@ const onClickEdit = async () => {
     id: item.value!.id,
     formResponse
   }).then(() => {
-    browserEl.value.reset()
+    browserEl.value!.reset()
     $notification.push({type: 'success', message: 'Альбом обновлен'})
   })
 }
@@ -128,7 +128,7 @@ const onClickDelete = () => {
         }
       })
 
-      browserEl.value.reset()
+      browserEl.value!.reset()
       $notification.push({type: 'success', message: 'Альбом удален'})
     }
   })

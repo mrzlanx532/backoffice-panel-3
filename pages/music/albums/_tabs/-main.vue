@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Section from '~/components/Base/Section.vue'
 import FlexTable from '~/components/Base/FlexTable.vue'
 
 const config = ref([
@@ -12,18 +11,18 @@ const config = ref([
     name: 'created_at',
     title: 'Создан',
     preset: {name: 'timestampToFormatPreset'},
-    columnClass: 6
+    columnClass: 4
   },
   {
     name: 'updated_at',
     title: 'Изменен',
     preset: {name: 'timestampToFormatPreset'},
-    columnClass: 6,
+    columnClass: 4,
   },
   {
     name: 'tracks_counter',
     title: 'Кол-во треков',
-    columnClass: 6,
+    columnClass: 4,
   },
 ])
 
@@ -35,12 +34,5 @@ const props = defineProps({
 </script>
 
 <template>
-  <Section>
-    <template #header>
-      Инфо
-    </template>
-    <template #content>
-      <FlexTable :item="item" :config="config"/>
-    </template>
-  </Section>
+    <FlexTable :item="props.item" :config="config"/>
 </template>
