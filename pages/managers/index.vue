@@ -45,11 +45,15 @@ const onItemUpdated = (item: IItem) => {
 <template>
   <Browser
       h1="Менеджеры"
-      url-prefix="managers"
-      :columns="columns"
-      :request-properties="requestProperties"
+      url-prefix="managers/browse"
+
+      detail-url-prefix="managers/detail"
       detail-title-property="id"
       detail-subtitle-property="name"
+
+      :columns="columns"
+      :request-properties="requestProperties"
+
       @itemUpdated="onItemUpdated"
   />
 </template>

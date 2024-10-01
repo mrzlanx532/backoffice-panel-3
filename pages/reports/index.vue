@@ -114,11 +114,16 @@ const onChangeTab = (index: number) => {
   <Browser
       ref="browserEl"
       h1="Отчеты"
-      url-prefix="reports"
-      :columns="columns"
-      :request-properties="requestProperties"
+      url-prefix="reports/browse"
+
+      detail-url-prefix="reports/detail"
       detail-title-property="id"
       detail-subtitle-property="name"
+      detail-page-url-prefix="reports"
+
+      :columns="columns"
+      :request-properties="requestProperties"
+
       @itemUpdated="onItemUpdated"
   >
     <template #browserDetailHeader>

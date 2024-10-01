@@ -25,14 +25,17 @@ export interface IBrowser {
 }
 
 interface Props {
-  itemPrimaryKeyPropertyName?: string,
+  urlPrefix: string,
+  detailUrlPrefix: string,
+
   columns: IColumn[],
-  urlPrefix: string
   requestProperties?: string[],
+
   h1?: string,
   browserFetchUrl?: string,
   browserDetailFetchUrl?: string,
-  detailPageUrlPrefix?: string,
+  itemPrimaryKeyPropertyName?: string,
+  detailPageUrlPrefix: string,
   detailTitleProperty?: string,
   detailSubtitleProperty?: string
 }
@@ -158,12 +161,8 @@ const localRequestProperties: Ref<{} | null> = ref(
         null
 )
 
-const fetchURL = computed(() => {
-  return `${runtimeConfig.public.laravelAuth.domain}/${props.urlPrefix}/browse`
-})
-
 const detailPageUrl = computed(() => {
-  return '/' + (props.detailPageUrlPrefix ? `${props.detailPageUrlPrefix}/${id.value}` : `${props.urlPrefix}/${id.value}`)
+  return `/${props.detailPageUrlPrefix}/${id.value}`
 })
 
 const fetchData = async () => {
@@ -203,7 +202,7 @@ const fetchData = async () => {
 
   try {
 
-    const data = await $authFetch(unref(fetchURL.value), config)
+    const data = await $authFetch(props.urlPrefix, config)
 
     fetchError.value = null
     totalItems.value = data.meta.count
@@ -555,8 +554,7 @@ defineExpose({
         :data-id="id"
         :title-property="detailTitleProperty"
         :subtitle-property="detailSubtitleProperty"
-        :url-prefix="urlPrefix + '/detail'"
-        :browser-detail-fetch-url="browserDetailFetchUrl"
+        :url-prefix="props.detailUrlPrefix"
         :detail-page-url-prefix="detailPageUrl"
         @close="onCloseDetail"
         @itemUpdated="onItemUpdated"

@@ -178,12 +178,16 @@ const onChangeState = async () => {
   <Browser
       ref="browserEl"
       h1="Статьи блога"
-      url-prefix="blog/posts"
-      :columns="columns"
-      :request-properties="requestProperties"
+      url-prefix="blog/posts/browse"
+      detail-url-prefix="blog/posts/detail"
+
       detail-title-property="id"
       detail-subtitle-property="name"
       detail-page-url-prefix="blog"
+
+      :columns="columns"
+      :request-properties="requestProperties"
+
       @itemUpdated="onItemUpdated"
   >
     <template #rightSide>

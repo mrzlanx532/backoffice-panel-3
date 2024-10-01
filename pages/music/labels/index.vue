@@ -144,11 +144,16 @@ const onItemUpdated = (_item: IItem) => {
   <Browser
       ref="browserEl"
       h1="Музыкальные лейблы"
-      url-prefix="music/labels"
-      :columns="columns"
-      :request-properties="requestProperties"
+      url-prefix="music/labels/browse"
+
+      detail-url-prefix="music/labels/detail"
       detail-title-property="id"
       detail-subtitle-property="name_ru"
+      detail-page-url-prefix="music/labels"
+
+      :columns="columns"
+      :request-properties="requestProperties"
+
       @itemUpdated="onItemUpdated"
   >
     <template #rightSide>

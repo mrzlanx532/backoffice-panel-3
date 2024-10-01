@@ -39,11 +39,16 @@ const onItemUpdated = (item: IItem) => {
 <template>
   <Browser
       h1="Плейлисты музыкальных треков"
-      url-prefix="music/playlists"
-      :columns="columns"
-      :request-properties="requestProperties"
+      url-prefix="music/playlists/browse"
+
+      detail-url-prefix="music/playlists/detail"
       detail-title-property="id"
       detail-subtitle-property="name_ru"
+      detail-page-url-prefix="music/playlists"
+
+      :columns="columns"
+      :request-properties="requestProperties"
+
       @itemUpdated="onItemUpdated"
   />
 </template>

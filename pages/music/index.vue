@@ -1,12 +1,16 @@
 <template>
   <Browser
       h1="Каталог музыкальных треков"
-      url-prefix="music/tracks"
-      :columns="columns"
-      :request-properties="requestProperties"
+      url-prefix="music/tracks/browse"
+
+      detail-url-prefix="music/tracks/detail"
       detail-title-property="id"
       detail-subtitle-property="name"
       detail-page-url-prefix="music"
+
+      :columns="columns"
+      :request-properties="requestProperties"
+
       @itemUpdated="onItemUpdated"
   >
     <template #rightSide>

@@ -8,12 +8,11 @@ const emit = defineEmits([
 ])
 
 const props = withDefaults(defineProps<{
-  titleProperty: string,
   dataId: number|null,
-  subtitleProperty?: string,
+  urlPrefix: string,
   detailPageUrlPrefix: string,
-  browserDetailFetchUrl?: string,
-  urlPrefix?: string,
+  titleProperty?: string,
+  subtitleProperty?: string,
 }>(), {
   titleProperty: 'id'
 })

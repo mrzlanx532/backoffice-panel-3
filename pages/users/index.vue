@@ -35,23 +35,23 @@ const selectedTab = ref(0)
 const tabs = [
   {
     title: 'Инфо',
-    componentName: '-main'
+    componentName: 'main'
   },
   {
     title: 'Подписка',
-    componentName: '-subscription'
+    componentName: 'subscription'
   },
   {
     title: 'Скачанное (музыка)',
-    componentName: '-downloaded_music'
+    componentName: 'downloaded_music'
   },
   {
     title: 'Скачанное (шумы)',
-    componentName: '-downloaded_sounds'
+    componentName: 'downloaded_sounds'
   },
   {
     title: 'Отчеты',
-    componentName: '-reports'
+    componentName: 'reports'
   },
 ]
 
@@ -154,11 +154,16 @@ const onClickDelete = () => {
 <template>
   <Browser
       h1="Каталог пользователей"
-      url-prefix="users"
-      :columns="columns"
-      :request-properties="requestProperties"
+      url-prefix="users/browse"
+
+      detail-url-prefix="users/detail"
       detail-title-property="id"
       detail-subtitle-property="name"
+      detail-page-url-prefix="users"
+
+      :columns="columns"
+      :request-properties="requestProperties"
+
       @itemUpdated="onItemUpdated"
   >
     <template #rightSide>

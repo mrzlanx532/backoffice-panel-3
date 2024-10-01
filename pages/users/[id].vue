@@ -18,23 +18,23 @@ const selectedTab = ref(0)
 const tabs = [
   {
     title: 'Инфо',
-    componentName: '-main'
+    componentName: 'main'
   },
   {
     title: 'Подписка',
-    componentName: '-subscription'
+    componentName: 'subscription'
   },
   {
     title: 'Скачанное (музыка)',
-    componentName: '-subscription'
+    componentName: 'subscription'
   },
   {
     title: 'Скачанное (шумы)',
-    componentName: '-subscription'
+    componentName: 'subscription'
   },
   {
     title: 'Отчеты',
-    componentName: '-subscription'
+    componentName: 'subscription'
   },
 ]
 

@@ -147,11 +147,16 @@ const onTabChange = (tab: number) => {
   <Browser
       ref="browserEl"
       h1="Альбомы музыкальных треков"
-      url-prefix="music/albums"
-      :columns="columns"
-      :request-properties="requestProperties"
+      url-prefix="music/albums/browse"
+
+      detail-url-prefix="music/albums/detail"
       detail-title-property="id"
       detail-subtitle-property="name_ru"
+      detail-page-url-prefix="music/albums"
+
+      :columns="columns"
+      :request-properties="requestProperties"
+
       @itemUpdated="onItemUpdated"
   >
     <template #rightSide>
