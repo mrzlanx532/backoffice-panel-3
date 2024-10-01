@@ -3,7 +3,7 @@ import FlexTable from '~/components/Base/FlexTable.vue'
 
 const config = ref([
   {
-    name: 'description',
+    name: 'description_ru',
     title: 'Описание',
     columnClass: 12
   },

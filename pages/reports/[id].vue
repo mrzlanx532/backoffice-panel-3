@@ -6,8 +6,8 @@ import { useNuxtApp, useRoute } from '#imports'
 import { ref } from 'vue'
 import { useAsyncData } from '#app'
 import Tabs from '@/components/Base/Tabs.vue'
-import TabMain from '~/pages/reports/_tabs/-main.vue'
-import TabTracks from '~/pages/reports/_tabs/-tracks.vue'
+import TabMain from '~/pages/reports/_tabs/main.vue'
+import TabTracks from '~/pages/reports/_tabs/tracks.vue'
 
 type IItem = {[key: string]: any}
 

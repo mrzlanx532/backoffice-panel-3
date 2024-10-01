@@ -5,9 +5,9 @@ import { useNuxtApp, useRoute, useAsyncData } from '#imports'
 import Detail from '@/components/Base/Detail.vue'
 import Button from '@/components/Base/Button.vue'
 import Tabs from '@/components/Base/Tabs.vue'
-import MainTab from '~/pages/music/labels/_tabs/-main.vue'
-import TracksTab from '~/pages/music/labels/_tabs/-tracks.vue'
-import AlbumsTab from '~/pages/music/labels/_tabs/-albums.vue'
+import MainTab from '~/pages/music/labels/_tabs/main.vue'
+import TracksTab from '~/pages/music/labels/_tabs/tracks.vue'
+import AlbumsTab from '~/pages/music/labels/_tabs/albums.vue'
 
 const {
   $modal,

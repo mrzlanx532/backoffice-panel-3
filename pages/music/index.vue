@@ -50,7 +50,7 @@ import { prepareDuration } from '~/helpers/functions-for-table-columns';
 import Section from '~/components/Base/Section';
 import Button from '~/components/Base/Button';
 import Tabs from '~/components/Base/Tabs';
-import MainTab from '~/pages/music/_tabs/-main.vue'
+import MainTab from '~/pages/music/_tabs/main.vue'
 import StateButton from '~/components/Base/StateButton';
 
 export default {

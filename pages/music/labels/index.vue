@@ -5,9 +5,9 @@ import { definePageMeta, useNuxtApp } from '#imports'
 import Browser, { type IItem } from '~/components/Base/Browser/Browser.vue'
 import Tabs from '~/components/Base/Tabs.vue'
 import Button from '~/components/Base/Button.vue'
-import MainTab from '~/pages/music/labels/_tabs/-main.vue'
-import TracksTab from '~/pages/music/labels/_tabs/-tracks.vue'
-import AlbumsTab from '~/pages/music/labels/_tabs/-albums.vue'
+import MainTab from '~/pages/music/labels/_tabs/main.vue'
+import TracksTab from '~/pages/music/labels/_tabs/tracks.vue'
+import AlbumsTab from '~/pages/music/labels/_tabs/albums.vue'
 
 const {
   $modal,

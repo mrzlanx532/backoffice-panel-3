@@ -4,7 +4,7 @@ import Detail from '@/components/Base/Detail.vue'
 import Button from '@/components/Base/Button.vue'
 import Tabs from '@/components/Base/Tabs.vue';
 import StateButton from '@/components/Base/StateButton.vue';
-import MainTab from '@/pages/music/_tabs/-main.vue'
+import MainTab from '~/pages/music/_tabs/main.vue'
 
 import { useRoute } from '#imports'
 
