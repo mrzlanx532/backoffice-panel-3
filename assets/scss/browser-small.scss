@@ -117,6 +117,10 @@
         background-color: var(--color-1, #ffffff);
         border-top: 1px solid var(--color-2, #dbdbdb);
 
+        &.--disable-cursor, &.--disable-cursor:hover {
+            cursor: default;
+        }
+
         td {
           font-family: "Roboto";
           font-size: 13px;

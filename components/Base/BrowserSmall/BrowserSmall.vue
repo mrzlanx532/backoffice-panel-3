@@ -23,15 +23,17 @@ interface Props {
     [key: string]: any[]
   }
   itemPrimaryKeyPropertyName?: string,
-  columns: IColumn[],
   urlPrefix: string,
+  columns?: IColumn[],
   requestProperties?: string[],
-  isEnabledTHead?: boolean
+  isEnabledTHead?: boolean,
+  customTr?: Component
 }
 
 const props = withDefaults(defineProps<Props>(), {
   itemPrimaryKeyPropertyName: 'id',
-  isEnabledTHead: true
+  isEnabledTHead: true,
+  columns: () => [] as IColumn[],
 })
 
 enum FilterType {
@@ -418,22 +420,27 @@ onMounted(() => {
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="item in items" :key="item[itemPrimaryKeyPropertyName]" @click="onClickRow(item)">
-                  <td v-for="column in columns">
-                    <template v-if="column.hasOwnProperty('component')">
-                      <component :is="column.component" :item="item" :column="column"/>
-                    </template>
-                    <template v-else-if="column.hasOwnProperty('preset')">
-                      {{ callPreset(column.preset!.name, column as IConfigItem, item)}}
-                    </template>
-                    <template v-else-if="column.toFormat">
-                      {{ column.toFormat(item) }}
-                    </template>
-                    <template v-else>
-                      {{ item[column.name] }}
-                    </template>
-                  </td>
-                </tr>
+                  <template v-if="props.customTr">
+                    <component :is="props.customTr" v-for="item in items" :item="item" :key="item[itemPrimaryKeyPropertyName]" @click="onClickRow(item)"/>
+                  </template>
+                  <template v-else>
+                    <tr v-for="item in items" :key="item[itemPrimaryKeyPropertyName]" @click="onClickRow(item)">
+                      <td v-for="column in columns">
+                        <template v-if="column.hasOwnProperty('component')">
+                          <component :is="column.component" :item="item" :column="column"/>
+                        </template>
+                        <template v-else-if="column.hasOwnProperty('preset')">
+                          {{ callPreset(column.preset!.name, column as IConfigItem, item)}}
+                        </template>
+                        <template v-else-if="column.toFormat">
+                          {{ column.toFormat(item) }}
+                        </template>
+                        <template v-else>
+                          {{ item[column.name] }}
+                        </template>
+                      </td>
+                    </tr>
+                  </template>
                 </tbody>
               </table>
             </template>

@@ -2,6 +2,7 @@
 import BrowserSmall, { type IColumn } from '~/components/Base/BrowserSmall/BrowserSmall.vue'
 import type { Ref } from 'vue'
 import { prepareDuration } from '~/helpers/functions-for-table-columns'
+import TracksTr from '~/components/CustomTr/TrackTr.vue'
 
 type IItem = {[key: string]: any}
 
@@ -50,6 +51,7 @@ watch(
 
 <template>
   <BrowserSmall
+    :custom-tr="TracksTr"
     url-prefix="music/albums/tracks/browse"
     :columns="columns"
     :filters="filters"
