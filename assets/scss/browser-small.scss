@@ -1,6 +1,10 @@
 .browser-small {
   min-height: 100%;
 
+  &.--is-disabled-thead tr:first-child {
+    border-top: none;
+  }
+
   &__paginator {
     display: flex;
     justify-content: space-between;

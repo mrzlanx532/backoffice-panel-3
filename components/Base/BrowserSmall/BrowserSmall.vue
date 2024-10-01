@@ -26,10 +26,12 @@ interface Props {
   columns: IColumn[],
   urlPrefix: string,
   requestProperties?: string[],
+  isEnabledTHead?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   itemPrimaryKeyPropertyName: 'id',
+  isEnabledTHead: true
 })
 
 enum FilterType {
@@ -46,7 +48,7 @@ interface IUnpreparedFilterValue {
   value: string[]|number[]|null[]|null|string
 }
 
-interface IColumn {
+export interface IColumn {
   name: string,
   title: string,
   toFormat?: (item: {[key: string]: any}) => {}
@@ -361,7 +363,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="browser-small">
+  <div class="browser-small" :class="{'--is-disabled-thead': !isEnabledTHead}">
     <ClientOnly>
       <Transition name="fade">
         <div
@@ -404,7 +406,7 @@ onMounted(() => {
             </div>
             <template v-if="items.length">
               <table class="browser-small__table" :class="{'--loading': loadingIsActive}">
-                <thead>
+                <thead v-if="isEnabledTHead">
                 <tr>
                   <BrowserTHeadTh
                       @sortChanged="onSortChanged"
