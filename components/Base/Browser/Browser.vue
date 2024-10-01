@@ -555,7 +555,7 @@ defineExpose({
         :data-id="id"
         :title-property="detailTitleProperty"
         :subtitle-property="detailSubtitleProperty"
-        :url-prefix="urlPrefix"
+        :url-prefix="urlPrefix + '/detail'"
         :browser-detail-fetch-url="browserDetailFetchUrl"
         :detail-page-url-prefix="detailPageUrl"
         @close="onCloseDetail"

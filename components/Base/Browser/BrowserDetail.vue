@@ -1,3 +1,85 @@
+<script setup lang="ts">
+import { useSlots } from 'vue'
+import { useNuxtApp } from '#imports'
+
+const emit = defineEmits([
+  'close',
+  'itemUpdated'
+])
+
+const props = withDefaults(defineProps<{
+  titleProperty: string,
+  dataId: number|null,
+  subtitleProperty?: string,
+  detailPageUrlPrefix: string,
+  browserDetailFetchUrl?: string,
+  urlPrefix?: string,
+}>(), {
+  titleProperty: 'id'
+})
+
+const {
+  $authFetch
+} = useNuxtApp()
+
+const isLoading = ref(false)
+const isClosing = ref(false)
+const setTimeoutInstance = ref(null)
+
+type IItem = {[key: string]: any}
+
+const item: IItem  = ref({})
+
+const slots = useSlots()
+
+watch(
+    () => props.dataId,
+    (newValue) => {
+
+      if (setTimeoutInstance.value) {
+        clearTimeout(setTimeoutInstance.value)
+      }
+
+      if (newValue === null) {
+        item.value = {}
+
+        isClosing.value = true
+
+        setTimeout(() => {
+          isClosing.value = false
+        }, 500)
+        return
+      }
+
+      fetchData()
+    }
+)
+
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    item.value = await $authFetch(props.urlPrefix, {
+      params: {
+        id: props.dataId
+      }
+    })
+
+  } catch (err) {
+    throw err
+  }
+
+  isLoading.value = false
+
+  emit('itemUpdated', item.value)
+}
+
+const onClickCloseButton = () => {
+  emit('close');
+}
+
+</script>
+
 <template>
   <div
       class="browser-detail"
@@ -18,7 +100,7 @@
                 {{ item[titleProperty]}}
               </div>
               <div class="browser-detail__header-subtitle">
-                {{ item[subtitleProperty]}}
+                {{ subtitleProperty ? item[subtitleProperty] : null }}
               </div>
             </div>
             <div class="browser-detail__header-buttons">
@@ -36,7 +118,7 @@
               </div>
             </div>
           </div>
-          <div class="browser-detail__header-second-row" v-if="isSlotHeaderExists">
+          <div class="browser-detail__header-second-row" v-if="slots.header">
             <slot name="header"/>
           </div>
         </div>
@@ -46,116 +128,3 @@
     </div>
   </div>
 </template>
-<script>
-import Button from "@/components/Base/Button"
-import Spinner from "@/components/Base/Spinner";
-import {useSlots} from "vue";
-import {useRouter} from "#imports";
-
-export default {
-  setup() {
-    const slots = useSlots()
-
-    const isSlotHeaderExists = () => {
-      return !!slots.header
-    }
-
-    const router = useRouter()
-
-    const runtimeConfig = useRuntimeConfig()
-
-    return {
-      isSlotHeaderExists,
-      router,
-      runtimeConfig
-    }
-  },
-  name: 'BrowserDetail',
-  components: {
-    Button,
-    Spinner
-  },
-  props: {
-    titleProperty: {
-      required: true,
-      default: 'id'
-    },
-    subtitleProperty: {
-      required: false
-    },
-    dataId: {
-      required: true
-    },
-    detailPageUrlPrefix: {
-      type: String,
-      required: false
-    },
-    browserDetailFetchUrl: {
-      type: String,
-      required: false,
-    },
-    urlPrefix: {
-      type: String,
-      required: false
-    },
-  },
-  computed: {
-    fetchURL: function () {
-      return `${this.runtimeConfig.public.laravelAuth.domain}/${this.urlPrefix}/detail`
-    },
-  },
-  data() {
-    return {
-      item: {},
-      isLoading: false,
-      isClosing: false,
-      setTimeoutInstance: null
-    }
-  },
-  watch: {
-    dataId: function (newValue) {
-
-      if (this.setTimeoutInstance) {
-        clearTimeout(this.setTimeoutInstance)
-      }
-
-      if (newValue === null) {
-        this.item = {}
-
-        this.isClosing = true
-
-        const vue = this
-
-        setTimeout(function() {
-          vue.isClosing = false
-        }, 500)
-        return
-      }
-
-      this.fetchData()
-    }
-  },
-  methods: {
-    onClickCloseButton() {
-      this.$emit('close');
-    },
-    async fetchData() {
-      this.isLoading = true
-      try {
-
-        this.item = await this.$authFetch(unref(this.fetchURL), {
-          params: {
-            id: this.dataId
-          }
-        })
-
-      } catch (err) {
-        throw err
-      }
-      this.isLoading = false
-
-      this.$emit('itemUpdated', this.item)
-    }
-  }
-}
-</script>
