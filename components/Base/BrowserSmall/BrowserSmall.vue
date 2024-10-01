@@ -102,7 +102,6 @@ const emit = defineEmits([
   'clickRow',
 ])
 
-const runtimeConfig = useRuntimeConfig()
 const { $authFetch } = useNuxtApp()
 
 const filters: Ref<IFilter[]> = ref([])
@@ -129,10 +128,6 @@ const filterMapper = shallowRef({
 /** sorts */
 const sorts: Ref<{[key: string]: any}> = ref({})
 const activeSort: Ref<string|null> = ref(null)
-
-const fetchURL = computed(() => {
-  return `${runtimeConfig.public.laravelAuth.domain}/${props.urlPrefix}/browse`
-})
 
 const localRequestProperties: Ref<{} | null> = ref(
     props.requestProperties ?
@@ -220,7 +215,7 @@ const fetchData = async () => {
 
   try {
 
-    const data = await $authFetch(unref(fetchURL.value), config)
+    const data = await $authFetch(props.urlPrefix, config)
 
     fetchError.value = null
     totalItems.value = data.meta.count

@@ -66,6 +66,6 @@ const onClickRow = (item: IItem) => {
       @click-row="onClickRow"
       :filters="filters"
       :columns="columns"
-      url-prefix="music/labels/tracks"
+      url-prefix="music/labels/tracks/browse"
   />
 </template>
