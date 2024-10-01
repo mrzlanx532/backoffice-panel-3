@@ -53,7 +53,6 @@ watch(
   <BrowserSmall
     :custom-tr="TracksTr"
     url-prefix="music/albums/tracks/browse"
-    :columns="columns"
     :filters="filters"
     :is-enabled-t-head="false"
   />
