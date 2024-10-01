@@ -4,7 +4,7 @@ import Section from '~/components/Base/Section.vue'
 import { ref } from 'vue'
 
 const props = defineProps<{
-  item: IItem
+  item: IItem|null
 }>()
 
 type IItem = {[key: string]: any}
@@ -49,7 +49,7 @@ const options = ref([
       Краткое содержание
     </template>
     <template v-slot:content>
-      {{ props.item.content_short ?? '[Не заполнено]' }}
+      {{ props.item?.content_short ?? '[Не заполнено]' }}
     </template>
   </Section>
   <Section>
@@ -57,7 +57,7 @@ const options = ref([
       Полное содержание
     </template>
     <template v-slot:content>
-      {{ item.content ?? '[Не заполнено]' }}
+      {{ props.item?.content ?? '[Не заполнено]' }}
     </template>
     </Section>
     <FlexTable :config="options" :item="props.item"/>

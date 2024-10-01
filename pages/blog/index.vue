@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { definePageMeta, useNuxtApp } from '#imports'
-import type { Ref } from 'vue'
 import Button from '@/components/Base/Button.vue'
 import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue';
 import Badge from '@/components/Base/Browser/ColumnComponents/Badge.vue'
 import Content from '@/pages/blog/_parts/content.vue'
-import { type IBrowser } from '~/components/Base/Browser/Browser.vue'
+import { useBrowser } from '~/composables/useBrowser'
 
 definePageMeta({
   middleware: ['auth']
@@ -17,9 +16,15 @@ const {
   $authFetch
 } = useNuxtApp()
 
-const item: Ref<IItem> = ref({})
+const {
+  browserEl,
+  item,
 
-const browserEl: Ref<IBrowser|null> = ref(null)
+  onClickCreate,
+  onClickEdit,
+  onClickDelete,
+  onItemUpdated
+} = useBrowser()
 
 const columns = shallowRef([
   {
@@ -91,80 +96,21 @@ const requestProperties = ref([
   'subscription_type'
 ])
 
-const onItemUpdated = (newItem: IItem) => {
-    item.value = newItem
-}
-
-const onClickDelete = () => {
-  $modal.confirm().then(async (isAgree) => {
-    if (!isAgree) {
-      return
-    }
-
-    await $authFetch('blog/posts/delete', {
-      method: 'POST',
-      body: {
-        id: item.value.id,
-      },
-    })
-
-    $notification.push({type: 'success', message: 'Статья удалена'})
-    item.value = {}
-    browserEl.value!.reset()
-    browserEl.value!.closeDetail()
-  })
-}
-
-const onClickEdit = async () => {
-  const formResponse = await $authFetch(`blog/posts/form`, {
-    method: 'GET',
-    params: {
-      id: item.value.id,
-    },
-  })
-
-  $modal.load('blog/form', {
-    title: 'Редактирование статьи',
-    id: item.value.id,
-    formResponse
-  }).then(() => {
-    browserEl.value!.reset(true)
-    $notification.push({type: 'success', message: 'Статья отредактирована'})
-  })
-}
-
-const onClickCreate = async () => {
-  const formResponse = await $authFetch(`blog/posts/form`, {
-    method: 'GET',
-    params: {
-      id: item.value.id,
-    },
-  })
-
-  $modal.load('blog/form', {
-    title: 'Создание статьи',
-    formResponse
-  }).then(() => {
-    browserEl.value!.reset()
-    $notification.push({type: 'success', message: 'Статья добавлена'})
-  })
-}
-
 const onChangeState = async () => {
 
   $modal.confirm({
-    question: item.value.state.id === 'DRAFT' ? 'Опубликовать?' : 'Снять с публикации?'
+    question: item.value!.state.id === 'DRAFT' ? 'Опубликовать?' : 'Снять с публикации?'
   }).then(async (isAgree) => {
     if (!isAgree) {
       return
     }
 
-    const prefix = item.value.state.id === 'DRAFT' ? 'publish' : 'withdraw'
+    const prefix = item.value!.state.id === 'DRAFT' ? 'publish' : 'withdraw'
 
     await $authFetch(`blog/posts/${prefix}`, {
       method: 'POST',
       body: {
-        id: item.value.id,
+        id: item.value!.id,
       },
     })
 
@@ -192,23 +138,38 @@ const onChangeState = async () => {
   >
     <template #rightSide>
       <div class="btn__group">
-        <Button @click="onClickCreate" :class="['--small --primary']">Добавить</Button>
+        <Button
+            @click="onClickCreate('blog/posts/form', 'blog/form', 'Статья добавлена')"
+            :class="['--small --primary']"
+        >
+          Добавить
+        </Button>
       </div>
     </template>
     <template #browserDetailHeader>
       <div class="btn__group">
-        <Button @click="onClickEdit" :class="['--big --outline-primary']">Изменить</Button>
-        <Button @click="onClickDelete" :class="['--big --outline-danger']">Удалить</Button>
+        <Button
+            @click="onClickEdit('blog/posts/form', 'blog/form', 'Статья изменена')"
+            :class="['--big --outline-primary']"
+        >
+          Изменить
+        </Button>
+        <Button
+            @click="onClickDelete('blog/posts/delete', 'Статья удалена')"
+            :class="['--big --outline-danger']"
+        >
+          Удалить
+        </Button>
       </div>
       <div class="btn__group ml_10">
         <Button
             @click="onChangeState"
             :class="{
               '--big': true,
-              '--outline-contrast-success': item.state?.id === 'DRAFT',
-              '--outline-contrast-default': item.state?.id === 'PUBLISHED'
+              '--outline-contrast-success': item?.state?.id === 'DRAFT',
+              '--outline-contrast-default': item?.state?.id === 'PUBLISHED'
             }"
-        >{{ item.state && item.state.id === 'DRAFT' ? 'Опубликовать' : 'Снять с публикации' }}</Button>
+        >{{ item?.state && item.state.id === 'DRAFT' ? 'Опубликовать' : 'Снять с публикации' }}</Button>
       </div>
     </template>
     <template #browserDetailContent>
