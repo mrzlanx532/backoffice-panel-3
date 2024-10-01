@@ -86,7 +86,6 @@ const onChangeStateButton = (option) => {
   <Detail
       :h1="'Трек #' + route.params.id"
       url-prefix="music"
-      :data-id="route.params.id"
       @itemUpdated="onItemUpdated"
   >
     <template #header>

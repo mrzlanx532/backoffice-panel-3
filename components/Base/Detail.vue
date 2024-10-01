@@ -11,9 +11,6 @@ const props = defineProps({
   h1: {
     type: String,
     required: false
-  },
-  dataId: {
-    required: false
   }
 })
 </script>
