@@ -145,7 +145,7 @@ const onClick = () => {
         </div>
         <div class="input-file__image-actions">
           <div>
-            <p class="input-file__label input-file__label_allow-formats">
+            <div class="input-file__label input-file__label_allow-formats">
               <p>Разрешенные форматы:</p>
               <template v-if="componentData?.allowedTypes">
                 <code v-for="(allowedType, index) in componentData.allowedTypes">{{ allowedType }}{{ index !== componentData.allowedTypes.length - 1 ? ',' : ''}}</code>
@@ -153,7 +153,7 @@ const onClick = () => {
               <template v-else>
                 <span>все</span>
               </template>
-            </p>
+            </div>
             <p class="input-file__label input-file__label_max-size mt_10">Максимальный размер</p>
             <p class="input-file__label input-file__label_max-size"><span>{{ componentData?.maxSizeMB ? componentData.maxSizeMB + 'MB' : 'не ограничен' }}</span></p>
           </div>
