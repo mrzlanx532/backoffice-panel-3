@@ -16,7 +16,7 @@ export interface IConfigDelete {
 
 export const useBrowser = () => {
 
-    const item: Ref<IItem|null> = ref(null)
+    const item: Ref<IItem|undefined> = ref()
     const browserEl: Ref<IBrowser|null> = ref(null)
 
     const {
