@@ -139,7 +139,12 @@ const onChangeState = async () => {
     <template #rightSide>
       <div class="btn__group">
         <Button
-            @click="onClickCreate('blog/posts/form', 'blog/form', 'Статья добавлена')"
+            @click="onClickCreate({
+              formURL: 'blog/posts/form',
+              modalPath: 'blog/form',
+              modalTitle: 'Создание статьи',
+              notificationMessage: 'Статья добавлена'
+            })"
             :class="['--small --primary']"
         >
           Добавить
@@ -149,13 +154,21 @@ const onChangeState = async () => {
     <template #browserDetailHeader>
       <div class="btn__group">
         <Button
-            @click="onClickEdit('blog/posts/form', 'blog/form', 'Статья изменена')"
+            @click="onClickEdit({
+              formURL: 'blog/posts/form',
+              modalPath: 'blog/form',
+              modalTitle: 'Редактирование статьи',
+              notificationMessage: 'Статья изменена'
+            })"
             :class="['--big --outline-primary']"
         >
           Изменить
         </Button>
         <Button
-            @click="onClickDelete('blog/posts/delete', 'Статья удалена')"
+            @click="onClickDelete({
+              deleteURL: 'blog/posts/delete',
+              notificationMessage: 'Статья удалена'}
+            )"
             :class="['--big --outline-danger']"
         >
           Удалить

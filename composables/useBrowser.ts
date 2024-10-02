@@ -2,6 +2,18 @@ import { useNuxtApp } from '#imports'
 import type { Ref } from 'vue'
 import { type IItem, type IBrowser } from '@/components/Base/Browser/Browser.vue';
 
+export interface IConfigCreateEdit {
+    formURL: string,
+    modalPath: string,
+    modalTitle: string,
+    notificationMessage: string
+}
+
+export interface IConfigDelete {
+    deleteURL: string,
+    notificationMessage: string
+}
+
 export const useBrowser = () => {
 
     const item: Ref<IItem|null> = ref(null)
@@ -13,55 +25,55 @@ export const useBrowser = () => {
         $authFetch
     } = useNuxtApp()
 
-    const onClickCreate = async (formURL: string, modalPath: string, notificationMsg: string) => {
-        const formResponse = await $authFetch(formURL, {
+    const onClickCreate = async (config: IConfigCreateEdit) => {
+        const formResponse = await $authFetch(config.formURL, {
             method: 'GET',
             params: {
                 id: item.value!.id,
             },
         })
 
-        $modal.load(modalPath, {
-            title: 'Создание статьи',
+        $modal.load(config.modalPath, {
+            title: config.modalTitle,
             formResponse
         }).then(() => {
             browserEl.value!.reset()
-            $notification.push({type: 'success', message: notificationMsg})
+            $notification.push({type: 'success', message: config.notificationMessage})
         })
     }
 
-    const onClickEdit = async (formURL: string, modalPath: string, notificationMsg: string) => {
-        const formResponse = await $authFetch(formURL, {
+    const onClickEdit = async (config: IConfigCreateEdit) => {
+        const formResponse = await $authFetch(config.formURL, {
             method: 'GET',
             params: {
                 id: item.value!.id,
             },
         })
 
-        $modal.load(modalPath, {
-            title: 'Редактирование статьи',
+        $modal.load(config.modalPath, {
+            title: config.modalTitle,
             id: item.value!.id,
             formResponse
         }).then(() => {
             browserEl.value!.reset(true)
-            $notification.push({type: 'success', message: notificationMsg})
+            $notification.push({type: 'success', message: config.notificationMessage})
         })
     }
 
-    const onClickDelete = (deleteURL: string, notificationMsg: string) => {
+    const onClickDelete = (config: IConfigDelete) => {
         $modal.confirm().then(async (isAgree) => {
             if (!isAgree) {
                 return
             }
 
-            await $authFetch(deleteURL, {
+            await $authFetch(config.deleteURL, {
                 method: 'POST',
                 body: {
                     id: item.value!.id,
                 },
             })
 
-            $notification.push({type: 'success', message: notificationMsg})
+            $notification.push({type: 'success', message: config.notificationMessage})
             item.value = {}
             browserEl.value!.reset()
             browserEl.value!.closeDetail()
