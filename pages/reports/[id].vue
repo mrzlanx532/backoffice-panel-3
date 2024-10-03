@@ -37,7 +37,7 @@ const tabs = shallowRef([
   },
 ])
 
-SSRLoadDetail(item, 'reports/detail', route.params.id)
+await SSRLoadDetail(item, 'reports/detail', route.params.id)
 </script>
 <template>
   <Detail
@@ -50,7 +50,8 @@ SSRLoadDetail(item, 'reports/detail', route.params.id)
       <div class="btn__group">
         <Button @click="onClickDelete({
           deleteURL: 'reports/delete',
-          notificationMessage: 'Отчет удален'
+          notificationMessage: 'Отчет удален',
+          redirectURL: '/reports'
         })" :class="['--big --outline-danger']">Удалить</Button>
       </div>
     </template>

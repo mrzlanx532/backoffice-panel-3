@@ -51,7 +51,7 @@ const onChangeSelectedTab = (tabIndex: number) => {
   selectedTab.value = tabIndex;
 }
 
-SSRLoadDetail(item,'music/labels/detail', route.params.id)
+await SSRLoadDetail(item,'music/labels/detail', route.params.id)
 </script>
 
 <template>

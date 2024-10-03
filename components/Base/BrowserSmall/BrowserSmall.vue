@@ -22,6 +22,9 @@ interface Props {
   filters?: {
     [key: string]: any[]
   }
+  params: {
+    [key: string]: any[]
+  }
   itemPrimaryKeyPropertyName?: string,
   urlPrefix: string,
   columns?: IColumn[],
@@ -68,7 +71,8 @@ interface IRequestParams {
     direction: string
   }
   per_page: number,
-  page: number
+  page: number,
+  [key: string]: any
 }
 
 export interface IConfigItem {
@@ -190,6 +194,12 @@ const fetchData = async () => {
 
   if (props.filters) {
     requestData.filters = props.filters
+  }
+
+  if (props.params) {
+    Object.entries(props.params).map(([key, value]) => {
+      requestData[key] = value
+    })
   }
 
   if (!isEmpty(activeFilters.value)) {

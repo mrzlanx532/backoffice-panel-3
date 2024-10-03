@@ -1,6 +1,7 @@
-import { useNuxtApp, useAsyncData } from '#imports'
+import { useNuxtApp, useAsyncData, useRouter } from '#imports'
 import type { Ref } from 'vue'
 import { type IItem, type IBrowser } from '@/components/Base/Browser/Browser.vue';
+import type { RouteLocationAsPathGeneric, RouteLocationAsRelativeGeneric } from '#vue-router'
 
 export interface IConfigCreateEdit {
     formURL: string,
@@ -11,7 +12,8 @@ export interface IConfigCreateEdit {
 
 export interface IConfigDelete {
     deleteURL: string,
-    notificationMessage: string
+    notificationMessage: string,
+    redirectURL?: string | RouteLocationAsRelativeGeneric | RouteLocationAsPathGeneric
 }
 
 export const usePage = () => {
@@ -75,8 +77,17 @@ export const usePage = () => {
 
             $notification.push({type: 'success', message: config.notificationMessage})
             item.value = {}
-            browserEl.value!.reset()
-            browserEl.value!.closeDetail()
+
+            if (browserEl.value !== null) {
+                browserEl.value.reset()
+                browserEl.value.closeDetail()
+
+                return
+            }
+
+            if (config.redirectURL) {
+                await useRouter().push(config.redirectURL)
+            }
         })
     }
 
@@ -88,8 +99,15 @@ export const usePage = () => {
                 params: {
                     id: id,
                 }
-            })
+            }),
         )
+
+        if (response.status.value === 'error') {
+            throw createError({
+                statusCode: 404,
+                message: 'Страницы не существует',
+            })
+        }
 
         if (
             typeof response.data.value === 'object' &&
