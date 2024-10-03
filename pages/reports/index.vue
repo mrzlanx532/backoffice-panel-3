@@ -1,9 +1,6 @@
 <script setup lang="ts">
-import type { Ref } from 'vue'
-import { useNuxtApp } from '#imports'
-
 import Tabs from '~/components/Base/Tabs.vue'
-import Browser, { type IItem } from '~/components/Base/Browser/Browser.vue';
+import Browser from '~/components/Base/Browser/Browser.vue';
 import Button from '~/components/Base/Button.vue'
 
 import TabMain from '~/pages/reports/_tabs/main.vue'
@@ -14,20 +11,12 @@ definePageMeta({
 })
 
 const {
-  $modal,
-  $notification,
-  $authFetch
-} = useNuxtApp()
+  browserEl,
+  item,
 
-interface IBrowserEl {
-  reset: (isUpdateItem?: boolean) => void,
-  closeDetail: () => void
-}
-
-const browserEl: Ref<IBrowserEl|null> = ref(null)
-
-const id: Ref<number|null> = ref(null)
-const item: Ref<IItem|null> = ref(null)
+  onClickDelete,
+  onItemUpdated,
+} = usePage()
 
 const selectedTab = ref(0)
 
@@ -81,30 +70,6 @@ const columns = ref([
   },
 ])
 
-const onItemUpdated = (newItem: IItem) => {
-  item.value = newItem
-}
-
-const onClickDelete = () => {
-  $modal.confirm().then(async (isAgree) => {
-    if (!isAgree) {
-      return
-    }
-
-    await $authFetch('reports/delete', {
-      method: 'POST',
-      body: {
-        id: item.value.id,
-      },
-    })
-
-    $notification.push({type: 'success', message: 'Отчет удален'})
-    item.value = {}
-    browserEl.value!.reset()
-    browserEl.value!.closeDetail()
-  })
-}
-
 const onChangeTab = (index: number) => {
   selectedTab.value = index
 }
@@ -128,7 +93,10 @@ const onChangeTab = (index: number) => {
   >
     <template #browserDetailHeader>
       <div class="btn__group">
-        <Button @click="onClickDelete" :class="['--big --outline-danger']">Удалить</Button>
+        <Button @click="onClickDelete({
+          deleteURL: 'reports/delete',
+          notificationMessage: 'Отчет успешно удален'
+        })" :class="['--big --outline-danger']">Удалить</Button>
       </div>
       <Tabs :tabs="tabs" @change="onChangeTab"/>
     </template>
