@@ -1,4 +1,4 @@
-import { useNuxtApp } from '#imports'
+import { useNuxtApp, useAsyncData } from '#imports'
 import type { Ref } from 'vue'
 import { type IItem, type IBrowser } from '@/components/Base/Browser/Browser.vue';
 
@@ -80,6 +80,25 @@ export const usePage = () => {
         })
     }
 
+    const SSRLoadDetail = async (item: Ref<IItem|undefined>, detailURL: string, id: string|string[]) => {
+
+        const response = await useAsyncData(
+            detailURL.replaceAll('/', '_'),
+            () => $authFetch(detailURL, {
+                params: {
+                    id: id,
+                }
+            })
+        )
+
+        if (
+            typeof response.data.value === 'object' &&
+            response.data.value !== null
+        ) {
+            item.value = response.data.value
+        }
+    }
+
     const onItemUpdated = (_item: IItem) => {
         item.value = _item
     }
@@ -91,6 +110,8 @@ export const usePage = () => {
         onClickCreate,
         onClickEdit,
         onClickDelete,
-        onItemUpdated
+        onItemUpdated,
+
+        SSRLoadDetail
     }
 }

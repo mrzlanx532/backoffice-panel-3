@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useNuxtApp, useRoute, useAsyncData } from '#imports'
+import { useRoute } from '#imports'
 
 import Detail from '@/components/Base/Detail.vue'
 import Button from '@/components/Base/Button.vue'
@@ -10,15 +10,13 @@ import TracksTab from '~/pages/music/labels/_tabs/tracks.vue'
 import AlbumsTab from '~/pages/music/labels/_tabs/albums.vue'
 
 const {
-  $authFetch,
-} = useNuxtApp()
-
-const {
   item,
 
   onClickEdit,
   onClickDelete,
-  onItemUpdated
+  onItemUpdated,
+
+  SSRLoadDetail
 } = usePage()
 
 const route = useRoute()
@@ -53,16 +51,7 @@ const onChangeSelectedTab = (tabIndex: number) => {
   selectedTab.value = tabIndex;
 }
 
-const response = await useAsyncData(
-    'blog_detail',
-    () => $authFetch('music/labels/detail', {
-      params: {
-        id: route.params.id,
-      }
-    })
-)
-
-item.value = ref(response.data)
+SSRLoadDetail(item,'music/labels/detail', route.params.id)
 </script>
 
 <template>
