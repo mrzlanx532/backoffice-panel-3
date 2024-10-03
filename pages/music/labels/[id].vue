@@ -10,12 +10,16 @@ import TracksTab from '~/pages/music/labels/_tabs/tracks.vue'
 import AlbumsTab from '~/pages/music/labels/_tabs/albums.vue'
 
 const {
-  $modal,
   $authFetch,
-  $notification
 } = useNuxtApp()
 
-type IItem = {[key: string]: any}
+const {
+  item,
+
+  onClickEdit,
+  onClickDelete,
+  onItemUpdated
+} = usePage()
 
 const route = useRoute()
 
@@ -49,10 +53,6 @@ const onChangeSelectedTab = (tabIndex: number) => {
   selectedTab.value = tabIndex;
 }
 
-const onItemUpdated = (item: IItem) => {
-  item.value = item
-}
-
 const response = await useAsyncData(
     'blog_detail',
     () => $authFetch('music/labels/detail', {
@@ -62,55 +62,28 @@ const response = await useAsyncData(
     })
 )
 
-const onClickEdit = async () => {
-  const formResponse = await $authFetch('music/labels/form', {
-    method: 'GET',
-    params: {
-      id: item.value!.id,
-    },
-  })
-
-  $modal.load('music/labels/form', {
-    title: 'Изменение лейбла',
-    id: item.value!.id,
-    formResponse
-  }).then(() => {
-    $notification.push({type: 'success', message: 'Лейбл изменен'})
-  })
-}
-
-const onClickDelete = () => {
-  $modal.confirm({
-    'question': 'Вы уверены?',
-  }).then(async confirm => {
-    if (confirm) {
-      await $authFetch('music/labels/delete', {
-        method: 'POST',
-        body: {
-          id: item.value!.id
-        }
-      })
-      $notification.push({type: 'success', message: 'Лейбл удален'})
-    }
-  })
-}
-
-const entityId = route.params.id
-const item: IItem = ref(response.data)
-const h1 = ref('Лейбл ' + entityId)
+item.value = ref(response.data)
 </script>
 
 <template>
   <Detail
-      :h1="h1"
-      :data-id="entityId"
+      :h1="'Лейбл ' + route.params.id"
+      :data-id="route.params.id"
       url-prefix="users"
       @itemUpdated="onItemUpdated"
   >
     <template #header>
       <div class="btn__group">
-        <Button @click="onClickEdit"  :class="['--big --outline-primary']">Изменить</Button>
-        <Button @click="onClickDelete" :class="['--big --outline-danger']">Удалить</Button>
+        <Button @click="onClickEdit({
+          formURL: 'music/labels/form',
+          modalPath: 'music/labels/form',
+          modalTitle: 'Редактировать лейбл',
+          notificationMessage: 'Лейбл изменен'
+        })"  :class="['--big --outline-primary']">Изменить</Button>
+        <Button @click="onClickDelete({
+          deleteURL: 'music/labels/delete',
+          notificationMessage: 'Лейбл успешно удален'
+        })" :class="['--big --outline-danger']">Удалить</Button>
       </div>
     </template>
     <template #content>

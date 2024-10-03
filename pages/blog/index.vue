@@ -4,7 +4,6 @@ import Button from '@/components/Base/Button.vue'
 import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue';
 import Badge from '@/components/Base/Browser/ColumnComponents/Badge.vue'
 import Content from '@/pages/blog/_parts/content.vue'
-import { useBrowser } from '~/composables/useBrowser'
 
 definePageMeta({
   middleware: ['auth']
@@ -24,7 +23,7 @@ const {
   onClickEdit,
   onClickDelete,
   onItemUpdated
-} = useBrowser()
+} = usePage()
 
 const columns = shallowRef([
   {

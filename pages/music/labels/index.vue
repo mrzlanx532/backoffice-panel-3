@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { definePageMeta, useBrowser } from '#imports'
+import { definePageMeta, usePage } from '#imports'
 
 import Browser from '~/components/Base/Browser/Browser.vue'
 import Tabs from '~/components/Base/Tabs.vue'
@@ -20,7 +20,7 @@ const {
   onClickEdit,
   onClickDelete,
   onItemUpdated
-} = useBrowser()
+} = usePage()
 
 const requestProperties = ref([
   'id',

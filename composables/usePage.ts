@@ -14,7 +14,7 @@ export interface IConfigDelete {
     notificationMessage: string
 }
 
-export const useBrowser = () => {
+export const usePage = () => {
 
     const item: Ref<IItem|undefined> = ref()
     const browserEl: Ref<IBrowser|null> = ref(null)
