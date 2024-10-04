@@ -15,7 +15,7 @@ interface Props {
   filters?: {
     [key: string]: any[]
   }
-  params: {
+  params?: {
     [key: string]: any[]
   }
   itemPrimaryKeyPropertyName?: string,
@@ -101,7 +101,6 @@ const emit = defineEmits([
 const { $authFetch } = useNuxtApp()
 
 const filters: Ref<IFilter[]> = ref([])
-const activeFilters: Ref<{[key: string]: any[]}> = ref({})
 const filtersByName: Ref<{[key: string]: IFilter}> = ref({})
 const firstLoadingIsActive = ref(true)
 const loadingIsActive = ref(false)
@@ -179,10 +178,6 @@ const fetchData = async () => {
     Object.entries(props.params).map(([key, value]) => {
       requestData[key] = value
     })
-  }
-
-  if (!isEmpty(activeFilters.value)) {
-    requestData.filters = Object.assign(activeFilters.value, requestData.filters)
   }
 
   if (searchString.value !== '') {
