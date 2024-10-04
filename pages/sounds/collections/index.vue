@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Browser from '~/components/Base/Browser/Browser.vue';
 
-import { definePageMeta, type IColumn, usePage, defineComponent } from '#imports'
+import { definePageMeta, type IColumn, defineComponent } from '#imports'
 import { type Ref, h } from 'vue'
 import Tabs from '~/components/Base/Tabs.vue'
 import Button from '~/components/Base/Button.vue'
@@ -17,6 +17,10 @@ const {
   onClickDelete,
   onItemUpdated,
 } = usePage()
+
+const {
+  initTabs
+} = useTabs()
 
 definePageMeta({
   middleware: ['auth']
@@ -46,9 +50,11 @@ const IdColumn = shallowRef(defineComponent(
     }
 ))
 
-const selectedTab = ref(0)
-
-const tabs = [
+const {
+  tabs,
+  selectedTabComponent,
+  onChangeSelectedTab
+} = initTabs([
   {
     title: 'Инфо',
     component: MainTab
@@ -57,7 +63,7 @@ const tabs = [
     title: 'Треки',
     component: TracksTab
   },
-]
+])
 
 const columns: Ref<IColumn[]> = ref([
   {
@@ -71,19 +77,6 @@ const columns: Ref<IColumn[]> = ref([
     classes: ['--min-width']
   },
 ])
-
-let selectedTabComponent = shallowRef(tabs[selectedTab.value].component)
-
-watch(
-    selectedTab,
-    () => {
-      selectedTabComponent.value = tabs[selectedTab.value].component
-    }
-)
-
-const onChangeSelectedTab = (tabIndex: number) => {
-  selectedTab.value = tabIndex;
-}
 </script>
 
 <template>

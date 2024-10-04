@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { prepareDuration } from '~/helpers/functions-for-table-columns';
-import Section from '~/components/Base/Section.vue';
 import Button from '~/components/Base/Button.vue';
 import Tabs from '~/components/Base/Tabs.vue';
 import Browser, {type IItem} from '~/components/Base/Browser/Browser.vue'
@@ -15,7 +14,11 @@ const {
   onClickEdit,
   onClickDelete,
   onItemUpdated
-} = useBrowser()
+} = usePage()
+
+const {
+  initTabs
+} = useTabs()
 
 const selectedState = ref({})
 
@@ -87,38 +90,42 @@ const columns = ref([
   },
 ])
 
-const tabs = ref([
+const {
+  tabs,
+  selectedTabComponent,
+  onChangeSelectedTab
+} = initTabs([
   {
     title: 'Инфо',
-    content: MainTab
+    component: MainTab
   },
   {
     title: 'Правообладатели',
-    content: MainTab
+    component: MainTab
   },
   {
     title: 'Вариации',
-    content: MainTab
+    component: MainTab
   },
   {
     title: 'Стемы',
-    content: MainTab
+    component: MainTab
   },
   {
     title: 'Лирика',
-    content: MainTab
+    component: MainTab
   },
   {
     title: 'Плейлисты',
-    content: MainTab
+    component: MainTab
   },
   {
     title: 'Еще раздел',
-    content: MainTab
+    component: MainTab
   },
   {
     title: 'И еще раздел',
-    content: MainTab
+    component: MainTab
   },
 ])
 
@@ -210,17 +217,10 @@ const onChangeStateButton = (option) => {
           notificationMessage: 'Трек удален'
         })" :class="['--big --outline-danger']">Удалить</Button>
       </div>
-      <Tabs :tabs="tabs"/>
+      <Tabs :tabs="tabs" @change="onChangeSelectedTab"/>
     </template>
     <template #browserDetailContent>
-      <Section>
-        <template #header>
-          Основное
-        </template>
-        <template #content>
-          Дополнительное
-        </template>
-      </Section>
+      <component :is="selectedTabComponent" :item="item"/>
     </template>
   </Browser>
 </template>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Section from '@/components/Base/Section.vue'
 import Detail from '@/components/Base/Detail.vue'
 import Button from '@/components/Base/Button.vue'
 import Tabs from '@/components/Base/Tabs.vue';
@@ -13,41 +12,44 @@ type IItem = {[key: string]: any}
 const route = useRoute()
 
 const item: IItem = ref({})
-const selectedTab = ref(0)
 const selectedState = ref({})
 
-const tabs = ref([
+const {
+  initTabs
+} = useTabs()
+
+const { tabs, selectedTabComponent, onChangeSelectedTab } = initTabs([
   {
     title: 'Инфо',
-    content: MainTab
+    component: MainTab
   },
   {
     title: 'Правообладатели',
-    content: MainTab
+    component: MainTab
   },
   {
     title: 'Вариации',
-    content: MainTab
+    component: MainTab
   },
   {
     title: 'Стемы',
-    content: MainTab
+    component: MainTab
   },
   {
     title: 'Лирика',
-    content: MainTab
+    component: MainTab
   },
   {
     title: 'Плейлисты',
-    content: MainTab
+    component: MainTab
   },
   {
     title: 'Еще раздел',
-    content: MainTab
+    component: MainTab
   },
   {
     title: 'И еще раздел',
-    content: MainTab
+    component: MainTab
   },
 ],)
 
@@ -71,10 +73,6 @@ const stateOptions = ref([
 
 const onItemUpdated = (_item: IItem) => {
   item.value = _item
-}
-
-const onChangeTab = (index: number) => {
-  selectedTab.value = index
 }
 
 const onChangeStateButton = (option) => {
@@ -103,16 +101,10 @@ const onChangeStateButton = (option) => {
       </div>
     </template>
     <template #content>
+      <Tabs @change="onChangeSelectedTab" :tabs="tabs"/>
       <ClientOnly>
-        <Transition name="fade">
-          <Section v-if="Object.keys(item).length > 0">
-            <template v-slot:header>
-              <Tabs :tabs="tabs"/>
-            </template>
-            <template v-slot:content>
-
-            </template>
-          </Section>
+        <Transition name="fade" mode="out-in">
+          <component :is="selectedTabComponent" :item="item"/>
         </Transition>
       </ClientOnly>
     </template>
