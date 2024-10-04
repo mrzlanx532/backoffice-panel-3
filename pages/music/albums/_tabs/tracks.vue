@@ -28,5 +28,6 @@ watch(
     url-prefix="music/albums/tracks/browse"
     :filters="filters"
     :is-enabled-t-head="false"
+    :is-enabled-search="true"
   />
 </template>

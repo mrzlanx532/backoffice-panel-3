@@ -28,6 +28,7 @@ const onSearch = () => {
         @keyup.enter="onSearch"
         @input="onInput"
         v-model="searchString"
+        autocomplete="off"
     >
     <div class="browser__search-string-button" @click="onSearch">
       <svg width="32px" height="32px">
