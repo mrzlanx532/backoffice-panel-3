@@ -30,15 +30,15 @@ const {
 } = useBrowser()
 
 interface Props {
+  urlPrefix: string,
   filters?: {
     [key: string]: any[]
   }
   params?: {
     [key: string]: any[]
   },
-  isEnableSearch: boolean,
+  isEnableSearch?: boolean,
   itemPrimaryKeyPropertyName?: string,
-  urlPrefix: string,
   columns?: IColumn[],
   requestProperties?: string[],
   isEnabledTHead?: boolean,

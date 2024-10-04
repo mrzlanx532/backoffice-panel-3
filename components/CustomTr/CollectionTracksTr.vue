@@ -36,7 +36,7 @@ const onClickInfo = () => {
       </svg>
     </td>
     <td class="--min-width">
-      //
+      {{ '[ДРОПДАУН_С_КНОПКАМИ]' }}
     </td>
   </tr>
 </template>
