@@ -1,17 +1,33 @@
 <script setup lang="ts">
-import { defineAsyncComponent, type Ref } from 'vue'
-import { definePageMeta, useNuxtApp } from '#imports'
+import { definePageMeta } from '#imports'
 
-import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue';
+import Browser from '@/components/Base/Browser/Browser.vue';
 import Tabs from '@/components/Base/Tabs.vue';
 import SubscriptionRow from '@/components/CustomRows/users/SubscriptionRow.vue'
 import Button from '@/components/Base/Button.vue';
+import MainTab from '@/pages/users/_tabs/main.vue'
+import SubscriptionTab from '@/pages/users/_tabs/subscription.vue'
+import ReportsTab from '@/pages/users/_tabs/reports.vue'
+import DownloadedMusicTab from '@/pages/users/_tabs/downloaded_music.vue'
+import DownloadedSoundTab from '@/pages/users/_tabs/downloaded_sounds.vue'
 
 definePageMeta({
   middleware: ['auth']
 })
 
-const item: Ref<IItem|null> = ref(null)
+const {
+  browserEl,
+  item,
+
+  onClickCreate,
+  onClickEdit,
+  onClickDelete,
+  onItemUpdated
+} = usePage()
+
+const {
+  initTabs,
+} = usePageTabs()
 
 const requestProperties = ref([
   'id',
@@ -26,34 +42,31 @@ const requestProperties = ref([
 ])
 
 const {
-  $modal,
-  $authFetch,
-} = useNuxtApp()
-
-const selectedTab = ref(0)
-
-const tabs = [
+  tabs,
+  selectedTabComponent,
+  onChangeSelectedTab
+} = initTabs([
   {
     title: 'Инфо',
-    componentName: 'main'
+    component: MainTab
   },
   {
     title: 'Подписка',
-    componentName: 'subscription'
+    component: SubscriptionTab
   },
   {
     title: 'Скачанное (музыка)',
-    componentName: 'downloaded_music'
+    component: DownloadedMusicTab
   },
   {
     title: 'Скачанное (шумы)',
-    componentName: 'downloaded_sounds'
+    component: DownloadedSoundTab
   },
   {
     title: 'Отчеты',
-    componentName: 'reports'
+    component: ReportsTab
   },
-]
+])
 
 const columns = shallowRef([
   {
@@ -85,74 +98,11 @@ const columns = shallowRef([
     }
   },
 ])
-
-const getAsyncComponent = () => {
-  return defineAsyncComponent(() => {
-    const componentName = tabs[selectedTab.value].componentName
-    return import(`@/pages/users/_tabs/${componentName}.vue`)
-  })
-}
-
-let selectedTabMap = shallowRef(getAsyncComponent())
-
-watch(
-    selectedTab,
-    () => {
-      selectedTabMap.value = getAsyncComponent()
-    }
-)
-
-const onChangeSelectedTab = (tabIndex: number) => {
-  selectedTab.value = tabIndex;
-}
-
-const onItemUpdated = (newItem: IItem) => {
-  item.value = newItem
-}
-
-const onClickCreate = async () => {
-  const formResponse = await $authFetch('users/form', {
-    method: 'GET',
-  })
-
-  $modal.load('users/form', {
-    title: 'Создание пользователя',
-    formResponse
-  }).then(res => {
-    console.log(res)
-  })
-}
-
-const onClickEdit = async () => {
-  const formResponse = await $authFetch('users/form', {
-    method: 'GET',
-    params: {
-      id: item.value!.id
-    }
-  })
-
-  $modal.load('users/form', {
-    title: 'Изменение пользователя',
-    id: item.value!.id,
-    formResponse
-  }).then(res => {
-    console.log(res)
-  })
-}
-
-const onClickDelete = () => {
-  $modal.confirm({
-    'question': 'Вы уверены?',
-  }).then(confirm => {
-    if (confirm) {
-      console.log('Удаляем!!')
-    }
-  })
-}
 </script>
 
 <template>
   <Browser
+      ref="browserEl"
       h1="Каталог пользователей"
       url-prefix="users/browse"
 
@@ -168,20 +118,33 @@ const onClickDelete = () => {
   >
     <template #rightSide>
       <div class="btn__group">
-        <Button @click="onClickCreate" :class="['--small --success']">Добавить</Button>
+        <Button @click="onClickCreate({
+          formURL: 'users/form',
+          modalPath: 'users/form',
+          modalTitle: 'Добавление пользователя',
+          notificationMessage: 'Пользователь добавлен'
+        })" :class="['--small --success']">Добавить</Button>
       </div>
     </template>
 
     <template #browserDetailHeader>
       <div class="btn__group">
-        <Button @click="onClickEdit" :class="['--big --outline-primary']">Изменить</Button>
-        <Button @click="onClickDelete" :class="['--big --outline-danger']">Удалить</Button>
+        <Button @click="onClickEdit({
+          formURL: 'users/form',
+          modalPath: 'users/form',
+          modalTitle: 'Изменение пользователя',
+          notificationMessage: 'Пользователь изменен'
+        })" :class="['--big --outline-primary']">Изменить</Button>
+        <Button @click="onClickDelete({
+          deleteURL: 'users/delete',
+          notificationMessage: 'Пользователь удален'
+        })" :class="['--big --outline-danger']">Удалить</Button>
       </div>
       <Tabs @change="onChangeSelectedTab" :tabs="tabs"/>
     </template>
 
     <template #browserDetailContent>
-        <component :is="selectedTabMap" :item="item"/>
+      <component :is="selectedTabComponent" :item="item"/>
     </template>
   </Browser>
 </template>

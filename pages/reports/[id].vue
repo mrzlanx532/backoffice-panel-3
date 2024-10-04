@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useRoute } from '#imports'
-import { ref } from 'vue'
 
 import Section from '~/components/Base/Section.vue'
 import Detail from '~/components/Base/Detail.vue'
@@ -20,13 +19,15 @@ const {
   SSRLoadDetail
 } = usePage()
 
-const selectedTab = ref(0)
+const {
+  initTabs
+} = usePageTabs()
 
-const onChangeTab = (index: number) => {
-  selectedTab.value = index
-}
-
-const tabs = shallowRef([
+const {
+  tabs,
+  selectedTabComponent,
+  onChangeSelectedTab
+} = initTabs([
   {
     title: 'Инфо',
     component: TabMain
@@ -58,10 +59,10 @@ await SSRLoadDetail(item, 'reports/detail', route.params.id)
     <template #content>
       <Section>
         <template v-slot:header>
-          <Tabs :tabs="tabs" @change="onChangeTab"/>
+          <Tabs :tabs="tabs" @change="onChangeSelectedTab"/>
         </template>
         <template v-slot:content>
-          <component :is="tabs[selectedTab].component" :item="item"/>
+          <component :is="selectedTabComponent" :item="item"/>
         </template>
       </Section>
     </template>

@@ -18,9 +18,15 @@ const {
   onItemUpdated,
 } = usePage()
 
-const selectedTab = ref(0)
+const {
+  initTabs
+} = usePageTabs()
 
-const tabs = shallowRef([
+const {
+  tabs,
+  selectedTabComponent,
+  onChangeSelectedTab
+} = initTabs([
   {
     title: 'Инфо',
     component: TabMain
@@ -69,10 +75,6 @@ const columns = ref([
     title: 'Территория',
   },
 ])
-
-const onChangeTab = (index: number) => {
-  selectedTab.value = index
-}
 </script>
 
 <template>
@@ -98,10 +100,10 @@ const onChangeTab = (index: number) => {
           notificationMessage: 'Отчет успешно удален'
         })" :class="['--big --outline-danger']">Удалить</Button>
       </div>
-      <Tabs :tabs="tabs" @change="onChangeTab"/>
+      <Tabs :tabs="tabs" @change="onChangeSelectedTab"/>
     </template>
     <template #browserDetailContent>
-      <component :is="tabs[selectedTab].component" :item="item"/>
+      <component :is="selectedTabComponent" :item="item"/>
     </template>
   </Browser>
 </template>

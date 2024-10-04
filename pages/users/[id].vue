@@ -1,115 +1,89 @@
 <script setup lang="ts">
-import { defineAsyncComponent, ref } from 'vue'
-import { useNuxtApp, useRoute } from '#imports'
+import { useRoute } from '#imports'
 
-import Detail from '@/components/Base/Detail.vue'
-import Button from '@/components/Base/Button.vue'
-import Tabs from '@/components/Base/Tabs.vue'
-import { useAsyncData } from '#app'
-
-const { $authFetch } = useNuxtApp()
-
-type IItem = {[key: string]: any}
+import Detail from '~/components/Base/Detail.vue'
+import Button from '~/components/Base/Button.vue'
+import Tabs from '~/components/Base/Tabs.vue'
+import MainTab from '~/pages/users/_tabs/main.vue'
+import SubscriptionTab from '~/pages/users/_tabs/subscription.vue'
+import DownloadedMusicTab from '~/pages/users/_tabs/downloaded_music.vue'
+import DownloadedSoundTab from '~/pages/users/_tabs/downloaded_sounds.vue'
+import ReportsTab from '~/pages/users/_tabs/reports.vue'
 
 const route = useRoute()
 
-const selectedTab = ref(0)
+const {
+  item,
 
-const tabs = [
+  onClickEdit,
+  onClickDelete,
+  onItemUpdated,
+
+  SSRLoadDetail
+} = usePage()
+
+const {
+  initTabs
+} = usePageTabs()
+
+const {
+  tabs,
+  selectedTabComponent,
+  onChangeSelectedTab
+} = initTabs([
   {
     title: 'Инфо',
-    componentName: 'main'
+    component: MainTab
   },
   {
     title: 'Подписка',
-    componentName: 'subscription'
+    component: SubscriptionTab
   },
   {
     title: 'Скачанное (музыка)',
-    componentName: 'subscription'
+    component: DownloadedMusicTab
   },
   {
     title: 'Скачанное (шумы)',
-    componentName: 'subscription'
+    component: DownloadedSoundTab
   },
   {
     title: 'Отчеты',
-    componentName: 'subscription'
+    component: ReportsTab
   },
-]
+])
 
-const getAsyncComponent = () => {
-
-  return defineAsyncComponent(() => {
-    const componentName = tabs[selectedTab.value].componentName
-
-    return import(`@/pages/users/_tabs/${componentName}.vue`)
-  })
-}
-
-let selectedTabMap = shallowRef(getAsyncComponent())
-
-watch(
-    selectedTab,
-    () => {
-      selectedTabMap.value = getAsyncComponent()
-    }
-)
-
-const onChangeSelectedTab = (tabIndex: number) => {
-  selectedTab.value = tabIndex;
-}
-
-const onItemUpdated = (item: IItem) => {
-  item.value = item
-}
-
-const response = await useAsyncData(
-    'blog_detail',
-    () => $authFetch('users/detail', {
-      params: {
-        id: route.params.id,
-      }
-    })
-)
-
-const entityId = route.params.id
-const item: IItem = ref(response.data)
-const h1 = ref('Пользователь ' + entityId)
+await SSRLoadDetail(item, 'users/detail', route.params.id)
 </script>
 
 <template>
   <Detail
-      :h1="h1"
-      :data-id="entityId"
+      :h1="'Пользователь #' + route.params.id"
+      :data-id="route.params.id"
       url-prefix="users"
       @itemUpdated="onItemUpdated"
   >
     <template #header>
       <div class="btn__group">
-        <Button :class="['--big --outline-primary']">Изменить</Button>
-        <Button :class="['--big --outline-danger']">Удалить</Button>
+        <Button @click="onClickEdit({
+          formURL: 'users/form',
+          modalPath: 'users/form',
+          modalTitle: 'Изменение пользователя',
+          notificationMessage: 'Пользователь изменен'
+        })" :class="['--big --outline-primary']">Изменить</Button>
+        <Button @click="onClickDelete({
+          deleteURL: 'users/delete',
+          notificationMessage: 'Пользователь удален'
+        })" :class="['--big --outline-danger']">Удалить</Button>
       </div>
     </template>
     <template #content>
       <Tabs @change="onChangeSelectedTab" :tabs="tabs"/>
       <ClientOnly>
         <Transition name="fade" mode="out-in">
-          <component :is="selectedTabMap" :item="item"/>
+          <component :is="selectedTabComponent" :item="item"/>
         </Transition>
       </ClientOnly>
     </template>
   </Detail>
 </template>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity .2s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>
