@@ -58,7 +58,7 @@ await SSRLoadDetail(item,'music/labels/detail', route.params.id)
   <Detail
       :h1="'Лейбл ' + route.params.id"
       :data-id="route.params.id"
-      url-prefix="users"
+      url-prefix="music/labels"
       @itemUpdated="onItemUpdated"
   >
     <template #header>
@@ -71,7 +71,8 @@ await SSRLoadDetail(item,'music/labels/detail', route.params.id)
         })"  :class="['--big --outline-primary']">Изменить</Button>
         <Button @click="onClickDelete({
           deleteURL: 'music/labels/delete',
-          notificationMessage: 'Лейбл успешно удален'
+          notificationMessage: 'Лейбл успешно удален',
+          redirectURL: '/music/labels',
         })" :class="['--big --outline-danger']">Удалить</Button>
       </div>
     </template>

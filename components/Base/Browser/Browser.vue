@@ -1,5 +1,10 @@
 <script lang="ts">
 export { type IItem, type IConfigItem } from '~/composables/useBrowser'
+
+export interface IBrowser {
+  reset: (isUpdateItem?: boolean) => void,
+  closeDetail: () => void
+}
 </script>
 
 <script setup lang="ts">
@@ -39,11 +44,6 @@ const {
   firstLoadingIsActive,
   loadingIsActive,
 } = useBrowser()
-
-export interface IBrowser {
-  reset: (isUpdateItem?: boolean) => void,
-  closeDetail: () => void
-}
 
 interface Props {
   urlPrefix: string,
