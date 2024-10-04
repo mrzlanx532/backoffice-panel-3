@@ -5,13 +5,6 @@ import { useNuxtApp } from '#imports'
 import isEmpty from 'lodash.isempty'
 import Spinner from '~/components/Base/Spinner.vue'
 import BrowserTHeadTh from '~/components/Base/Browser/BrowserTHeadTh.vue'
-import BrowserSelectFilter from '~/components/Base/Browser/BrowserSelectFilter.vue'
-import BrowserSelectSearchFilter from '~/components/Base/Browser/BrowserSelectSearchFilter.vue'
-import BrowserInputFilter from '~/components/Base/Browser/BrowserInputFilter.vue'
-import BrowserDateFilter from '~/components/Base/Browser/BrowserDateFilter.vue'
-import BrowserBooleanFilter from '~/components/Base/Browser/BrowserBooleanFilter.vue'
-import debounce from 'lodash.debounce'
-import type { DebouncedFunc } from 'lodash-es'
 import moment from 'moment/moment'
 import BrowserSearchString from '~/components/Base/Browser/BrowserSearchString.vue'
 import BrowserPagination from '~/components/Base/BrowserSmall/BrowserPagination.vue'
@@ -46,11 +39,6 @@ enum FilterType {
   INPUT = 'INPUT',
   DATE = 'DATE',
   BOOLEAN = 'BOOLEAN',
-}
-
-interface IUnpreparedFilterValue {
-  id: string,
-  value: string[]|number[]|null[]|null|string
 }
 
 export interface IColumn {
@@ -123,15 +111,6 @@ const totalItems = ref(0)
 const currentPage = ref(1)
 const fetchError: Ref<FetchError|null> = ref(null)
 const items: Ref<IItem[]> = ref([])
-const debouncedFetchDataFunction: Ref<null|DebouncedFunc<() => Promise<void>>> = ref(null)
-
-const filterMapper = shallowRef({
-  SELECT: BrowserSelectFilter,
-  SELECT_SEARCH: BrowserSelectSearchFilter,
-  INPUT: BrowserInputFilter,
-  DATE: BrowserDateFilter,
-  BOOLEAN: BrowserBooleanFilter
-})
 
 /** sorts */
 const sorts: Ref<{[key: string]: any}> = ref({})
@@ -267,57 +246,6 @@ const onSortChanged = (name: string, value: string) => {
   sorts.value[name] = value
 
   fetchData()
-}
-
-const onFilterValueChanged = (unpreparedFilterValue: IUnpreparedFilterValue) => {
-  prepareFilterValue(unpreparedFilterValue)
-  currentPage.value = 1
-
-  if (debouncedFetchDataFunction.value) {
-    debouncedFetchDataFunction.value.cancel()
-  }
-
-  debouncedFetchDataFunction.value = debounce(fetchData, 100)
-  debouncedFetchDataFunction.value()
-}
-
-const prepareFilterValue = (filter: IUnpreparedFilterValue) => {
-  if (filtersByName.value[filter.id].config.range) {
-
-    if (filter.value === null) {
-      delete activeFilters.value[filter.id]
-
-      return
-    }
-
-    const preparedFirstValue = filter.value[0] === null ? "" : filter.value[0]
-    const preparedSecondValue = filter.value[1] === null ? "" : filter.value[1]
-
-    if (preparedFirstValue === "" && preparedSecondValue === "") {
-      delete activeFilters.value[filter.id]
-
-      return
-    }
-
-    activeFilters.value[filter.id] = [preparedFirstValue, preparedSecondValue]
-
-    return
-  }
-
-  if (filtersByName.value[filter.id].config.multiple && filter.value instanceof Array) {
-
-    filter.value.length ? activeFilters.value[filter.id] = filter.value : delete activeFilters.value[filter.id]
-
-    return
-  }
-
-  if (filter.value === null || filter.value === '') {
-    delete activeFilters.value[filter.id]
-
-    return
-  }
-
-  activeFilters.value[filter.id] = [filter.value]
 }
 
 const dynamicMethods: {[key: string]: (configItem: IConfigItem, item: IItem) => string | null} = {
