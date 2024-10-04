@@ -24,15 +24,20 @@ import BrowserDetail from "@/components/Base/Browser/BrowserDetail.vue";
 import { type IItem, type IConfigItem, type IColumn } from '~/composables/useBrowser'
 
 const {
-  totalItems,
-  currentPage,
-  firstLoadingIsActive,
-  loadingIsActive,
+  // Items
   items,
   setItems,
   getLocalRequestProperties,
 
-  callPreset
+  // Pagination
+  totalItems,
+  currentPage,
+  onChangePage,
+
+  // Other
+  callPreset,
+  firstLoadingIsActive,
+  loadingIsActive,
 } = useBrowser()
 
 export interface IBrowser {
@@ -267,12 +272,6 @@ const onChangePaginationItemsCount = (value: number) => {
   currentPage.value = 1
 }
 
-const onChangePage = (page: number) => {
-  currentPage.value = page
-
-  fetchData()
-}
-
 const onSortChanged = (name: string, value: string) => {
 
   if (activeSort.value !== name) {
@@ -389,7 +388,7 @@ defineExpose({
                 :page="currentPage"
                 :total="totalItems"
                 :per-page="selectedPaginationItemsCount"
-                @changePage="onChangePage"
+                @changePage="onChangePage($event, fetchData)"
             />
             <BrowserPaginationCountSelect
                 @change="onChangePaginationItemsCount"

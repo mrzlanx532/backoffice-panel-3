@@ -93,10 +93,17 @@ export const useBrowser = () => {
     const totalItems = ref(0)
     const currentPage = ref(1)
 
+    const onChangePage = (page: number, fetchData: () => {}) => {
+        currentPage.value = page
+
+        fetchData()
+    }
+
     return {
         /** Pagination */
         totalItems,
         currentPage,
+        onChangePage,
 
         /** Items*/
         items,

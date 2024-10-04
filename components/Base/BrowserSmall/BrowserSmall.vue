@@ -13,15 +13,20 @@ import BrowserPagination from '~/components/Base/BrowserSmall/BrowserPagination.
 import { type IItem, type IConfigItem, type IColumn } from '~/composables/useBrowser'
 
 const {
-  totalItems,
-  currentPage,
-  firstLoadingIsActive,
-  loadingIsActive,
+  // Items
   items,
   setItems,
   getLocalRequestProperties,
 
-  callPreset
+  // Pagination
+  totalItems,
+  currentPage,
+  onChangePage,
+
+  // Other
+  callPreset,
+  firstLoadingIsActive,
+  loadingIsActive,
 } = useBrowser()
 
 interface Props {
@@ -201,12 +206,6 @@ const onClickRow = (item: IItem) => {
   emit('clickRow', item)
 }
 
-const onChangePage = (page: number) => {
-  currentPage.value = page
-
-  fetchData()
-}
-
 const onSearchStringInput = (value: string) => {
   currentPage.value = 1
   searchString.value = value
@@ -262,7 +261,7 @@ onMounted(() => {
                 :page="currentPage"
                 :total="totalItems"
                 :per-page="selectedPaginationItemsCount"
-                @changePage="onChangePage"
+                @changePage="onChangePage($event, fetchData)"
             />
             <div
                 v-if="items.length === 0"
