@@ -35,7 +35,8 @@ interface Props {
   }
   params?: {
     [key: string]: any[]
-  }
+  },
+  isEnableSearch: boolean,
   itemPrimaryKeyPropertyName?: string,
   urlPrefix: string,
   columns?: IColumn[],
@@ -47,6 +48,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   itemPrimaryKeyPropertyName: 'id',
   isEnabledTHead: true,
+  isEnableSearch: false,
   columns: () => [] as IColumn[],
 })
 
@@ -254,6 +256,7 @@ onMounted(() => {
               class="browser__table-container"
           >
             <BrowserSearchString
+                v-if="isEnableSearch"
                 @search="onSearchStringInput"
                 class="--in-small-browser"
             />
