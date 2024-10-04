@@ -30,7 +30,7 @@ const onClickInfo = () => {
     <td>
       {{ props.item.content.label?.name_en }}
     </td>
-    <td style="text-align: center">
+    <td>
       -
     </td>
     <td>

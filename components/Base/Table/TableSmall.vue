@@ -102,7 +102,7 @@ const fetchData = async () => {
     const data = await $authFetch(props.urlPrefix, config)
 
     fetchError.value = null
-    totalItems.value = data.meta.count
+    totalItems.value = data.meta.total
 
     setItems(data.items, localRequestProperties)
 
