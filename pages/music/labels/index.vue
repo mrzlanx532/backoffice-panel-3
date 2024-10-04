@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { definePageMeta, usePage } from '#imports'
+import { definePageMeta, usePage, usePageTabs, type ITabItem } from '#imports'
 
 import Browser from '~/components/Base/Browser/Browser.vue'
 import Tabs from '~/components/Base/Tabs.vue'
@@ -21,6 +21,12 @@ const {
   onClickDelete,
   onItemUpdated
 } = usePage()
+
+const {
+  onChangeSelectedTab,
+  watchSelectedTab,
+  initSelectedTabComponent,
+} = usePageTabs()
 
 const requestProperties = ref([
   'id',
@@ -61,12 +67,10 @@ const columns = ref([
   },
 ])
 
-const selectedTab = ref(0)
-
-const tabs = [
+const tabs: ITabItem[] = [
   {
     title: 'Инфо',
-    component: MainTab
+    component: MainTab,
   },
   {
     title: 'Треки',
@@ -78,18 +82,9 @@ const tabs = [
   },
 ]
 
-let selectedTabComponent = shallowRef(tabs[selectedTab.value].component)
+const selectedTabComponent = initSelectedTabComponent(tabs)
 
-watch(
-    selectedTab,
-    () => {
-      selectedTabComponent.value = tabs[selectedTab.value].component
-    }
-)
-
-const onChangeSelectedTab = (tabIndex: number) => {
-  selectedTab.value = tabIndex;
-}
+watchSelectedTab(tabs, selectedTabComponent)
 </script>
 
 <template>

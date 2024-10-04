@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRoute } from '#imports'
+import { usePageTabs, useRoute, type ITabItem, definePageMeta } from '#imports'
 
 import Detail from '@/components/Base/Detail.vue'
 import Button from '@/components/Base/Button.vue'
@@ -8,6 +7,10 @@ import Tabs from '@/components/Base/Tabs.vue'
 import MainTab from '~/pages/music/labels/_tabs/main.vue'
 import TracksTab from '~/pages/music/labels/_tabs/tracks.vue'
 import AlbumsTab from '~/pages/music/labels/_tabs/albums.vue'
+
+definePageMeta({
+  middleware: ['auth']
+})
 
 const {
   item,
@@ -19,11 +22,15 @@ const {
   SSRLoadDetail
 } = usePage()
 
+const {
+  onChangeSelectedTab,
+  watchSelectedTab,
+  initSelectedTabComponent,
+} = usePageTabs()
+
 const route = useRoute()
 
-const selectedTab = ref(0)
-
-const tabs = [
+const tabs: ITabItem[] = [
   {
     title: 'Инфо',
     component: MainTab
@@ -38,18 +45,9 @@ const tabs = [
   },
 ]
 
-let selectedTabComponent = shallowRef(tabs[selectedTab.value].component)
+const selectedTabComponent = initSelectedTabComponent(tabs)
 
-watch(
-    selectedTab,
-    () => {
-      selectedTabComponent.value = tabs[selectedTab.value].component
-    }
-)
-
-const onChangeSelectedTab = (tabIndex: number) => {
-  selectedTab.value = tabIndex;
-}
+watchSelectedTab(tabs, selectedTabComponent)
 
 await SSRLoadDetail(item,'music/labels/detail', route.params.id)
 </script>
