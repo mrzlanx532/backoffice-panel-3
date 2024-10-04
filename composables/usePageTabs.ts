@@ -7,7 +7,19 @@ export interface ITabItem {
 }
 
 export const usePageTabs = () => {
+
     const selectedTab = ref(0)
+
+    const initTabs = (tabs: ITabItem[]) => {
+        const selectedTabComponent = initSelectedTabComponent(tabs)
+        watchSelectedTab(tabs, selectedTabComponent)
+
+        return {
+            tabs,
+            selectedTabComponent,
+            onChangeSelectedTab
+        }
+    }
 
     const initSelectedTabComponent = (tabs: ITabItem[]) => {
         return shallowRef(tabs[selectedTab.value].component)
@@ -27,9 +39,6 @@ export const usePageTabs = () => {
     }
 
     return {
-        selectedTab,
-        initSelectedTabComponent,
-        watchSelectedTab,
-        onChangeSelectedTab,
+        initTabs
     }
 }

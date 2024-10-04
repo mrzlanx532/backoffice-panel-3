@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { usePageTabs, useRoute, type ITabItem, definePageMeta } from '#imports'
+import { usePageTabs, usePage, useRoute, definePageMeta } from '#imports'
 
 import Detail from '@/components/Base/Detail.vue'
 import Button from '@/components/Base/Button.vue'
@@ -12,6 +12,8 @@ definePageMeta({
   middleware: ['auth']
 })
 
+const route = useRoute()
+
 const {
   item,
 
@@ -23,14 +25,14 @@ const {
 } = usePage()
 
 const {
-  onChangeSelectedTab,
-  watchSelectedTab,
-  initSelectedTabComponent,
+  initTabs,
 } = usePageTabs()
 
-const route = useRoute()
-
-const tabs: ITabItem[] = [
+const {
+  tabs,
+  selectedTabComponent,
+  onChangeSelectedTab
+} = initTabs([
   {
     title: 'Инфо',
     component: MainTab
@@ -43,11 +45,7 @@ const tabs: ITabItem[] = [
     title: 'Альбомы',
     component: AlbumsTab
   },
-]
-
-const selectedTabComponent = initSelectedTabComponent(tabs)
-
-watchSelectedTab(tabs, selectedTabComponent)
+])
 
 await SSRLoadDetail(item,'music/labels/detail', route.params.id)
 </script>

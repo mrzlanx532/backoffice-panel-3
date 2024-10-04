@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { definePageMeta, usePage, usePageTabs, type ITabItem } from '#imports'
+import { definePageMeta, usePage, usePageTabs } from '#imports'
 
 import Browser from '~/components/Base/Browser/Browser.vue'
 import Tabs from '~/components/Base/Tabs.vue'
@@ -23,9 +23,7 @@ const {
 } = usePage()
 
 const {
-  onChangeSelectedTab,
-  watchSelectedTab,
-  initSelectedTabComponent,
+  initTabs
 } = usePageTabs()
 
 const requestProperties = ref([
@@ -67,10 +65,14 @@ const columns = ref([
   },
 ])
 
-const tabs: ITabItem[] = [
+const {
+  tabs,
+  selectedTabComponent,
+  onChangeSelectedTab
+} = initTabs([
   {
     title: 'Инфо',
-    component: MainTab,
+    component: MainTab
   },
   {
     title: 'Треки',
@@ -80,11 +82,7 @@ const tabs: ITabItem[] = [
     title: 'Альбомы',
     component: AlbumsTab
   },
-]
-
-const selectedTabComponent = initSelectedTabComponent(tabs)
-
-watchSelectedTab(tabs, selectedTabComponent)
+])
 </script>
 
 <template>
