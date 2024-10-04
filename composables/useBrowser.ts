@@ -87,12 +87,25 @@ export const useBrowser = () => {
         return dynamicMethods[methodName](configItem, item)
     }
 
-    return {
-        items,
+    const firstLoadingIsActive = ref(true)
+    const loadingIsActive = ref(false)
 
+    const totalItems = ref(0)
+    const currentPage = ref(1)
+
+    return {
+        /** Pagination */
+        totalItems,
+        currentPage,
+
+        /** Items*/
+        items,
         getLocalRequestProperties,
         setItems,
 
+        /** Other */
+        firstLoadingIsActive,
+        loadingIsActive,
         callPreset
     }
 }

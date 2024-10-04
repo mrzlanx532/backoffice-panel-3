@@ -13,6 +13,10 @@ import BrowserPagination from '~/components/Base/BrowserSmall/BrowserPagination.
 import { type IItem, type IConfigItem, type IColumn } from '~/composables/useBrowser'
 
 const {
+  totalItems,
+  currentPage,
+  firstLoadingIsActive,
+  loadingIsActive,
   items,
   setItems,
   getLocalRequestProperties,
@@ -88,12 +92,9 @@ const { $authFetch } = useNuxtApp()
 
 const filters: Ref<IFilter[]> = ref([])
 const filtersByName: Ref<{[key: string]: IFilter}> = ref({})
-const firstLoadingIsActive = ref(true)
-const loadingIsActive = ref(false)
+
 const searchString = ref('')
 const selectedPaginationItemsCount = ref(10)
-const totalItems = ref(0)
-const currentPage = ref(1)
 const fetchError: Ref<FetchError|null> = ref(null)
 
 /** sorts */

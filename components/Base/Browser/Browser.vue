@@ -24,6 +24,10 @@ import BrowserDetail from "@/components/Base/Browser/BrowserDetail.vue";
 import { type IItem, type IConfigItem, type IColumn } from '~/composables/useBrowser'
 
 const {
+  totalItems,
+  currentPage,
+  firstLoadingIsActive,
+  loadingIsActive,
   items,
   setItems,
   getLocalRequestProperties,
@@ -123,15 +127,11 @@ const filters: Ref<IFilter[]> = ref([])
 const filtersByName: Ref<{[key: string]: IFilter}> = ref({})
 const activeFilters: Ref<{[key: string]: any[]}> = ref({})
 
-const firstLoadingIsActive = ref(true)
-const loadingIsActive = ref(false)
 const searchString = ref('')
 const fetchError: Ref<FetchError|null> = ref(null)
 const openItem = ref({})
 const paginationItemsCountOptions = ref([20, 50, 100])
 const selectedPaginationItemsCount = ref(20)
-const totalItems = ref(0)
-const currentPage = ref(1)
 
 /** sorts */
 const sorts: Ref<{[key: string]: any}> = ref({})
