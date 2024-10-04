@@ -6,7 +6,7 @@ export interface ITabItem {
     component: Component
 }
 
-export const usePageTabs = () => {
+export const useTabs = () => {
 
     const selectedTab = ref(0)
 

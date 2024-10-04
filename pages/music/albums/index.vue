@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { definePageMeta, usePage } from '#imports'
+import { definePageMeta } from '#imports'
 
 import Button from '~/components/Base/Button.vue'
 import Browser, { type IItem } from '~/components/Base/Browser/Browser.vue'
@@ -21,6 +21,10 @@ const {
   onItemUpdated
 } = usePage()
 
+const {
+  initTabs
+} = useTabs()
+
 const requestProperties = ref([
   'id',
   'name_ru',
@@ -31,9 +35,11 @@ const requestProperties = ref([
   'created_at'
 ])
 
-const selectedTab = ref(0)
-
-const tabs = shallowRef([
+const {
+  tabs,
+  selectedTabComponent,
+  onChangeSelectedTab,
+} = initTabs([
   {
     title: 'Инфо',
     component: TabMain
@@ -83,10 +89,6 @@ const columns = shallowRef([
     }
   },
 ])
-
-const onTabChange = (tab: number) => {
-  selectedTab.value = tab
-}
 </script>
 
 <template>
@@ -130,11 +132,11 @@ const onTabChange = (tab: number) => {
           redirectURL: '/music/albums'
         })" :class="['--big --outline-danger']">Удалить</Button>
       </div>
-      <Tabs :tabs="tabs" @change="onTabChange"/>
+      <Tabs :tabs="tabs" @change="onChangeSelectedTab"/>
     </template>
 
     <template #browserDetailContent>
-      <component :is="tabs[selectedTab].component" :item="item"/>
+      <component :is="selectedTabComponent" :item="item"/>
     </template>
   </Browser>
 </template>

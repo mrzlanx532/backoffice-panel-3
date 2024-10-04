@@ -27,7 +27,7 @@ const {
 
 const {
   initTabs,
-} = usePageTabs()
+} = useTabs()
 
 const requestProperties = ref([
   'id',

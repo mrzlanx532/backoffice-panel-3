@@ -21,7 +21,7 @@ const {
 
 const {
   initTabs
-} = usePageTabs()
+} = useTabs()
 
 const {
   tabs,

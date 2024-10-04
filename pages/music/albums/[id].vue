@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-
 import Detail from '~/components/Base/Detail.vue'
 import Tabs from '~/components/Base/Tabs.vue'
 import Button from '~/components/Base/Button.vue'
@@ -16,11 +14,17 @@ const {
   SSRLoadDetail
 } = usePage()
 
+const {
+  initTabs
+} = useTabs()
+
 const route = useRoute()
 
-const selectedTab = ref(0)
-
-const tabs = shallowRef([
+const {
+  tabs,
+  selectedTabComponent,
+  onChangeSelectedTab
+} = initTabs([
   {
     title: 'Инфо',
     component: MainTab
@@ -30,19 +34,6 @@ const tabs = shallowRef([
     component: TracksTab
   },
 ])
-
-let selectedTabComponent = shallowRef(tabs.value[selectedTab.value].component)
-
-watch(
-    selectedTab,
-    () => {
-      selectedTabComponent.value = tabs.value[selectedTab.value].component
-    }
-)
-
-const onChangeSelectedTab = (tabIndex: number) => {
-  selectedTab.value = tabIndex;
-}
 
 await SSRLoadDetail(item,'music/albums/detail', route.params.id)
 </script>

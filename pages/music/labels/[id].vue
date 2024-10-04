@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { usePageTabs, usePage, useRoute, definePageMeta } from '#imports'
+import { useRoute, definePageMeta } from '#imports'
 
 import Detail from '@/components/Base/Detail.vue'
 import Button from '@/components/Base/Button.vue'
@@ -26,7 +26,7 @@ const {
 
 const {
   initTabs,
-} = usePageTabs()
+} = useTabs()
 
 const {
   tabs,
