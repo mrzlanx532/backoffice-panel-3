@@ -1,10 +1,13 @@
+<script lang="ts">
+export { type IItem, type IConfigItem } from '~/composables/useBrowser'
+</script>
+
 <script setup lang="ts">
 import { type Ref, type Component, useSlots } from "vue";
 import type { DebouncedFunc } from "lodash-es"
 import isEmpty from "lodash.isempty"
 import debounce from "lodash.debounce"
-import moment from "moment";
-import { useNuxtApp } from '#imports'
+import { useBrowser, useNuxtApp } from '#imports'
 import { FetchError } from 'ofetch'
 
 import BrowserSelectFilter from "@/components/Base/Browser/BrowserSelectFilter.vue"
@@ -18,6 +21,15 @@ import BrowserPaginationCountSelect from "@/components/Base/Browser/BrowserPagin
 import BrowserTHeadTh from "@/components/Base/Browser/BrowserTHeadTh.vue";
 import Spinner from "@/components/Base/Spinner.vue"
 import BrowserDetail from "@/components/Base/Browser/BrowserDetail.vue";
+import { type IItem, type IConfigItem, type IColumn } from '~/composables/useBrowser'
+
+const {
+  items,
+  setItems,
+  getLocalRequestProperties,
+
+  callPreset
+} = useBrowser()
 
 export interface IBrowser {
   reset: (isUpdateItem?: boolean) => void,
@@ -61,21 +73,6 @@ enum FilterType {
   BOOLEAN = 'BOOLEAN',
 }
 
-export type IItem = {[key: string]: any}
-
-export interface IConfigItem {
-  columnClass: number,
-  title: string,
-  name: string,
-  toFormat?: (item: {[key: string]: any}) => {},
-  component?: {}
-  preset?: {
-    name: string,
-    locale?: string ,
-    format?: string
-  }
-}
-
 interface IRequestParams {
   filters?: {},
   search_string?: string,
@@ -110,16 +107,6 @@ interface IUnpreparedFilterValue {
   value: string[]|number[]|null[]|null|string
 }
 
-interface IColumn {
-  name: string,
-  title: string,
-  toFormat?: (item: {[key: string]: any}) => {}
-  component?: Component,
-  preset?: {
-    name: string
-  }
-}
-
 onMounted(() => {
   fetchData().then(() => {
     firstLoadingIsActive.value = false
@@ -130,7 +117,6 @@ const browserDetail: Ref<Component|null> = ref(null)
 
 const id: Ref<number|null> = ref(null)
 const item: Ref<IItem|null> = ref(null)
-const items: Ref<IItem[]> = ref([])
 
 /** filters */
 const filters: Ref<IFilter[]> = ref([])
@@ -152,14 +138,7 @@ const sorts: Ref<{[key: string]: any}> = ref({})
 const activeSort: Ref<string|null> = ref(null)
 
 const debouncedFetchDataFunction: Ref<null|DebouncedFunc<() => Promise<void>>> = ref(null)
-
-const localRequestProperties: Ref<{} | null> = ref(
-    props.requestProperties ?
-        props.requestProperties.reduce((acc, value) => {
-          return {...acc, [value]: value}
-        }, {}) :
-        null
-)
+const localRequestProperties: Ref<{} | null> = ref(getLocalRequestProperties(props.requestProperties))
 
 const detailPageUrl = computed(() => {
   return `/${props.detailPageUrlPrefix}/${id.value}`
@@ -207,7 +186,7 @@ const fetchData = async () => {
     fetchError.value = null
     totalItems.value = data.meta.count
 
-    setItems(data.items)
+    setItems(data.items, localRequestProperties)
 
     if (firstLoadingIsActive.value) {
 
@@ -235,8 +214,6 @@ const filterMapper = shallowRef({
   DATE: BrowserDateFilter,
   BOOLEAN: BrowserBooleanFilter
 })
-
-const runtimeConfig = useRuntimeConfig()
 
 watch(
     selectedPaginationItemsCount,
@@ -309,32 +286,6 @@ const onSortChanged = (name: string, value: string) => {
   sorts.value[name] = value
 
   fetchData()
-}
-
-const setItems = (_items: IItem[]) => {
-  const preparedItems: IItem[] = [];
-
-  _items.forEach((item: IItem) => {
-
-    const filteredItem: {[key: string]: any} = {};
-
-    for (let value in item) {
-
-      if (!item.hasOwnProperty(value)) {
-        continue;
-      }
-
-      if (localRequestProperties.value !== null && !localRequestProperties.value.hasOwnProperty(value)) {
-        continue;
-      }
-
-      filteredItem[value] = item[value]
-    }
-
-    preparedItems.push(filteredItem)
-  })
-
-  items.value = preparedItems
 }
 
 const setFilters = (_filters: IFilter[]) => {
@@ -416,29 +367,6 @@ const reset = (isUpdateItem = false) => {
   if (isUpdateItem) {
     browserDetail.value!.fetchData()
   }
-}
-
-const dynamicMethods: {[key: string]: (configItem: IConfigItem, item: IItem) => string | null} = {
-  timestampToFormatPreset: (configItem: IConfigItem, item: IItem) => {
-
-    const date = moment(item[configItem.name] * 1000)
-
-    if (!date.isValid()) {
-      return null;
-    }
-
-    if (configItem.preset?.hasOwnProperty('locale')) {
-      date.locale(configItem.preset.locale!)
-    } else {
-      date.locale('ru')
-    }
-
-    return configItem.preset?.format ? date.format(configItem.preset.format) : date.format('DD.MM.YYYY')
-  }
-}
-
-const callPreset = (methodName: string, configItem: IConfigItem, item: IItem) => {
-  return dynamicMethods[methodName](configItem, item)
 }
 
 defineExpose({

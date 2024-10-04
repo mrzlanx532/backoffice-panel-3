@@ -1,15 +1,24 @@
+<script lang="ts">
+export { type IItem, type IConfigItem, type IColumn } from '~/composables/useBrowser'
+</script>
+
 <script setup lang="ts">
 import type { Component, Ref } from 'vue'
 import { FetchError } from 'ofetch'
-import { useNuxtApp } from '#imports'
-import isEmpty from 'lodash.isempty'
+import { useNuxtApp, useBrowser } from '#imports'
 import Spinner from '~/components/Base/Spinner.vue'
 import BrowserTHeadTh from '~/components/Base/Browser/BrowserTHeadTh.vue'
-import moment from 'moment/moment'
 import BrowserSearchString from '~/components/Base/Browser/BrowserSearchString.vue'
 import BrowserPagination from '~/components/Base/BrowserSmall/BrowserPagination.vue'
+import { type IItem, type IConfigItem, type IColumn } from '~/composables/useBrowser'
 
-type IItem = {[key: string]: any}
+const {
+  items,
+  setItems,
+  getLocalRequestProperties,
+
+  callPreset
+} = useBrowser()
 
 interface Props {
   filters?: {
@@ -41,16 +50,6 @@ enum FilterType {
   BOOLEAN = 'BOOLEAN',
 }
 
-export interface IColumn {
-  name: string,
-  title: string,
-  toFormat?: (item: {[key: string]: any}) => {}
-  component?: Component,
-  preset?: {
-    name: string
-  }
-}
-
 interface IRequestParams {
   filters?: {},
   search_string?: string,
@@ -61,19 +60,6 @@ interface IRequestParams {
   per_page: number,
   page: number,
   [key: string]: any
-}
-
-export interface IConfigItem {
-  columnClass: number,
-  title: string,
-  name: string,
-  toFormat?: (item: {[key: string]: any}) => {},
-  component?: {}
-  preset?: {
-    name: string,
-    locale?: string ,
-    format?: string
-  }
 }
 
 interface IFilter {
@@ -109,45 +95,12 @@ const selectedPaginationItemsCount = ref(10)
 const totalItems = ref(0)
 const currentPage = ref(1)
 const fetchError: Ref<FetchError|null> = ref(null)
-const items: Ref<IItem[]> = ref([])
 
 /** sorts */
 const sorts: Ref<{[key: string]: any}> = ref({})
 const activeSort: Ref<string|null> = ref(null)
 
-const localRequestProperties: Ref<{} | null> = ref(
-    props.requestProperties ?
-        props.requestProperties.reduce((acc, value) => {
-          return {...acc, [value]: value}
-        }, {}) :
-        null
-)
-
-const setItems = (_items: IItem[]) => {
-  const preparedItems: IItem[] = [];
-
-  _items.forEach((item: IItem) => {
-
-    const filteredItem: {[key: string]: any} = {};
-
-    for (let value in item) {
-
-      if (!item.hasOwnProperty(value)) {
-        continue;
-      }
-
-      if (localRequestProperties.value !== null && !localRequestProperties.value.hasOwnProperty(value)) {
-        continue;
-      }
-
-      filteredItem[value] = item[value]
-    }
-
-    preparedItems.push(filteredItem)
-  })
-
-  items.value = preparedItems
-}
+const localRequestProperties: Ref<{} | null> = ref(getLocalRequestProperties(props.requestProperties))
 
 const setFilters = (_filters: IFilter[]) => {
   const preparedFilters: IFilter[] = [];
@@ -208,7 +161,7 @@ const fetchData = async () => {
     fetchError.value = null
     totalItems.value = data.meta.count
 
-    setItems(data.items)
+    setItems(data.items, localRequestProperties)
 
     if (firstLoadingIsActive.value) {
 
@@ -241,29 +194,6 @@ const onSortChanged = (name: string, value: string) => {
   sorts.value[name] = value
 
   fetchData()
-}
-
-const dynamicMethods: {[key: string]: (configItem: IConfigItem, item: IItem) => string | null} = {
-  timestampToFormatPreset: (configItem: IConfigItem, item: IItem) => {
-
-    const date = moment(item[configItem.name] * 1000)
-
-    if (!date.isValid()) {
-      return null;
-    }
-
-    if (configItem.preset?.hasOwnProperty('locale')) {
-      date.locale(configItem.preset.locale!)
-    } else {
-      date.locale('ru')
-    }
-
-    return configItem.preset?.format ? date.format(configItem.preset.format) : date.format('DD.MM.YYYY')
-  }
-}
-
-const callPreset = (methodName: string, configItem: IConfigItem, item: IItem) => {
-  return dynamicMethods[methodName](configItem, item)
 }
 
 const onClickRow = (item: IItem) => {
