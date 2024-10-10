@@ -110,7 +110,7 @@ const columns = ref([
         <Button @click="onClickEdit({
           formURL: 'music/playlists/form',
           modalPath: 'music/playlists/form',
-          modalTitle: 'Изменить лейбл',
+          modalTitle: 'Изменить плейлист',
           notificationMessage: 'Плейлист изменен'
         })" :class="['--big --outline-primary']">Изменить</Button>
         <Button @click="onClickDelete({

@@ -77,6 +77,9 @@ const onClickCloseButton = () => {
   emit('close');
 }
 
+defineExpose({
+  fetchData
+})
 </script>
 
 <template>
