@@ -1,5 +1,9 @@
 <script lang="ts">
 export { type IItem, type IConfigItem, type IColumn } from '~/composables/useBrowser'
+
+export interface IBrowser {
+  reset: () => void,
+}
 </script>
 
 <script setup lang="ts">
@@ -215,6 +219,18 @@ const onSearchStringInput = (value: string) => {
   fetchData()
 }
 
+const reset = () => {
+  currentPage.value = 1
+  selectedPaginationItemsCount.value = 10
+  activeSort.value = null
+
+  Object.keys(sorts.value).map((key) => {
+    sorts.value[key] = null
+  })
+
+  fetchData()
+}
+
 watch(
     () => props.filters,
     () => {
@@ -226,6 +242,10 @@ onMounted(() => {
   fetchData().then(() => {
     firstLoadingIsActive.value = false
   })
+})
+
+defineExpose({
+  reset
 })
 </script>
 

@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { definePageMeta } from '#imports'
+import { defineComponent, definePageMeta } from '#imports'
 
 import Browser from '~/components/Base/Browser/Browser.vue';
 import Tabs from '~/components/Base/Tabs.vue'
 import Button from '~/components/Base/Button.vue'
 import MainTab from '~/pages/music/playlists/_tabs/main.vue'
 import TracksTab from '~/pages/music/playlists/_tabs/tracks.vue'
+import { h } from 'vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -28,6 +29,9 @@ const {
 const requestProperties = ref([
   'id',
   'name_ru',
+  'name_en',
+  'description_en',
+  'description_ru',
   'tracks_counter'
 ])
 
@@ -46,18 +50,31 @@ const {
   },
 ])
 
+const IdColumn = shallowRef(defineComponent(
+    (props) => {
+      return () => {
+        return h('div', [
+          h('p', { style: { color: 'black' }}, `#${props.item.id} ${props.item.name_en}`),
+          h('p', { style: { color: 'grey' } }, `${props.item.description_en}`),
+        ])
+      }
+    }, {
+      props: {
+        item: Object
+      }
+    }
+))
+
 const columns = ref([
   {
     name: 'id',
-    title: 'ID'
-  },
-  {
-    name: 'name_ru',
-    title: 'Название'
+    title: 'ID',
+    component: IdColumn
   },
   {
     name: 'tracks_counter',
     title: 'Кол-во треков',
+    classes: ['--min-width']
   },
 ])
 </script>
