@@ -1,6 +1,108 @@
+<script setup lang="ts">
+interface IFilter {
+  id: string,
+  title: string,
+  type: keyof typeof FilterType,
+  options?: {
+    id: string,
+    title: string,
+  }[]
+  config: {
+    filter: boolean,
+    hidden: boolean,
+    mask: string|null,
+    multiple: boolean,
+    range: boolean,
+    url: string
+  }
+}
+
+const props = defineProps<{
+  filter: IFilter
+}>()
+
+const singleValue = ref(null)
+const doubleValueFirst = ref(null)
+const doubleValueSecond = ref(null)
+
+const emit = defineEmits(['filterValueChanged'])
+
+const mapper = [
+  doubleValueFirst,
+  doubleValueSecond
+]
+
+const onBlur = () => {
+  if (props.filter.config.range) {
+    return
+  }
+
+  if (singleValue.value === null || singleValue.value === '') {
+    return
+  }
+
+  emitSingleValue()
+}
+
+const onInput = (param: number|undefined = undefined) => {
+  if (props.filter.config.range) {
+
+    if (mapper[param].value === '') {
+      emitDoubleValue()
+    }
+
+    return
+  }
+
+  if (singleValue.value === '') {
+    emitSingleValue()
+  }
+}
+
+const onKeyUpEnter = (param: number|undefined = undefined) => {
+  if (props.filter.config.range) {
+
+    if (mapper[param].value !== '' && mapper[param].value !== null) {
+      emitDoubleValue()
+
+      return
+    }
+  }
+
+  if (singleValue.value !== '' && singleValue.value !== null) {
+    emitSingleValue()
+  }
+}
+const onClickRemoveButton = (param: number|undefined = undefined) => {
+  if (props.filter.config.range) {
+    mapper[param].value = null
+    emitDoubleValue()
+
+    return
+  }
+
+  singleValue.value = null
+  emitSingleValue()
+}
+
+const emitSingleValue = () => {
+  emit('filterValueChanged', {
+    'id': props.filter.id,
+    'value': singleValue.value
+  })
+}
+
+const emitDoubleValue = () => {
+  emit('filterValueChanged', {
+    'id': props.filter.id,
+    'value': [doubleValueFirst.value, doubleValueSecond.value]
+  })
+}
+</script>
+
 <template>
   <div class="browser__filter">
-    <label :for="filter.id" class="browser__filter-name">{{ filter.title }}</label>
+    <div :for="filter.id" class="browser__filter-name">{{ filter.title }}</div>
     <div class="browser__filter-container">
       <div class="input__container-flex" v-if="filter.config.range">
         <div class="input__container input__container_range">
@@ -11,13 +113,13 @@
               v-model="doubleValueFirst"
               class="input input_range"
               type="text"
-              @input="onInput('doubleValueFirst')"
-              @keyup.enter="onKeyUpEnter('doubleValueFirst')"
-              @blur="onBlur('doubleValueFirst')"
+              @input="onInput(0)"
+              @keyup.enter="onKeyUpEnter(0)"
+              @blur="onBlur"
           >
           <div
               class="input__remove-button input__remove-button_range"
-              @click="onClickRemoveButton('doubleValueFirst')"
+              @click="onClickRemoveButton(0)"
               v-show="doubleValueFirst !== '' && doubleValueFirst !== null"
           >
             <svg>
@@ -33,13 +135,13 @@
               v-model="doubleValueSecond"
               class="input"
               type="text"
-              @input="onInput('doubleValueSecond')"
-              @keyup.enter="onKeyUpEnter('doubleValueSecond')"
-              @blur="onBlur('doubleValueSecond')"
+              @input="onInput(1)"
+              @keyup.enter="onKeyUpEnter(1)"
+              @blur="onBlur"
           >
           <div
               class="input__remove-button input__remove-button_range"
-              @click="onClickRemoveButton('doubleValueSecond')"
+              @click="onClickRemoveButton(1)"
               v-show="doubleValueSecond !== '' && doubleValueSecond !== null"
           >
             <svg>
@@ -70,79 +172,3 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  name: 'BrowseInputFilter',
-  props: {
-    filter: {
-      type: Object,
-      required: true
-    }
-  },
-  data() {
-    return {
-      singleValue: null,
-      doubleValueFirst: null,
-      doubleValueSecond: null,
-    }
-  },
-  methods: {
-    onBlur(param = undefined) {
-      if (this.filter.config.range) {
-        return
-      }
-
-      if (this.singleValue === null || this.singleValue === '') {
-        return
-      }
-
-      this.emitSingleValue()
-    },
-    onInput(param = undefined) {
-      if (this.filter.config.range) {
-
-        if (this[param] === '') {
-          this.emitDoubleValue()
-        }
-
-        return
-      }
-
-      if (this.singleValue === '') {
-        this.emitSingleValue()
-      }
-    },
-    onKeyUpEnter(param = undefined) {
-      if (this.filter.config.range) {
-
-        if (this[param] !== '' && this[param] !== null) {
-          this.emitDoubleValue()
-
-          return
-        }
-      }
-
-      if (this.singleValue !== '' && this.singleValue !== null) {
-        this.emitSingleValue()
-      }
-    },
-    onClickRemoveButton(param = undefined) {
-      if (this.filter.config.range) {
-        this[param] = null
-        this.emitDoubleValue()
-
-        return
-      }
-
-      this.singleValue = null
-      this.emitSingleValue()
-    },
-    emitSingleValue() {
-      this.$emit('filterValueChanged', {'id': this.filter.id, 'value': this.singleValue})
-    },
-    emitDoubleValue() {
-      this.$emit('filterValueChanged', {'id': this.filter.id, 'value': [this.doubleValueFirst, this.doubleValueSecond]})
-    }
-  }
-}
-</script>
