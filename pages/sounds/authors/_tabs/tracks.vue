@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import BrowserSmall from '~/components/Base/BrowserSmall/BrowserSmall.vue'
 import SoundAuthorsTrackTr from '~/components/CustomTr/SoundAuthorsTrackTr.vue'
-import type { ComponentInternalInstance } from 'vue'
 
 const props = defineProps<{
   item?: IItem,
-  browserSmallEl: ComponentInternalInstance | null
 }>()
 
 type IItem = Record<string, any>

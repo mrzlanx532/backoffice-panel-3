@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import BrowserSmall from '~/components/Base/BrowserSmall/BrowserSmall.vue'
 import { defineComponent, useNuxtApp } from '#imports'
-import { type ComponentInternalInstance, h } from 'vue'
 import ButtonDropdown from '~/components/Base/ButtonDropdown.vue'
 
 const {
@@ -12,7 +11,6 @@ const {
 
 const props = defineProps<{
   item?: IItem,
-  browserSmallEl: ComponentInternalInstance | null
 }>()
 
 type IItem = Record<string, any>
@@ -21,52 +19,53 @@ const filters = ref({
   'author_id': [props.item!.id]
 })
 
-const items = [
-  {
-    title: 'Изменить',
-    class: '--primary',
-    onClick: async () => {
-      const formResponse = await $authFetch('sound/libraries/form', {
-        method: 'GET',
-        params: {
-          id: props.item.id,
-        },
-      })
-
-      $modal.load('sound/libraries/form', {
-        title: 'Изменить библиотеку',
-        id: props.item.id,
-        formResponse
-      }).then(() => {
-        $notification.push({type: 'success', message: 'Библиотека изменена'})
-      })
-    }
-  },
-  {
-    title: 'Удалить',
-    class: '--danger',
-    onClick: async () => {
-      $modal.confirm().then(async (isAgree) => {
-        if (!isAgree) {
-          return
-        }
-
-        await $authFetch('sound/libraries/delete', {
-          method: 'POST',
-          body: {
-            id: props.item.id,
-          },
-        })
-
-        props.browserSmallEl.exposed.reset()
-        $notification.push({type: 'success', message: 'Библиотека удалена'})
-      })
-    }
-  },
-]
-
 const editColumn = defineComponent(
     (props) => {
+
+      const items = [
+        {
+          title: 'Изменить',
+          class: '--primary',
+          onClick: async () => {
+            const formResponse = await $authFetch('sound/libraries/form', {
+              method: 'GET',
+              params: {
+                id: props.item.id,
+              },
+            })
+
+            $modal.load('sound/libraries/form', {
+              title: 'Изменить библиотеку',
+              id: props.item.id,
+              formResponse
+            }).then(() => {
+              $notification.push({type: 'success', message: 'Библиотека изменена'})
+            })
+          }
+        },
+        {
+          title: 'Удалить',
+          class: '--danger',
+          onClick: async () => {
+            $modal.confirm().then(async (isAgree) => {
+              if (!isAgree) {
+                return
+              }
+
+              await $authFetch('sound/libraries/delete', {
+                method: 'POST',
+                body: {
+                  id: props.item.id,
+                },
+              })
+
+              props.browserSmallEl.exposed.reset()
+              $notification.push({type: 'success', message: 'Библиотека удалена'})
+            })
+          }
+        },
+      ]
+
       return () => {
         return h('div', [
           h(ButtonDropdown, {
