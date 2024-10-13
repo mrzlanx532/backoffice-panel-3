@@ -1,5 +1,5 @@
-<script setup>
-import BaseLink from "@/components/Base/BaseLink"
+<script setup lang="ts">
+import BaseLink from '~/components/Base/BaseLink.vue'
 
 const emit = defineEmits(['itemUpdated'])
 

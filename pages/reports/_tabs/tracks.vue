@@ -52,5 +52,6 @@ watch(
     :params="params"
     :customTr="ReportTracksTr"
     :columns="columns"
+    :is-enabled-search="false"
 />
 </template>

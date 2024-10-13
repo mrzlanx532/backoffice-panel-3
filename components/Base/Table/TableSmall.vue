@@ -36,6 +36,7 @@ interface Props {
   params?: {
     [key: string]: any[]
   }
+  isEnabledSearch?: boolean,
   itemPrimaryKeyPropertyName?: string,
   urlPrefix: string,
   columns?: IColumn[],
@@ -47,6 +48,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   itemPrimaryKeyPropertyName: 'id',
   isEnabledTHead: true,
+  isEnabledSearch: false,
   columns: () => [] as IColumn[],
 })
 
@@ -141,7 +143,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="browser-small" :class="{'--is-disabled-thead': !isEnabledTHead}">
+  <div class="browser-small" :class="{'--is-disabled-thead': !isEnabledTHead }">
     <ClientOnly>
       <Transition name="fade">
         <div
@@ -167,6 +169,7 @@ onMounted(() => {
               class="browser__table-container"
           >
             <BrowserSearchString
+                v-if="isEnabledSearch"
                 @search="onSearchStringInput"
                 class="--in-small-browser"
             />
