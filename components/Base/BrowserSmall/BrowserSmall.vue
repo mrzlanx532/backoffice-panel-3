@@ -35,6 +35,7 @@ const {
 
 interface Props {
   urlPrefix: string,
+  columns?: IColumn[],
   filters?: {
     [key: string]: any[]
   }
@@ -43,7 +44,6 @@ interface Props {
   },
   isEnabledSearch?: boolean,
   itemPrimaryKeyPropertyName?: string,
-  columns?: IColumn[],
   requestProperties?: string[],
   isEnabledTHead?: boolean,
   customTr?: Component
