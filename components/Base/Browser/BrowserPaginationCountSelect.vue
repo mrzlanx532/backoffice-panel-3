@@ -1,3 +1,35 @@
+<script setup lang="ts">
+const props = defineProps<{
+  options: number[],
+  selectedValue: number
+}>()
+
+const localSelectedValue = ref(null)
+const isSelecting = ref(false)
+
+const emit = defineEmits(['change'])
+
+const onClickSelectedValue = () => {
+  isSelecting.value = !isSelecting.value
+}
+
+const onMouseDownOnDropdownOption = (option) => {
+
+  localSelectedValue.value = option
+  isSelecting.value = false
+
+  emit('change', localSelectedValue.value)
+}
+
+const onClickOutside = () => {
+  isSelecting.value = false
+}
+
+onMounted(() => {
+  localSelectedValue.value = props.selectedValue;
+})
+</script>
+
 <template>
   <div class="browser__pagination-count select">
     <div class="select__label">Показывать по</div>
@@ -25,49 +57,3 @@
     </div>
   </div>
 </template>
-<script>
-
-export default {
-  name: 'BrowserPaginationCountSelect',
-  props: {
-    optionsById: {
-      type: Object,
-      required: false
-    },
-    options: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    selectedValue: {
-      type: Number,
-      required: true
-    }
-  },
-  created() {
-    this.localSelectedValue = this.selectedValue;
-  },
-  data() {
-    return {
-      localSelectedValue: null,
-      isSelecting: false
-    }
-  },
-  methods: {
-    onClickSelectedValue() {
-      this.isSelecting = !this.isSelecting
-    },
-    onMouseDownOnDropdownOption(option) {
-
-      this.localSelectedValue = option
-      this.isSelecting = false
-
-      this.$emit('change', this.localSelectedValue)
-    },
-    onClickOutside() {
-      this.isSelecting = false
-    },
-  }
-}
-</script>
