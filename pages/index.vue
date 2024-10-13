@@ -7,6 +7,7 @@ import StateButton from '@/components/Base/StateButton.vue'
 import BaseLink from '@/components/Base/BaseLink.vue'
 import Badge from '@/components/Base/Badge.vue'
 import type { Ref } from 'vue'
+import ButtonDropdown from '~/components/Base/ButtonDropdown.vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -112,6 +113,8 @@ const onChangeStateButton = (_selectedOption: IStateButtonOption) => {
           @change="onChangeStateButton"
       />
     </div>
+
+    <ButtonDropdown :items="[{title: 'Скачать', class: '--success'}, {title: 'Изменить', class: '--primary'}, {title: 'Удалить', class: '--danger'}]"/>
 
     <div :style="style">Badge</div>
     <template v-for="(btnClass, index) in btnClasses">

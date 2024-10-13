@@ -123,12 +123,16 @@
             cursor: default;
         }
 
+        &.--disable-hover:hover {
+          background-color: var(--color-1, #ffffff);
+        }
+
         td {
           font-family: "Roboto";
           font-size: 13px;
           padding: 12px;
 
-          &.--min {
+          &.--min-width {
             width: 1px;
           }
         }
