@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import BrowserSmall, { type IItem} from '~/components/Base/BrowserSmall/BrowserSmall.vue'
-import CollectionTracksTr from '~/components/CustomTr/CollectionTracksTr.vue'
+import LibraryTracksTr from '~/components/CustomTr/LibraryTracksTr.vue'
 
 const props = defineProps<{
   item?: IItem,
 }>()
 
 const filters = ref({
-  'track_collection_id': [props.item!.id]
+  'library_id': [props.item!.id]
 })
 
 watch(
     () => props.item,
     (value) => {
       filters.value = {
-        'track_collection_id': [value!.id]
+        'library_id': [value!.id]
       }
     }
 )
@@ -23,8 +23,8 @@ watch(
 
 <template>
   <BrowserSmall
-      urlPrefix="sound/collections/tracks/browse"
+      urlPrefix="sound/libraries/tracks/browse"
       :filters="filters"
-      :customTr="CollectionTracksTr"
+      :customTr="LibraryTracksTr"
   />
 </template>
