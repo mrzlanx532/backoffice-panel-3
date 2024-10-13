@@ -1,14 +1,49 @@
 <script setup lang="ts">
-import Browser, { type IItem } from '~/components/Base/Browser/Browser.vue';
+import Browser from '~/components/Base/Browser/Browser.vue';
 
-import type { Ref } from 'vue'
 import { definePageMeta } from '#imports'
+import MainTab from '~/pages/sounds/authors/_tabs/main.vue'
+import TracksTab from '~/pages/sounds/authors/_tabs/tracks.vue'
+import LibrariesTab from '~/pages/sounds/authors/_tabs/libraries.vue'
+import Tabs from '~/components/Base/Tabs.vue'
+import Button from '~/components/Base/Button.vue'
 
 definePageMeta({
   middleware: ['auth']
 })
 
-const item: Ref<IItem|null> = ref(null)
+const {
+  browserEl,
+  item,
+
+  onClickCreate,
+  onClickEdit,
+  onClickDelete,
+  onItemUpdated,
+} = usePage()
+
+const {
+  initTabs
+} = useTabs()
+
+const {
+  tabs,
+  selectedTabComponent,
+  onChangeSelectedTab
+} = initTabs([
+  {
+    title: 'Инфо',
+    component: MainTab
+  },
+  {
+    title: 'Треки',
+    component: TracksTab
+  },
+  {
+    title: 'Библиотеки',
+    component: LibrariesTab
+  },
+])
 
 const requestProperties = ref([
   'id',
@@ -48,14 +83,11 @@ const columns = ref([
     }
   },
 ])
-
-const onItemUpdated = (item: IItem) => {
-  item.value = item
-}
 </script>
 
 <template>
   <Browser
+      ref="browserEl"
       h1="Авторы шумовых треков"
       url-prefix="sound/authors/browse"
 
@@ -68,5 +100,35 @@ const onItemUpdated = (item: IItem) => {
       :request-properties="requestProperties"
 
       @itemUpdated="onItemUpdated"
-  />
+  >
+    <template #rightSide>
+      <div class="btn__group">
+        <Button @click="onClickCreate({
+          formURL: 'sound/authors/form',
+          modalPath: 'sound/authors/form',
+          modalTitle: 'Создать автор',
+          notificationMessage: 'Автор создан'
+        })" :class="['--small --success']">Добавить</Button>
+      </div>
+    </template>
+    <template #browserDetailHeader>
+      <div class="btn__group">
+        <Button @click="onClickEdit({
+          formURL: 'sound/authors/form',
+          modalPath: 'sound/authors/form',
+          modalTitle: 'Изменить автора',
+          notificationMessage: 'Автор изменен'
+        })" :class="['--big --outline-primary']">Изменить</Button>
+        <Button @click="onClickDelete({
+          deleteURL: 'sound/authors/delete',
+          notificationMessage: 'Автор удален'
+        })" :class="['--big --outline-danger']">Удалить</Button>
+      </div>
+      <Tabs @change="onChangeSelectedTab" :tabs="tabs"/>
+    </template>
+
+    <template #browserDetailContent>
+      <component :is="selectedTabComponent" :item="item"/>
+    </template>
+  </Browser>
 </template>

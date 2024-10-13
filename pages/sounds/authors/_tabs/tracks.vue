@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import BrowserSmall from '~/components/Base/BrowserSmall/BrowserSmall.vue'
-import MusicAuthorsTrackTr from '~/components/CustomTr/MusicAuthorsTrackTr.vue'
+import SoundAuthorsTrackTr from '~/components/CustomTr/SoundAuthorsTrackTr.vue'
+import type { ComponentInternalInstance } from 'vue'
 
 const props = defineProps<{
   item?: IItem,
+  browserSmallEl: ComponentInternalInstance | null
 }>()
 
 type IItem = Record<string, any>
@@ -24,8 +26,8 @@ watch(
 
 <template>
   <BrowserSmall
-      :customTr="MusicAuthorsTrackTr"
-      url-prefix="music/authors/tracks/browse"
+      :customTr="SoundAuthorsTrackTr"
+      url-prefix="sound/authors/tracks/browse"
       :filters="filters"
       :is-enabled-search="true"
       :is-enabled-t-head="false"
