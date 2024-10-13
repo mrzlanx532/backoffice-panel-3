@@ -67,6 +67,10 @@ export const useBrowser = () => {
     const dynamicMethods: {[key: string]: (configItem: IConfigItem, item: IItem) => string | null} = {
         timestampToFormatPreset: (configItem: IConfigItem, item: IItem) => {
 
+            if (item[configItem.name] === null) {
+                return '-'
+            }
+
             const date = moment(item[configItem.name] * 1000)
 
             if (!date.isValid()) {
