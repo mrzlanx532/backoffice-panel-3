@@ -63,7 +63,7 @@ const onClickListen = () => {
 }
 
 const onClickInfo = () => {
-  window.open('/sounds/' + props.item.id)
+  window.open('/music/' + props.item.id)
 }
 </script>
 

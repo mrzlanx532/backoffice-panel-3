@@ -39,10 +39,15 @@ watch(
       }
     }
 )
+
+const onClickRow = () => {
+  window.open('/music/albums/' + props.item.id)
+}
 </script>
 
 <template>
 <BrowserSmall
+    @click-row="onClickRow"
     url-prefix="music/authors/albums/browse"
     :columns="columns"
     :filters="filters"
