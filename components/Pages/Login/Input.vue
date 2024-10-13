@@ -1,58 +1,30 @@
+<script setup lang="ts">
+const props = defineProps<{
+  name: string,
+  type: string,
+  value?: string,
+  label: string,
+  errorMessage?: {}
+}>()
+
+const localValue = ref(props.value)
+const localLabel = ref(props.label)
+</script>
+
 <template>
   <div class="login__input-container">
-    <label :for="name">{{ localLabel }}</label>
+    <div class="label" :for="name">{{ localLabel }}</div>
     <input
         class="login__input"
         :type="type"
         :name="name"
         :id="name"
-        v-model="localValue"
-        @change="onChange"
-    >
+        v-model="localValue"/>
     <div
         class="login__input-error"
-        :class="{'login__input-error_hidden': errorMessage[name] === ''}"
+        :class="{'login__input-error_hidden': errorMessage && errorMessage[name] === ''}"
     >
-      {{ errorMessage[name] }}
+      {{ errorMessage && errorMessage[name] ? errorMessage[name] : ''}}
     </div>
   </div>
 </template>
-<script>
-export default {
-  name: 'Input',
-  props: {
-    name: {
-      type: String,
-      required: true,
-      default: ''
-    },
-    type: {
-      type: String,
-      required: true
-    },
-    value: {
-      type: String,
-      required: false
-    },
-    label: {
-      type: String
-    },
-    errorMessage: {
-      type: Object,
-      default: {}
-    }
-  },
-  data() {
-    return {
-      localValue: this.value,
-      localLabel: this.label,
-      localErrorMessage: this.errorMessage
-    }
-  },
-  methods: {
-    onChange(e) {
-      this.$emit('change', e)
-    }
-  },
-}
-</script>
