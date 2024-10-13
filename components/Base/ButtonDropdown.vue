@@ -4,7 +4,8 @@ import { defineComponent } from '#imports'
 
 interface IItem {
   title: string,
-  class: string
+  class: string,
+  onClick?: () => {}
 }
 
 const props = defineProps<{
@@ -43,7 +44,10 @@ const onClickOutside = () => {
 const AuthorColumn = defineComponent(
     (props, expose) => {
       return () => {
-        return h('div', { class: 'btn-dropdown__item' }, {
+        return h('div', {
+          class: 'btn-dropdown__item',
+          onClick: props.item.onClick
+        }, {
           default: () => {
             return expose.slots.default()
           }
@@ -51,7 +55,7 @@ const AuthorColumn = defineComponent(
       }
     }, {
       props: {
-        item: {Object}
+        item: Object
       }
     }
 )
@@ -88,7 +92,7 @@ const onMouseOut = () => {
         :style="{top: top + 'px', left: left + 'px'}"
         v-click-outside="onClickOutside"
     >
-      <AuthorColumn v-for="item in props.items" :class="item.class">
+      <AuthorColumn v-for="item in props.items" :class="item.class" :item="item">
         {{ item.title }}
       </AuthorColumn>
     </div>

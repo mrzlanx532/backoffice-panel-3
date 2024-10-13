@@ -9,6 +9,11 @@ const props = defineProps<{
   item: IItem
 }>()
 
+const buttonDropdownItems = [
+  { title: 'Изменить', class: '--primary', onClick: () => alert('edit') },
+  { title: 'Удалить', class: '--danger' },
+]
+
 const onClickListen = () => {
   window.alert('Слушаем песню..')
 }
@@ -38,7 +43,7 @@ const onClickInfo = () => {
       </svg>
     </td>
     <td class="--min-width">
-      <ButtonDropdown :items="[{title: 'Изменить', class: '--primary'}, {title: 'Удалить', class: '--danger'}]"/>
+      <ButtonDropdown :items="buttonDropdownItems"/>
     </td>
   </tr>
 </template>

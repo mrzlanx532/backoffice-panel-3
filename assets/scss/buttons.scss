@@ -424,6 +424,7 @@
     font-size: 14px;
     min-height: 40px;
     cursor: pointer;
+    user-select: none;
 
     &:hover {
       background: var(--color-3, #f3f3f3);
