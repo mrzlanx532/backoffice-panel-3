@@ -29,10 +29,14 @@ const props = withDefaults(defineProps<Props>(), {
 const dynamicMethods: {[key: string]: (configItem: IConfigItem, item: IItem) => string | null} = {
   timestampToFormatPreset: (configItem: IConfigItem, item: IItem) => {
 
+    if (item[configItem.name] === null) {
+      return props.emptySymbol
+    }
+
     const date = moment(item[configItem.name] * 1000)
 
     if (!date.isValid()) {
-      return null;
+      return props.emptySymbol;
     }
 
     if (configItem.preset?.hasOwnProperty('locale')) {
