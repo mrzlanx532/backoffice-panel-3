@@ -2,6 +2,7 @@ import { useNuxtApp, useAsyncData, useRouter } from '#imports'
 import type { Ref } from 'vue'
 import { type IItem, type IBrowser } from '@/components/Base/Browser/Browser.vue';
 import type { RouteLocationAsPathGeneric, RouteLocationAsRelativeGeneric } from '#vue-router'
+import { FetchError } from 'ofetch'
 
 export interface IConfigCreateEdit {
     formURL: string,
@@ -13,7 +14,8 @@ export interface IConfigCreateEdit {
 export interface IConfigDelete {
     deleteURL: string,
     notificationMessage: string,
-    redirectURL?: string | RouteLocationAsRelativeGeneric | RouteLocationAsPathGeneric
+    redirectURL?: string | RouteLocationAsRelativeGeneric | RouteLocationAsPathGeneric,
+    logicErrorStatusCode?: number
 }
 
 export const usePage = () => {
@@ -68,12 +70,24 @@ export const usePage = () => {
                 return
             }
 
-            await $authFetch(config.deleteURL, {
-                method: 'POST',
-                body: {
-                    id: item.value!.id,
-                },
-            })
+            try {
+                await $authFetch(config.deleteURL, {
+                    method: 'POST',
+                    body: {
+                        id: item.value!.id,
+                    },
+                })
+            } catch (e: FetchError) {
+                if (e.statusCode === (config.logicErrorStatusCode ? config.logicErrorStatusCode : 409)) {
+                    $notification.push({type: 'danger', message: e.data.message})
+
+                    return
+                }
+
+                $notification.push({type: 'danger', message: 'Ошибка сервера'})
+
+                return
+            }
 
             $notification.push({type: 'success', message: config.notificationMessage})
             item.value = {}
