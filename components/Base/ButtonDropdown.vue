@@ -37,7 +37,7 @@ const onClick = () => {
   })
 }
 
-const onClickOutside = () => {
+const setIsOpenAsFalse = () => {
   isOpen.value = false
 }
 
@@ -46,7 +46,7 @@ const AuthorColumn = defineComponent(
       return () => {
         return h('div', {
           class: 'btn-dropdown__item',
-          onClick: props.item.onClick
+          onClick: [props.item.onClick, setIsOpenAsFalse]
         }, {
           default: () => {
             return expose.slots.default()
@@ -90,7 +90,7 @@ const onMouseOut = () => {
         v-if="isOpen"
         class="btn-dropdown__container"
         :style="{top: top + 'px', left: left + 'px'}"
-        v-click-outside="onClickOutside"
+        v-click-outside="setIsOpenAsFalse"
     >
       <AuthorColumn v-for="item in props.items" :class="item.class" :item="item">
         {{ item.title }}

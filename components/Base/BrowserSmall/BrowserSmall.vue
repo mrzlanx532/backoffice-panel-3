@@ -7,7 +7,7 @@ export interface IBrowser {
 </script>
 
 <script setup lang="ts">
-import type { Component, Ref } from 'vue'
+import { type Component, type Ref, getCurrentInstance } from 'vue'
 import { FetchError } from 'ofetch'
 import { useNuxtApp, useBrowser } from '#imports'
 import Spinner from '~/components/Base/Spinner.vue'
@@ -94,6 +94,8 @@ interface IFilter {
     url: string
   }
 }
+
+const BrowserSmallEl = getCurrentInstance()
 
 const emit = defineEmits([
   'clickRow',
@@ -307,7 +309,14 @@ defineExpose({
                 </thead>
                 <tbody>
                   <template v-if="props.customTr">
-                    <component :is="props.customTr" v-for="item in items" :item="item" :key="item[itemPrimaryKeyPropertyName]" @click="onClickRow(item)"/>
+                    <component
+                        :is="props.customTr"
+                        v-for="item in items"
+                        :item="item"
+                        :key="item[itemPrimaryKeyPropertyName]"
+                        @click="onClickRow(item)"
+                        :browserSmallEl="BrowserSmallEl"
+                    />
                   </template>
                   <template v-else>
                     <tr v-for="item in items" :key="item[itemPrimaryKeyPropertyName]" @click="onClickRow(item)">

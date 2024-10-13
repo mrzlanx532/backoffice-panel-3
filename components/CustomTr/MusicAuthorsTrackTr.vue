@@ -2,16 +2,60 @@
 import Button from '~/components/Base/Button.vue'
 import { prepareDuration } from '~/helpers/functions-for-table-columns'
 import ButtonDropdown from '~/components/Base/ButtonDropdown.vue'
+import { useNuxtApp } from '#imports'
+import type { ComponentInternalInstance } from 'vue'
 
 type IItem = Record<any, string>
 
+const {
+  $authFetch,
+  $modal,
+  $notification
+} = useNuxtApp()
+
 const props = defineProps<{
-  item: IItem
+  item: IItem,
+  browserSmallEl: ComponentInternalInstance | null
 }>()
 
+const onClickEdit = async () => {
+  const formResponse = await $authFetch('music/tracks/form', {
+    method: 'GET',
+    params: {
+      id: props.item.id,
+    },
+  })
+
+  $modal.load('music/form', {
+    title: 'Изменить трек',
+    id: props.item.id,
+    formResponse
+  }).then(() => {
+    $notification.push({type: 'success', message: 'Трек изменен'})
+  })
+}
+
+const onClickDelete = async () => {
+  $modal.confirm().then(async (isAgree) => {
+    if (!isAgree) {
+      return
+    }
+
+    await $authFetch('music/tracks/delete', {
+      method: 'POST',
+      body: {
+        id: props.item.id,
+      },
+    })
+
+    props.browserSmallEl.exposed.reset()
+    $notification.push({type: 'success', message: 'Трек удален'})
+  })
+}
+
 const buttonDropdownItems = [
-  { title: 'Изменить', class: '--primary', onClick: () => alert('edit') },
-  { title: 'Удалить', class: '--danger' },
+  { title: 'Изменить', class: '--primary', onClick: onClickEdit },
+  { title: 'Удалить', class: '--danger', onClick: onClickDelete },
 ]
 
 const onClickListen = () => {
