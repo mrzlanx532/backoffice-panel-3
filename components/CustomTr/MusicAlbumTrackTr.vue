@@ -23,19 +23,16 @@ const onClickListen = () => {
       <div>
         {{ props.item.title_en }} {{ props.item.title_ru ? '(' + props.item.title_ru + ')' : '' }}
       </div>
-      <div>
-
-      </div>
     </td>
-    <td>
+    <td class="--min-width">
       {{ props.item.variation && props.item.variation.duration ? prepareDuration(props.item.variation.duration) : '-' }}
     </td>
-    <td>
+    <td class="--min-width">
       <Button class="--small --success" @click="onClickListen">
         Слушать
       </Button>
     </td>
-    <td>
+    <td class="--min-width">
       <svg @click="onClickInfo()">
         <use xlink:href="/img/sprite.svg#primary"/>
       </svg>

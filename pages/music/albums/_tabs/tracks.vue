@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BrowserSmall from '~/components/Base/BrowserSmall/BrowserSmall.vue'
-import TracksTr from '~/components/CustomTr/TrackTr.vue'
+import MusicAlbumTrackTr from '~/components/CustomTr/MusicAlbumTrackTr.vue'
 
 type IItem = {[key: string]: any}
 
@@ -24,7 +24,7 @@ watch(
 
 <template>
   <BrowserSmall
-    :custom-tr="TracksTr"
+    :custom-tr="MusicAlbumTrackTr"
     url-prefix="music/albums/tracks/browse"
     :filters="filters"
     :is-enabled-t-head="false"
