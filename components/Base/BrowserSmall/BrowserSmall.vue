@@ -297,15 +297,15 @@ defineExpose({
             <template v-if="items.length">
               <table class="browser-small__table" :class="{'--loading': loadingIsActive}">
                 <thead v-if="isEnabledTHead">
-                <tr>
-                  <BrowserTHeadTh
-                      @sortChanged="onSortChanged"
-                      v-for="column in columns"
-                      :key="column.name"
-                      :sorts="sorts"
-                      :column="column"
-                  />
-                </tr>
+                  <tr>
+                    <BrowserTHeadTh
+                        @sortChanged="onSortChanged"
+                        v-for="column in columns"
+                        :key="column.name"
+                        :sorts="sorts"
+                        :column="column"
+                    />
+                  </tr>
                 </thead>
                 <tbody>
                   <template v-if="props.customTr">

@@ -26,5 +26,6 @@ watch(
       urlPrefix="sound/libraries/tracks/browse"
       :filters="filters"
       :customTr="LibraryTracksTr"
+      :is-enabled-t-head="false"
   />
 </template>
