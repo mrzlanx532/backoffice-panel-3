@@ -1,3 +1,71 @@
+<script setup lang="ts">
+const props = withDefaults(defineProps<{
+  options: [],
+  url?: string,
+  selectedOption: {},
+  updateParamName?: string
+  dataId?: number
+}>(), {
+  updateParamName: 'state_id'
+})
+
+const emit = defineEmits(['change'])
+
+const isOpen = ref(false)
+const selectedOptionLocal = ref(props.selectedOption)
+const loadingMessage = ref('&nbsp;')
+const setIntervalInstance = ref(null)
+
+watch(
+    () => props.selectedOption,
+    (selectedOption) => {
+      if (
+          Object.keys(selectedOptionLocal.value).length === 0 ||
+          Object.keys(selectedOption.value).length === 0
+      ) {
+
+        selectedOptionLocal.value = selectedOption
+
+        clearInterval(setIntervalInstance.value)
+
+        setIntervalInstance.value = null
+
+        return
+      }
+
+      selectedOptionLocal.value = selectedOption
+
+      this.$authFetch(props.url, {
+        method: 'POST',
+        body: {
+          id: dataId.value,
+          [props.updateParamName]: selectedOptionLocal.value.id
+        }
+      })
+    }
+)
+
+const onOptionClick = async (option) => {
+  if (props.selectedOption.value.id === option.id) {
+    isOpen.value = false
+    return
+  }
+
+  emit('change', option);
+  isOpen.value = false
+}
+
+const onBlur = () => {
+  isOpen.value = false
+}
+
+onMounted(() => {
+  setIntervalInstance.value = setInterval(() => {
+    loadingMessage.value = loadingMessage.value === '&nbsp;...' || loadingMessage.value === '...' ? '.' : loadingMessage.value + '.'
+  }, 100)
+})
+</script>
+
 <template>
   <div class="btn-state__container">
     <button
@@ -32,96 +100,3 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  setup() {
-    const runtimeConfig = useRuntimeConfig()
-
-    return {
-      runtimeConfig
-    }
-  },
-  name: "StateButton",
-  props: {
-    options: {
-      required: true,
-      type: Array
-    },
-    url: {
-      required: false,
-      type: String
-    },
-    selectedOption: {
-      required: false,
-      type: Object
-    },
-    updateParamName: {
-      required: false,
-      type: String,
-      default: 'state_id'
-    },
-    dataId: {
-      required: false,
-      type: Number
-    }
-  },
-  data() {
-    return {
-      isOpen: false,
-      selectedOptionLocal: this.selectedOption,
-      loadingMessage: '&nbsp;',
-      setIntervalInstance: null
-    }
-  },
-  watch: {
-    selectedOption: function () {
-
-      if (
-          Object.keys(this.selectedOptionLocal).length === 0 ||
-          Object.keys(this.selectedOption).length === 0
-      ) {
-
-        this.selectedOptionLocal = this.selectedOption
-
-        clearInterval(this.setIntervalInstance)
-
-        this.setIntervalInstance = null
-
-        return
-      }
-
-      this.selectedOptionLocal = this.selectedOption
-
-      let data = {
-        method: 'POST',
-        body: {
-          id: this.dataId,
-          [this.updateParamName]: this.selectedOptionLocal.id
-        }
-      }
-
-      this.$authFetch(`${this.runtimeConfig.public.laravelAuth.domain}/${this.url}`, data)
-    }
-  },
-  methods: {
-    async onOptionClick(option) {
-
-      if (this.selectedOption.id === option.id) {
-        this.isOpen = false
-        return
-      }
-
-      this.$emit('change', option);
-      this.isOpen = false
-    },
-    onBlur() {
-      this.isOpen = false
-    }
-  },
-  mounted() {
-    this.setIntervalInstance = setInterval(() => {
-      this.loadingMessage = this.loadingMessage === '&nbsp;...' || this.loadingMessage === '...' ? '.' : this.loadingMessage + '.'
-    }, 100)
-  }
-}
-</script>
