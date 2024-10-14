@@ -79,7 +79,7 @@ const logout = async () => {
 
 const onClickOutside = () => {
   if (activeMenuItem.value) {
-    closeOpenMenuItem.value(activeMenuItem.value)
+    closeOpenMenuItem(activeMenuItem.value)
 
     activeMenuItem.value = null
   }
