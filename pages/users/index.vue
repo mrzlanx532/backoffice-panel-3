@@ -3,7 +3,6 @@ import { definePageMeta } from '#imports'
 
 import Browser from '@/components/Base/Browser/Browser.vue';
 import Tabs from '@/components/Base/Tabs.vue';
-import SubscriptionRow from '@/components/CustomRows/users/SubscriptionRow.vue'
 import Button from '@/components/Base/Button.vue';
 import MainTab from '@/pages/users/_tabs/main.vue'
 import SubscriptionTab from '@/pages/users/_tabs/subscription.vue'
@@ -80,7 +79,6 @@ const columns = shallowRef([
   {
     name: 'company',
     title: 'Подписка (Срок действия)',
-    component: SubscriptionRow
   },
   {
     name: 'downloads_counter',
