@@ -1,7 +1,70 @@
+<script setup lang="ts">
+import type { Ref } from 'vue'
+
+const props = withDefaults(defineProps<{
+  selectedItem?: number,
+  tabs: []
+}>(), {
+  selectedItem: 0
+})
+
+const emit = defineEmits(['change'])
+
+let mouseUpListener = null
+let mouseMoveListener = null
+
+const localSelectedItem = ref(props.selectedItem)
+const isDraggable = ref(false)
+const currentScrolledLeft: Ref<number|null> = ref(null)
+const screenXWhenMouseDown: Ref<number|null> = ref(null)
+const tabsEl = ref(null)
+
+const documentPointerUpListener = () => {
+  isDraggable.value = false
+  screenXWhenMouseDown.value = null
+  currentScrolledLeft.value = null
+
+  document.removeEventListener('pointerup', mouseUpListener)
+  document.removeEventListener('pointermove', mouseMoveListener)
+
+  mouseUpListener = null
+  mouseMoveListener = null
+}
+
+const documentPointerMoveListener = (e: MouseEvent) => {
+  if (!isDraggable.value) {
+    return
+  }
+
+  tabsEl.value.scrollTo(
+      (screenXWhenMouseDown.value + currentScrolledLeft.value) - e.screenX,
+      tabsEl.value.offsetTop
+  )
+}
+
+const onClick = (index: number) => {
+  localSelectedItem.value = index
+
+  emit('change', localSelectedItem.value)
+}
+
+const onMouseDown = (e: MouseEvent) => {
+  isDraggable.value = true
+  currentScrolledLeft.value = tabsEl.value.scrollLeft
+  screenXWhenMouseDown.value = e.screenX
+
+  mouseUpListener = documentPointerUpListener.bind(document)
+  mouseMoveListener = documentPointerMoveListener.bind(null)
+
+  document.addEventListener('pointerup', mouseUpListener)
+  document.addEventListener('pointermove', mouseMoveListener)
+}
+</script>
+
 <template>
   <div
       class="tabs"
-      ref="tabs"
+      ref="tabsEl"
       @mousedown="onMouseDown"
   >
     <div
@@ -14,72 +77,3 @@
     </div>
   </div>
 </template>
-<script>
-function documentPointerUpListener(vm) {
-  vm.isDraggable = false
-  vm.screenXWhenMouseDown = null
-  vm.currentScrolledLeft = null
-
-  this.removeEventListener('pointerup', vm.mouseUpListener)
-  this.removeEventListener('pointermove', vm.mouseMoveListener)
-
-  vm.mouseUpListener = null
-  vm.mouseMoveListener = null
-}
-
-function documentPointerMoveListener(vm, e) {
-  if (!vm.isDraggable) {
-    return
-  }
-
-  vm.$refs.tabs.scrollTo(
-      (vm.screenXWhenMouseDown + vm.currentScrolledLeft) - e.screenX,
-      vm.$refs.tabs.offsetTop
-  )
-}
-
-export default {
-  name: "Tabs",
-  props: {
-    selectedItem: {
-      required: false,
-      type: Number,
-      default: 0
-    },
-    tabs: {
-      required: true,
-      type: Array
-    }
-  },
-  data() {
-    return {
-      localSelectedItem: this.selectedItem,
-
-      /* Для перетаскивания */
-      isDraggable: false,
-      currentScrolledLeft: null,
-      screenXWhenMouseDown: null,
-    }
-  },
-  methods: {
-    onClick(index) {
-      this.localSelectedItem = index
-
-      this.$emit('change', this.localSelectedItem)
-    },
-    onMouseDown(e) {
-      this.isDraggable = true
-      this.currentScrolledLeft = this.$refs.tabs.scrollLeft
-      this.screenXWhenMouseDown = e.screenX
-
-      const vm = this
-
-      this.mouseUpListener = documentPointerUpListener.bind(document, vm)
-      this.mouseMoveListener = documentPointerMoveListener.bind(null, vm)
-
-      document.addEventListener('pointerup', this.mouseUpListener)
-      document.addEventListener('pointermove', this.mouseMoveListener)
-    }
-  }
-}
-</script>
