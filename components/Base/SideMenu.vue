@@ -1,3 +1,135 @@
+<script setup lang="ts">
+import { useNuxtApp, useRouter } from '#imports'
+
+const router = useRouter()
+
+const menuItemsIsClosing = ref({})
+const activeMenuItem = ref(null)
+const menu = ref([
+  {
+    name: 'Шумы',
+    children: [
+      {
+        name: 'Каталог треков',
+        link: '/sounds'
+      },
+      {
+        name: 'Коллекции',
+        link: '/sounds/collections'
+      },
+      {
+        name: 'Авторы',
+        link: '/sounds/authors'
+      },
+      {
+        name: 'Библиотеки',
+        link: '/sounds/libraries'
+      },
+    ]
+  },
+  {
+    name: 'Музыка',
+    children: [
+      {
+        name: 'Каталог треков',
+        link: '/music'
+      },
+      {
+        name: 'Плейлисты',
+        link: '/music/playlists'
+      },
+      {
+        name: 'Авторы',
+        link: '/music/authors'
+      },
+      {
+        name: 'Лейблы',
+        link: '/music/labels'
+      },
+      {
+        name: 'Альбомы',
+        link: '/music/albums'
+      },
+    ]
+  },
+  {
+    name: 'Пользователи',
+    children: [
+      {
+        name: 'Каталог пользователей',
+        link: '/users'
+      },
+      {
+        name: 'Отчеты',
+        link: '/reports'
+      },
+    ]
+  },
+  {
+    name: 'Блог',
+    link: '/blog'
+  },
+])
+
+const logout = async () => {
+  const { $auth } = useNuxtApp()
+
+  await $auth().logout()
+}
+
+const onClickOutside = () => {
+  if (activeMenuItem.value) {
+    closeOpenMenuItem.value(activeMenuItem.value)
+
+    activeMenuItem.value = null
+  }
+}
+
+const onSectionMenuItemClick = (menuItem) => {
+
+  const oldActiveMenuItem = activeMenuItem.value
+
+  if (menuItem === null) {
+    activeMenuItem.value = null;
+
+    closeOpenMenuItem(oldActiveMenuItem)
+
+    router.push('/')
+
+    return
+  }
+
+  activeMenuItem.value = activeMenuItem.value === menuItem.name ? null : menuItem.name
+
+  closeOpenMenuItem(oldActiveMenuItem)
+
+  menuItem.link ? router.push(menuItem.link) : null
+}
+
+const onSubSectionMenuItemClick = (menuItem, child) => {
+
+  closeOpenMenuItem(activeMenuItem.value)
+
+  activeMenuItem.value = null
+
+  child.link ? router.push(child.link) : null
+}
+
+const closeOpenMenuItem = (menuItem) => {
+  menuItemsIsClosing.value[menuItem] = true
+
+  setTimeout(() => {
+    menuItemsIsClosing.value[menuItem] = false
+  }, 100)
+}
+
+onMounted(() => {
+  menuItemsIsClosing.value = menu.value ? menu.value.reduce((acc, value) => {
+    return {...acc, [value.name]: false}
+  }, {}) : {}
+})
+</script>
+
 <template>
   <aside class="side-menu">
     <div class="side-menu__container">
@@ -51,135 +183,3 @@
     </div>
   </aside>
 </template>
-<script>
-import { useNuxtApp } from "#imports"
-
-export default {
-  name: 'Menu',
-  data: function () {
-    return {
-      activeMenuItem: null,
-      menuItemsIsClosing: {},
-      menu: [
-        {
-          name: 'Шумы',
-          children: [
-            {
-              name: 'Каталог треков',
-              link: '/sounds'
-            },
-            {
-              name: 'Коллекции',
-              link: '/sounds/collections'
-            },
-            {
-              name: 'Авторы',
-              link: '/sounds/authors'
-            },
-            {
-              name: 'Библиотеки',
-              link: '/sounds/libraries'
-            },
-          ]
-        },
-        {
-          name: 'Музыка',
-          children: [
-            {
-              name: 'Каталог треков',
-              link: '/music'
-            },
-            {
-              name: 'Плейлисты',
-              link: '/music/playlists'
-            },
-            {
-              name: 'Авторы',
-              link: '/music/authors'
-            },
-            {
-              name: 'Лейблы',
-              link: '/music/labels'
-            },
-            {
-              name: 'Альбомы',
-              link: '/music/albums'
-            },
-          ]
-        },
-        {
-          name: 'Пользователи',
-          children: [
-            {
-              name: 'Каталог пользователей',
-              link: '/users'
-            },
-            {
-              name: 'Отчеты',
-              link: '/reports'
-            },
-          ]
-        },
-        {
-          name: 'Блог',
-          link: '/blog'
-        },
-      ]
-    }
-  },
-  created() {
-    this.menuItemsIsClosing = this.menu ? this.menu.reduce((acc, value) => {
-      return {...acc, [value.name]: false}
-    }, {}) : {}
-  },
-  methods: {
-    async logout() {
-      const { $auth } = useNuxtApp()
-
-      await $auth().logout()
-    },
-    onClickOutside() {
-      if (this.activeMenuItem) {
-        this.closeOpenMenuItem(this.activeMenuItem)
-
-        this.activeMenuItem = null
-      }
-    },
-    onSectionMenuItemClick(menuItem) {
-
-      const oldActiveMenuItem = this.activeMenuItem
-
-      if (menuItem === null) {
-        this.activeMenuItem = null;
-
-        this.closeOpenMenuItem(oldActiveMenuItem)
-
-        this.$router.push('/')
-
-        return
-      }
-
-      this.activeMenuItem = this.activeMenuItem === menuItem.name ? null : menuItem.name
-
-      this.closeOpenMenuItem(oldActiveMenuItem)
-
-      menuItem.link ? this.$router.push(menuItem.link) : null
-    },
-    onSubSectionMenuItemClick(menuItem, child) {
-
-      this.closeOpenMenuItem(this.activeMenuItem)
-
-      this.activeMenuItem = null
-
-      child.link ? this.$router.push(child.link) : null
-    },
-    closeOpenMenuItem(menuItem) {
-      this.menuItemsIsClosing[menuItem] = true
-
-      setTimeout(() => {
-        this.menuItemsIsClosing[menuItem] = false
-      }, 100)
-    }
-  }
-}
-</script>
