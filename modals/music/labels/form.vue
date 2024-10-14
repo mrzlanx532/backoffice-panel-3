@@ -5,11 +5,15 @@ import Form from '@/components/Base/Form'
 import FormInput from '@/components/Base/Form/Input.jsx'
 import FormTextArea from '@/components/Base/Form/TextArea'
 import FormInputFile from '@/components/Base/Form/InputFile'
-import { getFormDataValues, formRequestBody } from '~/helpers/common.ts'
 
 const emit = defineEmits(['modal:resolve'])
 
 const { $authFetch } = useNuxtApp()
+
+const {
+  getFormDataValues,
+  formRequestBody
+} = useForm()
 
 const errors = ref([])
 

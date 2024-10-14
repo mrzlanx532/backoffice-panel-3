@@ -1,5 +1,5 @@
 <script setup>
-import { useNuxtApp } from '#app'
+import { useNuxtApp } from '#imports'
 import { onMounted } from 'vue'
 import Form from '@/components/Base/Form'
 import FormInput from '@/components/Base/Form/Input.jsx'
@@ -8,11 +8,15 @@ import FormDate from '@/components/Base/Form/Date'
 import FormTextArea from '@/components/Base/Form/TextArea'
 import FormInputFile from '@/components/Base/Form/InputFile'
 import moment from 'moment'
-import { getFormDataValues, formRequestBody } from '~/helpers/common.ts'
 
 const emit = defineEmits(['modal:resolve'])
 
 const { $authFetch } = useNuxtApp()
+
+const {
+  getFormDataValues,
+    formRequestBody
+} = useForm()
 
 const errors = ref([])
 
