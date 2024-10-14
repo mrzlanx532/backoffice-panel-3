@@ -1,3 +1,29 @@
+<script setup lang="ts">
+import { type IColumn } from '~/composables/useBrowser'
+
+const emit = defineEmits(['sortChanged'])
+
+type ISort = 'asc'|'desc'|null
+
+const props = defineProps<{
+  column: IColumn,
+  sorts: Record<string, ISort>
+}>()
+
+const nextValueMap = {
+  null: 'desc',
+  desc: 'asc',
+  asc: null
+}
+
+const onClick = (name: string) => {
+  emit('sortChanged', name, nextValue(props.sorts[name]))
+}
+const nextValue = (value: ISort) => {
+  return nextValueMap[value]
+}
+</script>
+
 <template>
   <th :class="column.hasOwnProperty('classes') ? column.classes.reduce((concatString, className) => {return `${concatString} ${className}`}) : null">
     <div class="container">
@@ -18,34 +44,3 @@
     </div>
   </th>
 </template>
-<script>
-export default {
-  name: 'BrowserSort',
-  props: [
-    'column',
-    'sorts'
-  ],
-  nextValueMap: {
-    null: 'desc',
-    desc: 'asc',
-    asc: null
-  },
-  data() {
-    return {
-      nextValueMap: {
-        null: 'desc',
-        desc: 'asc',
-        asc: null
-      }
-    }
-  },
-  methods: {
-    onClick(name) {
-      this.$emit('sortChanged', name, this.nextValue(this.sorts[name]))
-    },
-    nextValue(value) {
-      return this.$options.nextValueMap[value]
-    }
-  }
-}
-</script>
