@@ -4,7 +4,7 @@ import Section from '~/components/Base/Section.vue'
 import { ref } from 'vue'
 
 const props = defineProps<{
-  item: IItem|null
+  item?: IItem
 }>()
 
 type IItem = {[key: string]: any}
