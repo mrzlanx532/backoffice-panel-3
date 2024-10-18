@@ -1,9 +1,127 @@
+<script setup lang="ts">
+interface IFilter {
+  id: string,
+  title: string,
+  type: keyof typeof FilterType,
+  options?: {
+    id: string,
+    title: string,
+  }[]
+  config: {
+    filter: boolean,
+    hidden: boolean,
+    mask: string|null,
+    multiple: boolean,
+    range: boolean,
+    url: string
+  }
+}
+
+const props = defineProps<{
+  filter: IFilter,
+  optionsById?: {}
+}>()
+
+const emit = defineEmits(['filterValueChanged'])
+
+const selectedItems = ref({})
+const selectedId = ref(null)
+const selectedTitle = ref(null)
+const isSelecting = ref(false)
+const inverseRender = ref(false)
+const topPxStyle = ref(0)
+
+const selectDropdownEl = ref(null)
+const selectContainerEl = ref(null)
+
+const onDocumentVisibilityChange = () => {
+  if (document.hidden) {
+    isSelecting.value = false
+  }
+}
+
+const onClickSelectedValue = () => {
+  isSelecting.value = !isSelecting.value
+}
+
+const onMouseDownOnDropdownOption = (filterName, option) => {
+  if (props.filter.config.multiple) {
+
+    selectedItems.value[option.id] ? delete selectedItems.value[option.id] : selectedItems.value[option.id] = option
+
+    emit('filterValueChanged', {'id': filterName, 'value': Object.values(selectedItems.value).map(item => item.id)})
+    return
+  }
+
+  selectedId.value = option.id
+  selectedTitle.value = option.title
+  isSelecting.value = false
+
+  emit('filterValueChanged', {'id': filterName, 'value': option.id})
+}
+
+const onClickOutside = () => {
+  isSelecting.value = false
+}
+
+const onClickCancel = (filterName, index) => {
+  if (props.filter.config.multiple) {
+    delete selectedItems.value[index]
+
+    emit('filterValueChanged', {'id': filterName, 'value': Object.values(selectedItems.value).map(item => item.id)})
+  }
+}
+
+const onCrossClick = (filterName) => {
+  selectedId.value = null
+  selectedTitle.value = null
+
+  emit('filterValueChanged', {'id': filterName, 'value': null})
+}
+
+watch(
+    isSelecting,
+    () => {
+      nextTick(() => {
+        if (selectDropdownEl.value === null) {
+          inverseRender.value = false
+          topPxStyle.value = 0;
+          return
+        }
+
+        const rect = selectDropdownEl.value.getBoundingClientRect()
+
+        inverseRender.value = window.innerHeight < (rect.height + rect.top)
+
+        const ro = new ResizeObserver(() => {
+          if (window.innerHeight >= (rect.height + rect.top)) {
+            topPxStyle.value = 0
+            return
+          }
+
+          topPxStyle.value = ((rect.height + selectContainerEl.value.offsetHeight) * -1) + 'px'
+        })
+
+        ro.observe(selectContainerEl.value, {})
+      })
+    }
+)
+
+onMounted(() => {
+  document.addEventListener('visibilitychange', onDocumentVisibilityChange)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('visibilitychange', onDocumentVisibilityChange)
+})
+</script>
+
 <template>
   <div class="browser__filter">
     <div :for="filter.id" class="browser__filter-name">{{ filter.title }}</div>
     <div class="browser__filter-container select__container" tabindex="0" v-click-outside="onClickOutside">
       <div
-          ref="selected__container"
+          ref="selectContainerEl"
           class="select__selected-container"
           :class="{
             '--open': isSelecting,
@@ -50,7 +168,7 @@
           :style="{top: topPxStyle}"
       >
         <div
-            ref="select__dropdown"
+            ref="selectDropdownEl"
             class="select__dropdown"
             :class="{'--inverse': inverseRender}"
             v-scrollable="{classes: ['--without-track', '--smart-opacity']}"
@@ -69,105 +187,6 @@
     </div>
   </div>
 </template>
-<script>
-
-export default {
-  name: 'BrowserSelectFilter',
-  props: {
-    filter: {
-      type: Object,
-      required: true
-    },
-    optionsById: {
-      type: Object,
-      required: false
-    },
-  },
-  data() {
-    return {
-      selectedItems: {},
-      selectedId: null,
-      selectedTitle: null,
-      isSelecting: false,
-      inverseRender: false,
-      topPxStyle: 0
-    }
-  },
-  watch: {
-    isSelecting(val) {
-      this.$nextTick(() => {
-        if (this.$refs.select__dropdown === null) {
-          this.inverseRender = false
-          this.topPxStyle = 0;
-          return
-        }
-
-        const rect = this.$refs.select__dropdown.getBoundingClientRect()
-
-        this.inverseRender = window.innerHeight < (rect.height + rect.top)
-
-        const ro = new ResizeObserver(() => {
-          if (window.innerHeight >= (rect.height + rect.top)) {
-            this.topPxStyle = 0
-            return
-          }
-
-          this.topPxStyle = ((rect.height + this.$refs.selected__container.offsetHeight) * -1) + 'px'
-        })
-
-        ro.observe(this.$refs.selected__container, {})
-      })
-    }
-  },
-  destroyed() {
-    document.removeEventListener('visibilitychange', this.onDocumentVisibilityChange)
-  },
-  created() {
-    document.addEventListener('visibilitychange', this.onDocumentVisibilityChange)
-  },
-  methods: {
-    onDocumentVisibilityChange() {
-      if (document.hidden) {
-        this.isSelecting = false
-      }
-    },
-    onClickSelectedValue() {
-      this.isSelecting = !this.isSelecting
-    },
-    onMouseDownOnDropdownOption(filterName, option) {
-      if (this.filter.config.multiple) {
-
-        this.selectedItems[option.id] ? delete this.selectedItems[option.id] : this.selectedItems[option.id] = option
-
-        this.$emit('filterValueChanged', {'id': filterName, 'value': Object.values(this.selectedItems).map(item => item.id)})
-        return
-      }
-
-      this.selectedId = option.id
-      this.selectedTitle = option.title
-      this.isSelecting = false
-
-      this.$emit('filterValueChanged', {'id': filterName, 'value': option.id})
-    },
-    onClickOutside() {
-      this.isSelecting = false
-    },
-    onClickCancel(filterName, index) {
-      if (this.filter.config.multiple) {
-        delete this.selectedItems[index]
-
-        this.$emit('filterValueChanged', {'id': filterName, 'value': Object.values(this.selectedItems).map(item => item.id)})
-      }
-    },
-    onCrossClick(filterName) {
-      this.selectedId = null
-      this.selectedTitle = null
-
-      this.$emit('filterValueChanged', {'id': filterName, 'value': null})
-    }
-  }
-}
-</script>
 
 <style scoped>
 .list-move,
