@@ -6,6 +6,7 @@ import Browser, { type IItem } from '~/components/Base/Browser/Browser.vue'
 import Tabs from '~/components/Base/Tabs.vue'
 import TabMain from '~/pages/music/albums/_tabs/main.vue'
 import TabTracks from '~/pages/music/albums/_tabs/tracks.vue'
+import Picture from '~/components/Base/Browser/ColumnComponents/Picture.vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -27,6 +28,7 @@ const {
 
 const requestProperties = ref([
   'id',
+  'picture',
   'name_ru',
   'author',
   'label',
@@ -52,12 +54,12 @@ const {
 
 const columns = shallowRef([
   {
-    name: 'id',
-    title: 'ID'
-  },
-  {
-    name: 'name_ru',
-    title: 'Название'
+    name: 'picture',
+    title: 'Название',
+    component: {
+      component: Picture,
+      title: 'name_ru'
+    }
   },
   {
     name: 'author',

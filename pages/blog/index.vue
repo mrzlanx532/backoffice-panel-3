@@ -41,7 +41,6 @@ const columns = shallowRef([
     component: {
       component: Picture,
       title: 'name',
-      maxWidth: 200
     }
   },
   {

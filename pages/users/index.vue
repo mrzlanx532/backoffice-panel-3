@@ -9,6 +9,7 @@ import SubscriptionTab from '@/pages/users/_tabs/subscription.vue'
 import ReportsTab from '@/pages/users/_tabs/reports.vue'
 import DownloadedMusicTab from '@/pages/users/_tabs/downloaded_music.vue'
 import DownloadedSoundTab from '@/pages/users/_tabs/downloaded_sounds.vue'
+import Picture from '~/components/Base/Browser/ColumnComponents/Picture.vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -31,6 +32,7 @@ const {
 const requestProperties = ref([
   'id',
   'name',
+  'picture',
   'subscription_till',
   'subscription_till_for_exclusive_tracks',
   'subscription_type_id',
@@ -73,8 +75,12 @@ const columns = shallowRef([
     title: 'ID'
   },
   {
-    name: 'name',
-    title: 'Имя'
+    name: 'picture',
+    title: 'Имя',
+    component: {
+      component: Picture,
+      title: 'name',
+    }
   },
   {
     name: 'company',

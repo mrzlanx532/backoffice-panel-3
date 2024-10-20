@@ -380,7 +380,7 @@ const getSubComponent = (component: any) => {
   return defineComponent(
       (props) => {
         return () => {
-          return h(component.component, {
+          return h({...component.component}, {
             item: props.item,
             column: props.column,
             ...filteredProperties

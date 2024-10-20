@@ -7,6 +7,7 @@ import TracksTab from '~/pages/music/authors/_tabs/tracks.vue'
 import AlbumsTab from '~/pages/music/authors/_tabs/albums.vue'
 import Button from '~/components/Base/Button.vue'
 import Tabs from '~/components/Base/Tabs.vue'
+import Picture from '~/components/Base/Browser/ColumnComponents/Picture.vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -14,6 +15,7 @@ definePageMeta({
 
 const requestProperties = ref([
   'id',
+  'picture',
   'name_ru',
   'tracks_counter',
   'albums_counter',
@@ -22,8 +24,13 @@ const requestProperties = ref([
 
 const columns = ref([
   {
-    name: 'id',
+    name: 'picture',
     title: 'ID',
+    component: {
+      component: Picture,
+      title: 'name_ru',
+      firstLetterAsImage: true
+    },
     classes: [
       '--min-width'
     ]
