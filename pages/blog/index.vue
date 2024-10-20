@@ -3,8 +3,10 @@ import { definePageMeta, useNuxtApp } from '#imports'
 import Button from '@/components/Base/Button.vue'
 import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue';
 import Badge from '@/components/Base/Browser/ColumnComponents/Badge.vue'
-import Content from '@/pages/blog/_parts/content.vue'
 import Picture from '~/components/Base/Browser/ColumnComponents/Picture.vue'
+import MainTab from '~/pages/blog/_tabs/main.vue'
+import PhotosTab from '~/pages/blog/_tabs/photos.vue'
+import Tabs from '~/components/Base/Tabs.vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -25,6 +27,23 @@ const {
   onClickDelete,
   onItemUpdated
 } = usePage()
+
+const { initTabs } = useTabs()
+
+const {
+  tabs,
+  selectedTabComponent,
+  onChangeSelectedTab
+} = initTabs([
+  {
+    title: 'Пост',
+    component: MainTab
+  },
+  {
+    title: 'Фото',
+    component: PhotosTab
+  }
+])
 
 const columns = shallowRef([
   {
@@ -189,9 +208,10 @@ const onChangeState = async () => {
             }"
         >{{ item?.state && item.state.id === 'DRAFT' ? 'Опубликовать' : 'Снять с публикации' }}</Button>
       </div>
+      <Tabs @change="onChangeSelectedTab" :tabs="tabs"/>
     </template>
     <template #browserDetailContent>
-      <Content :item="item"/>
+      <component :is="selectedTabComponent" :item="item"/>
     </template>
   </Browser>
 </template>
