@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import Badge from '@/components/Base/Badge.vue'
 
-type IItem = {[key: string]: any}
+type IItem = Record<string, any>
 
 const props = defineProps<{
-  item: {[key: string]: any}
+  item: IItem
   column: {
     name: string,
     title: string,
-    mapper: Function
     toFormat: (item: IItem) => {title: string, class: string}
   }
 }>()

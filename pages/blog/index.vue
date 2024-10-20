@@ -4,6 +4,7 @@ import Button from '@/components/Base/Button.vue'
 import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue';
 import Badge from '@/components/Base/Browser/ColumnComponents/Badge.vue'
 import Content from '@/pages/blog/_parts/content.vue'
+import Picture from '~/components/Base/Browser/ColumnComponents/Picture.vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -35,6 +36,11 @@ const columns = shallowRef([
     title: 'Дата',
   },
   {
+    name: 'cover',
+    title: 'Изображение',
+    component: Picture
+  },
+  {
     name: 'name',
     title: 'Заголовок',
   },
@@ -58,7 +64,7 @@ const columns = shallowRef([
     component: Badge,
     toFormat(item: IItem) {
 
-      const mapper: {[key: string]: string} = {
+      const mapper: Record<string, string> = {
         DRAFT: '--default',
         PUBLISHED: '--success'
       }
@@ -83,6 +89,7 @@ const requestProperties = ref([
   'date',
   'name',
   'category',
+  'cover',
   'locale',
   'state',
   'created_at',
@@ -99,7 +106,7 @@ const onChangeState = async () => {
 
   $modal.confirm({
     question: item.value!.state.id === 'DRAFT' ? 'Опубликовать?' : 'Снять с публикации?'
-  }).then(async (isAgree) => {
+  }).then(async (isAgree: boolean) => {
     if (!isAgree) {
       return
     }

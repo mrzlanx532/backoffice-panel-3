@@ -20,7 +20,10 @@ export interface IColumn {
     name: string,
     title: string,
     toFormat?: (item: {[key: string]: any}) => {}
-    component?: Component,
+    component?: any | {
+        component: Component,
+        [key: string]: any
+    },
     preset?: {
         name: string
     }

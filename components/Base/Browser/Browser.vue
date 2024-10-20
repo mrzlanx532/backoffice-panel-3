@@ -8,7 +8,7 @@ export interface IBrowser {
 </script>
 
 <script setup lang="ts">
-import { type Ref, type Component, useSlots } from "vue";
+import { type Ref, type Component, useSlots, defineComponent, h } from "vue";
 import type { DebouncedFunc } from "lodash-es"
 import isEmpty from "lodash.isempty"
 import debounce from "lodash.debounce"
@@ -148,6 +148,10 @@ const localRequestProperties: Ref<{} | null> = ref(getLocalRequestProperties(pro
 const detailPageUrl = computed(() => {
   return `/${props.detailPageUrlPrefix}/${id.value}`
 })
+
+const isVueComponent = (component: any): boolean => {
+  return typeof component === 'object' && ('setup' in component || 'template' in component)
+}
 
 const fetchData = async () => {
 
@@ -368,6 +372,30 @@ const reset = (isUpdateItem = false) => {
   }
 }
 
+const getSubComponent = (component: any) => {
+
+  const filteredProperties = Object.assign({}, component)
+  delete filteredProperties['component']
+
+  return defineComponent(
+      (props) => {
+        return () => {
+          return h(component.component, {
+            item: props.item,
+            column: props.column,
+            ...filteredProperties
+          })
+        }
+      },
+      {
+        props: {
+          item: Object,
+          column: Object
+        }
+      }
+  )
+}
+
 defineExpose({
   reset,
   closeDetail
@@ -451,10 +479,19 @@ defineExpose({
               <tbody>
               <tr v-for="item in items" :key="item[itemPrimaryKeyPropertyName]" @click="onClickRow(item)">
                 <td v-for="column in columns">
-                  <template v-if="column.hasOwnProperty('component')">
-                    <component :is="column.component" :item="item" :column="column"/>
-                  </template>
-                  <template v-else-if="column.hasOwnProperty('preset')">
+                  <component
+                      v-if="column.component && isVueComponent(column.component)"
+                      :is="column.component"
+                      :item="item"
+                      :column="column"
+                  />
+                  <component
+                      v-else-if="column.component && isVueComponent(column.component.component)"
+                      :is="getSubComponent(column.component)"
+                      :item="item"
+                      :column="column"
+                  />
+                  <template v-else-if="column.preset">
                     {{ callPreset(column.preset!.name, column as IConfigItem, item)}}
                   </template>
                   <template v-else-if="column.toFormat">
