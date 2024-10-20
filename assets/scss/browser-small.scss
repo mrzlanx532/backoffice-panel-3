@@ -10,6 +10,18 @@
     justify-content: space-between;
   }
 
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    min-height: 50px;
+  }
+
+  &__header-left {
+    font-size: 18px;
+  }
+
   &__total {
     user-select: none;
     margin-top: 10px;
@@ -21,11 +33,16 @@
   &__container {
     position: relative;
     display: flex;
-    padding-top: 10px;
+    flex-direction: column;
 
     &.--empty {
       display: block;
     }
+  }
+
+  &__actions {
+    float: right;
+    margin-left: 10px;
   }
 
   &__empty-list {

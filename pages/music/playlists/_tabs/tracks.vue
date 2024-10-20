@@ -100,6 +100,7 @@ watch(
 
 <template>
   <BrowserSmall
+      h1="Треки"
       ref="browserEl"
       :columns="columns"
       url-prefix="music/playlists/tracks/browse"

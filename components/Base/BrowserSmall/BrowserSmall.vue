@@ -7,7 +7,7 @@ export interface IBrowser {
 </script>
 
 <script setup lang="ts">
-import { type Component, type Ref, getCurrentInstance } from 'vue'
+import { type Component, type Ref, getCurrentInstance, useSlots } from 'vue'
 import { FetchError } from 'ofetch'
 import { useNuxtApp, useBrowser } from '#imports'
 import Spinner from '~/components/Base/Spinner.vue'
@@ -34,6 +34,7 @@ const {
 } = useBrowser()
 
 interface Props {
+  h1: string,
   urlPrefix: string,
   columns?: IColumn[],
   filters?: {
@@ -100,6 +101,8 @@ const BrowserSmallEl = getCurrentInstance()
 const emit = defineEmits([
   'clickRow',
 ])
+
+const slots = useSlots()
 
 const { $authFetch } = useNuxtApp()
 
@@ -256,14 +259,11 @@ defineExpose({
     <ClientOnly>
       <Transition name="fade">
         <div
+            v-if="!firstLoadingIsActive"
             class="browser-small__container"
             :class="{'--empty': items.length === 0}"
-            v-if="!firstLoadingIsActive"
         >
-          <div
-              class="browser__error-container"
-              v-if="fetchError !== null"
-          >
+          <div v-if="fetchError !== null" class="browser__error-container">
             <div class="browser__error">
               <div class="browser__error-status-code">
                 Error code: {{ fetchError.statusCode }}
@@ -277,7 +277,15 @@ defineExpose({
               v-else
               class="browser__table-container"
           >
+            <div class="browser-small__header">
+              <div class="browser-small__header-left">{{ props.h1 }}</div>
+              <div v-if="slots.actions" class="browser-small__actions">
+                <slot name="actions"/>
+              </div>
+            </div>
+
             <BrowserSearchString
+                style="width: 100%;"
                 v-if="isEnabledSearch"
                 @search="onSearchStringInput"
                 class="--in-small-browser"

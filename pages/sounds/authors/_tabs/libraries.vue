@@ -109,6 +109,7 @@ watch(
 
 <template>
   <BrowserSmall
+      h1="Библиотеки"
       :columns="columns"
       url-prefix="sound/authors/libraries/browse"
       :filters="filters"

@@ -48,6 +48,7 @@ watch(
 
 <template>
 <TableSmall
+    h1="Треки"
     url-prefix="reports/content/list"
     :params="params"
     :customTr="ReportTracksTr"

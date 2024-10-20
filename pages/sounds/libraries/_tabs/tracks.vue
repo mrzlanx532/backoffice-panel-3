@@ -23,6 +23,7 @@ watch(
 
 <template>
   <BrowserSmall
+      h1="Треки"
       urlPrefix="sound/libraries/tracks/browse"
       :filters="filters"
       :customTr="LibraryTracksTr"

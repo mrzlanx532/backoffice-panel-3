@@ -3,7 +3,7 @@ export { type IItem, type IConfigItem, type IColumn } from '~/composables/useBro
 </script>
 
 <script setup lang="ts">
-import type { Component, Ref } from 'vue'
+import { type Component, type Ref, useSlots } from 'vue'
 import { FetchError } from 'ofetch'
 import { useNuxtApp, useBrowser } from '#imports'
 import Spinner from '~/components/Base/Spinner.vue'
@@ -30,6 +30,7 @@ const {
 } = useBrowser()
 
 interface Props {
+  h1: string,
   filters?: {
     [key: string]: any[]
   }
@@ -62,6 +63,8 @@ interface IRequestParams {
 const emit = defineEmits([
   'clickRow',
 ])
+
+const slots = useSlots()
 
 const { $authFetch } = useNuxtApp()
 
@@ -168,6 +171,13 @@ onMounted(() => {
               v-else
               class="browser__table-container"
           >
+            <div class="browser-small__header">
+              <div class="browser-small__header-left">{{ props.h1 }}</div>
+              <div v-if="slots.actions" class="browser-small__actions">
+                <slot name="actions"/>
+              </div>
+            </div>
+
             <BrowserSearchString
                 v-if="isEnabledSearch"
                 @search="onSearchStringInput"

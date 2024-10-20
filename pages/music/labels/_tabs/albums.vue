@@ -52,6 +52,7 @@ const onClickRow = (item: IItem) => {
 
 <template>
   <BrowserSmall
+      h1="Альбомы"
       @click-row="onClickRow"
       :filters="filters"
       :columns="columns"

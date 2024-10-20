@@ -47,6 +47,7 @@ const onClickRow = () => {
 
 <template>
 <BrowserSmall
+    h1="Альбомы"
     @click-row="onClickRow"
     url-prefix="music/authors/albums/browse"
     :columns="columns"

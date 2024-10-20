@@ -24,6 +24,7 @@ watch(
 
 <template>
   <BrowserSmall
+    h1="Альбомы"
     :custom-tr="MusicAlbumTrackTr"
     url-prefix="music/albums/tracks/browse"
     :filters="filters"
