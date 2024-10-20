@@ -147,9 +147,12 @@
   }
 
   &__tr-picture-text {
-    padding-left: 10px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  &__tr-picture-text:nth-child(2) {
+    padding-left: 10px;
   }
 }

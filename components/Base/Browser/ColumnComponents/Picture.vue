@@ -12,16 +12,33 @@ const props = withDefaults(defineProps<{
   width?: number,
   title?: string,
   maxWidth?: number,
-  firstLetterAsImage?: boolean
+  firstLetterAsImage?: boolean,
+  toFormat?: (item: IItem) => {title: string, class: string}
 }>(), {
   height: 32,
   width: 32,
   maxWidth: 200,
-  firstLetterAsImage: false
+  firstLetterAsImage: false,
 })
 
 const prepareLetter = (property: string) => {
   return property.toUpperCase()[0]
+}
+
+const prepareText = (isWithPrepareLetter: boolean = false) => {
+  if (props.toFormat) {
+    return props.toFormat(props.item)
+  }
+
+  if (props.title) {
+    if (isWithPrepareLetter) {
+      return prepareLetter(props.item[props.title])
+    }
+
+    return props.item[props.title]
+  }
+
+  return null
 }
 </script>
 
@@ -46,12 +63,12 @@ const prepareLetter = (property: string) => {
         }"
     >
       <div>
-        {{ props.title ? prepareLetter(props.item[props.title]) : null}}
+        {{ prepareText(true) }}
       </div>
     </div>
     <div
         class="browser__tr-picture-text"
-        :title="props.title ? props.item[props.title] : null"
-    >{{ props.title ? props.item[props.title] : null}}</div>
+        :title="prepareText()"
+    >{{ prepareText() }}</div>
   </div>
 </template>

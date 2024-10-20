@@ -6,6 +6,7 @@ import Tabs from '~/components/Base/Tabs.vue'
 import Button from '~/components/Base/Button.vue'
 import MainTab from '~/pages/sounds/libraries/_tabs/main.vue'
 import TracksTab from '~/pages/sounds/libraries/_tabs/tracks.vue'
+import Picture from '~/components/Base/Browser/ColumnComponents/Picture.vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -27,6 +28,7 @@ const {
 
 const requestProperties = ref([
   'id',
+  'picture',
   'name_ru',
   'ident',
   'tracks_counter',
@@ -51,10 +53,6 @@ const {
 
 const columns = ref([
   {
-    name: 'id',
-    title: 'ID'
-  },
-  {
     name: 'name_ru',
     title: 'Название'
   },
@@ -67,10 +65,13 @@ const columns = ref([
     title: 'Треки',
   },
   {
-    name: 'author',
+    name: 'picture',
     title: 'Автор',
-    toFormat(item: IItem) {
-      return item.author?.name_ru
+    component: {
+      component: Picture,
+      toFormat: (item: IItem) => {
+        return item.author ? item.author.name_en : ''
+      }
     }
   },
   {
