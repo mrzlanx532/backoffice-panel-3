@@ -6,10 +6,11 @@ const props = withDefaults(defineProps<{
   column: {
     name: string,
     title: string,
-    toFormat: (item: IItem) => {title: string, class: string}
+    toFormat?: (item: IItem) => {title: string, class: string}
   },
   height?: number,
-  width?: number
+  width?: number,
+  title?: string
 }>(), {
   height: 32,
   width: 32,
@@ -17,17 +18,19 @@ const props = withDefaults(defineProps<{
 </script>
 
 <template>
-  <div :style="{height: props.height + 'px', width: props.width + 'px'}">
-    <img v-if="props.item[props.column.name]" :src="props.item[props.column.name].original" alt="picture"/>
+  <div class="browser__tr-picture">
+    <img
+        v-if="props.item[props.column.name]"
+        :style="{
+          height: props.height + 'px',
+          width: props.width + 'px'
+        }"
+        :src="props.item[props.column.name].original"
+        alt="picture"
+    />
+    <div
+        class="browser__tr-picture-text"
+        :title="props.title ? props.item[props.title] : null"
+    >{{ props.title ? props.item[props.title] : null}}</div>
   </div>
 </template>
-
-<style scoped>
-img {
-  object-fit: cover;
-  border-radius: 50%;
-  width: 100%;
-  height: 100%;
-  border: 1px solid var(--color-2);
-}
-</style>

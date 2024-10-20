@@ -37,12 +37,12 @@ const columns = shallowRef([
   },
   {
     name: 'cover',
-    title: 'Изображение',
-    component: Picture
-  },
-  {
-    name: 'name',
     title: 'Заголовок',
+    component: {
+      component: Picture,
+      title: 'name',
+      maxWidth: 200
+    }
   },
   {
     name: 'category',
