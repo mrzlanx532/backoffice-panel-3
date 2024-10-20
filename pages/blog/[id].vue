@@ -3,7 +3,6 @@ import { ref } from 'vue'
 import { useRoute, useNuxtApp } from '#imports';
 import { useAsyncData } from '#app'
 
-import Content from '@/pages/blog/_parts/content.vue'
 import Detail from '@/components/Base/Detail.vue'
 import Button from '@/components/Base/Button.vue'
 
@@ -39,7 +38,7 @@ const h1 = ref('Пост ' + entityId)
       </div>
     </template>
     <template v-slot:content>
-      <Content :item="item"/>
+
     </template>
   </Detail>
 </template>
