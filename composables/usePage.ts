@@ -65,7 +65,7 @@ export const usePage = () => {
     }
 
     const onClickDelete = (config: IConfigDelete) => {
-        $modal.confirm().then(async (isAgree) => {
+        $modal.confirm().then(async (isAgree: boolean) => {
             if (!isAgree) {
                 return
             }
