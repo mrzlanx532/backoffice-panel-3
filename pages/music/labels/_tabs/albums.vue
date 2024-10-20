@@ -56,6 +56,7 @@ const onClickRow = (item: IItem) => {
       @click-row="onClickRow"
       :filters="filters"
       :columns="columns"
+      :is-enabled-search="true"
       url-prefix="music/labels/albums/browse"
   />
 </template>
