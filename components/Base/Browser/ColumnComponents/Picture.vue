@@ -10,15 +10,17 @@ const props = withDefaults(defineProps<{
   },
   height?: number,
   width?: number,
-  title?: string
+  title?: string,
+  maxWidth?: number
 }>(), {
   height: 32,
   width: 32,
+  maxWidth: 200
 })
 </script>
 
 <template>
-  <div class="browser__tr-picture">
+  <div class="browser__tr-picture" :style="{maxWidth: maxWidth + 'px'}">
     <img
         v-if="props.item[props.column.name]"
         :style="{
