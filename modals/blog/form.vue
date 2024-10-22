@@ -1,12 +1,20 @@
-<script setup>
+<script setup lang="ts">
 import { useNuxtApp } from '#imports'
 import { onMounted } from 'vue'
-import Form from '@/components/Base/Form'
+import Form from '@/components/Base/Form.vue'
 import FormInput from '@/components/Base/Form/Input.jsx'
-import FormSelect from '@/components/Base/Form/Select'
+import FormSelect from '@/components/Base/Form/Select.vue'
 import FormDatetime from '@/components/Base/Form/Datetime.vue'
-import FormTextArea from '@/components/Base/Form/TextArea'
-import FormInputFile from '@/components/Base/Form/InputFile'
+import FormTextArea from '@/components/Base/Form/TextArea.vue'
+import FormInputFile from '@/components/Base/Form/InputFile.vue'
+
+const props = defineProps<{
+  data: {
+    formResponse: Record<any, string>,
+    title: string,
+    id: number
+  }
+}>()
 
 const emit = defineEmits([
     'modal:resolve',
@@ -21,13 +29,6 @@ const {
 } = useForm()
 
 const errors = ref([])
-
-const props = defineProps({
-  data: {
-    type: Object,
-    required: false
-  }
-})
 
 const formDataValues = getFormDataValues([
     'locale_id',
