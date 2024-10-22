@@ -3,25 +3,73 @@ import { cloneDeep } from 'lodash-es'
 import { useNuxtApp } from '#imports'
 import { FetchError } from 'ofetch'
 import type { LooseRequired } from '@vue/shared'
+import FormSelect from '~/components/Base/Form/Select.vue'
+import FormInput from '~/components/Base/Form/Input.jsx'
+import FormDatetime from '~/components/Base/Form/Datetime.vue'
+import FormInputFile from '~/components/Base/Form/InputFile.vue'
+import FormTextArea from '~/components/Base/Form/TextArea.vue'
+
+interface ISelect {
+    name: string,
+    label: string,
+    class?: string,
+}
+
+interface IInput {
+    name: string,
+    label: string,
+    class?: string,
+}
+
+interface IDatetime {
+    name: string,
+    label: string,
+    class?: string,
+    componentData: {
+        format: string
+    }
+}
+
+interface IInputFile {
+    name: string,
+    label: string,
+    class?: string,
+    componentData: {
+        allowedTypes: string[]
+    }
+}
+
+interface ITextArea {
+    name: string,
+    label: string,
+    class?: string,
+}
+
+type TFormDataItem = ISelect | IInput | IDatetime | IInputFile | ITextArea
 
 export interface defaultProps {
     data: {
-        formResponse: Record<any, string>,
+        formResponse: {
+            entity?: {[key: string]: any}
+            [key: string]: any,
+        },
         title: string,
         id: number
     }
 }
 
+type propsWithDefaultPropsType = DefineProps<LooseRequired<defaultProps>, never>
+
 export const useForm = () => {
 
-    const initForm = (formDataPropertyNames: string[]) => {
+    const initForm = (formDataPropertyNames: TFormDataItem[]) => {
         const { $authFetch } = useNuxtApp()
 
         const formDataValues = getFormDataValues(formDataPropertyNames)
         const errors: Ref<Record<string, any>> = ref({})
 
         const onClickSave = async (
-            props: DefineProps<LooseRequired<defaultProps>, never>,
+            props: propsWithDefaultPropsType,
             emit: (event: ("modal:resolve" | "modal:close"), ...args: any[]) => void
         ) => {
             let requestBody = formRequestBody(formDataValues, props.data.id)
@@ -47,6 +95,7 @@ export const useForm = () => {
         }
 
         return {
+            formData: formDataPropertyNames,
             formDataValues,
             errors,
 
@@ -54,11 +103,11 @@ export const useForm = () => {
         };
     }
 
-    const getFormDataValues = (formDataPropertyNames: string[]): Reactive<Record<string, undefined>> => {
+    const getFormDataValues = (formDataItems: TFormDataItem[]): Reactive<Record<string, undefined>> => {
         const preparedFormDataValues: Record<string, undefined> = {}
 
-        formDataPropertyNames.map((propertyName) => {
-            preparedFormDataValues[propertyName] = undefined
+        formDataItems.map((formDataItem) => {
+            preparedFormDataValues[formDataItem.name] = undefined
         })
 
         return reactive(preparedFormDataValues)
@@ -108,9 +157,102 @@ export const useForm = () => {
         return _formDataValues
     }
 
+    const select = (config: ISelect) => {
+        return {
+            component: FormSelect,
+            name: config.name,
+            label: config.label,
+            class: config.class,
+            componentData: {
+                options: []
+            }
+        }
+    }
+
+    const input = (config: IInput) => {
+        return {
+            component: FormInput,
+            name: config.name,
+            label: config.label,
+            class: config.class,
+            componentData: {}
+        }
+    }
+
+    const datetime = (config: IDatetime) => {
+        return {
+            component: FormDatetime,
+            name: config.name,
+            label: config.label,
+            class: config.class,
+            componentData: config.componentData,
+        }
+    }
+
+    const inputFile = (config: IInputFile) => {
+        return {
+            component: FormInputFile,
+            name: config.name,
+            label: config.label,
+            class: config.class,
+            componentData: config.componentData,
+        }
+    }
+
+    const textArea = (config: ITextArea) => {
+        return {
+            component: FormTextArea,
+            name: config.name,
+            label: config.label,
+            class: config.class,
+            componentData: {}
+        }
+    }
+
+    const fillComponents = (
+        props: propsWithDefaultPropsType,
+        formData: TFormDataItem[],
+        formDataValues: Record<string, undefined>,
+        mapper: {[key: string]: {
+            to: string,
+            fn: (item: Record<string, any>) => any}
+        }
+    ) => {
+        const formResponse = props.data.formResponse
+        const mapperEntries = Object.entries(mapper)
+
+        formData.forEach(formDataItem => {
+            mapperEntries.map(([key, config]) => {
+
+                if (formDataItem.name === config.to) {
+                    formResponse[key].forEach((option: any) => {
+                        // @ts-ignore
+                        formDataItem.componentData.options.push(config.fn(option))
+                    })
+                }
+            })
+        })
+
+        if (props.data.id) {
+            Object.keys(formDataValues).map((key) => {
+                // @ts-ignore
+                formDataValues[key] = formResponse.entity[key]
+            })
+        }
+    }
+
     return {
         initForm,
+
+        fillComponents,
+
         getFormDataValues,
-        formRequestBody
+        formRequestBody,
+
+        select,
+        input,
+        datetime,
+        inputFile,
+        textArea
     }
 }

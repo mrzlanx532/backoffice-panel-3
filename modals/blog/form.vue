@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import Form from '@/components/Base/Form.vue'
-import FormInput from '@/components/Base/Form/Input.jsx'
-import FormSelect from '@/components/Base/Form/Select.vue'
-import FormDatetime from '@/components/Base/Form/Datetime.vue'
-import FormTextArea from '@/components/Base/Form/TextArea.vue'
-import FormInputFile from '@/components/Base/Form/InputFile.vue'
 import type { defaultProps } from '~/composables/useForm'
 
 const props = defineProps<defaultProps>()
@@ -17,100 +12,87 @@ const emit = defineEmits([
 
 const {
   initForm,
+
+  fillComponents,
+
+  select,
+  input,
+  datetime,
+  inputFile,
+  textArea,
 } = useForm()
 
 const {
+  formData,
   formDataValues,
   errors,
   onClickSave
 } = initForm([
-  'locale_id',
-  'category_id',
-  'name',
-  'date',
-  'cover',
-  'content_short',
-  'content'
-])
-
-const formData = [
-  {
+  select({
     name: 'locale_id',
     label: 'Язык публикации',
-    class: '--full',
-    component: FormSelect,
-    componentData: {
-      options: []
-    }
-  },
-  {
+    class: '--full'
+  }),
+  select({
     name: 'category_id',
     label: 'Категории',
-    class: '--full',
-    component: FormSelect,
-    componentData: {
-      options: []
-    }
-  },
-  {
+    class: '--full'
+  }),
+  input({
     name: 'name',
     label: 'Заголовок',
-    component: FormInput,
-  },
-  {
+    class: '--full'
+  }),
+  datetime({
     name: 'date',
     label: 'Дата',
-    component: FormDatetime,
+    class: '--full',
     componentData: {
-      format: 'DD.MM.YYYY HH:mm',
+      format: 'DD.MM.YYYY HH:mm'
     }
-  },
-  {
+  }),
+  inputFile({
     name: 'cover',
     label: 'Изображение',
-    component: FormInputFile,
     class: '--full',
     componentData: {
-      allowedTypes: ['jpg', 'jpeg', 'png'],
+      allowedTypes: ['jpg', 'jpeg', 'png']
     }
-  },
-  {
+  }),
+  textArea({
     name: 'content_short',
     label: 'Краткое содержание',
-    component: FormTextArea,
-    class: '--full',
-  },
-  {
+    class: '--full'
+  }),
+  textArea({
     name: 'content',
-    label: 'Полное содержание',
-    component: FormTextArea,
-    class: '--full',
-  }
-]
+    label: 'Содержание',
+    class: '--full'
+  }),
+])
 
 onMounted(async () => {
 
-  const formResponse = props.data.formResponse
-
-  formResponse.locales.forEach((locale) => {
-    formData[0].componentData.options.push({
-      id: locale.id,
-      title: locale.title,
-    })
+  fillComponents(props, formData, formDataValues, {
+    locales: {
+      to: 'locale_id',
+      fn: (locale) => {
+        return {
+          id: locale.id,
+          title: locale.title
+        }
+      }
+    },
+    categories: {
+      to: 'category_id',
+      fn: (category) => {
+        return {
+          id: category.id,
+          title: `${category.name_en} (${category.name_ru})`
+        }
+      }
+    }
   })
-
-  formResponse.categories.forEach((category) => {
-    formData[1].componentData.options.push({
-      id: category.id,
-      title: `${category.name_en} (${category.name_ru})`
-    })
-  })
-
-  if (props.data.id !== undefined) {
-    Object.keys(formDataValues).map((key) => {
-      formDataValues[key] = formResponse.entity[key]
-    })
-  }
 })
 </script>
 
