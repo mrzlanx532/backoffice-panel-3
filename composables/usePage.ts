@@ -32,9 +32,6 @@ export const usePage = () => {
     const onClickCreate = async (config: IConfigCreateEdit) => {
         const formResponse = await $authFetch(config.formURL, {
             method: 'GET',
-            params: {
-                id: item.value!.id,
-            },
         })
 
         $modal.load(config.modalPath, {
