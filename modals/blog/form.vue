@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useNuxtApp } from '#imports'
 import { onMounted } from 'vue'
 import Form from '@/components/Base/Form.vue'
 import FormInput from '@/components/Base/Form/Input.jsx'
@@ -7,37 +6,31 @@ import FormSelect from '@/components/Base/Form/Select.vue'
 import FormDatetime from '@/components/Base/Form/Datetime.vue'
 import FormTextArea from '@/components/Base/Form/TextArea.vue'
 import FormInputFile from '@/components/Base/Form/InputFile.vue'
+import type { defaultProps } from '~/composables/useForm'
 
-const props = defineProps<{
-  data: {
-    formResponse: Record<any, string>,
-    title: string,
-    id: number
-  }
-}>()
+const props = defineProps<defaultProps>()
 
 const emit = defineEmits([
     'modal:resolve',
     'modal:close'
 ])
 
-const { $authFetch } = useNuxtApp()
-
 const {
-  getFormDataValues,
-  formRequestBody
+  initForm,
 } = useForm()
 
-const errors = ref([])
-
-const formDataValues = getFormDataValues([
-    'locale_id',
-    'category_id',
-    'name',
-    'date',
-    'cover',
-    'content_short',
-    'content'
+const {
+  formDataValues,
+  errors,
+  onClickSave
+} = initForm([
+  'locale_id',
+  'category_id',
+  'name',
+  'date',
+  'cover',
+  'content_short',
+  'content'
 ])
 
 const formData = [
@@ -95,27 +88,6 @@ const formData = [
   }
 ]
 
-const onClickSave = async () => {
-  let requestBody = formRequestBody(formDataValues, props.data.id)
-
-  const method = props.data.id === undefined ? 'create' : 'update'
-
-  try {
-
-    await $authFetch(`blog/posts/${method}`, {
-      method: 'POST',
-      body: requestBody,
-    })
-
-    emit('modal:resolve')
-
-  } catch (err) {
-    if (err.status === 422 && err.data.errors) {
-      errors.value = err.data.errors
-    }
-  }
-}
-
 onMounted(async () => {
 
   const formResponse = props.data.formResponse
@@ -163,7 +135,7 @@ onMounted(async () => {
     </template>
     <template #footer>
       <div class="btn__group">
-        <button class="btn --primary --big" @click="onClickSave()">Сохранить</button>
+        <button class="btn --primary --big" @click="onClickSave(props, emit)">Сохранить</button>
         <button class="btn --outline-primary --big" @click="emit('modal:close')">Отмена</button>
       </div>
     </template>
