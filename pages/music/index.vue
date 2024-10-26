@@ -5,6 +5,7 @@ import Tabs from '~/components/Base/Tabs.vue';
 import Browser, {type IItem} from '~/components/Base/Browser/Browser.vue'
 import MainTab from '~/pages/music/_tabs/main.vue'
 import type { Ref } from 'vue'
+import TableSimple from '~/components/Base/Table/TableSimple.vue'
 
 const {
   browserEl,
@@ -23,7 +24,7 @@ const {
 const selectedState = ref({})
 const selectedIds: Ref<string[]> = ref([])
 
-const isOpenBulkActions = ref(true)
+const isOpenBulkActions = ref(false)
 
 const requestProperties = ref([
   'id',
@@ -150,39 +151,14 @@ const stateOptions = ref([
   }
 ])
 
-watch(
-    item,
-    (_item) => {
-      if (Object.keys(_item).length === 0) {
-        return {}
-      }
-
-      if (_item === undefined) {
-        return
-      }
-
-      const classesByState = {
-        PUBLISHED: '--success',
-        DRAFT: '--default',
-        DISABLED: '--danger',
-      }
-
-      selectedState.value = {
-        'id': _item.state.id,
-        'title': _item.state.title,
-        'class': classesByState[_item.state.id]
-      }
-    }
-)
-
-const onChangeStateButton = (option) => {
-  selectedState.value = option
-}
-
 const onChangeSelectedIds = (ids: string[]) => {
   selectedIds.value = ids
 
   console.log(selectedIds.value)
+}
+
+const onClickBulkActions = () => {
+  isOpenBulkActions.value = true
 }
 </script>
 
@@ -212,19 +188,22 @@ const onChangeSelectedIds = (ids: string[]) => {
           modalTitle: 'Создать трек',
           notificationMessage: 'Трек создан'
         })" :class="['--small --success']">Добавить</Button>
-        <Button :class="['--small --primary']">Массовые действия {{ selectedIds.length ? `(${(selectedIds.length)})` : '' }}</Button>
+        <Button :class="['--small --primary']" @click="onClickBulkActions">Массовые действия {{ selectedIds.length ? `(${(selectedIds.length)})` : '' }}</Button>
       </div>
     </template>
 
     <template v-if="isOpenBulkActions" #browserDetailHeaderTop>
       <div class="browser-detail__header-title-container">
-        <div class="browser-detail__header-title">Массовые треки</div>
+        <div class="browser-detail__header-title">Массовые треки ({{selectedIds.length}})</div>
+        <div class="browser-detail__header-subtitle">
+          Выберите действия:
+        </div>
       </div>
     </template>
 
     <template #browserDetailHeader>
       <template v-if="isOpenBulkActions">
-        <div class="btn__group">
+        <div class="btn__group" v-if="selectedIds.length">
           <Button @close="" :class="['--big --outline-primary']">Перенос к другому автору</Button>
           <Button @close="" :class="['--big --outline-danger']">Удалить</Button>
         </div>
@@ -248,7 +227,12 @@ const onChangeSelectedIds = (ids: string[]) => {
 
     <template #browserDetailContent>
       <template v-if="isOpenBulkActions">
-
+        <TableSimple
+            :selectedIds="selectedIds"
+            v-if="isOpenBulkActions"
+            :columns="columns"
+            :items="[{id: 1}, {id: 2}, {id: 3}]"
+        />
       </template>
       <template v-else>
         <component :is="selectedTabComponent" :item="item"/>
