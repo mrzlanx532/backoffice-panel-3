@@ -58,19 +58,22 @@ interface Props {
   itemPrimaryKeyPropertyName?: string,
   detailPageUrlPrefix: string,
   detailTitleProperty?: string,
-  detailSubtitleProperty?: string
+  detailSubtitleProperty?: string,
+  isMultipleSelectionIsEnable: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   itemPrimaryKeyPropertyName: 'id',
-  detailTitleProperty: 'id'
+  detailTitleProperty: 'id',
+  isMultipleSelectionIsEnable: false
 })
 
 const { $authFetch } = useNuxtApp()
 
 const emit = defineEmits([
   'clickRow',
-  'itemUpdated'
+  'itemUpdated',
+  'changeSelectedIds'
 ])
 
 enum FilterType {
@@ -126,6 +129,10 @@ const browserDetail: Ref<Component|null> = ref(null)
 
 const id: Ref<number|null> = ref(null)
 const item: Ref<IItem|null> = ref(null)
+
+/** multiple selections */
+const allSelected: Ref<boolean> = ref(false)
+const selectedIds: Ref<Record<string, boolean>> = ref({})
 
 /** filters */
 const filters: Ref<IFilter[]> = ref([])
@@ -254,10 +261,6 @@ const onCloseBrowserDetail = () => {
   openItem.value = {}
 }
 
-const onCloseDetail = () => {
-  id.value = null
-}
-
 const onItemUpdated = (item: IItem) => {
   item.value = item
 
@@ -372,6 +375,45 @@ const reset = (isUpdateItem = false) => {
   }
 }
 
+const onClickMultipleCheckbox = (_id: string|number) => {
+  if (selectedIds.value[_id]) {
+    delete selectedIds.value[_id];
+  } else {
+    selectedIds.value[_id] = true
+  }
+
+  emit('changeSelectedIds', prepareSelectedIds(selectedIds))
+}
+
+const onClickAllSelected = () => {
+  allSelected.value = !allSelected.value
+
+  if (allSelected.value) {
+    items.value.forEach((item: IItem) => {
+      selectedIds.value[item.id] = true
+    })
+    emit('changeSelectedIds', prepareSelectedIds(selectedIds))
+    return
+  }
+
+  selectedIds.value = {}
+  emit('changeSelectedIds', prepareSelectedIds(selectedIds))
+}
+
+const prepareSelectedIds = (selectedIds: Ref<Record<string, boolean>>) => {
+  const ids: string[] = [];
+
+  Object.entries(selectedIds.value).forEach(([key, value]) => {
+    if (!value) {
+      return
+    }
+
+    ids.push(key)
+  })
+
+  return ids
+}
+
 const getSubComponent = (component: any) => {
 
   const filteredProperties = Object.assign({}, component)
@@ -467,6 +509,9 @@ defineExpose({
             <table v-if="items.length" class="browser__table">
               <thead>
                 <tr>
+                  <th v-if="isMultipleSelectionIsEnable" @click="onClickAllSelected()">
+                    <input type="checkbox" name="all_selected" v-model="allSelected">
+                  </th>
                   <BrowserTHeadTh
                       @sortChanged="onSortChanged"
                       v-for="column in columns"
@@ -478,6 +523,9 @@ defineExpose({
               </thead>
               <tbody>
               <tr v-for="item in items" :key="item[itemPrimaryKeyPropertyName]" @click="onClickRow(item)">
+                <td v-if="isMultipleSelectionIsEnable" @click.stop="onClickMultipleCheckbox(item.id)">
+                  <input type="checkbox" :name="'selected_' + item.id" v-model="selectedIds[item.id]">
+                </td>
                 <td v-for="column in columns">
                   <component
                       v-if="column.component && isVueComponent(column.component)"
@@ -520,7 +568,6 @@ defineExpose({
         :subtitle-property="detailSubtitleProperty"
         :url-prefix="props.detailUrlPrefix"
         :detail-page-url-prefix="detailPageUrl"
-        @close="onCloseDetail"
         @itemUpdated="onItemUpdated"
     >
       <template #header>

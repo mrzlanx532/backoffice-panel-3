@@ -4,7 +4,7 @@ import Button from '~/components/Base/Button.vue';
 import Tabs from '~/components/Base/Tabs.vue';
 import Browser, {type IItem} from '~/components/Base/Browser/Browser.vue'
 import MainTab from '~/pages/music/_tabs/main.vue'
-import StateButton from '~/components/Base/StateButton.vue';
+import type { Ref } from 'vue'
 
 const {
   browserEl,
@@ -21,6 +21,7 @@ const {
 } = useTabs()
 
 const selectedState = ref({})
+const selectedIds: Ref<string[]> = ref([])
 
 const requestProperties = ref([
   'id',
@@ -175,13 +176,21 @@ watch(
 const onChangeStateButton = (option) => {
   selectedState.value = option
 }
+
+const onChangeSelectedIds = (ids: string[]) => {
+  selectedIds.value = ids
+
+  console.log(selectedIds.value)
+}
 </script>
 
 <template>
   <Browser
+      @change-selected-ids="onChangeSelectedIds"
       ref="browserEl"
       h1="Каталог музыкальных треков"
       url-prefix="music/tracks/browse"
+      :is-multiple-selection-is-enable="true"
 
       detail-url-prefix="music/tracks/detail"
       detail-title-property="id"
@@ -194,13 +203,14 @@ const onChangeStateButton = (option) => {
       @itemUpdated="onItemUpdated"
   >
     <template #rightSide>
-      <div class="btn__group">
+      <div class="btn__group-separated">
         <Button @click="onClickCreate({
           formURL: 'music/tracks/form',
           modalPath: 'music/tracks/form',
           modalTitle: 'Создать трек',
           notificationMessage: 'Трек создан'
         })" :class="['--small --success']">Добавить</Button>
+        <Button :class="['--small --primary']">Массовые действия {{ selectedIds.length ? `(${(selectedIds.length)})` : '' }}</Button>
       </div>
     </template>
 
