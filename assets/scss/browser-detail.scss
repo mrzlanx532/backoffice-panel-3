@@ -161,6 +161,11 @@
     background: var(--color-1, #ffffff);
   }
 
+  &__empty-bulk-actions-items-label {
+    text-align: center;
+    color: var(--color-4);
+  }
+
   .tabs {
     width: calc(100% + 40px);
   }

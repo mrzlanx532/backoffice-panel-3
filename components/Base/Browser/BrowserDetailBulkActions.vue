@@ -147,7 +147,7 @@ const onClickMultipleCheckbox = (id: string|number) => {
             <tr
                 v-for="item in preparedItems"
                 :key="item[itemPrimaryKeyPropertyName]"
-                @click.capture="onClickMultipleCheckbox(item.id)"
+                @pointerdown="onClickMultipleCheckbox(item.id)"
             >
               <td>
                 <BrowserCheckbox v-model="selectedIds[item[props.itemPrimaryKeyPropertyName]]"/>
@@ -178,6 +178,10 @@ const onClickMultipleCheckbox = (id: string|number) => {
             </tr>
             </tbody>
           </table>
+          <div v-else>
+            <div class="browser-detail__empty-bulk-actions-items-label">Здесь пока ничего нет</div>
+            <div class="browser-detail__empty-bulk-actions-items-label">Выберите элементы из каталога, чтобы совершить с ними массовые действия</div>
+          </div>
         </div>
     </div>
   </div>
