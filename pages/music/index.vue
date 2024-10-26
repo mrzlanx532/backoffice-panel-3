@@ -181,6 +181,10 @@ const onClickBulkActions = () => {
 const onCloseBulkActions = () => {
   isOpenBulkActions.value = false
 }
+
+const onClickMultiple = () => {
+  console.log(selectedIds.value)
+}
 </script>
 
 <template>
@@ -235,8 +239,8 @@ const onCloseBulkActions = () => {
 
     <template #browserDetailBulkActionsHeader>
       <div class="btn__group">
-        <Button :class="['--big --outline-primary']">Перенос к другому автору</Button>
-        <Button :class="['--big --outline-danger']">Удалить</Button>
+        <Button @click="onClickMultiple" :class="['--big --outline-primary']">Перенос к другому автору</Button>
+        <Button @click="onClickMultiple" :class="['--big --outline-danger']">Удалить</Button>
       </div>
     </template>
 

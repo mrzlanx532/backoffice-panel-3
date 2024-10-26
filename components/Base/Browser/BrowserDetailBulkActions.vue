@@ -4,7 +4,9 @@ import type { IConfigItem } from '~/composables/useBrowser'
 import BrowserCheckbox from '~/components/Base/Browser/BrowserCheckbox.vue'
 
 const {
-  callPreset
+  callPreset,
+  isVueComponent,
+  getSubComponent
 } = useBrowser()
 
 export interface IColumn {

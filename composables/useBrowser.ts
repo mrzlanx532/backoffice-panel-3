@@ -1,5 +1,5 @@
 import moment from 'moment/moment'
-import type { Component, Ref } from 'vue'
+import { type Component, defineComponent, h, type Ref } from 'vue'
 
 export type IItem = {[key: string]: any}
 
@@ -106,6 +106,34 @@ export const useBrowser = () => {
         fetchData()
     }
 
+    const isVueComponent = (component: any): boolean => {
+        return typeof component === 'object' && ('setup' in component || 'template' in component)
+    }
+
+    const getSubComponent = (component: any) => {
+
+        const filteredProperties = Object.assign({}, component)
+        delete filteredProperties['component']
+
+        return defineComponent(
+            (props) => {
+                return () => {
+                    return h({...component.component}, {
+                        item: props.item,
+                        column: props.column,
+                        ...filteredProperties
+                    })
+                }
+            },
+            {
+                props: {
+                    item: Object,
+                    column: Object
+                }
+            }
+        )
+    }
+
     return {
         /** Pagination */
         totalItems,
@@ -120,6 +148,8 @@ export const useBrowser = () => {
         /** Other */
         firstLoadingIsActive,
         loadingIsActive,
-        callPreset
+        callPreset,
+        isVueComponent,
+        getSubComponent
     }
 }

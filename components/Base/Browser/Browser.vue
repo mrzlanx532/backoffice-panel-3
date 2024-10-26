@@ -45,6 +45,8 @@ const {
   callPreset,
   firstLoadingIsActive,
   loadingIsActive,
+  isVueComponent,
+  getSubComponent
 } = useBrowser()
 
 interface Props {
@@ -161,10 +163,6 @@ const localRequestProperties: Ref<{} | null> = ref(getLocalRequestProperties(pro
 const detailPageUrl = computed(() => {
   return `/${props.detailPageUrlPrefix}/${id.value}`
 })
-
-const isVueComponent = (component: any): boolean => {
-  return typeof component === 'object' && ('setup' in component || 'template' in component)
-}
 
 const fetchData = async () => {
 
@@ -428,30 +426,6 @@ const prepareSelectedIds = (selectedIds: Ref<Record<string, boolean>>) => {
 
 const onCloseBulkActions = () => {
   emit('closeBulkActions')
-}
-
-const getSubComponent = (component: any) => {
-
-  const filteredProperties = Object.assign({}, component)
-  delete filteredProperties['component']
-
-  return defineComponent(
-      (props) => {
-        return () => {
-          return h({...component.component}, {
-            item: props.item,
-            column: props.column,
-            ...filteredProperties
-          })
-        }
-      },
-      {
-        props: {
-          item: Object,
-          column: Object
-        }
-      }
-  )
 }
 
 defineExpose({
