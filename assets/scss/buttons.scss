@@ -300,8 +300,16 @@
     font-size: 12px;
   }
 
-  &__group {
-    display: inline-flex;
+  &__group-separated > * {
+    margin: 0 1px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
   }
 
   &__group > button {

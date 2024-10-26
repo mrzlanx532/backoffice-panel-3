@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import type { Ref } from 'vue'
+import type { Component, Ref } from 'vue'
+
+export interface ITabItem {
+  title: string,
+  component: Component
+}
 
 const props = withDefaults(defineProps<{
   selectedItem?: number,
-  tabs: []
+  tabs: ITabItem[]
 }>(), {
   selectedItem: 0
 })
