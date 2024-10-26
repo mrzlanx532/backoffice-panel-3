@@ -300,6 +300,10 @@
     font-size: 12px;
   }
 
+  &__group {
+    display: inline-flex;
+  }
+
   &__group-separated > * {
     margin: 0 1px;
 
