@@ -27,6 +27,7 @@ import BrowserTHeadTh from "@/components/Base/Browser/BrowserTHeadTh.vue";
 import Spinner from "@/components/Base/Spinner.vue"
 import BrowserDetail from "@/components/Base/Browser/BrowserDetail.vue";
 import { type IItem, type IConfigItem, type IColumn } from '~/composables/useBrowser'
+import BrowserDetailBulkActions from '~/components/Base/Browser/BrowserDetailBulkActions.vue'
 
 const {
   // Items
@@ -50,6 +51,7 @@ interface Props {
   detailUrlPrefix: string,
 
   columns: IColumn[],
+  columnsBulkActions?: IColumn[],
   requestProperties?: string[],
 
   h1?: string,
@@ -59,13 +61,15 @@ interface Props {
   detailPageUrlPrefix: string,
   detailTitleProperty?: string,
   detailSubtitleProperty?: string,
-  isMultipleSelectionIsEnable?: boolean
+  isMultipleSelectionIsEnable?: boolean,
+  isOpenBulkActionsDetail?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   itemPrimaryKeyPropertyName: 'id',
   detailTitleProperty: 'id',
-  isMultipleSelectionIsEnable: false
+  isMultipleSelectionIsEnable: false,
+  isOpenBulkActionsDetail: false,
 })
 
 const { $authFetch } = useNuxtApp()
@@ -73,7 +77,8 @@ const { $authFetch } = useNuxtApp()
 const emit = defineEmits([
   'clickRow',
   'itemUpdated',
-  'changeSelectedIds'
+  'changeSelectedIds',
+  'closeBulkActions'
 ])
 
 enum FilterType {
@@ -382,6 +387,12 @@ const onClickMultipleCheckbox = (_id: string|number) => {
     selectedIds.value[_id] = true
   }
 
+  const preparedSelectedIds = prepareSelectedIds(selectedIds)
+
+  if (!preparedSelectedIds.length) {
+    allSelected.value = false
+  }
+
   emit('changeSelectedIds', prepareSelectedIds(selectedIds))
 }
 
@@ -412,6 +423,10 @@ const prepareSelectedIds = (selectedIds: Ref<Record<string, boolean>>) => {
   })
 
   return ids
+}
+
+const onCloseBulkActions = () => {
+  emit('closeBulkActions')
 }
 
 const getSubComponent = (component: any) => {
@@ -509,7 +524,7 @@ defineExpose({
             <table v-if="items.length" class="browser__table">
               <thead>
                 <tr>
-                  <th v-if="isMultipleSelectionIsEnable" @click="onClickAllSelected()">
+                  <th v-if="isMultipleSelectionIsEnable" @click="onClickAllSelected" class="--min-width">
                     <input type="checkbox" name="all_selected" v-model="allSelected">
                   </th>
                   <BrowserTHeadTh
@@ -584,5 +599,20 @@ defineExpose({
       </template>
 
     </BrowserDetail>
+    <BrowserDetailBulkActions
+        v-if="isMultipleSelectionIsEnable && props.columnsBulkActions"
+        :columns="props.columnsBulkActions"
+        :items="items"
+        :selected-ids="selectedIds"
+        :all-selected="allSelected"
+        :is-open="isOpenBulkActionsDetail"
+        :item-primary-key-property-name="props.itemPrimaryKeyPropertyName"
+        @close-bulk-actions="onCloseBulkActions"
+        @click-multiple-checkbox="onClickMultipleCheckbox"
+    >
+      <template v-if="slots.browserDetailBulkActionsHeader" #header>
+        <slot name="browserDetailBulkActionsHeader"/>
+      </template>
+    </BrowserDetailBulkActions>
   </div>
 </template>

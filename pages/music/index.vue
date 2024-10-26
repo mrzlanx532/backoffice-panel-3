@@ -5,7 +5,6 @@ import Tabs from '~/components/Base/Tabs.vue';
 import Browser, {type IItem} from '~/components/Base/Browser/Browser.vue'
 import MainTab from '~/pages/music/_tabs/main.vue'
 import type { Ref } from 'vue'
-import TableSimple from '~/components/Base/Table/TableSimple.vue'
 
 const {
   browserEl,
@@ -21,7 +20,6 @@ const {
   initTabs
 } = useTabs()
 
-const selectedState = ref({})
 const selectedIds: Ref<string[]> = ref([])
 
 const isOpenBulkActions = ref(false)
@@ -36,6 +34,24 @@ const requestProperties = ref([
   'authors',
   'created_at',
   'downloads_counter'
+])
+
+const columnsBulkActions = ref([
+  {
+    name: 'id',
+    title: 'ID'
+  },
+  {
+    name: 'title_ru',
+    title: 'Название'
+  },
+  {
+    name: 'created_at',
+    title: 'Загружен',
+    preset: {
+      name: 'timestampToFormatPreset'
+    }
+  },
 ])
 
 const columns = ref([
@@ -152,6 +168,7 @@ const stateOptions = ref([
 ])
 
 const onChangeSelectedIds = (ids: string[]) => {
+  isOpenBulkActions.value = true
   selectedIds.value = ids
 
   console.log(selectedIds.value)
@@ -159,6 +176,10 @@ const onChangeSelectedIds = (ids: string[]) => {
 
 const onClickBulkActions = () => {
   isOpenBulkActions.value = true
+}
+
+const onCloseBulkActions = () => {
+  isOpenBulkActions.value = false
 }
 </script>
 
@@ -168,7 +189,6 @@ const onClickBulkActions = () => {
       ref="browserEl"
       h1="Каталог музыкальных треков"
       url-prefix="music/tracks/browse"
-      :is-multiple-selection-is-enable="true"
 
       detail-url-prefix="music/tracks/detail"
       detail-title-property="id"
@@ -179,6 +199,11 @@ const onClickBulkActions = () => {
       :request-properties="requestProperties"
 
       @itemUpdated="onItemUpdated"
+
+      :columns-bulk-actions="columnsBulkActions"
+      :is-multiple-selection-is-enable="true"
+      :is-open-bulk-actions-detail="isOpenBulkActions"
+      @close-bulk-actions="onCloseBulkActions"
   >
     <template #rightSide>
       <div class="btn__group-separated">
@@ -192,23 +217,7 @@ const onClickBulkActions = () => {
       </div>
     </template>
 
-    <template v-if="isOpenBulkActions" #browserDetailHeaderTop>
-      <div class="browser-detail__header-title-container">
-        <div class="browser-detail__header-title">Массовые треки ({{selectedIds.length}})</div>
-        <div class="browser-detail__header-subtitle">
-          Выберите действия:
-        </div>
-      </div>
-    </template>
-
     <template #browserDetailHeader>
-      <template v-if="isOpenBulkActions">
-        <div class="btn__group" v-if="selectedIds.length">
-          <Button @close="" :class="['--big --outline-primary']">Перенос к другому автору</Button>
-          <Button @close="" :class="['--big --outline-danger']">Удалить</Button>
-        </div>
-      </template>
-      <template v-else>
         <div class="btn__group">
           <Button @click="onClickEdit({
           formURL: 'music/tracks/form',
@@ -222,21 +231,17 @@ const onClickBulkActions = () => {
         })" :class="['--big --outline-danger']">Удалить</Button>
         </div>
         <Tabs :tabs="tabs" @change="onChangeSelectedTab"/>
-      </template>
+    </template>
+
+    <template #browserDetailBulkActionsHeader>
+      <div class="btn__group">
+        <Button :class="['--big --outline-primary']">Перенос к другому автору</Button>
+        <Button :class="['--big --outline-danger']">Удалить</Button>
+      </div>
     </template>
 
     <template #browserDetailContent>
-      <template v-if="isOpenBulkActions">
-        <TableSimple
-            :selectedIds="selectedIds"
-            v-if="isOpenBulkActions"
-            :columns="columns"
-            :items="[{id: 1}, {id: 2}, {id: 3}]"
-        />
-      </template>
-      <template v-else>
-        <component :is="selectedTabComponent" :item="item"/>
-      </template>
+      <component :is="selectedTabComponent" :item="item"/>
     </template>
   </Browser>
 </template>
