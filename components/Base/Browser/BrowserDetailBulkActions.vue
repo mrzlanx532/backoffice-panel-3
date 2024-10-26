@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { type Component, useSlots } from 'vue'
 import type { IConfigItem } from '~/composables/useBrowser'
+import BrowserCheckbox from '~/components/Base/Browser/BrowserCheckbox.vue'
 
 const {
   callPreset
@@ -37,7 +38,7 @@ const preparedItems = computed(() => {
 
   const selectedIdsAsEntries = Object.entries(props.selectedIds)
 
-  return props.items.filter((item) => {
+  return props.items.filter((item: any) => {
 
     let isNeedToStay = false
 
@@ -141,9 +142,13 @@ const onClickMultipleCheckbox = (id: string|number) => {
               </tr>
             </thead>
             <tbody>
-            <tr v-for="item in preparedItems" :key="item[itemPrimaryKeyPropertyName]" @click="onClickRow(item)">
-              <td @click.stop="onClickMultipleCheckbox(item.id)">
-                <input type="checkbox" :name="'selected_' + item.id" v-model="selectedIds[item[props.itemPrimaryKeyPropertyName]]">
+            <tr
+                v-for="item in preparedItems"
+                :key="item[itemPrimaryKeyPropertyName]"
+                @click.capture="onClickMultipleCheckbox(item.id)"
+            >
+              <td>
+                <BrowserCheckbox v-model="selectedIds[item[props.itemPrimaryKeyPropertyName]]"/>
               </td>
               <td v-for="column in columns">
                 <component

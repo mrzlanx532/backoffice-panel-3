@@ -28,6 +28,7 @@ import Spinner from "@/components/Base/Spinner.vue"
 import BrowserDetail from "@/components/Base/Browser/BrowserDetail.vue";
 import { type IItem, type IConfigItem, type IColumn } from '~/composables/useBrowser'
 import BrowserDetailBulkActions from '~/components/Base/Browser/BrowserDetailBulkActions.vue'
+import BrowserCheckbox from '~/components/Base/Browser/BrowserCheckbox.vue'
 
 const {
   // Items
@@ -525,7 +526,7 @@ defineExpose({
               <thead>
                 <tr>
                   <th v-if="isMultipleSelectionIsEnable" @click="onClickAllSelected" class="--min-width">
-                    <input type="checkbox" name="all_selected" v-model="allSelected">
+                    <BrowserCheckbox v-model="allSelected"/>
                   </th>
                   <BrowserTHeadTh
                       @sortChanged="onSortChanged"
@@ -539,7 +540,7 @@ defineExpose({
               <tbody>
               <tr v-for="item in items" :key="item[itemPrimaryKeyPropertyName]" @click="onClickRow(item)">
                 <td v-if="isMultipleSelectionIsEnable" @click.stop="onClickMultipleCheckbox(item.id)">
-                  <input type="checkbox" :name="'selected_' + item.id" v-model="selectedIds[item.id]">
+                  <BrowserCheckbox v-model="selectedIds[item.id]"/>
                 </td>
                 <td v-for="column in columns">
                   <component
