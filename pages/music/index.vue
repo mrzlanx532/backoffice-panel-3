@@ -23,6 +23,8 @@ const {
 const selectedState = ref({})
 const selectedIds: Ref<string[]> = ref([])
 
+const isOpenBulkActions = ref(true)
+
 const requestProperties = ref([
   'id',
   'title_ru',
@@ -214,23 +216,43 @@ const onChangeSelectedIds = (ids: string[]) => {
       </div>
     </template>
 
+    <template v-if="isOpenBulkActions" #browserDetailHeaderTop>
+      <div class="browser-detail__header-title-container">
+        <div class="browser-detail__header-title">Массовые треки</div>
+      </div>
+    </template>
+
     <template #browserDetailHeader>
-      <div class="btn__group">
-        <Button @click="onClickEdit({
+      <template v-if="isOpenBulkActions">
+        <div class="btn__group">
+          <Button @close="" :class="['--big --outline-primary']">Перенос к другому автору</Button>
+          <Button @close="" :class="['--big --outline-danger']">Удалить</Button>
+        </div>
+      </template>
+      <template v-else>
+        <div class="btn__group">
+          <Button @click="onClickEdit({
           formURL: 'music/tracks/form',
           modalPath: 'music/tracks/form',
           modalTitle: 'Трек изменен',
           notificationMessage: 'Трек изменен'
         })" :class="['--big --outline-primary']">Изменить</Button>
-        <Button @click="onClickDelete({
+          <Button @click="onClickDelete({
           deleteURL: 'music/tracks/delete',
           notificationMessage: 'Трек удален'
         })" :class="['--big --outline-danger']">Удалить</Button>
-      </div>
-      <Tabs :tabs="tabs" @change="onChangeSelectedTab"/>
+        </div>
+        <Tabs :tabs="tabs" @change="onChangeSelectedTab"/>
+      </template>
     </template>
+
     <template #browserDetailContent>
-      <component :is="selectedTabComponent" :item="item"/>
+      <template v-if="isOpenBulkActions">
+
+      </template>
+      <template v-else>
+        <component :is="selectedTabComponent" :item="item"/>
+      </template>
     </template>
   </Browser>
 </template>

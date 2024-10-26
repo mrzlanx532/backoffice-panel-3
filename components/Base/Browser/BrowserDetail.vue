@@ -97,28 +97,40 @@ defineExpose({
         ]">
         <div class="browser-detail__header">
           <div class="browser-detail__header-first-row">
-            <div class="browser-detail__header-title-container">
-              <div class="browser-detail__header-title">
-                {{ item[titleProperty]}}
-              </div>
-              <div class="browser-detail__header-subtitle">
-                {{ subtitleProperty ? item[subtitleProperty] : null }}
-              </div>
-            </div>
-            <div class="browser-detail__header-buttons">
-              <div class="browser-detail__header-more-button">
-                <NuxtLink :to="detailPageUrlPrefix">
-                  <svg stroke="currentColor" class="feather feather-external-link">
-                    <use xlink:href="/img/sprite.svg#more_button"/>
+            <template v-if="slots.header_top">
+              <slot name="header_top"/>
+              <div class="browser-detail__header-buttons">
+                <div class="browser-detail__header-close-button" @click="onClickCloseButton">
+                  <svg>
+                    <use xlink:href="/img/sprite.svg#cancel_cross" />
                   </svg>
-                </NuxtLink>
+                </div>
               </div>
-              <div class="browser-detail__header-close-button" @click="onClickCloseButton">
-                <svg>
-                  <use xlink:href="/img/sprite.svg#cancel_cross" />
-                </svg>
+            </template>
+            <template v-else>
+              <div class="browser-detail__header-title-container">
+                <div class="browser-detail__header-title">
+                  {{ item[titleProperty]}}
+                </div>
+                <div class="browser-detail__header-subtitle">
+                  {{ subtitleProperty ? item[subtitleProperty] : null }}
+                </div>
               </div>
-            </div>
+              <div class="browser-detail__header-buttons">
+                <div class="browser-detail__header-more-button">
+                  <NuxtLink :to="detailPageUrlPrefix">
+                    <svg stroke="currentColor" class="feather feather-external-link">
+                      <use xlink:href="/img/sprite.svg#more_button"/>
+                    </svg>
+                  </NuxtLink>
+                </div>
+                <div class="browser-detail__header-close-button" @click="onClickCloseButton">
+                  <svg>
+                    <use xlink:href="/img/sprite.svg#cancel_cross" />
+                  </svg>
+                </div>
+              </div>
+            </template>
           </div>
           <div class="browser-detail__header-second-row" v-if="slots.header">
             <slot name="header"/>

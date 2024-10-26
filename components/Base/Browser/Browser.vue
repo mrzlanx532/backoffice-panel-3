@@ -59,7 +59,7 @@ interface Props {
   detailPageUrlPrefix: string,
   detailTitleProperty?: string,
   detailSubtitleProperty?: string,
-  isMultipleSelectionIsEnable: boolean
+  isMultipleSelectionIsEnable?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -254,7 +254,7 @@ const onClickRow = (item: IItem) => {
 }
 
 const closeDetail = () => {
-  onCloseDetail()
+  id.value = null
 }
 
 const onCloseBrowserDetail = () => {
@@ -569,8 +569,13 @@ defineExpose({
         :url-prefix="props.detailUrlPrefix"
         :detail-page-url-prefix="detailPageUrl"
         @itemUpdated="onItemUpdated"
+        @close="closeDetail"
     >
-      <template #header>
+      <template v-if="slots.browserDetailHeaderTop" #header_top>
+        <slot name="browserDetailHeaderTop"/>
+      </template>
+
+      <template v-if="slots.browserDetailHeader" #header>
         <slot name="browserDetailHeader"/>
       </template>
 
