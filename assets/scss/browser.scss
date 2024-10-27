@@ -33,6 +33,12 @@
     border: 1px solid var(--color-2, #dbdbdb);
     border-radius: 5px;
 
+    &.--fixed-search-string {
+      position: absolute;
+      left: 50%;
+      transform: translate(calc(-50% - 88px), 0);
+    }
+
     &.--in-small-browser {
       .browser__search-string {
         width: 100%;

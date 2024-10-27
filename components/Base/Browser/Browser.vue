@@ -442,7 +442,7 @@ defineExpose({
           <div class="page__title-container">
             <div class="page__title">{{ h1 }}</div>
           </div>
-          <BrowserSearchString @search="onSearchStringInput"/>
+          <BrowserSearchString class="--fixed-search-string" @search="onSearchStringInput"/>
           <div class="browser__control-panel-right">
             <BrowserPagination
                 :page="currentPage"
