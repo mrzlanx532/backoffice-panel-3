@@ -247,7 +247,7 @@
   &.--warning {
     border: 1px solid var(--warning-btn-color, #ffc107);
     background: var(--warning-btn-color, #ffc107);
-    color: #000000;
+    color: var(--color-1, #ffffff);
 
     &:hover {
       border: 1px solid var(--warning-btn-color-hover, #ffca2c);
@@ -257,7 +257,7 @@
     &:active {
       border: 1px solid var(--warning-btn-border-active, #eebc29);
       background: var(--warning-btn-color-active, #dcae24);
-      color: #000000;
+      color: var(--color-1, #ffffff);
     }
   }
 
@@ -281,7 +281,7 @@
     &:hover {
       border: 1px solid var(--warning-btn-color, #ffc107);
       background: var(--warning-btn-color, #ffc107);
-      color: #000000;
+      color: var(--color-1);
     }
 
     &:active {

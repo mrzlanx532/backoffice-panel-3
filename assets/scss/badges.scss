@@ -39,6 +39,6 @@
   &.--warning {
     border: 1px solid var(--warning-btn-color, #ffc107);
     background: var(--warning-btn-color, #ffc107);
-    color: #000000;
+    color: var(--color-1, #ffffff);
   }
 }
