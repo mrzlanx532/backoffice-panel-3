@@ -49,7 +49,9 @@ const AuthorColumn = defineComponent(
           onClick: [props.item.onClick, setIsOpenAsFalse]
         }, {
           default: () => {
-            return expose.slots.default()
+            if (expose.slots.default) {
+              return expose.slots.default()
+            }
           }
         })
       }
@@ -60,7 +62,7 @@ const AuthorColumn = defineComponent(
     }
 )
 
-const listener = (e) => e.preventDefault()
+const listener = (e: Event) => e.preventDefault()
 
 const onMouseOver = () => {
   window.addEventListener('selectstart', listener)
@@ -73,6 +75,7 @@ const onMouseOut = () => {
 
 <template>
   <div
+      v-bind="$attrs"
       ref="btnDropdownEl"
       class="btn-dropdown"
       :class="{'--is-open': isOpen}"

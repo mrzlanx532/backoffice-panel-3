@@ -5,6 +5,7 @@ import Tabs from '~/components/Base/Tabs.vue';
 import Browser, {type IItem} from '~/components/Base/Browser/Browser.vue'
 import MainTab from '~/pages/music/_tabs/main.vue'
 import type { Ref } from 'vue'
+import ButtonDropdown from '~/components/Base/ButtonDropdown.vue'
 
 const {
   browserEl,
@@ -185,6 +186,25 @@ const onCloseBulkActions = () => {
 const onClickMultiple = () => {
   console.log(selectedIds.value)
 }
+
+const buttonDropdownItems = [
+  {
+    title: 'Опубликовать',
+    class: '--success',
+  },
+  {
+    title: 'Снять с публикации',
+    class: '--warning',
+  },
+  {
+    title: 'Скопировать метаданные из основной версии',
+    class: '--primary',
+  },
+  {
+    title: 'Удалить',
+    class: '--danger',
+  },
+]
 </script>
 
 <template>
@@ -239,8 +259,8 @@ const onClickMultiple = () => {
 
     <template #browserDetailBulkActionsHeader>
       <div class="btn__group">
-        <Button @click="onClickMultiple" :class="['--big --outline-primary']">Перенос к другому автору</Button>
-        <Button @click="onClickMultiple" :class="['--big --outline-danger']">Удалить</Button>
+        <Button @click="onClickMultiple" :class="['--big --outline-primary']">Добавить в плейлист</Button>
+        <ButtonDropdown class="--primary" :items="buttonDropdownItems"/>
       </div>
     </template>
 

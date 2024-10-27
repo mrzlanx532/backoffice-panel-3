@@ -316,7 +316,7 @@
     }
   }
 
-  &__group > button {
+  &__group > * {
     display: inline-block;
     border-radius: 0;
     border-right: none;
@@ -328,13 +328,13 @@
       }
     }
 
-    &:first-of-type {
+    &:first-child {
       margin-left: 0;
       border-bottom-left-radius: 5px;
       border-top-left-radius: 5px;
     }
 
-    &:last-of-type {
+    &:last-child {
       border-bottom-right-radius: 5px;
       border-top-right-radius: 5px;
     }
@@ -408,12 +408,40 @@
 }
 
 .btn-dropdown {
+  display: inline-flex;
+  align-items: center;
   padding: 6px;
   cursor: pointer;
-  display: inline-block;
+  background: white;
 
-  &.--is-open svg {
-    color: var(--color-gradient-2, orange);
+  &.--warning {
+    border: 1px solid #fd9426;
+    svg { color: #fd9426; }
+    &.--is-open svg { color: #f8a64f; }
+  }
+
+  &.--special {
+    border: 1px solid var(--color-gradient-intermediate, #ff6e00);
+    svg { color: var(--color-gradient-intermediate, #ff6e00); }
+    &.--is-open svg { color: var(--color-gradient-2); }
+  }
+
+  &.--success {
+    border: 1px solid var(--success-btn-color, #198754);
+    svg { color: var(--success-btn-color, #198754); }
+    &.--is-open svg { color: var(--success-btn-color-contrast); }
+  }
+
+  &.--primary {
+    border: 1px solid var(--primary-btn-color, #0d6efd);
+    svg { color: var(--primary-btn-color, #0d6efd); }
+    &.--is-open svg { color: var(--primary-btn-color-contrast); }
+  }
+
+  &.--danger {
+    border: 1px solid var(--danger-btn-color, #dc3545);
+    svg { color: var(--danger-btn-color, #dc3545); }
+    &.--is-open svg { color: var(--danger-btn-color-contrast); }
   }
 
   svg {
@@ -440,6 +468,10 @@
 
     &:hover {
       background: var(--color-3, #f3f3f3);
+    }
+
+    &.--warning {
+      color: #fd9426;
     }
 
     &.--special {
