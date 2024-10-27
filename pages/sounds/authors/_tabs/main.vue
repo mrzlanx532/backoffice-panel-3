@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import FlexTable from '~/components/Base/FlexTable.vue'
+import FlexTable from '~/components/Base/FlexTable/FlexTable.vue'
+import FlexTablePicture from '~/components/Base/FlexTable/FlexTablePicture.vue'
 
 type IItem = Record<any, string>
 
 const config = ref([
+  {
+    name: 'photo',
+    title: 'Изображение',
+    columnClass: 12,
+    component: FlexTablePicture
+  },
   {
     name: 'name_ru',
     title: 'Название (ru)',

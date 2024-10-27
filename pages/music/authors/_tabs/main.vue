@@ -68,7 +68,7 @@ const config = ref([
   },
 ])
 
-import FlexTable from '~/components/Base/FlexTable.vue'
+import FlexTable from '~/components/Base/FlexTable/FlexTable.vue'
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import FlexTable from '~/components/Base/FlexTable.vue'
+import FlexTable from '~/components/Base/FlexTable/FlexTable.vue'
 
 const config = ref([
   {

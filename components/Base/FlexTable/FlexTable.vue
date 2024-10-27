@@ -23,7 +23,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  emptySymbol: '–'
+  emptySymbol: '—'
 })
 
 const dynamicMethods: {[key: string]: (configItem: IConfigItem, item: IItem) => string | null} = {
