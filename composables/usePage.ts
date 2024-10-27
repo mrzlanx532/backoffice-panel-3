@@ -132,6 +132,30 @@ export const usePage = () => {
         item.value = _item
     }
 
+    const initBrowserMultiple = () => {
+        const selectedIds: Ref<string[]> = ref([])
+        const isOpenBulkActions = ref(false)
+        const onChangeSelectedIds = (ids: string[]) => {
+            isOpenBulkActions.value = true
+            selectedIds.value = ids
+        }
+        const onClickBulkActions = () => {
+            isOpenBulkActions.value = true
+        }
+
+        const onCloseBulkActions = () => {
+            isOpenBulkActions.value = false
+        }
+
+        return {
+            selectedIds,
+            isOpenBulkActions,
+            onChangeSelectedIds,
+            onClickBulkActions,
+            onCloseBulkActions
+        }
+    }
+
     return {
         browserEl,
         item,
@@ -141,6 +165,9 @@ export const usePage = () => {
         onClickDelete,
         onItemUpdated,
 
-        SSRLoadDetail
+        SSRLoadDetail,
+
+        /** Browser Multiple Select */
+        initBrowserMultiple
     }
 }

@@ -4,7 +4,6 @@ import Button from '~/components/Base/Button.vue';
 import Tabs from '~/components/Base/Tabs.vue';
 import Browser, {type IItem} from '~/components/Base/Browser/Browser.vue'
 import MainTab from '~/pages/music/_tabs/main.vue'
-import type { Ref } from 'vue'
 import ButtonDropdown from '~/components/Base/ButtonDropdown.vue'
 
 const {
@@ -14,16 +13,22 @@ const {
   onClickCreate,
   onClickEdit,
   onClickDelete,
-  onItemUpdated
+  onItemUpdated,
+
+  initBrowserMultiple
 } = usePage()
 
 const {
   initTabs
 } = useTabs()
 
-const selectedIds: Ref<string[]> = ref([])
-
-const isOpenBulkActions = ref(false)
+const {
+  selectedIds,
+  isOpenBulkActions,
+  onChangeSelectedIds,
+  onClickBulkActions,
+  onCloseBulkActions
+} = initBrowserMultiple()
 
 const requestProperties = ref([
   'id',
@@ -168,21 +173,6 @@ const stateOptions = ref([
   }
 ])
 
-const onChangeSelectedIds = (ids: string[]) => {
-  isOpenBulkActions.value = true
-  selectedIds.value = ids
-
-  console.log(selectedIds.value)
-}
-
-const onClickBulkActions = () => {
-  isOpenBulkActions.value = true
-}
-
-const onCloseBulkActions = () => {
-  isOpenBulkActions.value = false
-}
-
 const onClickMultiple = () => {
   console.log(selectedIds.value)
 }
@@ -209,7 +199,6 @@ const buttonDropdownItems = [
 
 <template>
   <Browser
-      @change-selected-ids="onChangeSelectedIds"
       ref="browserEl"
       h1="Каталог музыкальных треков"
       url-prefix="music/tracks/browse"
@@ -227,6 +216,7 @@ const buttonDropdownItems = [
       :columns-bulk-actions="columnsBulkActions"
       :is-multiple-selection-is-enable="true"
       :is-open-bulk-actions-detail="isOpenBulkActions"
+      @change-selected-ids="onChangeSelectedIds"
       @close-bulk-actions="onCloseBulkActions"
   >
     <template #rightSide>
