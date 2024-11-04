@@ -2,18 +2,18 @@
 import { type Ref, type Component, h, nextTick } from 'vue'
 import { defineComponent } from '#imports'
 
-interface IItem {
+interface DropdownIItem {
   title: string,
   class: string,
   onClick?: () => {}
 }
 
 const props = defineProps<{
-  items: IItem[],
+  items: DropdownIItem[],
 }>()
 
-const btnDropdownEl: Ref<Component|null> = ref(null)
-const dropdownEl: Ref<Component|null> = ref(null)
+const btnDropdownEl: Ref<Component> = ref(null)
+const dropdownEl: Ref<Component> = ref(null)
 
 const isOpen = ref(false)
 const top = ref(0)

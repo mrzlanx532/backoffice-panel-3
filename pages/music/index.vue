@@ -23,6 +23,12 @@ const {
 } = useTabs()
 
 const {
+  $modal,
+  $authFetch,
+  $notification
+} = useNuxtApp()
+
+const {
   selectedIds,
   isOpenBulkActions,
   onChangeSelectedIds,
@@ -173,26 +179,148 @@ const stateOptions = ref([
   }
 ])
 
-const onClickMultiple = () => {
-  console.log(selectedIds.value)
+const onClickMultiple = async () => {
+  const formResponse = await $authFetch('music/tracks/playlists/list?search_string=&limit=30&offset=0', {
+    method: 'GET',
+  })
+
+  $modal.load('music/add_to_playlist_form', {
+    title: 'Добавить в плейлист',
+    formResponse,
+    selectedIds: selectedIds.value
+  }).then(() => {
+    browserEl.value!.reset()
+    $notification.push({type: 'success', message: 'Треки добавлены в плейлист'})
+  })
 }
 
 const buttonDropdownItems = [
   {
     title: 'Опубликовать',
     class: '--success',
+    onClick() {
+      $modal.confirm({
+        question: 'Вы действительно хотите опубликовать данные треки?'
+      }).then(() => {
+        $authFetch('music/tracks/state-update-many', {
+          method: 'POST',
+          body: {
+            state_id: 'PUBLISHED',
+            ids: selectedIds.value
+          },
+          onResponse({response}) {
+            if (response.ok) {
+              $notification.push({
+                type: 'success',
+                message: 'Треки опубликованы'
+              })
+
+              browserEl.value!.reset()
+
+              return
+            }
+
+            if (response.status === 409) {
+              $notification.push({
+                type: 'danger',
+                message: response._data.message
+              })
+            }
+          }
+        })
+      })
+    }
   },
   {
     title: 'Снять с публикации',
     class: '--warning',
+    onClick() {
+      $modal.confirm({
+        question: 'Вы действительно хотите снять треки с публикации?'
+      }).then(() => {
+        $authFetch('music/tracks/state-update-many', {
+          method: 'POST',
+          body: {
+            state_id: 'DRAFT',
+            ids: selectedIds.value
+          },
+          onResponse({response}) {
+            if (response.ok) {
+              $notification.push({
+                type: 'success',
+                message: 'Треки сняты с публикации'
+              })
+
+              browserEl.value!.reset()
+
+              return
+            }
+
+            if (response.status === 409) {
+              $notification.push({
+                type: 'danger',
+                message: response._data.message
+              })
+            }
+          }
+        })
+      })
+    }
   },
   {
     title: 'Скопировать метаданные из основной версии',
     class: '--primary',
+    onClick() {
+      $authFetch('music/tracks/copy-meta', {
+        method: 'POST',
+        body: {
+          track_ids: selectedIds.value
+        }
+      })
+
+      $notification.push({
+        type: 'success',
+        message: 'Метаданные скопированы'
+      })
+    }
   },
   {
     title: 'Удалить',
     class: '--danger',
+    onClick() {
+      $modal.confirm({
+        question: 'Вы действительно хотите удалить треки?'
+      }).then(() => {
+        $authFetch('music/tracks/delete-many', {
+          method: 'POST',
+          body: {
+            state_id: 'DRAFT',
+            ids: selectedIds.value
+          },
+          onResponse({response}) {
+            if (response.ok) {
+              $notification.push({
+                type: 'success',
+                message: 'Треки удалены'
+              })
+
+              selectedIds.value = []
+              browserEl.value!.reset()
+              browserEl.value!.resetSelectedIds()
+
+              return
+            }
+
+            if (response.status === 409) {
+              $notification.push({
+                type: 'danger',
+                message: response._data.message
+              })
+            }
+          }
+        })
+      })
+    }
   },
 ]
 </script>

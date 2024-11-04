@@ -3,6 +3,7 @@ export { type IItem, type IConfigItem } from '~/composables/useBrowser'
 
 export interface IBrowser {
   reset: (isUpdateItem?: boolean) => void,
+  resetSelectedIds: () => void,
   closeDetail: () => void
 }
 </script>
@@ -428,8 +429,13 @@ const onCloseBulkActions = () => {
   emit('closeBulkActions')
 }
 
+const resetSelectedIds = () => {
+  selectedIds.value = {}
+}
+
 defineExpose({
   reset,
+  resetSelectedIds,
   closeDetail
 })
 </script>
