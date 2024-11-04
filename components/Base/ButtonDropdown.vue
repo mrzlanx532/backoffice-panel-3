@@ -5,7 +5,7 @@ import { defineComponent } from '#imports'
 interface DropdownIItem {
   title: string,
   class: string,
-  onClick?: () => {}
+  onClick?: () => void
 }
 
 const props = defineProps<{

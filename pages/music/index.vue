@@ -161,24 +161,6 @@ const {
   },
 ])
 
-const stateOptions = ref([
-  {
-    id: 'PUBLISHED',
-    title: 'Опубликован',
-    class: '--success'
-  },
-  {
-    id: 'DRAFT',
-    title: 'Черновик',
-    class: '--default'
-  },
-  {
-    id: 'DISABLED',
-    title: 'Отключен',
-    class: '--danger'
-  }
-])
-
 const onClickMultiple = async () => {
   const formResponse = await $authFetch('music/tracks/playlists/list?search_string=&limit=30&offset=0', {
     method: 'GET',
