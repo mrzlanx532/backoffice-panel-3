@@ -19,8 +19,8 @@
     border-bottom: 1px solid var(--color-2, #dbdbdb);
 
     th, td {
-      padding: 10px 16px;
-      font-size: 14px;
+      padding: 6px 6px 6px 0;
+      font-size: 12px;
     }
 
     th {
@@ -30,7 +30,11 @@
     td {
       font-weight: normal;
       color: black;
-      font-size: 18px;
+      font-size: 16px;
+    }
+
+    &:last-child {
+      border-bottom: none;
     }
   }
 }
