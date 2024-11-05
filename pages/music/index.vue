@@ -183,7 +183,11 @@ const buttonDropdownItems = [
     onClick() {
       $modal.confirm({
         question: 'Вы действительно хотите опубликовать данные треки?'
-      }).then(() => {
+      }).then((isAgree: boolean) => {
+        if (!isAgree) {
+          return
+        }
+
         $authFetch('music/tracks/state-update-many', {
           method: 'POST',
           body: {
@@ -219,7 +223,11 @@ const buttonDropdownItems = [
     onClick() {
       $modal.confirm({
         question: 'Вы действительно хотите снять треки с публикации?'
-      }).then(() => {
+      }).then((isAgree: boolean) => {
+        if (!isAgree) {
+          return
+        }
+
         $authFetch('music/tracks/state-update-many', {
           method: 'POST',
           body: {
@@ -272,7 +280,11 @@ const buttonDropdownItems = [
     onClick() {
       $modal.confirm({
         question: 'Вы действительно хотите удалить треки?'
-      }).then(() => {
+      }).then((isAgree: boolean) => {
+        if (!isAgree) {
+          return
+        }
+
         $authFetch('music/tracks/delete-many', {
           method: 'POST',
           body: {

@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { type Ref, type Component, h, nextTick } from 'vue'
+import { h, nextTick, useTemplateRef } from 'vue'
 import { defineComponent } from '#imports'
 
-interface DropdownIItem {
+export interface IDropdownItem {
   title: string,
   class: string,
   onClick?: () => void
 }
 
 const props = defineProps<{
-  items: DropdownIItem[],
+  items: IDropdownItem[],
 }>()
 
-const btnDropdownEl: Ref<Component> = ref(null)
-const dropdownEl: Ref<Component> = ref(null)
+const btnDropdownEl = useTemplateRef<HTMLElement>('btnDropdownEl')
+const dropdownEl = useTemplateRef<HTMLElement>('dropdownEl')
 
 const isOpen = ref(false)
 const top = ref(0)
@@ -21,19 +21,19 @@ const left = ref(0)
 
 const onClick = () => {
 
-  const rect = btnDropdownEl.value.getBoundingClientRect()
+  const rect = btnDropdownEl.value!.getBoundingClientRect()
 
   top.value = rect.top + rect.height + 5
 
   isOpen.value = true
 
   nextTick(() => {
-    if ((rect.right + dropdownEl.value.clientWidth) > document.documentElement.clientWidth) {
-      left.value = rect.right - dropdownEl.value.clientWidth
+    if ((rect.right + dropdownEl.value!.clientWidth) > document.documentElement.clientWidth) {
+      left.value = rect.right - dropdownEl.value!.clientWidth
       return
     }
 
-    left.value = rect.right - (dropdownEl.value.clientWidth / 2)
+    left.value = rect.right - (dropdownEl.value!.clientWidth / 2)
   })
 }
 
