@@ -11,8 +11,11 @@
 
   &__content {
     font-size: 12px;
-    margin-top: 20px;
     color: var(--color-4, #757575);
+
+    &:nth-child(2) {
+      margin-top: 20px;
+    }
   }
 
   &__group > * {

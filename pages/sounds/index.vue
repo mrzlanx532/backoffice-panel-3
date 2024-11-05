@@ -4,6 +4,10 @@ import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue';
 import { prepareDuration } from '~/helpers/functions-for-table-columns'
 import Button from '~/components/Base/Button.vue'
 import ButtonDropdown from '~/components/Base/ButtonDropdown.vue'
+import MainTab from '~/pages/sounds/_tabs/main.vue'
+import VariationsTab from '~/pages/sounds/_tabs/variations.vue'
+import CollectionsTab from '~/pages/sounds/_tabs/collections.vue'
+import Tabs from '~/components/Base/Tabs.vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -26,6 +30,29 @@ const {
 
   initBrowserMultiple
 } = usePage()
+
+const {
+  initTabs
+} = useTabs()
+
+const {
+  tabs,
+  selectedTabComponent,
+  onChangeSelectedTab
+} = initTabs([
+  {
+    title: 'Инфо',
+    component: MainTab
+  },
+  {
+    title: 'Вариации',
+    component: VariationsTab
+  },
+  {
+    title: 'Коллекции',
+    component: CollectionsTab
+  },
+])
 
 const {
   selectedIds,
@@ -232,11 +259,31 @@ const onClickMultiple = async () => {
       </div>
     </template>
 
+    <template #browserDetailHeader>
+      <div class="btn__group">
+        <Button @click="onClickEdit({
+          formURL: 'music/tracks/form',
+          modalPath: 'music/tracks/form',
+          modalTitle: 'Трек изменен',
+          notificationMessage: 'Трек изменен'
+        })" :class="['--big --outline-primary']">Изменить</Button>
+        <Button @click="onClickDelete({
+          deleteURL: 'music/tracks/delete',
+          notificationMessage: 'Трек удален'
+        })" :class="['--big --outline-danger']">Удалить</Button>
+      </div>
+      <Tabs :tabs="tabs" @change="onChangeSelectedTab"/>
+    </template>
+
     <template #browserDetailBulkActionsHeader>
       <div class="btn__group">
         <Button @click="onClickMultiple" :class="['--big --outline-primary']">Добавить в коллекцию</Button>
         <ButtonDropdown class="--primary" :items="buttonDropdownItems"/>
       </div>
+    </template>
+
+    <template #browserDetailContent>
+      <component :is="selectedTabComponent" :item="item"/>
     </template>
   </Browser>
 </template>
