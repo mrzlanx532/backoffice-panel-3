@@ -4,6 +4,7 @@ import { prepareDuration } from '~/helpers/functions-for-table-columns'
 import ButtonDropdown from '~/components/Base/ButtonDropdown.vue'
 import { useNuxtApp } from '#imports'
 import type { ComponentInternalInstance } from 'vue'
+import Badge from '~/components/Base/Badge.vue'
 
 type IItem = Record<any, string>
 
@@ -88,14 +89,12 @@ const onClickInfo = () => {
       {{ props.item.duration ? prepareDuration(props.item.duration) : '-' }}
     </td>
     <td class="--min-width">
+      <Badge class="--success" title="Обработка выполнена"/>
+    </td>
+    <td class="--min-width">
       <Button class="--small --success" @click="onClickListen">
         Слушать
       </Button>
-    </td>
-    <td class="--min-width">
-      <svg @click="onClickInfo()">
-        <use xlink:href="/img/sprite.svg#primary"/>
-      </svg>
     </td>
     <td class="--min-width">
       <ButtonDropdown :items="buttonDropdownItems"/>

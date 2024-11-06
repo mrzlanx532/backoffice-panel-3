@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BrowserSmall from '~/components/Base/BrowserSmall/BrowserSmall.vue'
 import SoundTrackTr from '~/components/CustomTr/SoundTrackTr.vue'
+import Button from '~/components/Base/Button.vue'
 
 const props = defineProps<{
   item: IItem,
@@ -57,5 +58,9 @@ watch(
       :columns="columns"
       :is-enabled-search="true"
       :custom-tr="SoundTrackTr"
-  />
+  >
+    <template #actions>
+      <Button class="--success --small">Добавить</Button>
+    </template>
+  </BrowserSmall>
 </template>
