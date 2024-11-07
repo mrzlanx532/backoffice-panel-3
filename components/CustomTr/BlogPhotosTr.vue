@@ -26,7 +26,8 @@ const onClickEdit = async () => {
   $modal.load(BlogPhotoForm, {
     title: 'Изменить фото',
     id: props.item.id,
-    formResponse
+    formResponse,
+    blogPostId: props.item!.blog_post_id,
   }).then(() => {
     $notification.push({type: 'success', message: 'Фото изменено'})
   })
