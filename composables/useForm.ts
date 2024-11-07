@@ -72,7 +72,7 @@ type propsWithDefaultPropsType = DefineProps<LooseRequired<defaultProps>, never>
 
 export const useForm = () => {
 
-    const initForm = (formDataPropertyNames: TFormDataItem[]) => {
+    const initForm = (createURL: string, updateURL: string, formDataPropertyNames: TFormDataItem[]) => {
         const { $authFetch } = useNuxtApp()
 
         const formDataValues = getFormDataValues(formDataPropertyNames)
@@ -84,11 +84,11 @@ export const useForm = () => {
         ) => {
             let requestBody = formRequestBody(formDataValues, props.data.id)
 
-            const method = props.data.id ? 'update' : 'create'
+            const URL = props.data.id ? updateURL : createURL
 
             try {
 
-                await $authFetch(`blog/posts/${method}`, {
+                await $authFetch(URL, {
                     method: 'POST',
                     body: requestBody,
                 })

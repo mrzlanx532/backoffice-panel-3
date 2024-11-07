@@ -27,7 +27,10 @@ const {
   formDataValues,
   errors,
   onClickSave
-} = initForm([
+} = initForm(
+    'blog/posts/create',
+    'blog/posts/update',
+    [
   select({
     name: 'locale_id',
     label: 'Язык публикации',

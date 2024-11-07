@@ -28,7 +28,10 @@ const {
   formDataValues,
   errors,
   onClickSave
-} = initForm([
+} = initForm(
+    'music/albums/create',
+    'music/albums/update',
+    [
   input({
     name: 'name_ru',
     label: 'Название (ru)',
