@@ -7,6 +7,7 @@ import Button from '~/components/Base/Button.vue'
 import MainTab from '~/pages/music/labels/_tabs/main.vue'
 import TracksTab from '~/pages/music/labels/_tabs/tracks.vue'
 import AlbumsTab from '~/pages/music/labels/_tabs/albums.vue'
+import MusicLabelForm from '~/modals/music/MusicLabelForm.vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -105,7 +106,7 @@ const {
       <div class="btn__group">
         <Button @click="onClickCreate({
           formURL: 'music/labels/form',
-          modalPath: 'music/labels/form',
+          modalComponent: MusicLabelForm,
           modalTitle: 'Создать лейбл',
           notificationMessage: 'Лейбл создан'
         })" :class="['--small --success']">Добавить</Button>
@@ -115,7 +116,7 @@ const {
       <div class="btn__group">
         <Button @click="onClickEdit({
           formURL: 'music/labels/form',
-          modalPath: 'music/labels/form',
+          modalComponent: MusicLabelForm,
           modalTitle: 'Изменить лейбл',
           notificationMessage: 'Лейбл изменен'
         })" :class="['--big --outline-primary']">Изменить</Button>
