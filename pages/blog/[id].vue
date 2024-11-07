@@ -1,44 +1,117 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useRoute, useNuxtApp } from '#imports';
-import { useAsyncData } from '#app'
 
 import Detail from '@/components/Base/Detail.vue'
 import Button from '@/components/Base/Button.vue'
+import BlogForm from '~/modals/blog/BlogForm.vue'
+import Tabs from '~/components/Base/Tabs.vue'
+import MainTab from '~/pages/blog/_tabs/main.vue'
+import PhotosTab from '~/pages/blog/_tabs/photos.vue'
 
-const { $authFetch } = useNuxtApp()
 const route = useRoute()
 
-type IItem = {[key: string]: any}
+const {
+  $modal,
+  $notification,
+  $authFetch
+} = useNuxtApp()
 
-const response = await useAsyncData(
-    'blog_detail',
-    () => $authFetch('blog/posts/detail', {
-      params: {
-        id: route.params.id,
-      }
+const {
+  item,
+
+  onClickEdit,
+  onClickDelete,
+
+  SSRLoadDetail
+} = usePage()
+
+const { initTabs } = useTabs()
+
+const {
+  tabs,
+  selectedTabComponent,
+  onChangeSelectedTab
+} = initTabs([
+  {
+    title: 'Пост',
+    component: MainTab
+  },
+  {
+    title: 'Фото',
+    component: PhotosTab
+  }
+])
+
+const onChangeState = async () => {
+
+  $modal.confirm({
+    question: item.value!.state.id === 'DRAFT' ? 'Опубликовать?' : 'Снять с публикации?'
+  }).then(async (isAgree: boolean) => {
+    if (!isAgree) {
+      return
+    }
+
+    const prefix = item.value!.state.id === 'DRAFT' ? 'publish' : 'withdraw'
+
+    await $authFetch(`blog/posts/${prefix}`, {
+      method: 'POST',
+      body: {
+        id: item.value!.id,
+      },
     })
-)
 
-const entityId = route.params.id
-const item: IItem = ref(response.data)
-const h1 = ref('Пост ' + entityId)
+    $notification.push({type: 'success', message: 'Статус обновлен'})
+    window.location.reload()
+  })
+}
+
+await SSRLoadDetail(item, 'blog/posts/detail', route.params.id)
 </script>
 
 <template>
   <Detail
       url-prefix="blog"
-      :h1="h1"
-      :data-id="entityId"
+      :h1="'Пост ' + route.params.id"
+      :data-id="route.params.id"
   >
-    <template v-slot:header>
+    <template #header>
       <div class="btn__group">
-        <Button :class="['--big --outline-primary']">Изменить</Button>
-        <Button :class="['--big --outline-danger']">Удалить</Button>
+        <Button
+            @click="onClickEdit({
+              formURL: 'blog/posts/form',
+              modalComponent: BlogForm,
+              modalTitle: 'Редактирование статьи',
+              notificationMessage: 'Статья изменена'
+            })"
+            :class="['--big --outline-primary']"
+        >
+          Изменить
+        </Button>
+        <Button
+            @click="onClickDelete({
+              deleteURL: 'blog/posts/delete',
+              notificationMessage: 'Статья удалена'}
+            )"
+            :class="['--big --outline-danger']"
+        >
+          Удалить
+        </Button>
       </div>
-    </template>
-    <template v-slot:content>
+      <div class="btn__group ml_10">
+        <Button
+            @click="onChangeState"
+            :class="{
+              '--big': true,
+              '--outline-contrast-success': item?.state?.id === 'DRAFT',
+              '--outline-contrast-default': item?.state?.id === 'PUBLISHED'
+            }"
+        >{{ item?.state && item.state.id === 'DRAFT' ? 'Опубликовать' : 'Снять с публикации' }}</Button>
+      </div>
 
     </template>
+    <template #content>
+      <Tabs @change="onChangeSelectedTab" :tabs="tabs"/>
+      <component :is="selectedTabComponent" :item="item"/>
+    </template>>
   </Detail>
 </template>

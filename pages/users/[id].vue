@@ -9,6 +9,7 @@ import SubscriptionTab from '~/pages/users/_tabs/subscription.vue'
 import DownloadedMusicTab from '~/pages/users/_tabs/downloaded_music.vue'
 import DownloadedSoundTab from '~/pages/users/_tabs/downloaded_sounds.vue'
 import ReportsTab from '~/pages/users/_tabs/reports.vue'
+import UserForm from '~/modals/users/UserForm.vue'
 
 const route = useRoute()
 
@@ -67,7 +68,7 @@ await SSRLoadDetail(item, 'users/detail', route.params.id)
       <div class="btn__group">
         <Button @click="onClickEdit({
           formURL: 'users/form',
-          modalPath: 'users/form',
+          modalComponent: UserForm,
           modalTitle: 'Изменение пользователя',
           notificationMessage: 'Пользователь изменен'
         })" :class="['--big --outline-primary']">Изменить</Button>
