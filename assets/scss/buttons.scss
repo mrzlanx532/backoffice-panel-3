@@ -335,8 +335,7 @@
     }
 
     &:last-child {
-      border-bottom-right-radius: 5px;
-      border-top-right-radius: 5px;
+      border-radius: 0 5px 5px 0;
     }
 
     &.--small {
