@@ -4,6 +4,7 @@ import Tabs from '~/components/Base/Tabs.vue'
 import Button from '~/components/Base/Button.vue'
 import MainTab from '~/pages/music/albums/_tabs/main.vue'
 import TracksTab from '~/pages/music/albums/_tabs/tracks.vue'
+import MusicAlbumForm from '~/modals/music/MusicAlbumForm.vue'
 
 const {
   item,
@@ -47,10 +48,10 @@ await SSRLoadDetail(item,'music/albums/detail', route.params.id)
       <div class="btn__group">
         <Button @click="onClickEdit({
           formURL: 'music/albums/form',
-          modalPath: 'music/albums/form',
-          modalTitle: 'Редактировать альбом',
+          modalComponent: MusicAlbumForm,
+          modalTitle: 'Изменить альбом',
           notificationMessage: 'Альбом изменен'
-        })"  :class="['--big --outline-primary']">Изменить</Button>
+        })" :class="['--big --outline-primary']">Изменить</Button>
         <Button @click="onClickDelete({
           deleteURL: 'music/albums/delete',
           notificationMessage: 'Альбом удален',
@@ -59,12 +60,8 @@ await SSRLoadDetail(item,'music/albums/detail', route.params.id)
       </div>
     </template>
     <template #content>
-      <Tabs @change="onChangeSelectedTab" :tabs="tabs"/>
-      <ClientOnly>
-        <Transition name="fade" mode="out-in">
-          <component :is="selectedTabComponent" :item="item"/>
-        </Transition>
-      </ClientOnly>
+      <Tabs :tabs="tabs" @change="onChangeSelectedTab"/>
+      <component :is="selectedTabComponent" :item="item"/>
     </template>
   </Detail>
 </template>
