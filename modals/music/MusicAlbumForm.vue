@@ -1,162 +1,100 @@
-<script setup>
-import { useNuxtApp } from '#imports'
+<script setup lang="ts">
 import { onMounted } from 'vue'
-import Form from '@/components/Base/Form'
-import FormInput from '@/components/Base/Form/Input.jsx'
-import FormSelect from '@/components/Base/Form/Select'
-import FormDate from '@/components/Base/Form/Date'
-import FormTextArea from '@/components/Base/Form/TextArea'
-import FormInputFile from '@/components/Base/Form/InputFile'
-import moment from 'moment'
+import Form from '@/components/Base/Form.vue'
+import type { defaultProps } from '~/composables/useForm'
 
-const emit = defineEmits(['modal:resolve'])
+const props = defineProps<defaultProps>()
 
-const { $authFetch } = useNuxtApp()
-
-const {
-  getFormDataValues,
-    formRequestBody
-} = useForm()
-
-const errors = ref([])
-
-const props = defineProps({
-  data: {
-    type: Object,
-    required: false
-  }
-})
-
-const formDataValues = getFormDataValues([
-  'name_ru',
-  'name_en',
-  'author_id',
-  'label_id',
-  'release_date',
-  'description_ru',
-  'description_en',
-  'picture',
+const emit = defineEmits([
+  'modal:resolve',
+  'modal:close'
 ])
 
-const formData = [
-  {
+const {
+  initForm,
+
+  fillComponents,
+
+  select,
+  input,
+  date,
+  inputFile,
+  textArea,
+} = useForm()
+
+const {
+  formData,
+  formDataValues,
+  errors,
+  onClickSave
+} = initForm([
+  input({
     name: 'name_ru',
     label: 'Название (ru)',
-    class: '--full',
-    component: FormInput,
-  },
-  {
+    class: '--full'
+  }),
+  input({
     name: 'name_en',
-    label: 'Направление (en)',
-    class: '--full',
-    component: FormInput,
-  },
-  {
+    label: 'Название (en)',
+    class: '--full'
+  }),
+  select({
     name: 'author_id',
     label: 'Автор',
-    component: FormSelect,
-    componentData: {
-      options: []
-    }
-  },
-  {
+  }),
+  select({
     name: 'label_id',
     label: 'Лейбл',
-    component: FormSelect,
-    componentData: {
-      options: []
-    }
-  },
-  {
+  }),
+  date({
     name: 'release_date',
     label: 'Дата релиза',
-    component: FormDate,
     class: '--full',
     componentData: {
       format: 'DD.MM.yyyy',
     }
-  },
-  {
+  }),
+  textArea({
     name: 'description_ru',
     label: 'Описание (ru)',
-    component: FormTextArea,
-    class: '--full',
-  },
-  {
+    class: '--full'
+  }),
+  textArea({
     name: 'description_en',
     label: 'Описание (en)',
-    component: FormTextArea,
-    class: '--full',
-  },
-  {
+    class: '--full'
+  }),
+  inputFile({
     name: 'picture',
     label: 'Изображение',
-    component: FormInputFile,
     class: '--full',
     componentData: {
       allowedTypes: ['jpg', 'jpeg', 'png'],
     }
-  },
-]
-
-const onClickSave = async () => {
-  let formData = formRequestBody(formDataValues, props.data.id)
-
-  const method = props.data.id === undefined ? 'create' : 'update'
-
-  try {
-    await $authFetch(`music/albums/${method}`, {
-      method: 'POST',
-      body: formData,
-    })
-
-    emit('modal:resolve')
-
-  } catch (err) {
-    if (err.status === 422 && err.data.errors) {
-      errors.value = err.data.errors
-    }
-  }
-}
+  })
+])
 
 onMounted(async () => {
 
-  const formResponse = props.data.formResponse
-
-  if (props.data.id !== undefined) {
-    Object.keys(formDataValues).map((key) => {
-
-      if (key === 'label_id') {
-        formDataValues[key] = formResponse.entity.label === null ? null : formResponse.entity.label.id
-        return
+  fillComponents(props, formData, formDataValues, {
+    authors: {
+      to: 'author_id',
+      fn: (author) => {
+        return {
+          id: author.id,
+          title: `${author.name_en} (${author.name_ru})`
+        }
       }
-
-      if (key === 'author_id') {
-        formDataValues[key] = formResponse.entity.author === null ? null : formResponse.entity.author.id
-        return
+    },
+    labels: {
+      to: 'label_id',
+      fn: (label) => {
+        return {
+          id: label.id,
+          title: `${label.name_en} (${label.name_ru})`
+        }
       }
-
-      if (key === 'release_date') {
-        formDataValues[key] = formResponse.entity.release_date === null ? null : moment(formResponse.entity.release_date, 'X').format('DD.MM.yyyy')
-        return
-      }
-
-      formDataValues[key] = formResponse.entity[key]
-    })
-  }
-
-  formResponse.authors.forEach((author) => {
-    formData[2].componentData.options.push({
-      id: author.id,
-      title: `${author.name_en} (${author.name_en})`,
-    })
-  })
-
-  formResponse.labels.forEach((label) => {
-    formData[3].componentData.options.push({
-      id: label.id,
-      title: `${label.name_en} (${label.name_en})`,
-    })
+    }
   })
 })
 </script>
@@ -182,7 +120,7 @@ onMounted(async () => {
     </template>
     <template #footer>
       <div class="btn__group">
-        <button class="btn --primary --big" @click="onClickSave()">Сохранить</button>
+        <button class="btn --primary --big" @click="onClickSave(props, emit)">Сохранить</button>
         <button class="btn --outline-primary --big" @click="$emit('modal:close')">Отмена</button>
       </div>
     </template>

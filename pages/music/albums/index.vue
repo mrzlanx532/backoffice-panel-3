@@ -7,6 +7,7 @@ import Tabs from '~/components/Base/Tabs.vue'
 import TabMain from '~/pages/music/albums/_tabs/main.vue'
 import TabTracks from '~/pages/music/albums/_tabs/tracks.vue'
 import Picture from '~/components/Base/Browser/ColumnComponents/Picture.vue'
+import MusicAlbumForm from '~/modals/music/MusicAlbumForm.vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -113,7 +114,7 @@ const columns = shallowRef([
       <div class="btn__group">
         <Button @click="onClickCreate({
           formURL: 'music/albums/form',
-          modalPath: 'music/albums/form',
+          modalComponent: MusicAlbumForm,
           modalTitle: 'Создать альбом',
           notificationMessage: 'Альбом создан'
         })" :class="['--small --success']">Добавить</Button>
@@ -124,7 +125,7 @@ const columns = shallowRef([
       <div class="btn__group">
         <Button @click="onClickEdit({
           formURL: 'music/albums/form',
-          modalPath: 'music/albums/form',
+          modalComponent: MusicAlbumForm,
           modalTitle: 'Изменить альбом',
           notificationMessage: 'Альбом изменен'
         })" :class="['--big --outline-primary']">Изменить</Button>

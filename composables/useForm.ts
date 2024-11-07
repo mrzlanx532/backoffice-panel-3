@@ -6,6 +6,7 @@ import type { LooseRequired } from '@vue/shared'
 import FormSelect from '~/components/Base/Form/Select.vue'
 import FormInput from '~/components/Base/Form/Input.jsx'
 import FormDatetime from '~/components/Base/Form/Datetime.vue'
+import FormDate from '~/components/Base/Form/Date.vue'
 import FormInputFile from '~/components/Base/Form/InputFile.vue'
 import FormTextArea from '~/components/Base/Form/TextArea.vue'
 
@@ -22,6 +23,15 @@ interface IInput {
 }
 
 interface IDatetime {
+    name: string,
+    label: string,
+    class?: string,
+    componentData: {
+        format: string
+    }
+}
+
+interface IDate {
     name: string,
     label: string,
     class?: string,
@@ -179,6 +189,16 @@ export const useForm = () => {
         }
     }
 
+    const date = (config: IDate) => {
+        return {
+            component: FormDate,
+            name: config.name,
+            label: config.label,
+            class: config.class,
+            componentData: config.componentData,
+        }
+    }
+
     const datetime = (config: IDatetime) => {
         return {
             component: FormDatetime,
@@ -254,6 +274,7 @@ export const useForm = () => {
 
         select,
         input,
+        date,
         datetime,
         inputFile,
         textArea
