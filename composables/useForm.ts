@@ -233,15 +233,18 @@ export const useForm = () => {
         props: propsWithDefaultPropsType,
         formData: TFormDataItem[],
         formDataValues: Record<string, undefined>,
-        mapper?: {[key: string]: {
+        optionsMapper?: {[key: string]: {
             to: string,
             fn: (item: Record<string, any>) => any}
-        }
+        },
+        valueMapper?: {[key: string]: {
+            fn: (item: Record<string, any>, entity?: Record<string, any>) => any
+        }}
     ) => {
         const formResponse = props.data.formResponse
 
-        if (mapper) {
-            const mapperEntries = Object.entries(mapper)
+        if (optionsMapper) {
+            const mapperEntries = Object.entries(optionsMapper)
 
             formData.forEach(formDataItem => {
                 mapperEntries.map(([key, config]) => {
@@ -258,8 +261,9 @@ export const useForm = () => {
 
         if (props.data.id) {
             Object.keys(formDataValues).map((key) => {
-                // @ts-ignore
-                formDataValues[key] = formResponse.entity[key]
+                formDataValues[key] = valueMapper && valueMapper[key] ?
+                    valueMapper[key].fn(formResponse.entity![key], formResponse.entity) :
+                    formResponse.entity![key]
             })
         }
     }

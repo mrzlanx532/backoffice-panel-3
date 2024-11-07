@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 import Form from '@/components/Base/Form.vue'
 import type { defaultProps } from '~/composables/useForm'
+import moment from 'moment'
 
 const props = defineProps<defaultProps>()
 
@@ -93,6 +94,13 @@ onMounted(async () => {
           id: label.id,
           title: `${label.name_en} (${label.name_ru})`
         }
+      }
+    },
+  },
+  {
+    release_date: {
+      fn: (releaseDate) => {
+        return releaseDate ? moment(releaseDate, 'X').format('DD.MM.yyyy') : null
       }
     }
   })
