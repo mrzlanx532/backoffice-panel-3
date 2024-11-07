@@ -19,13 +19,25 @@ const isOpen = ref(false)
 const top = ref(0)
 const left = ref(0)
 
-const onClick = () => {
+const updateDimensions = () => {
 
   const rect = btnDropdownEl.value!.getBoundingClientRect()
 
-  top.value = rect.top + rect.height + 5
+  top.value = document.documentElement.scrollTop + rect.top + rect.height + 5
+
+  return rect
+}
+
+const onClick = () => {
+
+  const rect = updateDimensions()
 
   isOpen.value = true
+
+  document.addEventListener('scroll', updateDimensions)
+  document.querySelectorAll('.scrollable__content').forEach((scrollableContainer) => {
+    scrollableContainer.addEventListener('scroll', updateDimensions)
+  })
 
   nextTick(() => {
     if ((rect.right + dropdownEl.value!.clientWidth) > document.documentElement.clientWidth) {
@@ -39,9 +51,14 @@ const onClick = () => {
 
 const setIsOpenAsFalse = () => {
   isOpen.value = false
+
+  document.removeEventListener('scroll', updateDimensions)
+  document.querySelectorAll('.scrollable__content').forEach((scrollableContainer) => {
+    scrollableContainer.removeEventListener('scroll', updateDimensions)
+  })
 }
 
-const AuthorColumn = defineComponent(
+const BtnDropdownItemComponent = defineComponent(
     (props, expose) => {
       return () => {
         return h('div', {
@@ -95,9 +112,9 @@ const onMouseOut = () => {
         :style="{top: top + 'px', left: left + 'px'}"
         v-click-outside="setIsOpenAsFalse"
     >
-      <AuthorColumn v-for="item in props.items" :class="item.class" :item="item">
+      <BtnDropdownItemComponent v-for="item in props.items" :class="item.class" :item="item">
         {{ item.title }}
-      </AuthorColumn>
+      </BtnDropdownItemComponent>
     </div>
   </teleport>
 </template>
