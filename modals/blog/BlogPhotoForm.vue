@@ -79,6 +79,10 @@ const onClickSave = async () => {
     }
   }
 }
+
+onMounted(() => {
+  fillComponents(props, formData, formDataValues)
+})
 </script>
 
 <template>

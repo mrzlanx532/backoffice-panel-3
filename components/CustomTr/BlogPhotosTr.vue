@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import ButtonDropdown from '~/components/Base/ButtonDropdown.vue'
 import { useNuxtApp } from '#imports'
+import ButtonDropdown from '~/components/Base/ButtonDropdown.vue'
+import BlogPhotoForm from '~/modals/blog/BlogPhotoForm.vue'
 
 type IItem = Record<any, string>
 
@@ -22,7 +23,7 @@ const onClickEdit = async () => {
     },
   })
 
-  $modal.load('music/blog/photos/form', {
+  $modal.load(BlogPhotoForm, {
     title: 'Изменить фото',
     id: props.item.id,
     formResponse
@@ -37,7 +38,7 @@ const onClickDelete = async () => {
       return
     }
 
-    await $authFetch('music/blog/photos/delete', {
+    await $authFetch('blog/posts/contents/delete', {
       method: 'POST',
       body: {
         id: props.item.id,

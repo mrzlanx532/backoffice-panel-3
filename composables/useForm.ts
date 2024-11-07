@@ -213,25 +213,28 @@ export const useForm = () => {
         props: propsWithDefaultPropsType,
         formData: TFormDataItem[],
         formDataValues: Record<string, undefined>,
-        mapper: {[key: string]: {
+        mapper?: {[key: string]: {
             to: string,
             fn: (item: Record<string, any>) => any}
         }
     ) => {
         const formResponse = props.data.formResponse
-        const mapperEntries = Object.entries(mapper)
 
-        formData.forEach(formDataItem => {
-            mapperEntries.map(([key, config]) => {
+        if (mapper) {
+            const mapperEntries = Object.entries(mapper)
 
-                if (formDataItem.name === config.to) {
-                    formResponse[key].forEach((option: any) => {
-                        // @ts-ignore
-                        formDataItem.componentData.options.push(config.fn(option))
-                    })
-                }
+            formData.forEach(formDataItem => {
+                mapperEntries.map(([key, config]) => {
+
+                    if (formDataItem.name === config.to) {
+                        formResponse[key].forEach((option: any) => {
+                            // @ts-ignore
+                            formDataItem.componentData.options.push(config.fn(option))
+                        })
+                    }
+                })
             })
-        })
+        }
 
         if (props.data.id) {
             Object.keys(formDataValues).map((key) => {
