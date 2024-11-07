@@ -59,7 +59,7 @@ const buttonDropdownItems = [
   <tr class="--disable-cursor">
     <td>
       <img :src="props.item.picture.original" alt="picture">
-      <p>{{ props.item.name }}</p>
+      <p>Название: <span>{{ props.item.name }}</span></p>
     </td>
     <td class="--min-width">
       <ButtonDropdown :items="buttonDropdownItems"/>
@@ -68,6 +68,15 @@ const buttonDropdownItems = [
 </template>
 
 <style scoped>
+p > span {
+  color: grey;
+}
+
+img {
+  width: 250px;
+  border-radius: 5px;
+}
+
 svg {
   width: 20px;
   height: 20px;

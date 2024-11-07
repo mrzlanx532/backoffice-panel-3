@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useNuxtApp } from '#imports'
 import BrowserSmall from '~/components/Base/BrowserSmall/BrowserSmall.vue'
-import LibraryTracksTr from '~/components/CustomTr/LibraryTracksTr.vue'
+import BlogPhotosTr from '~/components/CustomTr/BlogPhotosTr.vue'
 import Button from '~/components/Base/Button.vue'
 import BlogPhotoForm from '~/modals/blog/BlogPhotoForm.vue'
 
@@ -37,7 +37,8 @@ const onClickCreate = async() => {
 
   $modal.load(BlogPhotoForm, {
     title: 'Добавить фото',
-    formResponse
+    formResponse,
+    blogPostId: props.item!.id
   }).then(() => {
     browserEl.value!.reset()
     $notification.push({type: 'success', message: 'Фото добавлено'})
@@ -47,10 +48,11 @@ const onClickCreate = async() => {
 
 <template>
   <BrowserSmall
+      ref="browserEl"
       h1="Фото"
       urlPrefix="blog/posts/contents/browse"
       :filters="filters"
-      :customTr="LibraryTracksTr"
+      :customTr="BlogPhotosTr"
       :is-enabled-t-head="false"
   >
     <template #actions>

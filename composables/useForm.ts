@@ -103,7 +103,7 @@ export const useForm = () => {
         };
     }
 
-    const getFormDataValues = (formDataItems: TFormDataItem[]): Reactive<Record<string, undefined>> => {
+    const getFormDataValues = (formDataItems: TFormDataItem[]): Reactive<Record<string, any>> => {
         const preparedFormDataValues: Record<string, undefined> = {}
 
         formDataItems.map((formDataItem) => {
