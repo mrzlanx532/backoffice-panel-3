@@ -10,6 +10,7 @@ import ReportsTab from '@/pages/users/_tabs/reports.vue'
 import DownloadedMusicTab from '@/pages/users/_tabs/downloaded_music.vue'
 import DownloadedSoundTab from '@/pages/users/_tabs/downloaded_sounds.vue'
 import Picture from '~/components/Base/Browser/ColumnComponents/Picture.vue'
+import UserForm from '~/modals/users/UserForm.vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -124,7 +125,7 @@ const columns = shallowRef([
       <div class="btn__group">
         <Button @click="onClickCreate({
           formURL: 'users/form',
-          modalPath: 'users/form',
+          modalComponent: UserForm,
           modalTitle: 'Добавление пользователя',
           notificationMessage: 'Пользователь добавлен'
         })" :class="['--small --success']">Добавить</Button>
@@ -135,7 +136,7 @@ const columns = shallowRef([
       <div class="btn__group">
         <Button @click="onClickEdit({
           formURL: 'users/form',
-          modalPath: 'users/form',
+          modalComponent: UserForm,
           modalTitle: 'Изменение пользователя',
           notificationMessage: 'Пользователь изменен'
         })" :class="['--big --outline-primary']">Изменить</Button>

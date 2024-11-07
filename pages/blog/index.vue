@@ -7,6 +7,7 @@ import Picture from '~/components/Base/Browser/ColumnComponents/Picture.vue'
 import MainTab from '~/pages/blog/_tabs/main.vue'
 import PhotosTab from '~/pages/blog/_tabs/photos.vue'
 import Tabs from '~/components/Base/Tabs.vue'
+import BlogForm from '~/modals/blog/BlogForm.vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -165,7 +166,7 @@ const onChangeState = async () => {
         <Button
             @click="onClickCreate({
               formURL: 'blog/posts/form',
-              modalPath: 'blog/form',
+              modalComponent: BlogForm,
               modalTitle: 'Создание статьи',
               notificationMessage: 'Статья добавлена'
             })"
@@ -180,7 +181,7 @@ const onChangeState = async () => {
         <Button
             @click="onClickEdit({
               formURL: 'blog/posts/form',
-              modalPath: 'blog/form',
+              modalComponent: BlogForm,
               modalTitle: 'Редактирование статьи',
               notificationMessage: 'Статья изменена'
             })"

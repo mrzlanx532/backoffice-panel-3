@@ -1,12 +1,12 @@
 import { useNuxtApp, useAsyncData, useRouter } from '#imports'
-import type { Ref } from 'vue'
+import type { Component, Ref } from 'vue'
 import { type IItem, type IBrowser } from '@/components/Base/Browser/Browser.vue';
 import type { RouteLocationAsPathGeneric, RouteLocationAsRelativeGeneric } from '#vue-router'
 import { FetchError } from 'ofetch'
 
 export interface IConfigCreateEdit {
     formURL: string,
-    modalPath: string,
+    modalComponent: Component,
     modalTitle: string,
     notificationMessage: string
 }
@@ -34,7 +34,7 @@ export const usePage = () => {
             method: 'GET',
         })
 
-        $modal.load(config.modalPath, {
+        $modal.load(config.modalComponent, {
             title: config.modalTitle,
             formResponse
         }).then(() => {
@@ -51,7 +51,7 @@ export const usePage = () => {
             },
         })
 
-        $modal.load(config.modalPath, {
+        $modal.load(config.modalComponent, {
             title: config.modalTitle,
             id: item.value!.id,
             formResponse
@@ -74,14 +74,17 @@ export const usePage = () => {
                         id: item.value!.id,
                     },
                 })
-            } catch (e: FetchError) {
-                if (e.statusCode === (config.logicErrorStatusCode ? config.logicErrorStatusCode : 409)) {
-                    $notification.push({type: 'danger', message: e.data.message})
+            } catch (e) {
 
-                    return
+                if (e instanceof FetchError) {
+                    if (e.statusCode === (config.logicErrorStatusCode ? config.logicErrorStatusCode : 409)) {
+                        $notification.push({type: 'danger', message: e.data.message})
+
+                        return
+                    }
+
+                    $notification.push({type: 'danger', message: 'Ошибка сервера'})
                 }
-
-                $notification.push({type: 'danger', message: 'Ошибка сервера'})
 
                 return
             }

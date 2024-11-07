@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { useNuxtApp } from '#imports'
 import BrowserSmall from '~/components/Base/BrowserSmall/BrowserSmall.vue'
 import LibraryTracksTr from '~/components/CustomTr/LibraryTracksTr.vue'
 import Button from '~/components/Base/Button.vue'
-import { useNuxtApp } from '#imports'
+import BlogPhotoForm from '~/modals/blog/BlogPhotoForm.vue'
 
 const props = defineProps<{
   item?: IItem,
@@ -13,6 +14,8 @@ const {
   $notification,
   $authFetch
 } = useNuxtApp()
+
+const browserEl = useTemplateRef<HTMLElement>('browserEl')
 
 const filters = ref({
   'blog_post_id': [props.item!.id]
@@ -32,7 +35,7 @@ const onClickCreate = async() => {
     method: 'GET',
   })
 
-  $modal.load('modals/blog/photos/form', {
+  $modal.load(BlogPhotoForm, {
     title: 'Добавить фото',
     formResponse
   }).then(() => {

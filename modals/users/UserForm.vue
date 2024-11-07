@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import InfoTab from '~/modals/users/tabs/info.vue'
+import { useNuxtApp } from '#app'
+import { onMounted } from 'vue'
+
+import InfoTab from '~/modals/users/_tabs/info.vue'
+import CompanyTab from '~/modals/users/_tabs/company.vue'
+import SubscriptionTab from '~/modals/users/_tabs/subscription.vue'
+
 import FormInput from '~/components/Base/Form/Input'
 import FormSelect from '~/components/Base/Form/Select.vue'
 import FormInputFile from '~/components/Base/Form/InputFile.vue'
 import FormCheckbox from '~/components/Base/Form/Checkbox.vue'
-import CompanyTab from '~/modals/users/tabs/company.vue'
-import SubscriptionTab from '~/modals/users/tabs/subscription.vue'
 import FormDate from '~/components/Base/Form/Date.vue'
 import Tabs from '~/components/Base/Tabs.vue'
 import Form from '~/components/Base/Form.vue'
-import { useNuxtApp } from '#app'
-import { onMounted } from 'vue'
 
 const emit = defineEmits([
     'modal:resolve',
