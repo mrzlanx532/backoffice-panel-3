@@ -1,4 +1,4 @@
-import type { DefineProps, Reactive, Ref } from 'vue'
+import { defineComponent, type DefineProps, h, type Reactive, type Ref } from 'vue'
 import { cloneDeep } from 'lodash-es'
 import { useNuxtApp } from '#imports'
 import { FetchError } from 'ofetch'
@@ -10,6 +10,7 @@ import FormDate from '~/components/Base/Form/Date.vue'
 import FormInputFile from '~/components/Base/Form/InputFile.vue'
 import FormTextArea from '~/components/Base/Form/TextArea.vue'
 import FormCheckbox from '~/components/Base/Form/Checkbox.vue'
+import Form from '~/components/Base/Form.vue'
 
 interface ISelect {
     name: string,
@@ -115,12 +116,59 @@ export const useForm = () => {
             }
         }
 
+        const getFormComponent = (
+            emit: (event: ("modal:resolve" | "modal:close"), ...args: any[]) => void,
+            props: propsWithDefaultPropsType,
+            formData: TFormDataItem[],
+            errors: Ref<Record<string, any>>
+        ) => {
+            return defineComponent(
+                (_props) => {
+                    return () => {
+                        return h(Form, {
+                            title: props.data.title,
+                            onClose: () => {
+                                emit('modal:close')
+                            }
+                        }, {
+                            content: () => h('div', {class: 'grid --2x2'}, formData.map((formDataItem) => {
+                                return h(formDataItem.component, {
+                                    componentData: formDataItem?.componentData,
+                                    class: formDataItem.class,
+                                    label: formDataItem.label,
+                                    name: formDataItem.name,
+                                    modelValue: formDataValues[formDataItem.name],
+                                    'onUpdate:modelValue': (value: any) => {
+                                        formDataValues[formDataItem.name] = value
+                                    },
+                                    errors: errors.value[formDataItem.name]
+                                })
+                            })),
+                            footer: () => h('div', {class: 'btn__group'}, [
+                                h('button', {
+                                    class: 'btn --primary --big',
+                                    onClick: () => onClickSave(props, emit),
+                                }, 'Сохранить'),
+                                h('button', {
+                                    class: 'btn --outline-primary --big',
+                                    onClick: () => {
+                                        emit('modal:close')
+                                    }
+                                }, 'Отмена')
+                            ])
+                        })
+                    }
+                }
+            )
+        }
+
         return {
             formData: formDataPropertyNames,
             formDataValues,
             errors,
 
-            onClickSave
+            onClickSave,
+            getFormComponent
         };
     }
 
