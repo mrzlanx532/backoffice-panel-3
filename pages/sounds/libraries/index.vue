@@ -7,6 +7,7 @@ import Button from '~/components/Base/Button.vue'
 import MainTab from '~/pages/sounds/libraries/_tabs/main.vue'
 import TracksTab from '~/pages/sounds/libraries/_tabs/tracks.vue'
 import Picture from '~/components/Base/Browser/ColumnComponents/Picture.vue'
+import SoundLibraryForm from '~/modals/sound/SoundLibraryForm.vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -104,7 +105,7 @@ const columns = ref([
       <div class="btn__group">
         <Button @click="onClickCreate({
           formURL: 'sound/libraries/form',
-          modalPath: 'sound/libraries/form',
+          modalComponent: SoundLibraryForm,
           modalTitle: 'Создать библиотеку',
           notificationMessage: 'Библиотека создана'
         })" :class="['--small --success']">Добавить</Button>
@@ -114,7 +115,7 @@ const columns = ref([
       <div class="btn__group">
         <Button @click="onClickEdit({
           formURL: 'sound/libraries/form',
-          modalPath: 'sound/libraries/form',
+          modalComponent: SoundLibraryForm,
           modalTitle: 'Изменить библиотеку',
           notificationMessage: 'Библиотека изменена'
         })" :class="['--big --outline-primary']">Изменить</Button>
