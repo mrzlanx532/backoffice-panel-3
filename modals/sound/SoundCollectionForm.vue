@@ -16,7 +16,6 @@ const {
   input,
   textArea,
   inputFile,
-  checkbox
 } = useForm()
 
 const {
@@ -25,35 +24,17 @@ const {
   errors,
   getFormComponent
 } = initForm(
-    'sound/authors/create',
-    'sound/authors/update',
+    'sound/collections/create',
+    'sound/collections/update',
     [
       input({
         name: 'name_ru',
-        label: 'Имя (ru)',
+        label: 'Название (ru)',
         class: '--full'
       }),
       input({
         name: 'name_en',
-        label: 'Имя (en)',
-        class: '--full'
-      }),
-      input({
-        name: 'ident',
-        label: 'Идентификатор',
-        class: '--full',
-        componentData: {
-          description: 'Только латинские буквы и цифры'
-        }
-      }),
-      input({
-        name: 'subtitle_ru',
-        label: 'Страна (ru)',
-        class: '--full'
-      }),
-      input({
-        name: 'subtitle_en',
-        label: 'Страна (en)',
+        label: 'Название (en)',
         class: '--full'
       }),
       textArea({
@@ -67,17 +48,12 @@ const {
         class: '--full'
       }),
       inputFile({
-        name: 'photo',
+        name: 'picture',
         label: 'Картинка',
         class: '--full',
         componentData: {
           allowedTypes: ['jpg', 'png', 'jpeg']
         }
-      }),
-      checkbox({
-        name: 'a_list_is_active',
-        label: 'A-List',
-        class: '--full'
       })
     ])
 

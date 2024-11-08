@@ -7,6 +7,7 @@ import Tabs from '~/components/Base/Tabs.vue'
 import Button from '~/components/Base/Button.vue'
 import MainTab from '~/pages/sounds/collections/_tabs/main.vue'
 import TracksTab from '~/pages/sounds/collections/_tabs/tracks.vue'
+import SoundCollectionForm from '~/modals/sound/SoundCollectionForm.vue'
 
 const {
   browserEl,
@@ -99,7 +100,7 @@ const columns: Ref<IColumn[]> = ref([
       <div class="btn__group">
         <Button @click="onClickCreate({
           formURL: 'sound/collections/form',
-          modalPath: 'sound/collections/form',
+          modalComponent: SoundCollectionForm,
           modalTitle: 'Создать коллекцию',
           notificationMessage: 'Коллекция создана'
         })" :class="['--small --success']">Добавить</Button>
@@ -109,7 +110,7 @@ const columns: Ref<IColumn[]> = ref([
       <div class="btn__group">
         <Button @click="onClickEdit({
           formURL: 'sound/collections/form',
-          modalPath: 'sound/collections/form',
+          modalComponent: SoundCollectionForm,
           modalTitle: 'Изменить коллекцию',
           notificationMessage: 'Коллекция изменена'
         })" :class="['--big --outline-primary']">Изменить</Button>
