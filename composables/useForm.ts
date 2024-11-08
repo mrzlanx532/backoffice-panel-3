@@ -9,6 +9,7 @@ import FormDatetime from '~/components/Base/Form/Datetime.vue'
 import FormDate from '~/components/Base/Form/Date.vue'
 import FormInputFile from '~/components/Base/Form/InputFile.vue'
 import FormTextArea from '~/components/Base/Form/TextArea.vue'
+import FormCheckbox from '~/components/Base/Form/Checkbox.vue'
 
 interface ISelect {
     name: string,
@@ -54,6 +55,12 @@ interface IInputFile {
 }
 
 interface ITextArea {
+    name: string,
+    label: string,
+    class?: string,
+}
+
+interface ICheckbox {
     name: string,
     label: string,
     class?: string,
@@ -148,6 +155,10 @@ export const useForm = () => {
                     return
                 }
 
+                if (typeof value === 'boolean') {
+                    value = value ? 1 : 0
+                }
+
                 formData.append(key, value)
             })
 
@@ -233,6 +244,16 @@ export const useForm = () => {
         }
     }
 
+    const checkbox = (config: ICheckbox) => {
+        return {
+            component: FormCheckbox,
+            name: config.name,
+            label: config.label,
+            class: config.class,
+            componentData: {}
+        }
+    }
+
     const fillComponents = (
         props: propsWithDefaultPropsType,
         formData: TFormDataItem[],
@@ -285,6 +306,7 @@ export const useForm = () => {
         date,
         datetime,
         inputFile,
-        textArea
+        textArea,
+        checkbox
     }
 }

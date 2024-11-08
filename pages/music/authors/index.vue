@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { definePageMeta } from '#imports'
-
 import Browser from '~/components/Base/Browser/Browser.vue'
 import MainTab from '~/pages/music/authors/_tabs/main.vue'
 import TracksTab from '~/pages/music/authors/_tabs/tracks.vue'
@@ -8,6 +6,7 @@ import AlbumsTab from '~/pages/music/authors/_tabs/albums.vue'
 import Button from '~/components/Base/Button.vue'
 import Tabs from '~/components/Base/Tabs.vue'
 import Picture from '~/components/Base/Browser/ColumnComponents/Picture.vue'
+import MusicAuthorForm from '~/modals/music/MusicAuthorForm.vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -120,7 +119,7 @@ const {
       <div class="btn__group">
         <Button @click="onClickCreate({
           formURL: 'music/authors/form',
-          modalPath: 'music/authors/form',
+          modalComponent: MusicAuthorForm,
           modalTitle: 'Создать автора',
           notificationMessage: 'Автор создан'
         })" :class="['--small --success']">Добавить</Button>
@@ -130,7 +129,7 @@ const {
       <div class="btn__group">
         <Button @click="onClickEdit({
           formURL: 'music/authors/form',
-          modalPath: 'music/authors/form',
+          modalComponent: MusicAuthorForm,
           modalTitle: 'Изменить автора',
           notificationMessage: 'Автор изменен'
         })" :class="['--big --outline-primary']">Изменить</Button>
