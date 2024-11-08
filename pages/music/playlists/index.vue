@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { defineComponent, definePageMeta } from '#imports'
+import { h } from 'vue'
 
 import Browser from '~/components/Base/Browser/Browser.vue';
 import Tabs from '~/components/Base/Tabs.vue'
 import Button from '~/components/Base/Button.vue'
 import MainTab from '~/pages/music/playlists/_tabs/main.vue'
 import TracksTab from '~/pages/music/playlists/_tabs/tracks.vue'
-import { h } from 'vue'
+import MusicPlaylistForm from '~/modals/music/MusicPlaylistForm.vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -99,7 +100,7 @@ const columns = ref([
       <div class="btn__group">
         <Button @click="onClickCreate({
           formURL: 'music/playlists/form',
-          modalPath: 'music/playlists/form',
+          modalComponent: MusicPlaylistForm,
           modalTitle: 'Создать плейлист',
           notificationMessage: 'Плейлист создан'
         })" :class="['--small --success']">Добавить</Button>
@@ -109,7 +110,7 @@ const columns = ref([
       <div class="btn__group">
         <Button @click="onClickEdit({
           formURL: 'music/playlists/form',
-          modalPath: 'music/playlists/form',
+          modalComponent: MusicPlaylistForm,
           modalTitle: 'Изменить плейлист',
           notificationMessage: 'Плейлист изменен'
         })" :class="['--big --outline-primary']">Изменить</Button>
