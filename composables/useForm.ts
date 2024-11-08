@@ -20,6 +20,9 @@ interface IInput {
     name: string,
     label: string,
     class?: string,
+    componentData?: {
+        disabled?: boolean
+    }
 }
 
 interface IDatetime {
@@ -185,7 +188,7 @@ export const useForm = () => {
             name: config.name,
             label: config.label,
             class: config.class,
-            componentData: {}
+            componentData: config.componentData ? config.componentData : undefined,
         }
     }
 

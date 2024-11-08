@@ -12,6 +12,10 @@ const createInput = (ctx) => {
         onInput: ctx.onInput
     }
 
+    if (ctx.componentData?.disabled) {
+        inputAttrs.disabled = true
+    }
+
     const directives = []
 
     if (ctx.componentData?.mask) {

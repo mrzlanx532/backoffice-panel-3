@@ -48,6 +48,9 @@ const {
         name: 'ident',
         label: 'Идентификатор',
         class: '--full',
+        componentData: {
+          disabled: true
+        }
       }),
       textArea({
         name: 'description_ru',
