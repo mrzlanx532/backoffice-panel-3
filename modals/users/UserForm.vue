@@ -13,6 +13,7 @@ import FormCheckbox from '~/components/Base/Form/Checkbox.vue'
 import FormDate from '~/components/Base/Form/Date.vue'
 import Tabs from '~/components/Base/Tabs.vue'
 import Form from '~/components/Base/Form.vue'
+import { FetchError } from 'ofetch'
 
 const emit = defineEmits([
     'modal:resolve',
@@ -286,6 +287,10 @@ const onClickSave = async () => {
     emit('modal:resolve')
 
   } catch (err) {
+    if (!(err instanceof FetchError)) {
+      return
+    }
+
     if (err.status === 422 && err.data.errors) {
       errors.value = err.data.errors
     }

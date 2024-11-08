@@ -15,22 +15,25 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits(['change'])
 
-let mouseUpListener = null
-let mouseMoveListener = null
+type TMouseUpListener = () => void
+type TMouseMoveListener = (e: MouseEvent) => void
+
+let mouseUpListener: null|TMouseUpListener = null
+let mouseMoveListener: null|TMouseMoveListener = null
 
 const localSelectedItem = ref(props.selectedItem)
 const isDraggable = ref(false)
 const currentScrolledLeft: Ref<number|null> = ref(null)
 const screenXWhenMouseDown: Ref<number|null> = ref(null)
-const tabsEl = ref(null)
+const tabsEl = useTemplateRef<HTMLElement>('tabsEl')
 
-const documentPointerUpListener = () => {
+const documentPointerUpListener = (): void => {
   isDraggable.value = false
   screenXWhenMouseDown.value = null
   currentScrolledLeft.value = null
 
-  document.removeEventListener('pointerup', mouseUpListener)
-  document.removeEventListener('pointermove', mouseMoveListener)
+  document.removeEventListener('pointerup', mouseUpListener as TMouseUpListener)
+  document.removeEventListener('pointermove', mouseMoveListener as TMouseMoveListener)
 
   mouseUpListener = null
   mouseMoveListener = null
@@ -41,9 +44,9 @@ const documentPointerMoveListener = (e: MouseEvent) => {
     return
   }
 
-  tabsEl.value.scrollTo(
-      (screenXWhenMouseDown.value + currentScrolledLeft.value) - e.screenX,
-      tabsEl.value.offsetTop
+  tabsEl.value!.scrollTo(
+      (screenXWhenMouseDown.value! + currentScrolledLeft.value!) - e.screenX,
+      tabsEl.value!.offsetTop
   )
 }
 
@@ -55,7 +58,7 @@ const onClick = (index: number) => {
 
 const onMouseDown = (e: MouseEvent) => {
   isDraggable.value = true
-  currentScrolledLeft.value = tabsEl.value.scrollLeft
+  currentScrolledLeft.value = tabsEl.value!.scrollLeft
   screenXWhenMouseDown.value = e.screenX
 
   mouseUpListener = documentPointerUpListener.bind(document)
