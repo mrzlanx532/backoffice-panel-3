@@ -8,6 +8,7 @@ import LibrariesTab from '~/pages/sounds/authors/_tabs/libraries.vue'
 import Tabs from '~/components/Base/Tabs.vue'
 import Button from '~/components/Base/Button.vue'
 import Picture from '~/components/Base/Browser/ColumnComponents/Picture.vue'
+import SoundAuthorForm from '~/modals/sound/SoundAuthorForm.vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -112,7 +113,7 @@ const columns = ref([
       <div class="btn__group">
         <Button @click="onClickCreate({
           formURL: 'sound/authors/form',
-          modalPath: 'sound/authors/form',
+          modalComponent: SoundAuthorForm,
           modalTitle: 'Создать автор',
           notificationMessage: 'Автор создан'
         })" :class="['--small --success']">Добавить</Button>
@@ -122,7 +123,7 @@ const columns = ref([
       <div class="btn__group">
         <Button @click="onClickEdit({
           formURL: 'sound/authors/form',
-          modalPath: 'sound/authors/form',
+          modalComponent: SoundAuthorForm,
           modalTitle: 'Изменить автора',
           notificationMessage: 'Автор изменен'
         })" :class="['--big --outline-primary']">Изменить</Button>
