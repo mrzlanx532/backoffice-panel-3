@@ -1,4 +1,4 @@
-import { defineComponent, type DefineProps, h, type Reactive, type Ref } from 'vue'
+import { type Component, defineComponent, type DefineProps, h, type Reactive, type Ref } from 'vue'
 import { cloneDeep } from 'lodash-es'
 import { useNuxtApp } from '#imports'
 import { FetchError } from 'ofetch'
@@ -12,62 +12,40 @@ import FormTextArea from '~/components/Base/Form/TextArea.vue'
 import FormCheckbox from '~/components/Base/Form/Checkbox.vue'
 import Form from '~/components/Base/Form.vue'
 
-interface ISelect {
+interface IFormComponent {
     name: string,
     label: string,
     class?: string,
 }
 
-interface IInput {
-    name: string,
-    label: string,
-    class?: string,
+interface ISelect extends IFormComponent {}
+interface ITextArea extends IFormComponent {}
+interface ICheckbox extends IFormComponent {}
+interface IInput extends IFormComponent {
     componentData?: {
         disabled?: boolean,
         description?: string
     }
 }
-
-interface IDatetime {
-    name: string,
-    label: string,
-    class?: string,
+interface IDatetime extends IFormComponent {
     componentData: {
         format: string
     }
 }
-
-interface IDate {
-    name: string,
-    label: string,
-    class?: string,
+interface IDate extends IFormComponent{
     componentData: {
         format: string
     }
 }
-
-interface IInputFile {
-    name: string,
-    label: string,
-    class?: string,
+interface IInputFile extends IFormComponent {
     componentData: {
         allowedTypes: string[]
     }
 }
 
-interface ITextArea {
-    name: string,
-    label: string,
-    class?: string,
-}
 
-interface ICheckbox {
-    name: string,
-    label: string,
-    class?: string,
-}
-
-type TFormDataItem = ISelect | IInput | IDatetime | IInputFile | ITextArea
+type TFormDataItemInput = ISelect | IInput | IDatetime | IDate | IInputFile | ITextArea | ICheckbox
+type TFormDataItemOutput = IFormComponent & { component: Component, componentData: any }
 
 export interface defaultProps {
     data: {
@@ -84,7 +62,7 @@ type propsWithDefaultPropsType = DefineProps<LooseRequired<defaultProps>, never>
 
 export const useForm = () => {
 
-    const initForm = (createURL: string, updateURL: string, formDataPropertyNames: TFormDataItem[]) => {
+    const initForm = (createURL: string, updateURL: string, formDataPropertyNames: TFormDataItemInput[]) => {
         const { $authFetch } = useNuxtApp()
 
         const formDataValues = getFormDataValues(formDataPropertyNames)
@@ -119,7 +97,7 @@ export const useForm = () => {
         const getFormComponent = (
             emit: (event: ("modal:resolve" | "modal:close"), ...args: any[]) => void,
             props: propsWithDefaultPropsType,
-            formData: TFormDataItem[],
+            formData: TFormDataItemOutput[],
             errors: Ref<Record<string, any>>
         ) => {
             return defineComponent(
@@ -172,7 +150,7 @@ export const useForm = () => {
         };
     }
 
-    const getFormDataValues = (formDataItems: TFormDataItem[]): Reactive<Record<string, any>> => {
+    const getFormDataValues = (formDataItems: TFormDataItemInput[]): Reactive<Record<string, any>> => {
         const preparedFormDataValues: Record<string, undefined> = {}
 
         formDataItems.map((formDataItem) => {
@@ -230,7 +208,7 @@ export const useForm = () => {
         return _formDataValues
     }
 
-    const select = (config: ISelect) => {
+    const select = (config: ISelect): TFormDataItemOutput =>  {
         return {
             component: FormSelect,
             name: config.name,
@@ -242,7 +220,7 @@ export const useForm = () => {
         }
     }
 
-    const input = (config: IInput) => {
+    const input = (config: IInput): TFormDataItemOutput => {
         return {
             component: FormInput,
             name: config.name,
@@ -252,7 +230,7 @@ export const useForm = () => {
         }
     }
 
-    const date = (config: IDate) => {
+    const date = (config: IDate): TFormDataItemOutput => {
         return {
             component: FormDate,
             name: config.name,
@@ -262,7 +240,7 @@ export const useForm = () => {
         }
     }
 
-    const datetime = (config: IDatetime) => {
+    const datetime = (config: IDatetime): TFormDataItemOutput => {
         return {
             component: FormDatetime,
             name: config.name,
@@ -272,7 +250,7 @@ export const useForm = () => {
         }
     }
 
-    const inputFile = (config: IInputFile) => {
+    const inputFile = (config: IInputFile): TFormDataItemOutput => {
         return {
             component: FormInputFile,
             name: config.name,
@@ -282,7 +260,7 @@ export const useForm = () => {
         }
     }
 
-    const textArea = (config: ITextArea) => {
+    const textArea = (config: ITextArea): TFormDataItemOutput => {
         return {
             component: FormTextArea,
             name: config.name,
@@ -292,7 +270,7 @@ export const useForm = () => {
         }
     }
 
-    const checkbox = (config: ICheckbox) => {
+    const checkbox = (config: ICheckbox): TFormDataItemOutput => {
         return {
             component: FormCheckbox,
             name: config.name,
@@ -304,7 +282,7 @@ export const useForm = () => {
 
     const fillComponents = (
         props: propsWithDefaultPropsType,
-        formData: TFormDataItem[],
+        formData: TFormDataItemOutput[],
         formDataValues: Record<string, undefined>,
         optionsMapper?: {[key: string]: {
             to: string,
@@ -324,7 +302,6 @@ export const useForm = () => {
 
                     if (formDataItem.name === config.to) {
                         formResponse[key].forEach((option: any) => {
-                            // @ts-ignore
                             formDataItem.componentData.options.push(config.fn(option))
                         })
                     }
