@@ -5,6 +5,8 @@ import Tabs from '~/components/Base/Tabs.vue';
 import Browser, {type IItem} from '~/components/Base/Browser/Browser.vue'
 import MainTab from '~/pages/music/_tabs/main.vue'
 import ButtonDropdown from '~/components/Base/ButtonDropdown.vue'
+import MusicTrackForm from '~/modals/music/MusicTrackForm.vue'
+import AddTrackToPlaylistForm from '~/modals/music/AddTrackToPlaylistForm.vue'
 
 const {
   browserEl,
@@ -100,7 +102,7 @@ const columns = ref([
     name: 'authors',
     title: 'Автор',
     toFormat(item: IItem) {
-      return item.authors.reduce((acc, item) => {
+      return item.authors.reduce((acc: any, item: any) => {
         if (acc === null) {
           return item.name_ru
         }
@@ -166,7 +168,7 @@ const onClickMultiple = async () => {
     method: 'GET',
   })
 
-  $modal.load('music/add_to_playlist_form', {
+  $modal.load(AddTrackToPlaylistForm, {
     title: 'Добавить в плейлист',
     formResponse,
     selectedIds: selectedIds.value
@@ -345,7 +347,7 @@ const buttonDropdownItems = [
       <div class="btn__group-separated">
         <Button @click="onClickCreate({
           formURL: 'music/tracks/form',
-          modalPath: 'music/tracks/form',
+          modalComponent: MusicTrackForm,
           modalTitle: 'Создать трек',
           notificationMessage: 'Трек создан'
         })" :class="['--small --success']">Добавить</Button>
@@ -357,7 +359,7 @@ const buttonDropdownItems = [
         <div class="btn__group">
           <Button @click="onClickEdit({
           formURL: 'music/tracks/form',
-          modalPath: 'music/tracks/form',
+          modalComponent: MusicTrackForm,
           modalTitle: 'Трек изменен',
           notificationMessage: 'Трек изменен'
         })" :class="['--big --outline-primary']">Изменить</Button>
