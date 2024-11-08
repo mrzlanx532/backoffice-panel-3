@@ -49,7 +49,8 @@ const {
         label: 'Идентификатор',
         class: '--full',
         componentData: {
-          disabled: true
+          disabled: true,
+          description: 'Только латинские буквы и цифры'
         }
       }),
       textArea({

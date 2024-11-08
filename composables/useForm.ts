@@ -21,7 +21,8 @@ interface IInput {
     label: string,
     class?: string,
     componentData?: {
-        disabled?: boolean
+        disabled?: boolean,
+        description?: string
     }
 }
 

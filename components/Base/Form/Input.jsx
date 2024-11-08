@@ -75,6 +75,7 @@ export default defineComponent({
     render: (ctx) => {
 
         const input = createInput(ctx)
+        const description = ctx.componentData?.description ? h('div', {class: 'input__description'}, ctx.componentData.description) : undefined
 
         return (
             <div>
@@ -82,6 +83,7 @@ export default defineComponent({
                 <div class={ctx.inputContainerClasses}>
                     {input}
                 </div>
+                {description}
                 <div class="input__error">{ctx.errors && ctx.errors[0] ? ctx.errors[0] : null}</div>
             </div>
         )
