@@ -49,7 +49,7 @@ const {
         label: 'Идентификатор',
         class: '--full',
         componentData: {
-          disabled: true,
+          disabled: !!props.data.id,
           description: 'Только латинские буквы и цифры'
         }
       }),
