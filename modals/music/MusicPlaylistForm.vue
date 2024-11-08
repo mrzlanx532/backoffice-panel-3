@@ -1,102 +1,66 @@
-<script setup>
-import { useNuxtApp } from '#app'
+<script setup lang="ts">
 import { onMounted } from 'vue'
-import Form from '@/components/Base/Form'
-import FormInput from '@/components/Base/Form/Input.jsx'
-import FormTextArea from '@/components/Base/Form/TextArea'
-import FormInputFile from '@/components/Base/Form/InputFile'
+import Form from '@/components/Base/Form.vue'
+import type { defaultProps } from '~/composables/useForm'
 
-const emit = defineEmits(['modal:resolve'])
+const props = defineProps<defaultProps>()
 
-const { $authFetch } = useNuxtApp()
-
-const {
-  getFormDataValues,
-  formRequestBody
-} = useForm()
-
-const errors = ref([])
-
-const props = defineProps({
-  data: {
-    type: Object,
-    required: false
-  }
-})
-
-const formDataValues = getFormDataValues([
-  'name_ru',
-  'name_en',
-  'description_ru',
-  'description_en',
-  'picture',
+const emit = defineEmits([
+  'modal:resolve',
+  'modal:close'
 ])
 
-const formData = [
-  {
-    name: 'name_ru',
-    label: 'Название (ru)',
-    class: '--full',
-    component: FormInput,
-  },
-  {
-    name: 'name_en',
-    label: 'Название (en)',
-    class: '--full',
-    component: FormInput,
-  },
-  {
-    name: 'description_ru',
-    label: 'Описание (ru)',
-    class: '--full',
-    component: FormTextArea,
-  },
-  {
-    name: 'description_en',
-    label: 'Описание (en)',
-    class: '--full',
-    component: FormTextArea,
-  },
-  {
-    name: 'picture',
-    label: 'Изображение',
-    component: FormInputFile,
-    class: '--full',
-    componentData: {
-      allowedTypes: ['jpg', 'jpeg', 'png'],
-    }
-  },
-]
+const {
+  initForm,
 
-const onClickSave = async () => {
-  let formData = formRequestBody(formDataValues, props.data.id)
+  fillComponents,
 
-  const method = props.data.id === undefined ? 'create' : 'update'
+  input,
+  inputFile,
+  textArea,
+} = useForm()
 
-  try {
-    await $authFetch(`music/playlists/${method}`, {
-      method: 'POST',
-      body: formData,
-    })
-
-    emit('modal:resolve')
-
-  } catch (err) {
-    if (err.status === 422 && err.data.errors) {
-      errors.value = err.data.errors
-    }
-  }
-}
+const {
+  formData,
+  formDataValues,
+  errors,
+  onClickSave
+} = initForm(
+    'music/playlists/create',
+    'music/playlists/update', [
+      input({
+        name: 'name_ru',
+        label: 'Название (ru)',
+        class: '--full'
+      }),
+      input({
+        name: 'name_en',
+        label: 'Название (en)',
+        class: '--full'
+      }),
+      textArea({
+        name: 'description_ru',
+        label: 'Описание (ru)',
+        class: '--full'
+      }),
+      textArea({
+        name: 'description_en',
+        label: 'Описание (en)',
+        class: '--full'
+      }),
+      inputFile({
+        name: 'picture',
+        label: 'Изображение',
+        class: '--full',
+        componentData: {
+          allowedTypes: ['jpg', 'jpeg', 'png'],
+        }
+      })
+    ]
+)
 
 onMounted(async () => {
-
-  const formResponse = props.data.formResponse
-
-  if (props.data.id !== undefined) {
-    Object.keys(formDataValues).map((key) => {
-      formDataValues[key] = formResponse.entity[key]
-    })
-  }
+  fillComponents(props, formData, formDataValues)
 })
 </script>
 
@@ -121,7 +85,7 @@ onMounted(async () => {
     </template>
     <template #footer>
       <div class="btn__group">
-        <button class="btn --primary --big" @click="onClickSave()">Сохранить</button>
+        <button class="btn --primary --big" @click="onClickSave(props, emit)">Сохранить</button>
         <button class="btn --outline-primary --big" @click="$emit('modal:close')">Отмена</button>
       </div>
     </template>
