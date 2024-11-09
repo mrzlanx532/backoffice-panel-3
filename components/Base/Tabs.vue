@@ -4,14 +4,15 @@ import type { Component, Ref } from 'vue'
 export interface ITabItem {
   title: string,
   component: Component,
-  hasError?: false
+  hasError?: boolean
 }
 
 const props = withDefaults(defineProps<{
   selectedItem?: number,
   tabs: ITabItem[]
 }>(), {
-  selectedItem: 0
+  selectedItem: 0,
+  hasError: false
 })
 
 const emit = defineEmits(['change'])
