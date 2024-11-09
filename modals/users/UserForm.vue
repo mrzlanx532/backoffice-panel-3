@@ -64,6 +64,7 @@ const tabs = shallowRef([
   {
     title: 'Инфо',
     component: InfoTab,
+    hasError: true,
     formData: [
       {
         name: 'first_name',

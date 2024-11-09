@@ -3,7 +3,8 @@ import type { Component, Ref } from 'vue'
 
 export interface ITabItem {
   title: string,
-  component: Component
+  component: Component,
+  hasError?: false
 }
 
 const props = withDefaults(defineProps<{
@@ -78,7 +79,10 @@ const onMouseDown = (e: MouseEvent) => {
     <div
         v-for="(tab, index) in tabs"
         class="tabs__item"
-        :class="{'tabs__item_active': localSelectedItem === index}"
+        :class="{
+          'tabs__item_active': localSelectedItem === index,
+          '--with-error': tab.hasError
+        }"
         @click="onClick(index)"
     >
       {{ tab.title }}
