@@ -15,6 +15,10 @@ import Tabs from '~/components/Base/Tabs.vue'
 import Form from '~/components/Base/Form.vue'
 import { FetchError } from 'ofetch'
 
+import type { defaultProps } from '~/composables/useForm'
+
+const props = defineProps<defaultProps>()
+
 const emit = defineEmits([
     'modal:resolve',
     'modal:close'
@@ -26,13 +30,6 @@ const {
   getFormDataValues,
   formRequestBody
 } = useForm()
-
-const props = defineProps({
-  data: {
-    type: Object,
-    required: false
-  }
-})
 
 const selectedTab = ref(0)
 
