@@ -62,10 +62,14 @@ type propsWithDefaultPropsType = DefineProps<LooseRequired<defaultProps>, never>
 
 export const useForm = () => {
 
-    const initForm = (createURL: string, updateURL: string, formDataPropertyNames: TFormDataItemOutput[]) => {
+    const initForm = (
+        createURL: string,
+        updateURL: string,
+        formData: TFormDataItemOutput[]
+    ) => {
         const { $authFetch } = useNuxtApp()
 
-        const formDataValues = getFormDataValues(formDataPropertyNames)
+        const formDataValues = getFormDataValues(formData)
         const errors: Ref<Record<string, any>> = ref({})
 
         const onClickSave = async (
@@ -141,7 +145,7 @@ export const useForm = () => {
         }
 
         return {
-            formData: formDataPropertyNames,
+            formData,
             formDataValues,
             errors,
 
