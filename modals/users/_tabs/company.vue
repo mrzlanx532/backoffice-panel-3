@@ -18,7 +18,7 @@ const props = defineProps({
 })
 </script>
 <template>
-  <div class="grid --3x3">
+  <div class="grid">
     <template v-for="el in data.formData">
       <component
           :is="el.component"

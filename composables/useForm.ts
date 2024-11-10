@@ -10,21 +10,29 @@ import FormDate from '~/components/Base/Form/Date.vue'
 import FormInputFile from '~/components/Base/Form/InputFile.vue'
 import FormTextArea from '~/components/Base/Form/TextArea.vue'
 import FormCheckbox from '~/components/Base/Form/Checkbox.vue'
+import FormSwitcher from '~/components/Base/Form/Switcher.vue'
 import Form from '~/components/Base/Form.vue'
 
 interface IFormComponent {
     name: string,
     label: string,
     class?: string,
+    section?: string
 }
 
-interface ISelect extends IFormComponent {}
+interface ISelect extends IFormComponent {
+    componentData?: {
+        options?: {}[],
+        isMultiple?: boolean
+    }
+}
 interface ITextArea extends IFormComponent {}
 interface ICheckbox extends IFormComponent {}
 interface IInput extends IFormComponent {
     componentData?: {
         disabled?: boolean,
-        description?: string
+        description?: string,
+        mask?: string
     }
 }
 interface IDatetime extends IFormComponent {
@@ -39,7 +47,8 @@ interface IDate extends IFormComponent{
 }
 interface IInputFile extends IFormComponent {
     componentData: {
-        allowedTypes: string[]
+        allowedTypes: string[],
+        maxSizeMB?: number
     }
 }
 
@@ -58,14 +67,82 @@ export interface defaultProps {
     }
 }
 
+interface ITabWithFormData {
+    title: string,
+    component: Component,
+    formData: TFormDataItemOutput[]
+    hasError?: boolean,
+    formClass?: string
+}
+
 type propsWithDefaultPropsType = DefineProps<LooseRequired<defaultProps>, never>
 
 export const useForm = () => {
 
+    const initFormWithTabs = (
+        createURL: string,
+        updateURL: string,
+        tabsWithFormData: ITabWithFormData[],
+    ) => {
+        const { $authFetch } = useNuxtApp()
+
+        const formDataValues = getFormDataValuesFromTabs(tabsWithFormData)
+        const errors: Ref<Record<string, any>> = ref({})
+
+        const selectedTab = ref(0)
+
+        const onChangeTab = (_selectedTab: number) => {
+            selectedTab.value = _selectedTab
+        }
+
+        const onChangeFormData = (param: string, value: any) => {
+            formDataValues[param] = value
+        }
+
+        const onClickSave = async (
+            props: propsWithDefaultPropsType,
+            emit: (event: ("modal:resolve" | "modal:close"), ...args: any[]) => void
+        ) => {
+            let requestBody = formRequestBody(formDataValues, props.data.id)
+
+            const URL = props.data.id ? updateURL : createURL
+
+            try {
+
+                await $authFetch(URL, {
+                    method: 'POST',
+                    body: requestBody,
+                })
+
+                emit('modal:resolve')
+
+            } catch (err) {
+                if (err instanceof FetchError) {
+                    if (err.status === 422 && err.data.errors) {
+                        errors.value = err.data.errors
+                    }
+                }
+            }
+        }
+
+        return {
+            tabsWithFormData,
+            formDataValues,
+            errors,
+            selectedTab,
+
+            onClickSave,
+            onChangeTab,
+            onChangeFormData
+            //getFormComponent
+        };
+    }
+
     const initForm = (
         createURL: string,
         updateURL: string,
-        formData: TFormDataItemOutput[]
+        formData: TFormDataItemOutput[],
+        formClass?: string
     ) => {
         const { $authFetch } = useNuxtApp()
 
@@ -107,25 +184,28 @@ export const useForm = () => {
             return defineComponent(
                 (_props) => {
                     return () => {
+
+                        const contentFormData = formData.map((formDataItem) => {
+                            return h(formDataItem.component, {
+                                componentData: formDataItem?.componentData,
+                                class: formDataItem.class,
+                                label: formDataItem.label,
+                                name: formDataItem.name,
+                                modelValue: formDataValues[formDataItem.name],
+                                'onUpdate:modelValue': (value: any) => {
+                                    formDataValues[formDataItem.name] = value
+                                },
+                                errors: errors.value[formDataItem.name]
+                            })
+                        })
+
                         return h(Form, {
                             title: props.data.title,
                             onClose: () => {
                                 emit('modal:close')
                             }
                         }, {
-                            content: () => h('div', {class: 'grid --2x2'}, formData.map((formDataItem) => {
-                                return h(formDataItem.component, {
-                                    componentData: formDataItem?.componentData,
-                                    class: formDataItem.class,
-                                    label: formDataItem.label,
-                                    name: formDataItem.name,
-                                    modelValue: formDataValues[formDataItem.name],
-                                    'onUpdate:modelValue': (value: any) => {
-                                        formDataValues[formDataItem.name] = value
-                                    },
-                                    errors: errors.value[formDataItem.name]
-                                })
-                            })),
+                            content: () => h('div', {class: 'grid ' + (formClass ? formClass : '--2x2')}, contentFormData),
                             footer: () => h('div', {class: 'btn__group'}, [
                                 h('button', {
                                     class: 'btn --primary --big',
@@ -152,6 +232,18 @@ export const useForm = () => {
             onClickSave,
             getFormComponent
         };
+    }
+
+    const getFormDataValuesFromTabs = (tabsWithFormData: ITabWithFormData[]): Reactive<Record<string, any>> => {
+        const preparedFormDataValues: Record<string, undefined> = {}
+
+        tabsWithFormData.forEach((tab) => {
+            tab.formData.forEach((formDataItem) => {
+                preparedFormDataValues[formDataItem.name] = undefined
+            })
+        })
+
+        return reactive(preparedFormDataValues)
     }
 
     const getFormDataValues = (formDataItems: TFormDataItemInput[]): Reactive<Record<string, any>> => {
@@ -218,6 +310,7 @@ export const useForm = () => {
             name: config.name,
             label: config.label,
             class: config.class,
+            section: config.section,
             componentData: {
                 options: []
             }
@@ -230,6 +323,7 @@ export const useForm = () => {
             name: config.name,
             label: config.label,
             class: config.class,
+            section: config.section,
             componentData: config.componentData ? config.componentData : undefined,
         }
     }
@@ -240,6 +334,7 @@ export const useForm = () => {
             name: config.name,
             label: config.label,
             class: config.class,
+            section: config.section,
             componentData: config.componentData,
         }
     }
@@ -250,6 +345,7 @@ export const useForm = () => {
             name: config.name,
             label: config.label,
             class: config.class,
+            section: config.section,
             componentData: config.componentData,
         }
     }
@@ -260,6 +356,7 @@ export const useForm = () => {
             name: config.name,
             label: config.label,
             class: config.class,
+            section: config.section,
             componentData: config.componentData,
         }
     }
@@ -270,6 +367,7 @@ export const useForm = () => {
             name: config.name,
             label: config.label,
             class: config.class,
+            section: config.section,
             componentData: {}
         }
     }
@@ -280,6 +378,18 @@ export const useForm = () => {
             name: config.name,
             label: config.label,
             class: config.class,
+            section: config.section,
+            componentData: {}
+        }
+    }
+
+    const switcher = (config: ICheckbox): TFormDataItemOutput => {
+        return {
+            component: FormSwitcher,
+            name: config.name,
+            label: config.label,
+            class: config.class,
+            section: config.section,
             componentData: {}
         }
     }
@@ -324,6 +434,7 @@ export const useForm = () => {
 
     return {
         initForm,
+        initFormWithTabs,
 
         fillComponents,
 
@@ -336,6 +447,7 @@ export const useForm = () => {
         datetime,
         inputFile,
         textArea,
-        checkbox
+        checkbox,
+        switcher
     }
 }

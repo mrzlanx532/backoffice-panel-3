@@ -2,9 +2,9 @@
 import { useNuxtApp } from '#app'
 import { onMounted } from 'vue'
 
-import InfoTab from '~/modals/users/_tabs/info.vue'
-import CompanyTab from '~/modals/users/_tabs/company.vue'
-import SubscriptionTab from '~/modals/users/_tabs/subscription.vue'
+import InfoTabComponent from '~/modals/users/_tabs/info.vue'
+import CompanyTabComponent from '~/modals/users/_tabs/company.vue'
+import SubscriptionTabComponent from '~/modals/users/_tabs/subscription.vue'
 
 import FormInput from '~/components/Base/Form/Input'
 import FormSelect from '~/components/Base/Form/Select.vue'
@@ -27,298 +27,208 @@ const emit = defineEmits([
 const { $authFetch } = useNuxtApp()
 
 const {
-  getFormDataValues,
-  formRequestBody
+  initFormWithTabs,
+  input,
+  select,
+  inputFile,
+  checkbox,
+  textArea,
+  date,
+  switcher,
 } = useForm()
 
-const selectedTab = ref(0)
-
-const errors = ref([])
-
-const formDataValues = getFormDataValues([
-  'first_name',
-  'last_name',
-  'email',
-  'phone',
-  'locale_id',
-  'about',
-  'picture',
-  'is_checked',
-  'company_name',
-  'company_business_type_id',
-  'job_title',
-  'company_url',
-  'company_index',
-  'company_country_id',
-  'company_city',
-  'subscription_type_id',
-  'subscription_till',
-  'subscription_till_for_exclusive_tracks',
-  'subscription_labels',
-])
-
-const tabs = shallowRef([
-  {
-    title: 'Инфо',
-    component: InfoTab,
-    hasError: true,
-    formData: [
-      {
-        name: 'first_name',
-        label: 'Имя',
-        component: FormInput
-      },
-      {
-        name: 'last_name',
-        label: 'Фамилия',
-        component: FormInput
-      },
-      {
-        name: 'email',
-        label: 'E-mail',
-        component: FormInput
-      },
-      {
-        name: 'phone',
-        label: 'Телефон',
-        component: FormInput,
-        componentData: {
-          mask: '+7 (###) ###-##-##'
-        }
-      },
-      {
-        name: 'locale_id',
-        label: 'Язык',
-        class: '--full',
-        component: FormSelect,
-        componentData: {
-          options: [
-            {
-              id: 'ru',
-              title: 'Русский'
-            },
-            {
-              id: 'en',
-              title: 'Английский'
-            },
-            {
-              id: 'fr',
-              title: 'Французский'
-            },
-            {
-              id: 'au',
-              title: 'Австралийский'
-            },
-            {
-              id: 'ge',
-              title: 'Немецкий'
-            },
-            {
-              id: 'me',
-              title: 'Мексиканский'
-            },
-          ]
-        }
-      },
-      {
-        name: 'about',
-        label: 'О себе',
-        class: '--full',
-        component: FormInput
-      },
-      {
-        name: 'picture',
-        label: 'Фотография',
-        class: '--full',
-        component: FormInputFile,
-        componentData: {
-          allowedTypes: ['jpg', 'jpeg', 'png', 'sql'],
-          maxSizeMB: 20
-        }
-      },
-      {
-        name: 'is_checked',
-        label: 'Согласен с условиями пользовательского соглашения',
-        class: '--full',
-        component: FormCheckbox,
-      },
-    ]
-  },
-  {
-    title: 'Компания',
-    component: CompanyTab,
-    formData: [
-      {
-        name: 'company_name',
-        label: 'Название компании',
-        component: FormInput,
-        class: '--full'
-      },
-      {
-        name: 'company_business_type_id',
-        label: 'Направление работы компании',
-        component: FormSelect,
-        class: '--full',
-        componentData: {
-          options: []
-        }
-      },
-      {
-        name: 'job_title',
-        label: 'Должность',
-        component: FormInput,
-        class: '--full'
-      },
-      {
-        name: 'company_url',
-        label: 'Сайт компании',
-        component: FormInput,
-        class: '--full'
-      },
-      {
-        name: 'company_index',
-        label: 'Индекс',
-        component: FormInput,
-      },
-      {
-        name: 'company_country_id',
-        label: 'Страна',
-        component: FormSelect,
-        componentData: {
-          options: []
-        }
-      },
-      {
-        name: 'company_city',
-        label: 'Город',
-        component: FormInput,
-      },
-    ]
-  },
-  {
-    title: 'Подписка',
-    component: SubscriptionTab,
-    formData: [
-      {
-        name: 'subscription_type_id',
-        label: 'Тип подписки',
-        component: FormSelect,
-        componentData: {
-          options: [
-            {
-              id: 'NONE',
-              title: 'Подписка отсутствует'
-            },
-            {
-              id: 'ONLY_MUSIC',
-              title: 'Только музыка'
-            },
-            {
-              id: 'ONLY_SOUNDS',
-              title: 'Только шумы'
-            },
-            {
-              id: 'MUSIC_AND_SOUNDS',
-              title: 'Музыка и шумы'
-            },
-          ]
-        }
-      },
-      {
-        name: 'subscription_till',
-        label: 'Дата истечения',
-        component: FormDate,
-        componentData: {
-          returnFormat: 'DD.MM.yyyy'
-        }
-      },
-      {
-        name: 'subscription_till_for_exclusive_tracks',
-        label: 'Дата истечения',
-        component: FormDate,
-        class: '--full',
-        componentData: {
-          altPosition: () => ({
-            top: -40,
-            left: 120
-          }),
-          returnFormat: 'DD.MM.yyyy'
-        }
-      },
-      {
-        name: 'subscription_labels',
-        label: 'Лейблы',
-        component: FormInput,
-        class: '--full'
-      },
-      {
-        name: 'subscription_labels',
-        label: 'Отключить подписку на эксклюзивные треки',
-        component: FormInput,
-        class: '--full'
+const InfoTab = {
+  title: 'Инфо',
+  component: InfoTabComponent,
+  formData: [
+    input({
+      name: 'first_name',
+      label: 'Имя',
+    }),
+    input({
+      name: 'last_name',
+      label: 'Фамилия',
+    }),
+    input({
+      name: 'email',
+      label: 'E-mail',
+    }),
+    input({
+      name: 'phone',
+      label: 'Телефон',
+      componentData: {
+        mask: '+7 (###) ###-##-##'
       }
-    ]
-  }
-])
-
-
-const onChangeTab = (_selectedTab: number) => {
-  selectedTab.value = _selectedTab
+    }),
+    input({
+      name: 'password',
+      label: 'Пароль',
+    }),
+    input({
+      name: 'password_confirmation',
+      label: 'Подтверждение пароля',
+    }),
+    select({
+      name: 'locale_id',
+      label: 'Язык',
+      class: '--full',
+      componentData: {
+        options: [
+          {
+            id: 'ru',
+            title: 'Русский'
+          },
+          {
+            id: 'en',
+            title: 'Английский'
+          },
+          {
+            id: 'fr',
+            title: 'Французский'
+          },
+          {
+            id: 'au',
+            title: 'Австралийский'
+          },
+          {
+            id: 'ge',
+            title: 'Немецкий'
+          },
+          {
+            id: 'me',
+            title: 'Мексиканский'
+          },
+        ]
+      }
+    }),
+    textArea({
+      name: 'about',
+      label: 'О себе',
+      class: '--full'
+    }),
+    inputFile({
+      name: 'picture',
+      label: 'Фотография',
+      class: '--full',
+      componentData: {
+        allowedTypes: ['jpg', 'jpeg', 'png'],
+        maxSizeMB: 20
+      }
+    }),
+    checkbox({
+      name: 'is_checked',
+      label: 'Согласен с условиями пользовательского соглашения',
+      class: '--full'
+    })
+  ]
 }
 
-const onChangeFormData = (param, value) => {
-  formDataValues[param] = value
+const CompanyTab = {
+  title: 'Компания',
+  component: InfoTabComponent,
+  formClass: '--3x3',
+  formData: [
+    input({
+      name: 'company_name',
+      label: 'Название компании',
+      class: '--full'
+    }),
+    input({
+      name: 'company_business_type_id',
+      label: 'Направление работы компании',
+      class: '--full'
+    }),
+    input({
+      name: 'job_title',
+      label: 'Должность',
+      class: '--full'
+    }),
+    input({
+      name: 'company_url',
+      label: 'Сайт компании',
+      class: '--full'
+    }),
+    input({
+      name: 'company_address',
+      label: 'Адрес',
+      class: '--full'
+    }),
+    input({
+      name: 'company_index',
+      label: 'Индекс',
+    }),
+    select({
+      name: 'company_country_id',
+      label: 'Страна',
+    }),
+    input({
+      name: 'company_city',
+      label: 'Город'
+    })
+  ]
 }
 
-const onClickSave = async () => {
+const SubscriptionTab = {
+  title: 'Подписка',
+  component: SubscriptionTabComponent,
+  formData: [
+    select({
+      section: 'Подписка',
+      name: 'subscription_type_id',
+      label: 'Тип подписки'
+    }),
+    date({
+      name: 'subscription_till',
+      label: 'Дата истечения',
+      componentData: {
+        format: 'DD.MM.yyyy'
+      }
+    }),
+    select({
+      section: 'Подписка на эксклюзивные треки',
+      name: 'subscription_till_for_exclusive_tracks',
+      label: 'Дата истечения',
+      class: '--full',
+      componentData: {
 
-  let formData = formRequestBody(formDataValues, props.data!.id)
-
-  const method = props.data!.id === undefined ? 'create' : 'update'
-
-  try {
-    await $authFetch(`users/${method}`, {
-      method: 'POST',
-      body: formData,
+      }
+    }),
+    switcher({
+      name: 'remove',
+      label: 'Отключить подписку на эксклюзивные треки',
+      class: '--full'
+    }),
+    select({
+      section: 'Подписка на лейблы',
+      name: 'subscription_labels',
+      label: 'Лейблы',
+      class: '--full',
+      componentData: {
+        isMultiple: true
+      }
     })
-
-    emit('modal:resolve')
-
-  } catch (err) {
-    if (!(err instanceof FetchError)) {
-      return
-    }
-
-    if (err.status === 422 && err.data.errors) {
-      errors.value = err.data.errors
-    }
-  }
+  ]
 }
 
-onMounted(async () => {
+const {
+  tabsWithFormData,
+  formDataValues,
+  errors,
+  selectedTab,
 
-  const formResponse = props.data.formResponse
+  onClickSave,
+  onChangeTab,
+  onChangeFormData
+} = initFormWithTabs(
+    'users/create',
+    'users/update',
+    [
+      InfoTab,
+      CompanyTab,
+      SubscriptionTab
+    ],
+)
 
-  formResponse.company_business_types.forEach((companyBusinessType) => {
-    tabs.value[1].formData[1].componentData.options.push({
-      id: companyBusinessType.id,
-      title: companyBusinessType.name_ru,
-    })
-  })
-
-  formResponse.company_countries.forEach((companyCountry) => {
-    tabs.value[1].formData[5].componentData.options.push({
-      id: companyCountry.id,
-      title: companyCountry.name_ru,
-    })
-  })
-
-  if (props.data!.id !== undefined) {
-    Object.keys(formDataValues).map((key) => {
-      formDataValues[key] = formResponse.entity[key]
-    })
-  }
-})
 </script>
 
 <template>
@@ -327,23 +237,23 @@ onMounted(async () => {
     @close="$emit('modal:close')"
   >
     <template #header>
-      <Tabs :tabs="tabs" @change="onChangeTab"/>
+      <Tabs :tabs="tabsWithFormData" @change="onChangeTab"/>
     </template>
     <template #content>
       <keep-alive>
         <component
             @change="onChangeFormData"
             :errors="errors"
-            :is="tabs[selectedTab].component"
-            :data="tabs[selectedTab]"
+            :is="tabsWithFormData[selectedTab].component"
+            :data="tabsWithFormData[selectedTab]"
             :formData="formDataValues"
-            keep-alive
+            :class="tabsWithFormData[selectedTab].formClass ? tabsWithFormData[selectedTab].formClass : '--2x2'"
         />
       </keep-alive>
     </template>
     <template #footer>
       <div class="btn__group">
-        <button class="btn --primary --big" @click="onClickSave">Сохранить</button>
+        <button class="btn --primary --big" @click="onClickSave(props, emit)">Сохранить</button>
         <button class="btn --outline-primary --big" @click="emit('modal:close')">Отмена</button>
       </div>
     </template>

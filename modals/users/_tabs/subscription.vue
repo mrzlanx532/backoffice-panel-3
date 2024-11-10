@@ -18,8 +18,9 @@ const props = defineProps({
 })
 </script>
 <template>
-  <div class="grid --2x2">
+  <div class="grid">
     <template v-for="el in data.formData">
+      <div class="--full form__section" v-if="el.section">{{ el.section }}</div>
       <component
           :is="el.component"
           :errors="errors && errors[el.name] ? errors[el.name] : null"
