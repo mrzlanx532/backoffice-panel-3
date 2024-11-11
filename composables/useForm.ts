@@ -77,6 +77,10 @@ interface ITabWithFormData {
 
 type propsWithDefaultPropsType = DefineProps<LooseRequired<defaultProps>, never>
 
+const isTabWithFormData = (item: ITabWithFormData|TFormDataItemOutput): item is ITabWithFormData => {
+    return 'formData' in item
+}
+
 export const useForm = () => {
 
     const initFormWithTabs = (
@@ -405,11 +409,11 @@ export const useForm = () => {
 
     const fillComponents = (
         props: propsWithDefaultPropsType,
-        formData: TFormDataItemOutput[],
+        formData: TFormDataItemOutput[]|ITabWithFormData[],
         formDataValues: Record<string, undefined>,
         optionsMapper?: {[key: string]: {
             to: string,
-            fn: (item: Record<string, any>) => any}
+            fn?: (item: Record<string, any>) => any}
         },
         valueMapper?: {[key: string]: {
             fn: (item: Record<string, any>, entity?: Record<string, any>) => any
@@ -421,11 +425,27 @@ export const useForm = () => {
             const mapperEntries = Object.entries(optionsMapper)
 
             formData.forEach(formDataItem => {
+
+                if (isTabWithFormData(formDataItem)) {
+                    formDataItem.formData.forEach((_formDataItem) => {
+                        mapperEntries.map(([key, config]) => {
+
+                            if (_formDataItem.name === config.to) {
+                                formResponse[key].forEach((option: any) => {
+                                    _formDataItem.componentData.options.push(config.fn ? config.fn(option) : option)
+                                })
+                            }
+                        })
+                    })
+
+                    return
+                }
+
                 mapperEntries.map(([key, config]) => {
 
                     if (formDataItem.name === config.to) {
                         formResponse[key].forEach((option: any) => {
-                            formDataItem.componentData.options.push(config.fn(option))
+                            formDataItem.componentData.options.push(config.fn ? config.fn(option) : option)
                         })
                     }
                 })

@@ -1,19 +1,12 @@
 <script setup lang="ts">
-import { useNuxtApp } from '#app'
 import { onMounted } from 'vue'
 
 import InfoTabComponent from '~/modals/users/_tabs/info.vue'
 import CompanyTabComponent from '~/modals/users/_tabs/company.vue'
 import SubscriptionTabComponent from '~/modals/users/_tabs/subscription.vue'
 
-import FormInput from '~/components/Base/Form/Input'
-import FormSelect from '~/components/Base/Form/Select.vue'
-import FormInputFile from '~/components/Base/Form/InputFile.vue'
-import FormCheckbox from '~/components/Base/Form/Checkbox.vue'
-import FormDate from '~/components/Base/Form/Date.vue'
 import Tabs from '~/components/Base/Tabs.vue'
 import Form from '~/components/Base/Form.vue'
-import { FetchError } from 'ofetch'
 
 import type { defaultProps } from '~/composables/useForm'
 
@@ -24,8 +17,6 @@ const emit = defineEmits([
     'modal:close'
 ])
 
-const { $authFetch } = useNuxtApp()
-
 const {
   initFormWithTabs,
   input,
@@ -35,6 +26,7 @@ const {
   textArea,
   date,
   switcher,
+  fillComponents
 } = useForm()
 
 const InfoTab = {
@@ -125,7 +117,7 @@ const InfoTab = {
 
 const CompanyTab = {
   title: 'Компания',
-  component: InfoTabComponent,
+  component: CompanyTabComponent,
   formClass: '--3x3',
   formData: [
     input({
@@ -184,13 +176,13 @@ const SubscriptionTab = {
         format: 'DD.MM.yyyy'
       }
     }),
-    select({
+    date({
       section: 'Подписка на эксклюзивные треки',
       name: 'subscription_till_for_exclusive_tracks',
       label: 'Дата истечения',
       class: '--full',
       componentData: {
-
+        format: 'DD.MM.yyyy'
       }
     }),
     switcher({
@@ -229,6 +221,35 @@ const {
     ],
 )
 
+onMounted(() => {
+  fillComponents(props, tabsWithFormData, formDataValues, {
+    locales: {
+      to: 'locale_id',
+      fn: (locale) => locale
+    },
+    company_countries: {
+      to: 'company_country_id',
+      fn(country) {
+        return {
+          id: country.id,
+          title: country.name_ru,
+        }
+      }
+    },
+    subscription_types: {
+      to: 'subscription_type_id',
+    },
+    labels: {
+      to: 'subscription_labels',
+      fn: (label) => {
+        return {
+          id: label.id,
+          title: label.name_ru,
+        }
+      }
+    }
+  })
+})
 </script>
 
 <template>
