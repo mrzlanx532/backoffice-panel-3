@@ -1,4 +1,4 @@
-import { type Component, defineComponent, type DefineProps, h, type Reactive, type Ref } from 'vue'
+import { type Component, defineComponent, type DefineProps, h, type Reactive, type Ref, type VNode } from 'vue'
 import { cloneDeep } from 'lodash-es'
 import { useNuxtApp } from '#imports'
 import { FetchError } from 'ofetch'
@@ -185,19 +185,27 @@ export const useForm = () => {
                 (_props) => {
                     return () => {
 
-                        const contentFormData = formData.map((formDataItem) => {
-                            return h(formDataItem.component, {
-                                componentData: formDataItem?.componentData,
-                                class: formDataItem.class,
-                                label: formDataItem.label,
-                                name: formDataItem.name,
-                                modelValue: formDataValues[formDataItem.name],
-                                'onUpdate:modelValue': (value: any) => {
-                                    formDataValues[formDataItem.name] = value
-                                    delete errors.value[formDataItem.name]
-                                },
-                                errors: errors.value[formDataItem.name]
-                            })
+                        const contentFormData: VNode[] = []
+
+                        formData.forEach((formDataItem) => {
+                            if (formDataItem.section) {
+                                contentFormData.push(h('div', {class: 'form__section --full'}, formDataItem.section))
+                            }
+
+                            contentFormData.push(
+                                h(formDataItem.component, {
+                                    componentData: formDataItem?.componentData,
+                                    class: formDataItem.class,
+                                    label: formDataItem.label,
+                                    name: formDataItem.name,
+                                    modelValue: formDataValues[formDataItem.name],
+                                    'onUpdate:modelValue': (value: any) => {
+                                        formDataValues[formDataItem.name] = value
+                                        delete errors.value[formDataItem.name]
+                                    },
+                                    errors: errors.value[formDataItem.name]
+                                })
+                            )
                         })
 
                         return h(Form, {
