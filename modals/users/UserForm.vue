@@ -55,10 +55,16 @@ const InfoTab = {
     input({
       name: 'password',
       label: 'Пароль',
+      componentData: {
+        type: 'password'
+      }
     }),
     input({
       name: 'password_confirmation',
       label: 'Подтверждение пароля',
+      componentData: {
+        type: 'password'
+      }
     }),
     select({
       name: 'locale_id',

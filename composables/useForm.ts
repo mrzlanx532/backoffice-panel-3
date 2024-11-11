@@ -43,7 +43,8 @@ interface IInput extends IFormComponent {
     componentData?: {
         disabled?: boolean,
         description?: string,
-        mask?: string
+        mask?: string,
+        type?: 'text' | 'password'
     }
 }
 interface IDatetime extends IFormComponent {
@@ -140,8 +141,10 @@ export const useForm = () => {
             }
         }
 
+        const shallowRefTabsWithFormData = shallowRef(tabsWithFormData)
+
         return {
-            tabsWithFormData,
+            tabsWithFormData: shallowRefTabsWithFormData,
             formDataValues,
             errors,
             selectedTab,
