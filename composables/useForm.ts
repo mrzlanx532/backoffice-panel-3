@@ -1,4 +1,13 @@
-import { type Component, defineComponent, type DefineProps, h, type Reactive, type Ref, type VNode } from 'vue'
+import {
+    type Component,
+    defineComponent,
+    type DefineProps,
+    h,
+    type Reactive,
+    type Ref,
+    type ShallowRef,
+    type VNode
+} from 'vue'
 import { cloneDeep } from 'lodash-es'
 import { useNuxtApp } from '#imports'
 import { FetchError } from 'ofetch'
@@ -14,10 +23,12 @@ import FormSwitcher from '~/components/Base/Form/Switcher.vue'
 import Form from '~/components/Base/Form.vue'
 
 interface IFormComponent {
-    name: string,
-    label: string,
-    class?: string,
+    name: string
+    label: string
+    class?: string
     section?: string
+    hide?: boolean,
+    onUpdate?: (value: any) => void
 }
 
 interface ISelect extends IFormComponent {
@@ -182,7 +193,7 @@ export const useForm = () => {
         const getFormComponent = (
             emit: (event: ("modal:resolve" | "modal:close"), ...args: any[]) => void,
             props: propsWithDefaultPropsType,
-            formData: TFormDataItemOutput[],
+            formData: ShallowRef<TFormDataItemOutput[]>,
             errors: Ref<Record<string, any>>
         ) => {
             return defineComponent(
@@ -191,9 +202,13 @@ export const useForm = () => {
 
                         const contentFormData: VNode[] = []
 
-                        formData.forEach((formDataItem) => {
+                        formData.value.forEach((formDataItem) => {
                             if (formDataItem.section) {
                                 contentFormData.push(h('div', {class: 'form__section --full'}, formDataItem.section))
+                            }
+
+                            if (formDataItem.hide) {
+                                return
                             }
 
                             contentFormData.push(
@@ -206,6 +221,10 @@ export const useForm = () => {
                                     'onUpdate:modelValue': (value: any) => {
                                         formDataValues[formDataItem.name] = value
                                         delete errors.value[formDataItem.name]
+
+                                        if (formDataItem.onUpdate) {
+                                            formDataItem.onUpdate(value)
+                                        }
                                     },
                                     errors: errors.value[formDataItem.name]
                                 })
@@ -237,13 +256,20 @@ export const useForm = () => {
             )
         }
 
+        const shallowRefFormData = shallowRef(formData)
+
+        const findFormDataItemByName = (name: string) => {
+            return shallowRefFormData.value.find(formDataItem => formDataItem.name === name)
+        }
+
         return {
-            formData,
+            formData: shallowRefFormData,
             formDataValues,
             errors,
 
             onClickSave,
-            getFormComponent
+            getFormComponent,
+            findFormDataItemByName
         };
     }
 
@@ -324,6 +350,8 @@ export const useForm = () => {
             label: config.label,
             class: config.class,
             section: config.section,
+            onUpdate: config.onUpdate,
+            hide: config.hide ? config.hide : false,
             componentData: {
                 options: []
             }
@@ -337,7 +365,9 @@ export const useForm = () => {
             label: config.label,
             class: config.class,
             section: config.section,
-            componentData: config.componentData ? config.componentData : undefined,
+            onUpdate: config.onUpdate,
+            hide: config.hide ? config.hide : false,
+            componentData: config.componentData ? config.componentData : {},
         }
     }
 
@@ -348,7 +378,9 @@ export const useForm = () => {
             label: config.label,
             class: config.class,
             section: config.section,
-            componentData: config.componentData,
+            onUpdate: config.onUpdate,
+            hide: config.hide ? config.hide : false,
+            componentData: config.componentData ? config.componentData : {},
         }
     }
 
@@ -359,7 +391,9 @@ export const useForm = () => {
             label: config.label,
             class: config.class,
             section: config.section,
-            componentData: config.componentData,
+            onUpdate: config.onUpdate,
+            hide: config.hide ? config.hide : false,
+            componentData: config.componentData ? config.componentData : {},
         }
     }
 
@@ -370,7 +404,9 @@ export const useForm = () => {
             label: config.label,
             class: config.class,
             section: config.section,
-            componentData: config.componentData,
+            onUpdate: config.onUpdate,
+            hide: config.hide ? config.hide : false,
+            componentData: config.componentData ? config.componentData : {},
         }
     }
 
@@ -381,6 +417,8 @@ export const useForm = () => {
             label: config.label,
             class: config.class,
             section: config.section,
+            onUpdate: config.onUpdate,
+            hide: config.hide ? config.hide : false,
             componentData: {}
         }
     }
@@ -392,6 +430,8 @@ export const useForm = () => {
             label: config.label,
             class: config.class,
             section: config.section,
+            onUpdate: config.onUpdate,
+            hide: config.hide ? config.hide : false,
             componentData: {}
         }
     }
@@ -403,13 +443,15 @@ export const useForm = () => {
             label: config.label,
             class: config.class,
             section: config.section,
+            onUpdate: config.onUpdate,
+            hide: config.hide ? config.hide : false,
             componentData: {}
         }
     }
 
     const fillComponents = (
         props: propsWithDefaultPropsType,
-        formData: TFormDataItemOutput[]|ITabWithFormData[],
+        formData: ShallowRef<TFormDataItemOutput[]|ITabWithFormData[]>,
         formDataValues: Record<string, undefined>,
         optionsMapper?: {[key: string]: {
             to: string,
@@ -424,7 +466,7 @@ export const useForm = () => {
         if (optionsMapper) {
             const mapperEntries = Object.entries(optionsMapper)
 
-            formData.forEach(formDataItem => {
+            formData.value.forEach(formDataItem => {
 
                 if (isTabWithFormData(formDataItem)) {
                     formDataItem.formData.forEach((_formDataItem) => {
