@@ -32,6 +32,11 @@ const props = defineProps({
     type: String,
     required: false,
     default: 'X'
+  },
+  disabled: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 })
 
@@ -123,6 +128,10 @@ watch(
 )
 
 const onClick = () => {
+  if (props.disabled) {
+    return
+  }
+
   isOpen.value = true
 }
 
@@ -311,13 +320,14 @@ const onKeydownEnter = () => {
 </script>
 
 <template>
-  <div class="date__input-container" v-click-outside="onClickOutside" :class="{'--is-open': isOpen, '--inverse': isNeedToInverse}">
+  <div class="date__input-container" v-click-outside="onClickOutside" :class="{'--is-open': isOpen, '--inverse': isNeedToInverse, '--disabled': props.disabled }">
     <div class="date__multiple-label" v-if="rangeIndex !== undefined">{{ rangeIndex === 0 ? 'от' : 'до' }}</div>
     <input
         @keydown.enter="onKeydownEnter"
         @keydown="onKeydown"
         :value="localDate"
         @click="onClick"
+        :disabled="props.disabled"
         ref="input"
     />
     <div class="date__input-remove-icon" @click="onClickRemove" v-if="localDate !== null">

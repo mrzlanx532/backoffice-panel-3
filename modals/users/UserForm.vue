@@ -188,7 +188,8 @@ const SubscriptionTab = {
       label: 'Дата истечения',
       class: '--full',
       componentData: {
-        format: 'DD.MM.yyyy'
+        format: 'DD.MM.yyyy',
+        disabled: true
       }
     }),
     switcher({

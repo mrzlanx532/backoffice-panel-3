@@ -54,7 +54,8 @@ interface IDatetime extends IFormComponent {
 }
 interface IDate extends IFormComponent{
     componentData: {
-        format: string
+        format: string,
+        disabled?: boolean,
     }
 }
 interface IInputFile extends IFormComponent {

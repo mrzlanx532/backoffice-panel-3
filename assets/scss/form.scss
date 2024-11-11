@@ -566,6 +566,19 @@
       position: relative;
       margin-top: 12px;
 
+      &.--disabled {
+        background: var(--color-3);
+
+        input {
+          background: var(--color-3);
+          cursor: not-allowed;
+        }
+
+        .date__input-icon {
+          cursor: not-allowed;
+        }
+      }
+
       input {
         display: block;
         outline: none;
