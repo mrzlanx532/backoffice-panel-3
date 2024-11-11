@@ -194,6 +194,7 @@ export const useForm = () => {
                                 modelValue: formDataValues[formDataItem.name],
                                 'onUpdate:modelValue': (value: any) => {
                                     formDataValues[formDataItem.name] = value
+                                    delete errors.value[formDataItem.name]
                                 },
                                 errors: errors.value[formDataItem.name]
                             })
