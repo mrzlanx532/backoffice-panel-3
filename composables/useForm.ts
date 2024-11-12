@@ -2,11 +2,11 @@ import {
     type Component,
     defineComponent,
     type DefineProps,
-    h,
+    h, KeepAlive,
     type Reactive,
     type Ref,
     type ShallowRef,
-    type VNode
+    type VNode,
 } from 'vue'
 import { cloneDeep } from 'lodash-es'
 import { useNuxtApp } from '#imports'
@@ -21,6 +21,7 @@ import FormTextArea from '~/components/Base/Form/TextArea.vue'
 import FormCheckbox from '~/components/Base/Form/Checkbox.vue'
 import FormSwitcher from '~/components/Base/Form/Switcher.vue'
 import Form from '~/components/Base/Form.vue'
+import Tabs from '~/components/Base/Tabs.vue'
 
 interface IFormComponent {
     name: string
@@ -31,14 +32,19 @@ interface IFormComponent {
     onUpdate?: (value: any) => void
 }
 
+interface ITextArea extends IFormComponent {
+}
+
+interface ICheckbox extends IFormComponent {
+}
+
 interface ISelect extends IFormComponent {
     componentData?: {
         options?: {}[],
         isMultiple?: boolean
     }
 }
-interface ITextArea extends IFormComponent {}
-interface ICheckbox extends IFormComponent {}
+
 interface IInput extends IFormComponent {
     componentData?: {
         disabled?: boolean,
@@ -47,17 +53,20 @@ interface IInput extends IFormComponent {
         type?: 'text' | 'password'
     }
 }
+
 interface IDatetime extends IFormComponent {
     componentData: {
         format: string
     }
 }
-interface IDate extends IFormComponent{
+
+interface IDate extends IFormComponent {
     componentData: {
         format: string,
         disabled?: boolean,
     }
 }
+
 interface IInputFile extends IFormComponent {
     componentData: {
         allowedTypes: string[],
@@ -72,7 +81,7 @@ type TFormDataItemOutput = IFormComponent & { component: Component, componentDat
 export interface defaultProps {
     data: {
         formResponse: {
-            entity?: {[key: string]: any}
+            entity?: { [key: string]: any }
             [key: string]: any,
         },
         title: string,
@@ -82,7 +91,6 @@ export interface defaultProps {
 
 interface ITabWithFormData {
     title: string,
-    component: Component,
     formData: TFormDataItemOutput[]
     hasError?: boolean,
     formClass?: string
@@ -90,7 +98,7 @@ interface ITabWithFormData {
 
 type propsWithDefaultPropsType = DefineProps<LooseRequired<defaultProps>, never>
 
-const isTabWithFormData = (item: ITabWithFormData|TFormDataItemOutput): item is ITabWithFormData => {
+const isTabWithFormData = (item: ITabWithFormData | TFormDataItemOutput): item is ITabWithFormData => {
     return 'formData' in item
 }
 
@@ -101,7 +109,7 @@ export const useForm = () => {
         updateURL: string,
         tabsWithFormData: ITabWithFormData[],
     ) => {
-        const { $authFetch } = useNuxtApp()
+        const {$authFetch} = useNuxtApp()
 
         const formDataValues = getFormDataValuesFromTabs(tabsWithFormData)
         const errors: Ref<Record<string, any>> = ref({})
@@ -142,6 +150,108 @@ export const useForm = () => {
             }
         }
 
+        const TabComponent = defineComponent(
+            (_props, ctx) => {
+
+                return () => {
+
+                    const contentVNodes: VNode[] = []
+
+                    _props.data.formData.forEach((formDataItem: TFormDataItemOutput) => {
+
+                        if (formDataItem.section) {
+                            contentVNodes.push(h('div', {class: 'form__section --full'}, formDataItem.section))
+                        }
+
+                        contentVNodes.push(h(formDataItem.component, {
+                            key: formDataItem.name,
+                            errors: errors && errors.value[formDataItem.name] ? errors.value[formDataItem.name] : null,
+                            class: formDataItem.class,
+                            name: formDataItem.name,
+                            label: formDataItem.label,
+                            componentData: formDataItem.componentData,
+                            modelValue: _props.formData[formDataItem.name],
+                            'onUpdate:modelValue': (value: any) => {
+
+                                _props.formData[formDataItem.name] = value
+                                delete errors.value[formDataItem.name]
+
+                                if (formDataItem.onUpdate) {
+                                    formDataItem.onUpdate(value)
+                                }
+                            }
+                        }))
+                    })
+
+                    return h('div', {
+                        onChange: onChangeFormData,
+                        class: 'grid',
+                    }, contentVNodes)
+                }
+            },
+            {
+                props: {
+                    data: {
+                        type: Object,
+                        required: true,
+                    },
+                    errors: {
+                        type: Object,
+                        required: false,
+                    },
+                    formData: {
+                        type: Object,
+                        required: true,
+                    },
+                },
+            })
+
+        const getFormComponent = (
+            emit: (event: ("modal:resolve" | "modal:close"), ...args: any[]) => void,
+            props: propsWithDefaultPropsType,
+            shallowRefTabsWithFormData: ShallowRef<ITabWithFormData[]>,
+            errors: Ref<Record<string, any>>
+        ) => {
+            return defineComponent(
+                (_props) => {
+
+                    return () => {
+                        return h(Form, {
+                            title: props.data.title,
+                            onClose: () => {
+                                emit('modal:close')
+                            }
+                        }, {
+                            header: () => h(Tabs, {
+                                tabs: shallowRefTabsWithFormData.value as [],
+                                onChange: onChangeTab,
+                            }),
+                            content: () => h(KeepAlive, h(TabComponent, {
+                                key: selectedTab.value,
+                                class: tabsWithFormData[selectedTab.value].formClass ? tabsWithFormData[selectedTab.value].formClass : '--2x2',
+                                data: tabsWithFormData[selectedTab.value],
+                                formData: formDataValues,
+                                onChange: onChangeFormData,
+                                errors,
+                            })),
+                            footer: () => h('div', {class: 'btn__group'}, [
+                                h('button', {
+                                    class: 'btn --primary --big',
+                                    onClick: () => onClickSave(props, emit),
+                                }, 'Сохранить'),
+                                h('button', {
+                                    class: 'btn --outline-primary --big',
+                                    onClick: () => {
+                                        emit('modal:close')
+                                    }
+                                }, 'Отмена')
+                            ])
+                        })
+                    }
+                }
+            )
+        }
+
         const shallowRefTabsWithFormData = shallowRef(tabsWithFormData)
 
         return {
@@ -152,8 +262,8 @@ export const useForm = () => {
 
             onClickSave,
             onChangeTab,
-            onChangeFormData
-            //getFormComponent
+            onChangeFormData,
+            getFormComponent
         };
     }
 
@@ -163,7 +273,7 @@ export const useForm = () => {
         formData: TFormDataItemOutput[],
         formClass?: string
     ) => {
-        const { $authFetch } = useNuxtApp()
+        const {$authFetch} = useNuxtApp()
 
         const formDataValues = getFormDataValues(formData)
         const errors: Ref<Record<string, any>> = ref({})
@@ -299,7 +409,7 @@ export const useForm = () => {
         return reactive(preparedFormDataValues)
     }
 
-    const formRequestBody = (formDataValues: IItem, id: number|undefined = undefined): IItem|FormData => {
+    const formRequestBody = (formDataValues: IItem, id: number | undefined = undefined): IItem | FormData => {
 
         const _formDataValues = cloneDeep(formDataValues)
 
@@ -347,7 +457,7 @@ export const useForm = () => {
         return _formDataValues
     }
 
-    const select = (config: ISelect): TFormDataItemOutput =>  {
+    const select = (config: ISelect): TFormDataItemOutput => {
         return {
             component: FormSelect,
             name: config.name,
@@ -455,15 +565,19 @@ export const useForm = () => {
 
     const fillComponents = (
         props: propsWithDefaultPropsType,
-        formData: ShallowRef<TFormDataItemOutput[]|ITabWithFormData[]>,
+        formData: ShallowRef<TFormDataItemOutput[] | ITabWithFormData[]>,
         formDataValues: Record<string, undefined>,
-        optionsMapper?: {[key: string]: {
-            to: string,
-            fn?: (item: Record<string, any>) => any}
+        optionsMapper?: {
+            [key: string]: {
+                to: string,
+                fn?: (item: Record<string, any>) => any
+            }
         },
-        valueMapper?: {[key: string]: {
-            fn: (item: Record<string, any>, entity?: Record<string, any>) => any
-        }}
+        valueMapper?: {
+            [key: string]: {
+                fn: (item: Record<string, any>, entity?: Record<string, any>) => any
+            }
+        }
     ) => {
         const formResponse = props.data.formResponse
 

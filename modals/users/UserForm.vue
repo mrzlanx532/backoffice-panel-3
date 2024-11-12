@@ -1,20 +1,13 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 
-import InfoTabComponent from '~/modals/users/_tabs/info.vue'
-import CompanyTabComponent from '~/modals/users/_tabs/company.vue'
-import SubscriptionTabComponent from '~/modals/users/_tabs/subscription.vue'
-
-import Tabs from '~/components/Base/Tabs.vue'
-import Form from '~/components/Base/Form.vue'
-
 import type { defaultProps } from '~/composables/useForm'
 
 const props = defineProps<defaultProps>()
 
 const emit = defineEmits([
-    'modal:resolve',
-    'modal:close'
+  'modal:resolve',
+  'modal:close'
 ])
 
 const {
@@ -31,7 +24,6 @@ const {
 
 const InfoTab = {
   title: 'Инфо',
-  component: InfoTabComponent,
   formData: [
     input({
       name: 'first_name',
@@ -70,34 +62,6 @@ const InfoTab = {
       name: 'locale_id',
       label: 'Язык',
       class: '--full',
-      componentData: {
-        options: [
-          {
-            id: 'ru',
-            title: 'Русский'
-          },
-          {
-            id: 'en',
-            title: 'Английский'
-          },
-          {
-            id: 'fr',
-            title: 'Французский'
-          },
-          {
-            id: 'au',
-            title: 'Австралийский'
-          },
-          {
-            id: 'ge',
-            title: 'Немецкий'
-          },
-          {
-            id: 'me',
-            title: 'Мексиканский'
-          },
-        ]
-      }
     }),
     textArea({
       name: 'about',
@@ -123,7 +87,6 @@ const InfoTab = {
 
 const CompanyTab = {
   title: 'Компания',
-  component: CompanyTabComponent,
   formClass: '--3x3',
   formData: [
     input({
@@ -131,7 +94,7 @@ const CompanyTab = {
       label: 'Название компании',
       class: '--full'
     }),
-    input({
+    select({
       name: 'company_business_type_id',
       label: 'Направление работы компании',
       class: '--full'
@@ -168,7 +131,6 @@ const CompanyTab = {
 
 const SubscriptionTab = {
   title: 'Подписка',
-  component: SubscriptionTabComponent,
   formData: [
     select({
       section: 'Подписка',
@@ -190,12 +152,12 @@ const SubscriptionTab = {
       componentData: {
         format: 'DD.MM.yyyy',
         disabled: true
-      }
+      },
     }),
     switcher({
       name: 'remove',
       label: 'Отключить подписку на эксклюзивные треки',
-      class: '--full'
+      class: '--full',
     }),
     select({
       section: 'Подписка на лейблы',
@@ -213,11 +175,8 @@ const {
   tabsWithFormData,
   formDataValues,
   errors,
-  selectedTab,
 
-  onClickSave,
-  onChangeTab,
-  onChangeFormData
+  getFormComponent
 } = initFormWithTabs(
     'users/create',
     'users/update',
@@ -227,6 +186,8 @@ const {
       SubscriptionTab
     ],
 )
+
+const FormComponent = getFormComponent(emit, props, tabsWithFormData, errors)
 
 onMounted(() => {
   fillComponents(props, tabsWithFormData, formDataValues, {
@@ -254,36 +215,20 @@ onMounted(() => {
           title: label.name_ru,
         }
       }
+    },
+    company_business_types: {
+      to: 'company_business_type_id',
+      fn: (companyBusinessType) => {
+        return {
+          id: companyBusinessType.id,
+          title: companyBusinessType.name_en,
+        }
+      },
     }
   })
 })
 </script>
 
 <template>
-  <Form
-    :title="props.data!.title"
-    @close="$emit('modal:close')"
-  >
-    <template #header>
-      <Tabs :tabs="tabsWithFormData" @change="onChangeTab"/>
-    </template>
-    <template #content>
-      <keep-alive>
-        <component
-            @change="onChangeFormData"
-            :errors="errors"
-            :is="tabsWithFormData[selectedTab].component"
-            :data="tabsWithFormData[selectedTab]"
-            :formData="formDataValues"
-            :class="tabsWithFormData[selectedTab].formClass ? tabsWithFormData[selectedTab].formClass : '--2x2'"
-        />
-      </keep-alive>
-    </template>
-    <template #footer>
-      <div class="btn__group">
-        <button class="btn --primary --big" @click="onClickSave(props, emit)">Сохранить</button>
-        <button class="btn --outline-primary --big" @click="emit('modal:close')">Отмена</button>
-      </div>
-    </template>
-  </Form>
+  <FormComponent/>
 </template>
