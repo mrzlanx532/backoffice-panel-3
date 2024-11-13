@@ -29,7 +29,10 @@ interface IFormComponent {
     class?: string
     section?: string
     hide?: boolean,
-    onUpdate?: (value: any) => void
+    onUpdate?: (
+        value: any,
+        findFormDataItemByName: (name: string) => TFormDataItemOutput | void
+    ) => void
 }
 
 interface ITextArea extends IFormComponent {
@@ -73,7 +76,6 @@ interface IInputFile extends IFormComponent {
         maxSizeMB?: number
     }
 }
-
 
 type TFormDataItemInput = ISelect | IInput | IDatetime | IDate | IInputFile | ITextArea | ICheckbox
 type TFormDataItemOutput = IFormComponent & { component: Component, componentData: any }
@@ -150,6 +152,30 @@ export const useForm = () => {
             }
         }
 
+        const shallowRefTabsWithFormData = shallowRef(tabsWithFormData)
+
+        const findFormDataItemByName = (name: string) => {
+
+            let formDataItem: TFormDataItemOutput | undefined = undefined;
+
+            shallowRefTabsWithFormData.value.forEach((_tabsWithFormData) => {
+
+                const foundFormDataItem = _tabsWithFormData.formData.find((formDataItem) => formDataItem.name = name)
+
+                if (foundFormDataItem) {
+                    formDataItem = foundFormDataItem
+
+                    return
+                }
+            })
+
+            if (!formDataItem) {
+                return
+            }
+
+            return formDataItem
+        }
+
         const TabComponent = defineComponent(
             (_props, ctx) => {
 
@@ -177,7 +203,7 @@ export const useForm = () => {
                                 delete errors.value[formDataItem.name]
 
                                 if (formDataItem.onUpdate) {
-                                    formDataItem.onUpdate(value)
+                                    formDataItem.onUpdate(value, findFormDataItemByName)
                                 }
                             }
                         }))
@@ -252,8 +278,6 @@ export const useForm = () => {
             )
         }
 
-        const shallowRefTabsWithFormData = shallowRef(tabsWithFormData)
-
         return {
             tabsWithFormData: shallowRefTabsWithFormData,
             formDataValues,
@@ -263,7 +287,7 @@ export const useForm = () => {
             onClickSave,
             onChangeTab,
             onChangeFormData,
-            getFormComponent
+            getFormComponent,
         };
     }
 
@@ -304,6 +328,12 @@ export const useForm = () => {
             }
         }
 
+        const shallowRefFormData = shallowRef(formData)
+
+        const findFormDataItemByName = (name: string): TFormDataItemOutput | undefined => {
+            return shallowRefFormData.value.find(formDataItem => formDataItem.name === name)
+        }
+
         const getFormComponent = (
             emit: (event: ("modal:resolve" | "modal:close"), ...args: any[]) => void,
             props: propsWithDefaultPropsType,
@@ -337,7 +367,7 @@ export const useForm = () => {
                                         delete errors.value[formDataItem.name]
 
                                         if (formDataItem.onUpdate) {
-                                            formDataItem.onUpdate(value)
+                                            formDataItem.onUpdate(value, findFormDataItemByName)
                                         }
                                     },
                                     errors: errors.value[formDataItem.name]
@@ -370,12 +400,6 @@ export const useForm = () => {
             )
         }
 
-        const shallowRefFormData = shallowRef(formData)
-
-        const findFormDataItemByName = (name: string) => {
-            return shallowRefFormData.value.find(formDataItem => formDataItem.name === name)
-        }
-
         return {
             formData: shallowRefFormData,
             formDataValues,
@@ -383,7 +407,6 @@ export const useForm = () => {
 
             onClickSave,
             getFormComponent,
-            findFormDataItemByName
         };
     }
 

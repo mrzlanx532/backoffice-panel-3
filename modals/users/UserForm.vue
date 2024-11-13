@@ -135,7 +135,15 @@ const SubscriptionTab = {
     select({
       section: 'Подписка',
       name: 'subscription_type_id',
-      label: 'Тип подписки'
+      label: 'Тип подписки',
+      onUpdate(value, findFormDataItemByName) {
+        // TODO: Код ниже работает неправильно
+        /*const item = findFormDataItemByName('subscription_labels')
+
+        if (item) {
+          item.hide = ['ONLY_MUSIC', 'MUSIC_AND_SOUNDS'].includes(value)
+        }*/
+      },
     }),
     date({
       name: 'subscription_till',
@@ -193,7 +201,6 @@ onMounted(() => {
   fillComponents(props, tabsWithFormData, formDataValues, {
     locales: {
       to: 'locale_id',
-      fn: (locale) => locale
     },
     company_countries: {
       to: 'company_country_id',
