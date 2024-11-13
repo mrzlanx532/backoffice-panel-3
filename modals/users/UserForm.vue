@@ -139,6 +139,12 @@ const SubscriptionTab = {
       onUpdate(value, findFormDataItemByName) {
         // TODO: Код ниже работает неправильно
 
+        // Происходит какая-то вакханалия в форме
+        /*const item = findFormDataItemByName('subscription_labels')
+
+        if (item) {
+          item.hide = true
+        }*/
       },
     }),
     date({
