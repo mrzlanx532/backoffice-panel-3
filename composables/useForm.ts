@@ -126,6 +126,8 @@ export const useForm = () => {
             formDataValues[param] = value
         }
 
+        const shallowRefTabsWithFormData = ref(tabsWithFormData)
+
         const onClickSave = async (
             props: propsWithDefaultPropsType,
             emit: (event: ("modal:resolve" | "modal:close"), ...args: any[]) => void
@@ -147,12 +149,26 @@ export const useForm = () => {
                 if (err instanceof FetchError) {
                     if (err.status === 422 && err.data.errors) {
                         errors.value = err.data.errors
+
+                        for (let tabI = 0; tabI <= shallowRefTabsWithFormData.value.length - 1; tabI++) {
+                            shallowRefTabsWithFormData.value[tabI].hasError = false
+
+                            formIterator: for (let formItemI = 0; formItemI <= shallowRefTabsWithFormData.value[tabI].formData.length - 1; formItemI++) {
+
+                                for (let errorKey in err.data.errors) {
+
+                                    if (errorKey === shallowRefTabsWithFormData.value[tabI].formData[formItemI].name) {
+                                        shallowRefTabsWithFormData.value[tabI].hasError = true
+
+                                        break formIterator
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
-
-        const shallowRefTabsWithFormData = shallowRef(tabsWithFormData)
 
         const findFormDataItemByName = (name: string) => {
 
