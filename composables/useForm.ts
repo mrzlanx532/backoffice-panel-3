@@ -480,15 +480,21 @@ export const useForm = () => {
         return _formDataValues
     }
 
-    const select = (config: ISelect): TFormDataItemOutput => {
+    const getDefaultFormDataItemProperties = (config: IFormComponent) => {
         return {
-            component: FormSelect,
             name: config.name,
             label: config.label,
             class: config.class,
             section: config.section,
             onUpdate: config.onUpdate,
             hide: config.hide ? config.hide : false,
+        }
+    }
+
+    const select = (config: ISelect): TFormDataItemOutput => {
+        return {
+            ...getDefaultFormDataItemProperties(config),
+            component: FormSelect,
             componentData: {
                 options: []
             }
@@ -497,91 +503,56 @@ export const useForm = () => {
 
     const input = (config: IInput): TFormDataItemOutput => {
         return {
+            ...getDefaultFormDataItemProperties(config),
             component: FormInput,
-            name: config.name,
-            label: config.label,
-            class: config.class,
-            section: config.section,
-            onUpdate: config.onUpdate,
-            hide: config.hide ? config.hide : false,
             componentData: config.componentData ? config.componentData : {},
         }
     }
 
     const date = (config: IDate): TFormDataItemOutput => {
         return {
+            ...getDefaultFormDataItemProperties(config),
             component: FormDate,
-            name: config.name,
-            label: config.label,
-            class: config.class,
-            section: config.section,
-            onUpdate: config.onUpdate,
-            hide: config.hide ? config.hide : false,
             componentData: config.componentData ? config.componentData : {},
         }
     }
 
     const datetime = (config: IDatetime): TFormDataItemOutput => {
         return {
+            ...getDefaultFormDataItemProperties(config),
             component: FormDatetime,
-            name: config.name,
-            label: config.label,
-            class: config.class,
-            section: config.section,
-            onUpdate: config.onUpdate,
-            hide: config.hide ? config.hide : false,
             componentData: config.componentData ? config.componentData : {},
         }
     }
 
     const inputFile = (config: IInputFile): TFormDataItemOutput => {
         return {
+            ...getDefaultFormDataItemProperties(config),
             component: FormInputFile,
-            name: config.name,
-            label: config.label,
-            class: config.class,
-            section: config.section,
-            onUpdate: config.onUpdate,
-            hide: config.hide ? config.hide : false,
             componentData: config.componentData ? config.componentData : {},
         }
     }
 
     const textArea = (config: ITextArea): TFormDataItemOutput => {
         return {
+            ...getDefaultFormDataItemProperties(config),
             component: FormTextArea,
-            name: config.name,
-            label: config.label,
-            class: config.class,
-            section: config.section,
-            onUpdate: config.onUpdate,
-            hide: config.hide ? config.hide : false,
             componentData: {}
         }
     }
 
     const checkbox = (config: ICheckbox): TFormDataItemOutput => {
         return {
+            ...getDefaultFormDataItemProperties(config),
             component: FormCheckbox,
-            name: config.name,
-            label: config.label,
-            class: config.class,
-            section: config.section,
-            onUpdate: config.onUpdate,
-            hide: config.hide ? config.hide : false,
             componentData: {}
         }
     }
 
     const switcher = (config: ICheckbox): TFormDataItemOutput => {
         return {
+            ...getDefaultFormDataItemProperties(config),
             component: FormSwitcher,
-            name: config.name,
-            label: config.label,
-            class: config.class,
-            section: config.section,
-            onUpdate: config.onUpdate,
-            hide: config.hide ? config.hide : false,
             componentData: {}
         }
     }

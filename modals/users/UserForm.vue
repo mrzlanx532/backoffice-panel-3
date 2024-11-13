@@ -138,11 +138,7 @@ const SubscriptionTab = {
       label: 'Тип подписки',
       onUpdate(value, findFormDataItemByName) {
         // TODO: Код ниже работает неправильно
-        /*const item = findFormDataItemByName('subscription_labels')
 
-        if (item) {
-          item.hide = ['ONLY_MUSIC', 'MUSIC_AND_SOUNDS'].includes(value)
-        }*/
       },
     }),
     date({
