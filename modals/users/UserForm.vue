@@ -138,8 +138,9 @@ const SubscriptionTab = {
       label: 'Тип подписки',
       onUpdate(value, findFormDataItemByName) {
         // TODO: Код ниже работает неправильно
-
         // Происходит какая-то вакханалия в форме
+        // Реактивность ломается
+
         /*const item = findFormDataItemByName('subscription_labels')
 
         if (item) {
