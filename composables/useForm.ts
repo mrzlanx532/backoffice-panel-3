@@ -212,10 +212,10 @@ export const useForm = () => {
                             name: formDataItem.name,
                             label: formDataItem.label,
                             componentData: formDataItem.componentData,
-                            modelValue: _props.formData[formDataItem.name],
+                            modelValue: _props.formDataValues[formDataItem.name],
                             'onUpdate:modelValue': (value: any) => {
 
-                                _props.formData[formDataItem.name] = value
+                                _props.formDataValues[formDataItem.name] = value
                                 delete errors.value[formDataItem.name]
 
                                 if (formDataItem.onUpdate) {
@@ -241,7 +241,7 @@ export const useForm = () => {
                         type: Object,
                         required: false,
                     },
-                    formData: {
+                    formDataValues: {
                         type: Object,
                         required: true,
                     },
@@ -272,7 +272,7 @@ export const useForm = () => {
                                 key: selectedTab.value,
                                 class: tabsWithFormData[selectedTab.value].formClass ? tabsWithFormData[selectedTab.value].formClass : '--2x2',
                                 data: tabsWithFormData[selectedTab.value],
-                                formData: formDataValues,
+                                formDataValues,
                                 onChange: onChangeFormData,
                                 errors,
                             })),
