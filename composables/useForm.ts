@@ -174,19 +174,15 @@ export const useForm = () => {
 
             let formDataItem: TFormDataItemOutput | undefined = undefined;
 
-            shallowRefTabsWithFormData.value.forEach((_tabsWithFormData) => {
+            tab_loop: for (let i = 0; i < shallowRefTabsWithFormData.value.length; i++) {
+                for (let j = 0; j < shallowRefTabsWithFormData.value[i].formData.length; j++) {
 
-                const foundFormDataItem = _tabsWithFormData.formData.find((formDataItem) => formDataItem.name = name)
+                    if (name === shallowRefTabsWithFormData.value[i].formData[j].name) {
+                        formDataItem = shallowRefTabsWithFormData.value[i].formData[j]
 
-                if (foundFormDataItem) {
-                    formDataItem = foundFormDataItem
-
-                    return
+                        break tab_loop;
+                    }
                 }
-            })
-
-            if (!formDataItem) {
-                return
             }
 
             return formDataItem
