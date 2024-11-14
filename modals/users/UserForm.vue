@@ -144,9 +144,11 @@ const SubscriptionTab = {
         // Вот так работает, а через функцию findFormDataItemByName - работает некорректно
         if (value === 'ONLY_MUSIC') {
           tabsWithFormData.value[2].formData[2].hide = true
+          tabsWithFormData.value[2].formData[5].hide = true
         } else {
           tabsWithFormData.value[2].formData[2].hide = false
           tabsWithFormData.value[2].formData[2].componentData.description = 'fwefwe'
+          tabsWithFormData.value[2].formData[5].hide = false
         }
 
         /*const item = findFormDataItemByName('subscription_labels')
