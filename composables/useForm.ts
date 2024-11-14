@@ -126,7 +126,7 @@ export const useForm = () => {
             formDataValues[param] = value
         }
 
-        const shallowRefTabsWithFormData = ref(tabsWithFormData)
+        const shallowRefTabsWithFormData = shallowRef(tabsWithFormData)
 
         const onClickSave = async (
             props: propsWithDefaultPropsType,
@@ -205,9 +205,13 @@ export const useForm = () => {
                             contentVNodes.push(h('div', {class: 'form__section --full'}, formDataItem.section))
                         }
 
+                        if (formDataItem.hide) {
+                            return
+                        }
+
                         contentVNodes.push(h(formDataItem.component, {
                             key: formDataItem.name,
-                            errors: errors && errors.value[formDataItem.name] ? errors.value[formDataItem.name] : null,
+                            errors: _props.errors && _props.errors[formDataItem.name] ? _props.errors[formDataItem.name] : null,
                             class: formDataItem.class,
                             name: formDataItem.name,
                             label: formDataItem.label,
@@ -270,11 +274,11 @@ export const useForm = () => {
                             }),
                             content: () => h(KeepAlive, h(TabComponent, {
                                 key: selectedTab.value,
-                                class: tabsWithFormData[selectedTab.value].formClass ? tabsWithFormData[selectedTab.value].formClass : '--2x2',
-                                data: tabsWithFormData[selectedTab.value],
+                                class: shallowRefTabsWithFormData.value[selectedTab.value].formClass ? shallowRefTabsWithFormData.value[selectedTab.value].formClass : '--2x2',
+                                data: shallowRefTabsWithFormData.value[selectedTab.value],
                                 formDataValues,
                                 onChange: onChangeFormData,
-                                errors,
+                                errors: errors.value,
                             })),
                             footer: () => h('div', {class: 'btn__group'}, [
                                 h('button', {

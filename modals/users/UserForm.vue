@@ -141,6 +141,14 @@ const SubscriptionTab = {
         // Происходит какая-то вакханалия в форме
         // Реактивность ломается
 
+        // Вот так работает, а через функцию findFormDataItemByName - работает некорректно
+        if (value === 'ONLY_MUSIC') {
+          tabsWithFormData.value[2].formData[2].hide = true
+        } else {
+          tabsWithFormData.value[2].formData[2].hide = false
+          tabsWithFormData.value[2].formData[2].componentData.description = 'fwefwe'
+        }
+
         /*const item = findFormDataItemByName('subscription_labels')
 
         if (item) {
@@ -153,6 +161,13 @@ const SubscriptionTab = {
       label: 'Дата истечения',
       componentData: {
         format: 'DD.MM.yyyy'
+      }
+    }),
+    input({
+      name: 'input_test',
+      label: 'Для теста',
+      componentData: {
+        description: 'Тест'
       }
     }),
     date({
