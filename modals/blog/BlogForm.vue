@@ -60,10 +60,6 @@ const {
     name: 'date',
     label: 'Дата',
     class: '--full',
-    isComponentDataReactive: true,
-    componentData: {
-      disabled: true
-    }
   }),
   inputFile({
     name: 'cover',
