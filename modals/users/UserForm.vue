@@ -154,15 +154,21 @@ const SubscriptionTab = {
       name: 'subscription_till_for_exclusive_tracks',
       label: 'Дата истечения',
       class: '--full',
+      isComponentDataReactive: true,
       componentData: {
         format: 'DD.MM.yyyy',
-        disabled: true
+        disabled: false
       },
     }),
     switcher({
       name: 'remove',
       label: 'Отключить подписку на эксклюзивные треки',
       class: '--full',
+      onUpdate(value, findFormDataItemByName) {
+        const item = findFormDataItemByName('subscription_till_for_exclusive_tracks')
+
+        item!.componentData.value.disabled = value
+      }
     }),
     select({
       section: 'Подписка на лейблы',

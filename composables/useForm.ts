@@ -216,7 +216,7 @@ export const useForm = () => {
                             class: formDataItem.class,
                             name: formDataItem.name,
                             label: formDataItem.label,
-                            componentData: formDataItem.componentData,
+                            componentData: formDataItem.isComponentDataReactive ? formDataItem.componentData.value : formDataItem.componentData,
                             modelValue: _props.formDataValues[formDataItem.name],
                             'onUpdate:modelValue': (value: any) => {
 
