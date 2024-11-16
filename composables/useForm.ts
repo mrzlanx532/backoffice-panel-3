@@ -8,6 +8,7 @@ import {
     type ShallowRef,
     type VNode,
 } from 'vue'
+import { defu } from 'defu'
 import { cloneDeep } from 'lodash-es'
 import { useNuxtApp } from '#imports'
 import { FetchError } from 'ofetch'
@@ -508,12 +509,15 @@ export const useForm = () => {
     }
 
     const select = (config: ISelect): TFormDataItemOutput => {
+
+        const defaultComponentData = {
+            options: []
+        }
+
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormSelect,
-            componentData: {
-                options: []
-            }
+            componentData: config.componentData ? defu(defaultComponentData, config.componentData) : defaultComponentData,
         }
     }
 

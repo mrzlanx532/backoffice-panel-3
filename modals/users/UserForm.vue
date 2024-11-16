@@ -137,23 +137,9 @@ const SubscriptionTab = {
       name: 'subscription_type_id',
       label: 'Тип подписки',
       onUpdate(value, findFormDataItemByName) {
-        // TODO: Код ниже работает неправильно
-        // Происходит какая-то вакханалия в форме
-        // Реактивность ломается
-
-        // Вот так работает, а через функцию findFormDataItemByName - работает некорректно
-        /*if (value === 'ONLY_MUSIC') {
-          tabsWithFormData.value[2].formData[2].hide = true
-          tabsWithFormData.value[2].formData[5].hide = true
-        } else {
-          tabsWithFormData.value[2].formData[2].hide = false
-          tabsWithFormData.value[2].formData[2].componentData.description = 'fwefwe'
-          tabsWithFormData.value[2].formData[5].hide = false
-        }*/
-
         const item = findFormDataItemByName('subscription_labels')
 
-        item!.hide = value === 'ONLY_MUSIC'
+        item!.hide = !(['ONLY_MUSIC', 'MUSIC_AND_SOUNDS'].includes(value))
       },
     }),
     date({
@@ -161,13 +147,6 @@ const SubscriptionTab = {
       label: 'Дата истечения',
       componentData: {
         format: 'DD.MM.yyyy'
-      }
-    }),
-    input({
-      name: 'input_test',
-      label: 'Для теста',
-      componentData: {
-        description: 'Тест'
       }
     }),
     date({
@@ -190,6 +169,7 @@ const SubscriptionTab = {
       name: 'subscription_labels',
       label: 'Лейблы',
       class: '--full',
+      hide: true,
       componentData: {
         isMultiple: true
       }
