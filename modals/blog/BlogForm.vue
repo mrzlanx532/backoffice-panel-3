@@ -44,17 +44,6 @@ const {
     name: 'name',
     label: 'Заголовок',
     class: '--full',
-    onUpdate(value, findFormDataItemByName) {
-      if (value) {
-        const item = findFormDataItemByName('date')
-
-        console.log(item!.componentData.value)
-
-        item!.componentData.value.disabled = false
-
-        console.log(item!.componentData.value)
-      }
-    }
   }),
   date({
     name: 'date',
