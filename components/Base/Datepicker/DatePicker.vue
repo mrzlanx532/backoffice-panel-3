@@ -81,8 +81,6 @@ watch(
     () => props.modelValue,
     ((value) => {
 
-      console.log(value)
-
       if (value === null) {
         localDateMoment = null
         localDate.value = null
