@@ -481,6 +481,14 @@ export const useForm = () => {
                     value = value ? 1 : 0
                 }
 
+                if (value instanceof Array) {
+                    value.forEach(item => {
+                        formData.append(`${key}[]`, item)
+                    })
+
+                    return
+                }
+
                 formData.append(key, value)
             })
 
