@@ -16,7 +16,7 @@ const {
 
   select,
   input,
-  datetime,
+  date,
   inputFile,
   textArea,
 } = useForm()
@@ -43,23 +43,32 @@ const {
   input({
     name: 'name',
     label: 'Заголовок',
-    class: '--full'
+    class: '--full',
+    onUpdate(value, findFormDataItemByName) {
+      if (value) {
+        const item = findFormDataItemByName('date')
+
+        console.log(item!.componentData.value)
+
+        item!.componentData.value.disabled = false
+
+        console.log(item!.componentData.value)
+      }
+    }
   }),
-  datetime({
+  date({
     name: 'date',
     label: 'Дата',
     class: '--full',
+    isComponentDataReactive: true,
     componentData: {
-      format: 'DD.MM.YYYY HH:mm'
+      disabled: true
     }
   }),
   inputFile({
     name: 'cover',
     label: 'Изображение',
     class: '--full',
-    componentData: {
-      allowedTypes: ['jpg', 'jpeg', 'png']
-    }
   }),
   textArea({
     name: 'content_short',

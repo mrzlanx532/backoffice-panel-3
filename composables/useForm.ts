@@ -30,6 +30,10 @@ interface IFormComponent {
     class?: string
     section?: string
     hide?: boolean,
+    isComponentDataReactive?: boolean,
+    componentData?: {
+        [key: string]: any
+    }
     onUpdate?: (
         value: any,
         findFormDataItemByName: (name: string) => TFormDataItemOutput | void
@@ -59,8 +63,8 @@ interface IInput extends IFormComponent {
 }
 
 interface IDatetime extends IFormComponent {
-    componentData: {
-        format: string
+    componentData?: {
+        format?: string
     }
 }
 
@@ -72,8 +76,8 @@ interface IDate extends IFormComponent {
 }
 
 interface IInputFile extends IFormComponent {
-    componentData: {
-        allowedTypes: string[],
+    componentData?: {
+        allowedTypes?: string[],
         maxSizeMB?: number
     }
 }
@@ -190,7 +194,7 @@ export const useForm = () => {
         }
 
         const TabComponent = defineComponent(
-            (_props, ctx) => {
+            (_props) => {
 
                 return () => {
 
@@ -374,7 +378,7 @@ export const useForm = () => {
 
                             contentFormData.push(
                                 h(formDataItem.component, {
-                                    componentData: formDataItem?.componentData,
+                                    componentData: formDataItem.isComponentDataReactive ? formDataItem.componentData.value : formDataItem.componentData,
                                     class: formDataItem.class,
                                     label: formDataItem.label,
                                     name: formDataItem.name,
@@ -505,6 +509,7 @@ export const useForm = () => {
             section: config.section,
             onUpdate: config.onUpdate,
             hide: config.hide ? config.hide : false,
+            isComponentDataReactive: config.isComponentDataReactive ? config.isComponentDataReactive : false,
         }
     }
 
@@ -514,18 +519,23 @@ export const useForm = () => {
             options: []
         }
 
+        const componentData = config.componentData ? defu(config.componentData, defaultComponentData) : defaultComponentData
+
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormSelect,
-            componentData: config.componentData ? defu(config.componentData, defaultComponentData) : defaultComponentData,
+            componentData: config.isComponentDataReactive ? ref(componentData) : componentData
         }
     }
 
     const input = (config: IInput): TFormDataItemOutput => {
+
+        const componentData = config.componentData ? config.componentData : {}
+
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormInput,
-            componentData: config.componentData ? config.componentData : {},
+            componentData: config.isComponentDataReactive ? ref(componentData) : componentData
         }
     }
 
@@ -536,50 +546,75 @@ export const useForm = () => {
             format: 'DD.MM.yyyy',
         }
 
+        const componentData = config.componentData ? defu(config.componentData, defaultComponentData) : defaultComponentData
+
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormDate,
-            componentData: config.componentData ? defu(config.componentData, defaultComponentData) : defaultComponentData,
+            componentData: config.isComponentDataReactive ? ref(componentData) : componentData
         }
     }
 
     const datetime = (config: IDatetime): TFormDataItemOutput => {
+
+        const defaultComponentData = {
+            format: 'DD.MM.yyyy HH:mm'
+        }
+
+        const componentData = config.componentData ? defu(config.componentData, defaultComponentData) : defaultComponentData
+
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormDatetime,
-            componentData: config.componentData ? config.componentData : {},
+            componentData: config.isComponentDataReactive ? ref(componentData) : componentData,
         }
     }
 
     const inputFile = (config: IInputFile): TFormDataItemOutput => {
+
+        const defaultComponentData = {
+            allowedTypes: ['jpg', 'jpeg', 'png']
+        }
+
+        const componentData = config.componentData ? defu(config.componentData, defaultComponentData) : defaultComponentData
+
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormInputFile,
-            componentData: config.componentData ? config.componentData : {},
+            componentData: config.isComponentDataReactive ? ref(componentData) : componentData
         }
     }
 
     const textArea = (config: ITextArea): TFormDataItemOutput => {
+
+        const componentData = config.componentData ? config.componentData : {}
+
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormTextArea,
-            componentData: {}
+            componentData: config.isComponentDataReactive ? ref(componentData) : componentData
         }
     }
 
     const checkbox = (config: ICheckbox): TFormDataItemOutput => {
+
+        const componentData = config.componentData ? config.componentData : {}
+
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormCheckbox,
-            componentData: {}
+            componentData: config.isComponentDataReactive ? ref(componentData) : componentData
         }
     }
 
     const switcher = (config: ICheckbox): TFormDataItemOutput => {
+
+        const componentData = config.componentData ? config.componentData : {}
+
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormSwitcher,
-            componentData: {}
+            componentData: config.isComponentDataReactive ? ref(componentData) : componentData
         }
     }
 

@@ -51,9 +51,6 @@ const {
         name: 'picture',
         label: 'Картинка',
         class: '--full',
-        componentData: {
-          allowedTypes: ['jpg', 'png', 'jpeg']
-        }
       })
     ])
 
