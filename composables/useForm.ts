@@ -28,12 +28,15 @@ interface IFormComponent {
     name: string
     label: string
     class?: string
+    /** заголовок перед компонентом */
     section?: string
     hide?: boolean,
+    /** для того чтобы изменять свойство в componentData */
     isComponentDataReactive?: boolean,
     componentData?: {
         [key: string]: any
     }
+    /** колбек после изменения значения в компоненте */
     onUpdate?: (
         value: any,
         findFormDataItemByName: (name: string) => TFormDataItemOutput | void
@@ -489,6 +492,11 @@ export const useForm = () => {
         }
 
         Object.entries(_formDataValues).map(([key, value]) => {
+
+            if (value instanceof Array) {
+                return
+            }
+
             if (value instanceof Object) {
                 _formDataValues[key] = undefined
             }
