@@ -345,16 +345,16 @@ export const useForm = () => {
             }
         }
 
-        const shallowRefFormData = shallowRef(formData)
+        const refFormData = ref(formData)
 
         const findFormDataItemByName = (name: string): TFormDataItemOutput | undefined => {
-            return shallowRefFormData.value.find(formDataItem => formDataItem.name === name)
+            return refFormData.value.find(formDataItem => formDataItem.name === name)
         }
 
         const getFormComponent = (
             emit: (event: ("modal:resolve" | "modal:close"), ...args: any[]) => void,
             props: propsWithDefaultPropsType,
-            formData: ShallowRef<TFormDataItemOutput[]>,
+            formData: Ref<TFormDataItemOutput[]>,
             errors: Ref<Record<string, any>>
         ) => {
             return defineComponent(
@@ -418,7 +418,7 @@ export const useForm = () => {
         }
 
         return {
-            formData: shallowRefFormData,
+            formData: refFormData,
             formDataValues,
             errors,
 
@@ -517,7 +517,7 @@ export const useForm = () => {
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormSelect,
-            componentData: config.componentData ? defu(defaultComponentData, config.componentData) : defaultComponentData,
+            componentData: config.componentData ? defu(config.componentData, defaultComponentData) : defaultComponentData,
         }
     }
 
@@ -539,7 +539,7 @@ export const useForm = () => {
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormDate,
-            componentData: config.componentData ? defu(defaultComponentData, config.componentData) : defaultComponentData,
+            componentData: config.componentData ? defu(config.componentData, defaultComponentData) : defaultComponentData,
         }
     }
 
@@ -585,7 +585,7 @@ export const useForm = () => {
 
     const fillComponents = (
         props: propsWithDefaultPropsType,
-        formData: ShallowRef<TFormDataItemOutput[] | ITabWithFormData[]>,
+        formData: Ref<TFormDataItemOutput[] | ITabWithFormData[]>,
         formDataValues: Record<string, undefined>,
         optionsMapper?: {
             [key: string]: {
