@@ -345,16 +345,16 @@ export const useForm = () => {
             }
         }
 
-        const refFormData = ref(formData)
+        const shallowRefFormData = shallowRef(formData)
 
         const findFormDataItemByName = (name: string): TFormDataItemOutput | undefined => {
-            return refFormData.value.find(formDataItem => formDataItem.name === name)
+            return shallowRefFormData.value.find(formDataItem => formDataItem.name === name)
         }
 
         const getFormComponent = (
             emit: (event: ("modal:resolve" | "modal:close"), ...args: any[]) => void,
             props: propsWithDefaultPropsType,
-            formData: Ref<TFormDataItemOutput[]>,
+            formData: ShallowRef<TFormDataItemOutput[]>,
             errors: Ref<Record<string, any>>
         ) => {
             return defineComponent(
@@ -418,7 +418,7 @@ export const useForm = () => {
         }
 
         return {
-            formData: refFormData,
+            formData: shallowRefFormData,
             formDataValues,
             errors,
 
@@ -585,7 +585,7 @@ export const useForm = () => {
 
     const fillComponents = (
         props: propsWithDefaultPropsType,
-        formData: Ref<TFormDataItemOutput[] | ITabWithFormData[]>,
+        formData: ShallowRef<TFormDataItemOutput[] | ITabWithFormData[]>,
         formDataValues: Record<string, undefined>,
         optionsMapper?: {
             [key: string]: {
