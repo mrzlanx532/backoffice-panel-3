@@ -249,7 +249,8 @@ onMounted(() => {
   })
 
   if (['MUSIC_AND_SOUNDS', 'ONLY_MUSIC'].includes(formDataValues.subscription_type_id)) {
-    formDataValues.remove = true
+    formDataValues.remove = !formDataValues.subscription_till_for_exclusive_tracks
+    findFormDataItemByName('subscription_till_for_exclusive_tracks')!.componentData.disabled = !formDataValues.subscription_till_for_exclusive_tracks
     findFormDataItemByName('subscription_labels')!.hide = false
   }
 })
