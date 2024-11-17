@@ -1,37 +1,44 @@
 <script setup lang="ts">
-  const checked = ref(false)
+const checked = ref(false)
 
-  const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue'])
 
-  const props = defineProps({
-    label: {
-      required: true,
-      type: String,
-    },
-    name: {
-      required: true,
-      type: String,
-    },
-    modelValue: {
-      required: false,
-      type: [Number, String, Array, Boolean]
-    },
-    errors: {
-      type: Array,
-      required: false,
-      default: []
-    },
-    componentData: {
-      type: Object,
-      required: false
-    }
-  })
-
-  const onClick = () => {
-    checked.value = !checked.value
-
-    emit('update:modelValue', checked.value)
+const props = defineProps({
+  label: {
+    required: true,
+    type: String,
+  },
+  name: {
+    required: true,
+    type: String,
+  },
+  modelValue: {
+    required: false,
+    type: [Number, String, Array, Boolean]
+  },
+  errors: {
+    type: Array,
+    required: false,
+    default: []
+  },
+  componentData: {
+    type: Object,
+    required: false
   }
+})
+
+watch(
+    () => props.modelValue,
+    (value) => {
+      checked.value = value as boolean
+    }
+)
+
+const onClick = () => {
+  checked.value = !checked.value
+
+  emit('update:modelValue', checked.value)
+}
 </script>
 
 <template>

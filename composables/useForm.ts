@@ -312,6 +312,7 @@ export const useForm = () => {
             onChangeTab,
             onChangeFormData,
             getFormComponent,
+            findFormDataItemByName
         };
     }
 
@@ -431,6 +432,7 @@ export const useForm = () => {
 
             onClickSave,
             getFormComponent,
+            findFormDataItemByName
         };
     }
 
