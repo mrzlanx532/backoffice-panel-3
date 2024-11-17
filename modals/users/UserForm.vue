@@ -81,6 +81,7 @@ const InfoTab = {
     }),
     checkbox({
       name: 'is_checked',
+      hide: !!props.data.id,
       label: 'Согласен с условиями пользовательского соглашения',
       class: '--full'
     })
