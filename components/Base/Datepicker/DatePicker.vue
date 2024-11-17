@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type IRow, type IMonth, type IYear, type IPayload } from './types'
+import { type IRow, type IMonth, type IYear } from './types'
 import { nextTick, onMounted, onUnmounted, type Ref } from 'vue'
 import moment, { type Moment } from 'moment'
 import 'moment/dist/locale/ru'
@@ -80,25 +80,7 @@ const monthDays = ref([
 watch(
     () => props.modelValue,
     ((value) => {
-
-      if (value === null) {
-        localDateMoment = null
-        localDate.value = null
-
-        buildCalendar()
-        return
-      }
-
-      localDateMoment = moment(value as moment.MomentInput, props.format)
-      localDate.value = localDateMoment.format('DD.MM.YYYY')
-
-      calendarNavMoment = localDateMoment.clone()
-      calendarNavMonth.value = localDateMoment.format('MMMM')
-      calendarNavYear.value = localDateMoment.format('YYYY')
-
-      buildCalendar()
-
-      isOpen.value = false
+      setLocalValues(value)
     })
 )
 
@@ -315,6 +297,33 @@ const onKeydown = (e: Event) => {
 const onKeydownEnter = () => {
   isOpen.value = !isOpen.value
 }
+
+const setLocalValues = (value: string|number|undefined|null) => {
+  if (value === undefined) {
+    return
+  }
+
+  if (value === null) {
+    localDateMoment = null
+    localDate.value = null
+
+    buildCalendar()
+    return
+  }
+
+  localDateMoment = moment(value as moment.MomentInput, props.format)
+  localDate.value = localDateMoment.format('DD.MM.YYYY')
+
+  calendarNavMoment = localDateMoment.clone()
+  calendarNavMonth.value = localDateMoment.format('MMMM')
+  calendarNavYear.value = localDateMoment.format('YYYY')
+
+  buildCalendar()
+
+  isOpen.value = false
+}
+
+setLocalValues(props.modelValue)
 </script>
 
 <template>

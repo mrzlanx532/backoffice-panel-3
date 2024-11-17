@@ -16,7 +16,7 @@ const {
 
   select,
   input,
-  date,
+  datetime,
   inputFile,
   textArea,
 } = useForm()
@@ -45,7 +45,7 @@ const {
     label: 'Заголовок',
     class: '--full',
   }),
-  date({
+  datetime({
     name: 'date',
     label: 'Дата',
     class: '--full',

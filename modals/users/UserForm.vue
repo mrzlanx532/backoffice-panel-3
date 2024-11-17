@@ -148,9 +148,6 @@ const SubscriptionTab = {
     date({
       name: 'subscription_till',
       label: 'Дата истечения',
-      componentData: {
-        format: 'DD.MM.yyyy'
-      }
     }),
     date({
       section: 'Подписка на эксклюзивные треки',
@@ -159,7 +156,6 @@ const SubscriptionTab = {
       class: '--full',
       isComponentDataReactive: true,
       componentData: {
-        format: 'DD.MM.yyyy',
         disabled: false
       },
     }),
@@ -248,9 +244,15 @@ onMounted(() => {
     }
   })
 
+  if (formDataValues.subscription_till_for_exclusive_tracks) {
+    findFormDataItemByName('subscription_till_for_exclusive_tracks')!.componentData.disabled = true
+    formDataValues.remove = true
+  } else {
+    findFormDataItemByName('subscription_till_for_exclusive_tracks')!.componentData.disabled = false
+    formDataValues.remove = false
+  }
+
   if (['MUSIC_AND_SOUNDS', 'ONLY_MUSIC'].includes(formDataValues.subscription_type_id)) {
-    formDataValues.remove = !formDataValues.subscription_till_for_exclusive_tracks
-    findFormDataItemByName('subscription_till_for_exclusive_tracks')!.componentData.disabled = !formDataValues.subscription_till_for_exclusive_tracks
     findFormDataItemByName('subscription_labels')!.hide = false
   }
 })

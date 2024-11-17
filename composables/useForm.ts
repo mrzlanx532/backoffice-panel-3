@@ -561,7 +561,7 @@ export const useForm = () => {
 
         const defaultComponentData = {
             disabled: false,
-            format: 'DD.MM.yyyy',
+            format: 'X',
         }
 
         const componentData = config.componentData ? defu(config.componentData, defaultComponentData) : defaultComponentData
