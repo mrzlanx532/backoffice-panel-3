@@ -8,7 +8,8 @@ interface IOption {
 
 interface IComponentData {
   options: IOption[]
-  isMultiple: boolean
+  isMultiple: boolean,
+  inverse?: boolean
 }
 
 const props = defineProps({
@@ -35,14 +36,14 @@ const props = defineProps({
   }
 })
 
-const select__dropdown = ref(null)
-const selected__container = ref(null)
+const select__dropdown = useTemplateRef<HTMLElement>('select__dropdown')
+const selected__container = useTemplateRef<HTMLElement>('selected__container')
 
 const isSelecting = ref(false)
 const inverseRender = ref(false)
 const selectedItems = ref({})
 const selectedId = ref(null)
-const topPxStyle = ref(0)
+const topPxStyle = ref('0')
 const selectedItemOrItems = ref(props.modelValue !== undefined ? props.modelValue : null)
 
 const emit = defineEmits(['update:modelValue'])
@@ -79,7 +80,7 @@ const onDocumentVisibilityChange = () =>  {
     isSelecting.value = false
   }
 }
-const onClickCancel = (index) => {
+const onClickCancel = (index: number) => {
   if (props.componentData.isMultiple) {
     delete selectedItems.value[index]
 
@@ -90,7 +91,8 @@ const onClickCancel = (index) => {
 
   emit('update:modelValue', null)
 }
-const onMouseDownOnDropdownOption = (option, index) => {
+const onMouseDownOnDropdownOption = (option: IOption, index: number) => {
+
   if (props.componentData.isMultiple) {
     selectedItems.value[option.id] ? delete selectedItems.value[option.id] : selectedItems.value[option.id] = option
 
@@ -103,7 +105,7 @@ const onMouseDownOnDropdownOption = (option, index) => {
   isSelecting.value = false
 
   emit('update:modelValue', option.id)
-  selected__container.value.focus()
+  selected__container.value!.focus()
 }
 
 onMounted(() => {
@@ -113,11 +115,11 @@ onUnmounted(() => {
   document.removeEventListener('visibilitychange', onDocumentVisibilityChange)
 })
 
-const getInverseValue = (rect) => {
+const getInverseValue = (rect: DOMRect) => {
   if (
       props.componentData !== undefined &&
       props.componentData.inverse !== undefined &&
-      props.componentData.inverse === true
+      props.componentData.inverse
   ) {
     return true
   }
@@ -132,7 +134,7 @@ watch(
       nextTick(() => {
         if (select__dropdown.value === null) {
           inverseRender.value = false
-          topPxStyle.value = 0;
+          topPxStyle.value = '0';
           return
         }
 
@@ -142,14 +144,14 @@ watch(
 
         const ro = new ResizeObserver(() => {
           if (inverseRender.value === false) {
-            topPxStyle.value = 0
+            topPxStyle.value = '0'
             return
           }
 
-          topPxStyle.value = ((rect.height + selected__container.value.offsetHeight) * -1) + 'px'
+          topPxStyle.value = ((rect.height + selected__container.value!.offsetHeight) * -1) + 'px'
         })
 
-        ro.observe(selected__container.value, {})
+        ro.observe(selected__container.value!, {})
       })
     }
 )
@@ -196,7 +198,7 @@ watch(
         <div
             class="select__active-select-remove-button"
             v-if="selectedId !== null"
-            @click.stop="onClickCancel()"
+            @click.stop="onClickCancel"
         >
           <svg>
             <use xlink:href="/img/temp_sprite.svg#min_cross"/>
