@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, watch, nextTick, type PropType } from 'vue'
+import { onMounted, onUnmounted, watch, nextTick, type Ref } from 'vue'
 
 interface IOption {
   id: number,
@@ -12,28 +12,14 @@ interface IComponentData {
   inverse?: boolean
 }
 
-const props = defineProps({
-  label: {
-    required: true,
-    type: String,
-  },
-  name: {
-    required: true,
-    type: String,
-  },
-  modelValue: {
-    required: false,
-    type: [Number, String, Array]
-  },
-  errors: {
-    type: Array,
-    required: false,
-    default: []
-  },
-  componentData: {
-    type: Object as PropType<IComponentData>,
-    required: true
-  }
+const props = withDefaults(defineProps<{
+  label: string,
+  name: string,
+  componentData: IComponentData,
+  modelValue?: number|number[]|string|string[],
+  errors?: string[]
+}>(), {
+  errors: () => []
 })
 
 const select__dropdown = useTemplateRef<HTMLElement>('select__dropdown')
@@ -41,8 +27,8 @@ const selected__container = useTemplateRef<HTMLElement>('selected__container')
 
 const isSelecting = ref(false)
 const inverseRender = ref(false)
-const selectedItems = ref({})
-const selectedId = ref(null)
+const selectedItems: Ref<{[key: string]: IOption}> = ref({})
+const selectedId: Ref<string|number|null> = ref(null)
 const topPxStyle = ref('0')
 const selectedItemOrItems = ref(props.modelValue !== undefined ? props.modelValue : null)
 
@@ -80,9 +66,9 @@ const onDocumentVisibilityChange = () =>  {
     isSelecting.value = false
   }
 }
-const onClickCancel = (index: number) => {
+const onClickCancel = (index?: number|string) => {
   if (props.componentData.isMultiple) {
-    delete selectedItems.value[index]
+    delete selectedItems.value[index!]
 
     emit('update:modelValue', Object.values(selectedItems).map(item => item.id).filter(id => id !== undefined))
 
@@ -198,7 +184,7 @@ watch(
         <div
             class="select__active-select-remove-button"
             v-if="selectedId !== null"
-            @click.stop="onClickCancel"
+            @click.stop="onClickCancel()"
         >
           <svg>
             <use xlink:href="/img/temp_sprite.svg#min_cross"/>
