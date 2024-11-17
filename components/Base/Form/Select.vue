@@ -2,7 +2,7 @@
 import { onMounted, onUnmounted, watch, nextTick, type Ref } from 'vue'
 
 interface IOption {
-  id: number,
+  id: number|string,
   title: string
 }
 
@@ -31,6 +31,12 @@ const selectedItems: Ref<{[key: string]: IOption}> = ref({})
 const selectedId: Ref<string|number|null> = ref(null)
 const topPxStyle = ref('0')
 const selectedItemOrItems: Ref<IOption|IOption[]|undefined> = ref()
+
+if (props.componentData.isMultiple) {
+  // TODO:
+} else {
+  selectedItemOrItems.value = props.componentData.options.find(option => option.id === props.modelValue)
+}
 
 const emit = defineEmits(['update:modelValue'])
 
