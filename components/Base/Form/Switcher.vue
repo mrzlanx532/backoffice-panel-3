@@ -3,29 +3,21 @@ const checked = ref(false)
 
 const emit = defineEmits(['update:modelValue'])
 
-const props = defineProps({
-  label: {
-    required: true,
-    type: String,
-  },
-  name: {
-    required: true,
-    type: String,
-  },
-  modelValue: {
-    required: false,
-    type: [Number, String, Array, Boolean]
-  },
-  errors: {
-    type: Array,
-    required: false,
-    default: []
-  },
-  componentData: {
-    type: Object,
-    required: false
-  }
+interface IComponentData {}
+
+const props = withDefaults(defineProps<{
+  label: string,
+  name: string,
+  modelValue?: number|boolean,
+  errors?: string[],
+  componentData?: IComponentData
+}>(), {
+  errors: () => [],
 })
+
+if (props.modelValue) {
+  checked.value = props.modelValue as boolean
+}
 
 watch(
     () => props.modelValue,
