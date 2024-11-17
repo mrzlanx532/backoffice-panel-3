@@ -16,7 +16,7 @@ const props = withDefaults(defineProps<{
   label: string,
   name: string,
   componentData: IComponentData,
-  modelValue?: number|number[]|string|string[],
+  modelValue?: number|number[]|string|string[]|null,
   errors?: string[]
 }>(), {
   errors: () => []
@@ -30,7 +30,7 @@ const inverseRender = ref(false)
 const selectedItems: Ref<{[key: string]: IOption}> = ref({})
 const selectedId: Ref<string|number|null> = ref(null)
 const topPxStyle = ref('0')
-const selectedItemOrItems = ref(props.modelValue !== undefined ? props.modelValue : null)
+const selectedItemOrItems: Ref<IOption|IOption[]|undefined> = ref()
 
 const emit = defineEmits(['update:modelValue'])
 
@@ -39,15 +39,13 @@ watch(
     (value) => {
       if (props.componentData.isMultiple) {
         props.componentData.options.forEach(option => {
-          if (option.id === value) {
-            selectedItemOrItems.value = option
-          }
+          // TODO:
         })
         return
       }
 
       if (props.modelValue === null) {
-        selectedItemOrItems.value = null
+        selectedItemOrItems.value = undefined
         selectedId.value = null
       }
 
