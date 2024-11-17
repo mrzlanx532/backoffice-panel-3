@@ -32,34 +32,47 @@ const selectedId: Ref<string|number|null> = ref(null)
 const topPxStyle = ref('0')
 const selectedItemOrItems: Ref<IOption|IOption[]|undefined> = ref()
 
-if (props.componentData.isMultiple) {
-  // TODO:
-} else {
-  selectedItemOrItems.value = props.componentData.options.find(option => option.id === props.modelValue)
+const setLocalValues = (value: number|number[]|string|string[]|null|undefined) => {
+  if (value === undefined) {
+    return
+  }
+
+  if (props.componentData.isMultiple) {
+
+    if (Array.isArray(value)) {
+
+      const preparedItems: IOption[] = []
+      const preparedSelectedItems: {[key: string]: IOption} = {}
+
+      props.componentData.options.forEach((option: IOption) => {
+        // @ts-ignore
+        value.forEach((id: number|string) => {
+          if (option.id === id) {
+            preparedItems.push(option)
+            // @ts-ignore
+            preparedSelectedItems[id] = option
+          }
+        })
+      })
+
+      // @ts-ignore
+      selectedItems.value = preparedSelectedItems
+      selectedItemOrItems.value = preparedItems
+    }
+
+  } else {
+    selectedItemOrItems.value = props.componentData.options.find(option => option.id === value)
+  }
 }
+
+setLocalValues(props.modelValue)
 
 const emit = defineEmits(['update:modelValue'])
 
 watch(
     () => props.modelValue,
     (value) => {
-      if (props.componentData.isMultiple) {
-        props.componentData.options.forEach(option => {
-          // TODO:
-        })
-        return
-      }
-
-      if (props.modelValue === null) {
-        selectedItemOrItems.value = undefined
-        selectedId.value = null
-      }
-
-      props.componentData.options.forEach(option => {
-        if (option.id === value) {
-          selectedItemOrItems.value = option
-        }
-      })
+      setLocalValues(value)
     }
 )
 

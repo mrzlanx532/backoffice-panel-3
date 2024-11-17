@@ -191,7 +191,8 @@ const {
   formDataValues,
   errors,
 
-  getFormComponent
+  getFormComponent,
+  findFormDataItemByName
 } = initFormWithTabs(
     'users/create',
     'users/update',
@@ -239,10 +240,17 @@ onMounted(() => {
         }
       },
     }
+  }, {
+    subscription_labels: {
+      fn: (labels) => {
+        return labels.map((label: any) => label.id)
+      }
+    }
   })
 
   if (['MUSIC_AND_SOUNDS', 'ONLY_MUSIC'].includes(formDataValues.subscription_type_id)) {
     formDataValues.remove = true
+    findFormDataItemByName('subscription_labels')!.hide = false
   }
 })
 </script>
