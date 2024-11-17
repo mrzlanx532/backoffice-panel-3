@@ -1,35 +1,30 @@
 <script setup lang="ts">
-  const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue'])
 
-  const props = defineProps({
-    modelValue: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    label: {
-      type: String,
-      required: true
-    },
-    errors: {
-      type: Array,
-      required: false,
-      default: []
-    },
-  })
+interface IComponentData {}
 
-  const localValue: Ref<boolean> = ref(props.modelValue)
+const props = withDefaults(defineProps<{
+  label: string,
+  modelValue?: boolean|number,
+  errors?: string[],
+  componentData?: IComponentData
+}>(), {
+  errors: () => [],
+  componentData: () => ({})
+})
 
-  watch(
-      () => props.modelValue,
-      (value) => {
-        localValue.value = value as boolean
-      }
-  )
+const localValue: Ref<boolean|number|undefined> = ref(props.modelValue)
 
-  const onClick = () => {
-    emit('update:modelValue', localValue.value === undefined || localValue.value === false)
-  }
+watch(
+    () => props.modelValue,
+    (value) => {
+      localValue.value = value as boolean
+    }
+)
+
+const onClick = () => {
+  emit('update:modelValue', localValue.value === undefined || localValue.value === false)
+}
 </script>
 
 <template>
