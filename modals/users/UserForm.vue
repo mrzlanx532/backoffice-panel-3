@@ -47,13 +47,15 @@ const InfoTab = {
     input({
       name: 'password',
       label: 'Пароль',
+      hide: !!props.data.id,
       componentData: {
-        type: 'password'
+        type: 'password',
       }
     }),
     input({
       name: 'password_confirmation',
       label: 'Подтверждение пароля',
+      hide: !!props.data.id,
       componentData: {
         type: 'password'
       }
@@ -237,6 +239,10 @@ onMounted(() => {
       },
     }
   })
+
+  if (['MUSIC_AND_SOUNDS', 'ONLY_MUSIC'].includes(formDataValues.subscription_type_id)) {
+    formDataValues.remove = true
+  }
 })
 </script>
 

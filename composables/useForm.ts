@@ -95,7 +95,7 @@ export interface defaultProps {
             [key: string]: any,
         },
         title: string,
-        id: number
+        id?: number
     }
 }
 
