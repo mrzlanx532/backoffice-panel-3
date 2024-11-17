@@ -166,7 +166,7 @@ const SubscriptionTab = {
       onUpdate(value, findFormDataItemByName) {
         const item = findFormDataItemByName('subscription_till_for_exclusive_tracks')
 
-        item!.componentData.value.disabled = value
+        item!.componentData.value.disabled = !value
       }
     }),
     select({
