@@ -30,6 +30,7 @@
     "@types/lodash-es": "^4.17.12",
     "@types/lodash.debounce": "^4.0.9",
     "@types/lodash.isempty": "^4.4.9",
+    "@types/mime-db": "^1.43.5",
     "lodash-es": "^4.17.21",
     "sass": "^1.75.0",
     "typescript": "^5.4.5",

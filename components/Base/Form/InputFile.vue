@@ -33,16 +33,35 @@ const props = defineProps({
   },
 })
 
+const imageEl: Ref<HTMLImageElement|null> = ref(null)
+
+const tryToLoadImage = (link: string) => {
+  const img = new Image()
+  img.onerror = () => {
+    isUnrecognisedFile.value = true
+  }
+  img.onload = () => {
+    imageEl.value!.src = link
+  }
+  img.src = link
+}
+
+const setLocalValues = (value: any) => {
+  if (value === null || value instanceof File) {
+    return
+  }
+
+  tryToLoadImage(value.original)
+}
+
 watch(
     () => props.modelValue,
     (value) => {
-      if (value === null || value instanceof File) {
-        return
-      }
-
-      tryToLoadImage(value.original)
+      setLocalValues(value)
     }
 )
+
+setLocalValues(props.modelValue)
 
 const { $notification } = useNuxtApp()
 
@@ -50,7 +69,6 @@ const emit = defineEmits(['update:modelValue'])
 
 const files = ref([])
 
-const imageEl: Ref<HTMLElement|null> = ref(null)
 const isUnrecognisedFile: Ref<boolean|null> = ref(false)
 
 const handleUploadedFiles = (uploadFiles: FileList) => {
@@ -87,23 +105,12 @@ const handleUploadedFiles = (uploadFiles: FileList) => {
   })
 }
 
-const tryToLoadImage = (link: string) => {
-  const img = new Image()
-  img.onerror = () => {
-    isUnrecognisedFile.value = true
-  }
-  img.onload = () => {
-    imageEl.value.src = link
-  }
-  img.src = link
-}
-
 const onChange = (e: Event) => {
-  handleUploadedFiles(e.target.files)
+  handleUploadedFiles((e.target as HTMLInputElement).files!)
 }
 
-const onDrop = (e: Event) => {
-  handleUploadedFiles(e.dataTransfer.files)
+const onDrop = (e: DragEvent) => {
+  handleUploadedFiles(e.dataTransfer!.files)
 }
 
 const onRemove = () => {
