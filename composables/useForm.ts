@@ -67,7 +67,8 @@ interface IInput extends IFormComponent {
 
 interface IDatetime extends IFormComponent {
     componentData?: {
-        format?: 'X' | 'DD.MM.yyyy HH:mm'
+        format?: 'X' | 'DD.MM.yyyy HH:mm',
+        disabled?: boolean,
     }
 }
 
@@ -576,6 +577,7 @@ export const useForm = () => {
     const datetime = (config: IDatetime): TFormDataItemOutput => {
 
         const defaultComponentData = {
+            disabled: false,
             format: 'X'
         }
 

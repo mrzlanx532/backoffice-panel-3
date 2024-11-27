@@ -33,6 +33,11 @@ const props = defineProps({
     type: String,
     required: false,
     default: 'X'
+  },
+  disabled: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 })
 
@@ -97,36 +102,7 @@ const monthDays = ref([
 watch(
     () => props.modelValue,
     ((value) => {
-
-      if (value === null) {
-        localDateMoment = null
-        localDate.value = null
-
-        localDateUnconfirmedMoment = localDateMoment
-        localDateUnconfirmed.value = null
-
-        localHours.value = 0
-        localMinutes.value = 0
-
-        buildCalendar()
-
-        return
-      }
-
-      localDateMoment = moment(value as moment.MomentInput, props.format)
-      localDate.value = localDateMoment.format('DD.MM.YYYY HH:mm')
-
-      localDateUnconfirmedMoment = localDateMoment.clone()
-      localDateUnconfirmed.value = localDate.value
-
-      localHours.value = Number(localDateMoment.format('H'))
-      localMinutes.value = Number(localDateMoment.format('m'))
-
-      calendarNavMoment = localDateMoment.clone()
-      calendarNavMonth.value = localDateMoment.format('MMMM')
-      calendarNavYear.value = localDateMoment.format('YYYY')
-
-      buildCalendar()
+      setLocalValues(value)
     })
 )
 
@@ -481,6 +457,40 @@ const onClickMinute = (value: number) => {
   minutesIsOpen.value = false
   timeIsOpen.value = true
 }
+
+const setLocalValues = (value: string|number|undefined) => {
+  if (value === null) {
+    localDateMoment = null
+    localDate.value = null
+
+    localDateUnconfirmedMoment = localDateMoment
+    localDateUnconfirmed.value = null
+
+    localHours.value = 0
+    localMinutes.value = 0
+
+    buildCalendar()
+
+    return
+  }
+
+  localDateMoment = moment(value as moment.MomentInput, props.format)
+  localDate.value = localDateMoment.format('DD.MM.YYYY HH:mm')
+
+  localDateUnconfirmedMoment = localDateMoment.clone()
+  localDateUnconfirmed.value = localDate.value
+
+  localHours.value = Number(localDateMoment.format('H'))
+  localMinutes.value = Number(localDateMoment.format('m'))
+
+  calendarNavMoment = localDateMoment.clone()
+  calendarNavMonth.value = localDateMoment.format('MMMM')
+  calendarNavYear.value = localDateMoment.format('YYYY')
+
+  buildCalendar()
+}
+
+setLocalValues(props.modelValue)
 </script>
 
 <template>

@@ -19,6 +19,7 @@ const {
   checkbox,
   textArea,
   date,
+  datetime,
   switcher,
   fillComponents
 } = useForm()
@@ -153,7 +154,7 @@ const SubscriptionTab = {
         format: 'DD.MM.yyyy'
       }
     }),
-    date({
+    datetime({
       section: 'Подписка на эксклюзивные треки',
       name: 'subscription_till_for_exclusive_tracks',
       label: 'Дата истечения',
@@ -161,7 +162,7 @@ const SubscriptionTab = {
       isComponentDataReactive: true,
       componentData: {
         disabled: false,
-        format: 'DD.MM.yyyy'
+        format: 'DD.MM.yyyy HH:mm'
       },
     }),
     switcher({
