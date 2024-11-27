@@ -3,34 +3,26 @@ import { nextTick, type Ref } from 'vue'
 import { useNuxtApp } from '#imports'
 import mimeTypeMapper from 'mime-db'
 
-const props = defineProps({
-  label: {
-    required: true,
-    type: String,
+interface IComponentData {
+  maxSizeMB: number|null,
+  allowedTypes: string[]
+}
+
+const props = withDefaults(defineProps<{
+  label: string,
+  name: string,
+  modelValue?: {
+    original: string
   },
-  name: {
-    required: true,
-    type: String,
-  },
-  modelValue: {
-    required: false,
-    type: [Object, String]
-  },
-  errors: {
-    type: Array,
-    required: false,
-    default: []
-  },
-  componentData: {
-    type: Object,
-    required: false,
-    default() {
-      return {
-        maxSizeMB: null,
-        allowedTypes: []
-      }
+  errors?: string[],
+  componentData?: IComponentData
+}>(), {
+  componentData: () => {
+    return {
+      maxSizeMB: null,
+      allowedTypes: ['jpeg', 'png', 'jpg'],
     }
-  },
+  }
 })
 
 const imageEl: Ref<HTMLImageElement|null> = ref(null)
@@ -67,7 +59,7 @@ const { $notification } = useNuxtApp()
 
 const emit = defineEmits(['update:modelValue'])
 
-const files = ref([])
+const files: Ref<File[]> = ref([])
 
 const isUnrecognisedFile: Ref<boolean|null> = ref(false)
 
@@ -77,16 +69,16 @@ const handleUploadedFiles = (uploadFiles: FileList) => {
   Array.from(uploadFiles).map((file) => {
 
     const fileExtension = mimeTypeMapper[file.type]['extensions'] ?
-        mimeTypeMapper[file.type]['extensions'][0] :
+        mimeTypeMapper[file.type]['extensions']![0] :
         file.name.split('.').pop()
 
-    if (!props.componentData.allowedTypes.includes(fileExtension)) {
+    if (!props.componentData.allowedTypes.includes(fileExtension!)) {
       $notification.push({type: 'danger', message: `Файл имеет неверный формат`})
 
       return
     }
 
-    if (props.componentData.maxSizeMB < (file.size / (1024 ** 2))) {
+    if (props.componentData.maxSizeMB !== null && props.componentData.maxSizeMB < (file.size / (1024 ** 2))) {
       $notification.push({type: 'danger', message: `Размер файла превышает ${props.componentData.maxSizeMB?.toString()}MB`, autoRemoving: false})
 
       return
