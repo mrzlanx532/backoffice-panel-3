@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 
 import type { defaultProps } from '~/composables/useForm'
+import moment from 'moment'
 
 const props = defineProps<defaultProps>()
 
@@ -148,6 +149,9 @@ const SubscriptionTab = {
     date({
       name: 'subscription_till',
       label: 'Дата истечения',
+      componentData: {
+        format: 'DD.MM.yyyy'
+      }
     }),
     date({
       section: 'Подписка на эксклюзивные треки',
@@ -156,7 +160,8 @@ const SubscriptionTab = {
       class: '--full',
       isComponentDataReactive: true,
       componentData: {
-        disabled: false
+        disabled: false,
+        format: 'DD.MM.yyyy'
       },
     }),
     switcher({
@@ -240,6 +245,16 @@ onMounted(() => {
     subscription_labels: {
       fn: (labels) => {
         return labels.map((label: any) => label.id)
+      }
+    },
+    subscription_till: {
+      fn: (subscriptionTill) => {
+        return moment(subscriptionTill, 'X').format('DD.MM.yyyy')
+      }
+    },
+    subscription_till_for_exclusive_tracks: {
+      fn: (subscriptionTillForExclusiveTracks) => {
+        return moment(subscriptionTillForExclusiveTracks, 'X').format('DD.MM.yyyy')
       }
     }
   })
