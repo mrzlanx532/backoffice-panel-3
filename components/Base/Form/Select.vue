@@ -85,10 +85,7 @@ const onDocumentVisibilityChange = () =>  {
 }
 const onClickCancel = (index?: number|string) => {
   if (props.componentData.isMultiple) {
-    delete selectedItems.value[index!]
-
-    emit('update:modelValue', Object.values(selectedItems).map(item => item.id).filter(id => id !== undefined))
-
+    emit('update:modelValue', Object.values(selectedItems.value).map(item => item.id).filter(id => id != index))
     return
   }
 
