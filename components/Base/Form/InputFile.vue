@@ -39,7 +39,7 @@ const tryToLoadImage = (link: string) => {
 }
 
 const setLocalValues = (value: any) => {
-  if (value === null || value instanceof File) {
+  if (value === null || value === undefined || value instanceof File) {
     return
   }
 
