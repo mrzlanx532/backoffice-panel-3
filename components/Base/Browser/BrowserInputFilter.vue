@@ -110,6 +110,7 @@ const emitDoubleValue = () => {
             От
           </div>
           <input
+              spellcheck="false"
               v-model="doubleValueFirst"
               class="input input_range"
               type="text"
@@ -132,6 +133,7 @@ const emitDoubleValue = () => {
             До
           </div>
           <input
+              spellcheck="false"
               v-model="doubleValueSecond"
               class="input"
               type="text"
@@ -152,6 +154,7 @@ const emitDoubleValue = () => {
       </div>
       <div class="input__container" v-else>
         <input
+            spellcheck="false"
             v-model="singleValue"
             class="input"
             type="text"

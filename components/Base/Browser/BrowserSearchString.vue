@@ -21,6 +21,7 @@ const onSearch = () => {
 <template>
   <div class="browser__search-string-container">
     <input
+        spellcheck="false"
         name="search_string"
         type="text"
         class="browser__search-string"

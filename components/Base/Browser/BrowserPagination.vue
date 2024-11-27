@@ -120,6 +120,7 @@ const onKeyUp = (e: KeyboardEvent) => {
     </div>
     <div>
       <input
+          spellcheck="false"
           ref="paginatorInputEl"
           :value="value"
           @keyup="onKeyUp"

@@ -5,6 +5,7 @@ const createInput = (ctx) => {
     const inputAttrs = {
         class: 'input',
         name: ctx.name,
+        spellcheck: 'false',
         type: ctx.componentData?.type || 'text',
         autocomplete: 'off',
         value: ctx.modelValue,

@@ -62,7 +62,7 @@ const onInput = () => {
 <template>
   <div>
     <label class="label">{{ props.label }}</label>
-    <textarea class="textarea" @input="onInput" ref="textareaEl" v-model="internalValue"/>
+    <textarea spellcheck="false" class="textarea" @input="onInput" ref="textareaEl" v-model="internalValue"/>
     <div class="input__error">{{ props.errors && props.errors[0] ? props.errors[0] : null }}</div>
   </div>
 </template>

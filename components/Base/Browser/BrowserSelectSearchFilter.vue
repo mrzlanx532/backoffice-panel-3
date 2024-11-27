@@ -211,6 +211,7 @@ onUnmounted(() => {
           :style="{top: topPxStyleInput}"
       >
         <input
+            spellcheck="false"
             autocomplete="off"
             name="search"
             v-show="isSelecting"
