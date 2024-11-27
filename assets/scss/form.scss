@@ -133,6 +133,34 @@
 
   .select {
 
+    &__search-input-container {
+      position: relative;
+      z-index: 3;
+    }
+
+    &__search-input {
+      position: absolute;
+      padding: 8px;
+      font-size: 12px;
+      outline: none;
+      height: 30px;
+      border: 1px solid var(--color-2, #dbdbdb);
+      visibility: hidden;
+      width: 100%;
+      border-bottom: 1px solid var(--color-gradient-2, orange);
+      font-family: Roboto;
+      border-top: none;
+
+      &.--inverse {
+        border-top: 1px solid var(--color-gradient-2, orange);
+        border-bottom: 1px solid var(--color-2, #dbdbdb);;
+      }
+
+      &_open {
+        visibility: inherit;
+      }
+    }
+
     &__container {
       outline: none;
       margin-top: 14px;
@@ -287,7 +315,6 @@
       border-bottom-left-radius: 5px;
 
       &.--inverse {
-        border: 1px solid var(--color-gradient-2, orange);
         border-bottom: none;
         border-radius: 5px 5px 0 0;
       }

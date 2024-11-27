@@ -10,6 +10,7 @@ interface IComponentData {
   options: IOption[]
   isMultiple: boolean,
   inverse?: boolean
+  isFilterable?: boolean,
 }
 
 const props = withDefaults(defineProps<{
@@ -26,11 +27,15 @@ const select__dropdown = useTemplateRef<HTMLElement>('select__dropdown')
 const selected__container = useTemplateRef<HTMLElement>('selected__container')
 
 const isSelecting = ref(false)
+const searchString = ref('')
+const filteredOptions: Ref<IOption[]> = ref(props.componentData?.isFilterable ? props.componentData.options : [])
 const inverseRender = ref(false)
 const selectedItems: Ref<{[key: string]: IOption}> = ref({})
 const selectedId: Ref<string|number|null> = ref(null)
-const topPxStyle = ref('0')
+const topPxStyle = ref(props.componentData?.isFilterable ? '30px' : '0')
+const topPxStyleInput = ref('0')
 const selectedItemOrItems: Ref<IOption|IOption[]|undefined> = ref()
+const resizeObserverIsSet = false
 
 const setLocalValues = (value: number|number[]|string|string[]|null|undefined) => {
   if (value === undefined) {
@@ -129,6 +134,31 @@ const getInverseValue = (rect: DOMRect) => {
 }
 
 watch(
+    searchString,
+    (newValue) => {
+      filteredOptions.value = props.componentData.options
+      filteredOptions.value = filteredOptions.value.filter((option) => {
+        return option.title.toLowerCase().includes(newValue.toLowerCase())
+      })
+    }
+)
+
+const resizeObserverCallback = () => {
+  const rect = select__dropdown.value!.getBoundingClientRect()
+
+  inverseRender.value = getInverseValue(rect)
+
+  if (inverseRender.value === false) {
+    topPxStyle.value = props.componentData.isFilterable ? '30px' : '0'
+    topPxStyleInput.value = '0'
+    return
+  }
+
+  topPxStyle.value = ((rect.height + selected__container.value!.offsetHeight + (props.componentData.isFilterable ? 27 : 0)) * -1) + 'px'
+  topPxStyleInput.value = props.componentData.isFilterable ? '-60px' : '0'
+}
+
+watch(
     () => isSelecting.value,
     () => {
 
@@ -139,20 +169,11 @@ watch(
           return
         }
 
-        const rect = select__dropdown.value.getBoundingClientRect()
+        if (!resizeObserverIsSet) {
+          const ro = new ResizeObserver(resizeObserverCallback)
 
-        inverseRender.value = getInverseValue(rect)
-
-        const ro = new ResizeObserver(() => {
-          if (inverseRender.value === false) {
-            topPxStyle.value = '0'
-            return
-          }
-
-          topPxStyle.value = ((rect.height + selected__container.value!.offsetHeight) * -1) + 'px'
-        })
-
-        ro.observe(selected__container.value!, {})
+          ro.observe(selected__container.value!)
+        }
       })
     }
 )
@@ -211,6 +232,24 @@ watch(
         ></div>
       </div>
       <div
+          v-if="props.componentData.isFilterable"
+          class="select__search-input-container"
+          :style="{top: topPxStyleInput}"
+      >
+        <input
+            placeholder="Поиск.."
+            spellcheck="false"
+            autocomplete="off"
+            name="search"
+            v-show="isSelecting"
+            ref="inputEl"
+            type="text"
+            class="select__search-input select__search-input_open"
+            :class="{'--inverse': inverseRender}"
+            v-model="searchString"
+        >
+      </div>
+      <div
           v-if="isSelecting"
           class="select__dropdown-container"
           :style="{top: topPxStyle}"
@@ -221,7 +260,15 @@ watch(
             :class="{'--inverse': inverseRender}"
             v-scrollable="{classes: ['--without-track', '--smart-opacity']}"
         >
-          <template v-if="componentData.options.length > 0">
+          <template v-if="props.componentData.isFilterable && filteredOptions.length > 0">
+            <div
+                v-for="(option, index) in filteredOptions"
+                class="select__dropdown-option"
+                :class="{'select__dropdown-option_selected': selectedItems[option.id]}"
+                @mouseup="onMouseDownOnDropdownOption(option, index)"
+            >{{ option.title }}</div>
+          </template>
+          <template v-else-if="!(props.componentData.isFilterable) && componentData.options.length > 0">
             <div
                 v-for="(option, index) in componentData.options"
                 :key="option.id"
