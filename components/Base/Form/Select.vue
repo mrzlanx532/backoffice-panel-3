@@ -144,7 +144,12 @@ watch(
 )
 
 const resizeObserverCallback = () => {
-  const rect = select__dropdown.value!.getBoundingClientRect()
+
+  if (!select__dropdown.value) {
+    return
+  }
+
+  const rect = select__dropdown.value.getBoundingClientRect()
 
   inverseRender.value = getInverseValue(rect)
 
