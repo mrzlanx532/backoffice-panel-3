@@ -225,10 +225,6 @@
       border: 1px solid var(--color-2, #dbdbdb);
       outline: none;
 
-      &:focus {
-        border: 1px solid var(--color-gradient-2, orange);
-      }
-
       &.--has-errors {
         border: 1px solid #ff5252;
       }
@@ -241,11 +237,6 @@
       &.--open {
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
-        border: 1px solid var(--color-gradient-2, orange);
-
-        &:focus-within {
-          border: 1px solid var(--color-gradient-2, orange);
-        }
       }
 
       &.--open.--inverse {
@@ -284,12 +275,13 @@
     }
 
     &__dropdown {
+      box-shadow: rgba(99, 99, 99, 0.2) 0 2px 8px 0;
       position: absolute;
       width: inherit;
       z-index: 99;
       background: var(--color-1, #ffffff);
       max-height: 150px;
-      border: 1px solid var(--color-gradient-2, orange);
+      border: 1px solid var(--color-2);
       border-top: none;
       border-bottom-right-radius: 5px;
       border-bottom-left-radius: 5px;
