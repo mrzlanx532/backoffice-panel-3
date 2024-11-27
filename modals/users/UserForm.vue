@@ -154,15 +154,14 @@ const SubscriptionTab = {
         format: 'DD.MM.yyyy'
       }
     }),
-    datetime({
+    date({
       section: 'Подписка на эксклюзивные треки',
       name: 'subscription_till_for_exclusive_tracks',
       label: 'Дата истечения',
       class: '--full',
       isComponentDataReactive: true,
       componentData: {
-        disabled: false,
-        format: 'DD.MM.yyyy HH:mm'
+        format: 'DD.MM.yyyy'
       },
     }),
     switcher({

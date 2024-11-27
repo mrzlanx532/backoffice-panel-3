@@ -567,11 +567,10 @@
       margin-top: 12px;
 
       &.--disabled {
-        background: var(--color-3);
 
         input {
-          background: var(--color-3);
           cursor: not-allowed;
+          background: #efefef4d;
         }
 
         .date__input-icon {
@@ -612,6 +611,7 @@
 
       &.--disabled {
         cursor: not-allowed;
+        background: #efefef4d;
 
         svg:hover {
           color: var(--color-6, #959595);

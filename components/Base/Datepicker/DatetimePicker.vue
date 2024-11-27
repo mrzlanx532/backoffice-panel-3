@@ -130,6 +130,10 @@ watch(
 )
 
 const onClick = () => {
+  if (props.disabled) {
+    return
+  }
+
   buildCalendar()
 
   isOpen.value = true
@@ -340,6 +344,10 @@ const onDocumentVisibilityChange = () => {
 }
 
 const onClickRemove = () => {
+  if (props.disabled) {
+    return
+  }
+
   emit('update:modelValue', {'value': null, 'rangeIndex': props.rangeIndex})
 }
 
@@ -459,7 +467,7 @@ const onClickMinute = (value: number) => {
 }
 
 const setLocalValues = (value: string|number|undefined) => {
-  if (value === null) {
+  if (value === null || value === undefined) {
     localDateMoment = null
     localDate.value = null
 
@@ -494,7 +502,7 @@ setLocalValues(props.modelValue)
 </script>
 
 <template>
-  <div class="date__input-container" v-click-outside="onClickOutside" :class="{'--is-open': isOpen, '--inverse': isNeedToInverse}">
+  <div class="date__input-container" v-click-outside="onClickOutside" :class="{'--is-open': isOpen, '--inverse': isNeedToInverse, '--disabled': props.disabled}">
     <div class="date__multiple-label" v-if="rangeIndex !== undefined">{{ rangeIndex === 0 ? 'от' : 'до' }}</div>
     <input
         @keydown.enter="onKeydownEnter"
@@ -502,8 +510,9 @@ setLocalValues(props.modelValue)
         :value="localDate"
         @click="onClick"
         ref="input"
+        :disabled="props.disabled"
     />
-    <div class="date__input-remove-icon" @click="onClickRemove" v-if="localDate !== null">
+    <div class="date__input-remove-icon" @click="onClickRemove" v-if="localDate !== null" :class="{'--disabled': props.disabled}">
       <svg>
         <use xlink:href="/img/temp_sprite.svg#min_cross"/>
       </svg>
