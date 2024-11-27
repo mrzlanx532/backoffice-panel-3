@@ -5,7 +5,7 @@ const emit = defineEmits(['update:modelValue'])
 
 const textareaEl: Ref<HTMLElement|null> = ref(null)
 
-const internalValue = ref('')
+const internalValue = ref()
 
 const props = defineProps({
   label: {
@@ -31,20 +31,26 @@ const props = defineProps({
   }
 })
 
+const setLocalValues = (value: any) => {
+  internalValue.value = value
+
+  nextTick(() => {
+    triggerAutosize()
+  })
+}
+
 watch(
     () => props.modelValue,
     (value) => {
-      internalValue.value = value
-
-      nextTick(() => {
-        triggerAutosize()
-      })
+      setLocalValues(value)
     }
 )
 
+setLocalValues(props.modelValue)
+
 const triggerAutosize = () => {
-  textareaEl.value.style.height = "50px";
-  textareaEl.value.style.height = textareaEl.value.scrollHeight + 2 + "px";
+  textareaEl.value!.style.height = "50px";
+  textareaEl.value!.style.height = textareaEl.value!.scrollHeight + 2 + "px";
 }
 
 const onInput = () => {
