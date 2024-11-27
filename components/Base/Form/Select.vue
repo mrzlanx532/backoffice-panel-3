@@ -62,6 +62,7 @@ const setLocalValues = (value: number|number[]|string|string[]|null|undefined) =
 
   } else {
     selectedItemOrItems.value = props.componentData.options.find(option => option.id === value)
+    selectedId.value = selectedItemOrItems.value ? selectedItemOrItems.value.id : null
   }
 }
 
