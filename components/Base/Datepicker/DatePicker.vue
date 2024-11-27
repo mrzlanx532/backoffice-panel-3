@@ -261,6 +261,10 @@ const onDocumentVisibilityChange = () => {
 }
 
 const onClickRemove = () => {
+  if (props.disabled) {
+    return
+  }
+
   emit('update:modelValue', {'value': null, 'rangeIndex': props.rangeIndex})
 }
 
@@ -337,7 +341,12 @@ setLocalValues(props.modelValue)
         :disabled="props.disabled"
         ref="input"
     />
-    <div class="date__input-remove-icon" @click="onClickRemove" v-if="localDate !== null">
+    <div
+        v-if="localDate !== null"
+        class="date__input-remove-icon"
+        :class="{'--disabled': props.disabled}"
+        @click="onClickRemove"
+    >
       <svg>
         <use xlink:href="/img/temp_sprite.svg#min_cross"/>
       </svg>

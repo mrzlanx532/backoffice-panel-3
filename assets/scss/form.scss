@@ -610,6 +610,14 @@
       padding: 9px 7px;
       cursor: pointer;
 
+      &.--disabled {
+        cursor: not-allowed;
+
+        svg:hover {
+          color: var(--color-6, #959595);
+        }
+      }
+
       svg {
         width: 12px;
         height: 12px;
