@@ -252,6 +252,7 @@
       background: var(--color-1, #ffffff);
       border: 1px solid var(--color-2, #dbdbdb);
       outline: none;
+      cursor: pointer;
 
       &.--has-errors {
         border: 1px solid #ff5252;
