@@ -39,9 +39,6 @@ const selectedItemOrItems: Ref<IOption|IOption[]|undefined> = ref()
 const resizeObserverIsSet = false
 
 const setLocalValues = (value: number|number[]|string|string[]|null|undefined) => {
-  if (value === undefined) {
-    return
-  }
 
   if (props.componentData.isMultiple) {
 
@@ -104,6 +101,11 @@ const onMouseDownOnDropdownOption = (option: IOption, index: number) => {
     selectedItems.value[option.id] ? delete selectedItems.value[option.id] : selectedItems.value[option.id] = option
 
     emit('update:modelValue', Object.values(selectedItems.value).map(item => item.id).filter(id => id !== undefined))
+    return
+  }
+
+  if (selectedId.value === option.id) {
+    isSelecting.value = false
     return
   }
 

@@ -4,7 +4,8 @@ import type { defaultProps } from '~/composables/useForm'
 import { useNuxtApp } from '#imports'
 
 interface IFormResponse {
-  ucs_sub_categories?: any[]
+  ucs_sub_categories?: any[],
+  libraries?: any[]
 }
 
 const {
@@ -32,6 +33,27 @@ const MainTab = {
     select({
       name: 'author_id',
       label: 'Автор',
+      onUpdate: async (value, findFormDataItemByName) => {
+
+        formDataValues.library_id = undefined
+
+        const libraryFormItem = findFormDataItemByName('library_id')
+
+        libraryFormItem.componentData.options = []
+
+        const response = await $authFetch<IFormResponse>('sound/tracks/form', {
+          params: {
+            author_id: value,
+          }
+        })
+
+        libraryFormItem.componentData.options = response.libraries!.map(library => {
+          return {
+            id: library.id,
+            title: library.name_ru
+          }
+        })
+      },
     }),
     select({
       name: 'library_id',
