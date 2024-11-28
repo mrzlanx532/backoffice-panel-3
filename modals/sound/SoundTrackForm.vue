@@ -5,7 +5,9 @@ import { useNuxtApp } from '#imports'
 
 interface IFormResponse {
   ucs_sub_categories?: any[],
-  libraries?: any[]
+  libraries?: any[],
+  location_countries?: any[],
+  location_cities?: any[]
 }
 
 const {
@@ -84,7 +86,7 @@ const AttributesTab = {
 
         const ucsSubFormItem = findFormDataItemByName('ucs_sub_id')
 
-        formDataValues.ucs_sub_id = null
+        formDataValues.ucs_sub_id = undefined
 
         if (!value) {
           ucsSubFormItem.componentData.options = []
@@ -112,10 +114,47 @@ const AttributesTab = {
     select({
       name: 'location_continent_id',
       label: 'Location (continent)',
+      onUpdate: async (value, findFormDataItemByName) => {
+        const locationCountryFormItem = findFormDataItemByName('location_country_id')
+
+        formDataValues.location_country_id = undefined
+        formDataValues.location_city_id = undefined
+
+        const response = await $authFetch<IFormResponse>('sound/tracks/form', {
+          params: {
+            location_continent_id: value
+          }
+        })
+
+        locationCountryFormItem.componentData.options = response.location_countries!.map(locationCountry => {
+          return {
+            id: locationCountry.id,
+            title: locationCountry.name_ru,
+          }
+        })
+      },
     }),
     select({
       name: 'location_country_id',
       label: 'Location (country)',
+      onUpdate: async (value, findFormDataItemByName) => {
+        const locationCityFormItem = findFormDataItemByName('location_city_id')
+
+        formDataValues.location_city_id = undefined
+
+        const response = await $authFetch<IFormResponse>('sound/tracks/form', {
+          params: {
+            location_country_id: value
+          }
+        })
+
+        locationCityFormItem.componentData.options = response.location_cities!.map(locationCity => {
+          return {
+            id: locationCity.id,
+            title: locationCity.name_ru,
+          }
+        })
+      },
     }),
     select({
       name: 'location_city_id',
