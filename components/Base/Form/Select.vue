@@ -11,6 +11,7 @@ interface IComponentData {
   isMultiple: boolean,
   inverse?: boolean
   isFilterable?: boolean,
+  isRemovable?: boolean
 }
 
 const props = withDefaults(defineProps<{
@@ -233,7 +234,7 @@ watch(
         <div class="select__active-select" v-else>{{ selectedItemOrItems?.title }}</div>
         <div
             class="select__active-select-remove-button"
-            v-if="selectedId !== null"
+            v-if="selectedId !== null && componentData.isRemovable"
             @click.stop="onClickCancel()"
         >
           <svg>

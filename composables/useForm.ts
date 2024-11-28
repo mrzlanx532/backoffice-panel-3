@@ -39,7 +39,7 @@ interface IFormComponent {
     /** колбек после изменения значения в компоненте */
     onUpdate?: (
         value: any,
-        findFormDataItemByName: (name: string) => TFormDataItemOutput | void
+        findFormDataItemByName: (name: string) => TFormDataItemOutput
     ) => void
 }
 
@@ -53,7 +53,8 @@ interface ISelect extends IFormComponent {
     componentData?: {
         options?: {}[],
         isMultiple?: boolean,
-        isFilterable?: boolean
+        isFilterable?: boolean,
+        isRemovable?: boolean
     }
 }
 
@@ -180,7 +181,7 @@ export const useForm = () => {
             }
         }
 
-        const findFormDataItemByName = (name: string) => {
+        const findFormDataItemByName = (name: string): TFormDataItemOutput => {
 
             let formDataItem: TFormDataItemOutput | undefined = undefined;
 
@@ -193,6 +194,10 @@ export const useForm = () => {
                         break tab_loop;
                     }
                 }
+            }
+
+            if (!formDataItem) {
+                throw new Error('Элемент "' + name + '" не найден')
             }
 
             return formDataItem
@@ -357,8 +362,14 @@ export const useForm = () => {
 
         const shallowRefFormData = shallowRef(formData)
 
-        const findFormDataItemByName = (name: string): TFormDataItemOutput | undefined => {
-            return shallowRefFormData.value.find(formDataItem => formDataItem.name === name)
+        const findFormDataItemByName = (name: string): TFormDataItemOutput => {
+            const item = shallowRefFormData.value.find(formDataItem => formDataItem.name === name)
+
+            if (!item) {
+                throw new Error('Элемент "' + name + '" не найден')
+            }
+
+            return item
         }
 
         const getFormComponent = (
@@ -537,7 +548,8 @@ export const useForm = () => {
 
         const defaultComponentData = {
             options: [],
-            isFilterable: false
+            isFilterable: false,
+            isRemovable: false
         }
 
         const componentData = config.componentData ? defu(config.componentData, defaultComponentData) : defaultComponentData

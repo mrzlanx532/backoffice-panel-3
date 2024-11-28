@@ -143,7 +143,9 @@ const SubscriptionTab = {
       onUpdate(value, findFormDataItemByName) {
         const item = findFormDataItemByName('subscription_labels')
 
-        item!.hide = !(['ONLY_MUSIC', 'MUSIC_AND_SOUNDS'].includes(value))
+        item.hide = !(['ONLY_MUSIC', 'MUSIC_AND_SOUNDS'].includes(value))
+
+        findFormDataItemByName('subscription_labels').section = item.hide ? undefined : 'Подписка на лейблы'
       },
     }),
     date({
@@ -170,17 +172,16 @@ const SubscriptionTab = {
       onUpdate(value, findFormDataItemByName) {
         const item = findFormDataItemByName('subscription_till_for_exclusive_tracks')
 
-        item!.componentData.value.disabled = !value
+        item.componentData.value.disabled = value
       }
     }),
     select({
-      section: 'Подписка на лейблы',
       name: 'subscription_labels',
       label: 'Лейблы',
       class: '--full',
       hide: true,
       componentData: {
-        isMultiple: true
+        isMultiple: true,
       }
     })
   ]
@@ -202,6 +203,15 @@ const {
       SubscriptionTab
     ],
 )
+
+const setDefaultForCreate = () => {
+  formDataValues.subscription_type_id = 'NONE'
+  formDataValues.remove = true
+
+  const subscriptionTillForExclusiveTracksFormItem = findFormDataItemByName('subscription_till_for_exclusive_tracks')
+
+  subscriptionTillForExclusiveTracksFormItem.componentData.value.disabled = true
+}
 
 const FormComponent = getFormComponent(emit, props, tabsWithFormData, errors)
 
@@ -258,16 +268,10 @@ onMounted(() => {
     }
   })
 
-  if (formDataValues.subscription_till_for_exclusive_tracks) {
-    findFormDataItemByName('subscription_till_for_exclusive_tracks')!.componentData.disabled = true
-    formDataValues.remove = true
-  } else {
-    findFormDataItemByName('subscription_till_for_exclusive_tracks')!.componentData.disabled = false
-    formDataValues.remove = false
-  }
+  if (!props.data.id) {
+    setDefaultForCreate()
 
-  if (['MUSIC_AND_SOUNDS', 'ONLY_MUSIC'].includes(formDataValues.subscription_type_id)) {
-    findFormDataItemByName('subscription_labels')!.hide = false
+    return
   }
 })
 </script>
