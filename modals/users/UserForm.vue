@@ -19,7 +19,6 @@ const {
   checkbox,
   textArea,
   date,
-  datetime,
   switcher,
   fillComponents
 } = useForm()

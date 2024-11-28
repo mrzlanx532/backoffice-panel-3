@@ -52,7 +52,8 @@ interface ICheckbox extends IFormComponent {
 interface ISelect extends IFormComponent {
     componentData?: {
         options?: {}[],
-        isMultiple?: boolean
+        isMultiple?: boolean,
+        isFilterable?: boolean
     }
 }
 
@@ -535,7 +536,8 @@ export const useForm = () => {
     const select = (config: ISelect): TFormDataItemOutput => {
 
         const defaultComponentData = {
-            options: []
+            options: [],
+            isFilterable: false
         }
 
         const componentData = config.componentData ? defu(config.componentData, defaultComponentData) : defaultComponentData
