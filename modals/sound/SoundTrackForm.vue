@@ -215,6 +215,65 @@ const {
     ]
 )
 
+const setDefaultForUpdate = async () => {
+
+  const params: {[key: string]: any} = {}
+
+  if (formDataValues.author_id) {
+    params.author_id = formDataValues.author_id
+  }
+
+  if (formDataValues.location_continent_id) {
+    params.location_continent_id = formDataValues.location_continent_id
+  }
+
+  if (formDataValues.location_country_id) {
+    params.location_country_id = formDataValues.location_country_id
+  }
+
+  if (formDataValues.ucs_id) {
+    params.ucs_category_id = formDataValues.ucs_id
+  }
+
+  const response = await $authFetch<IFormResponse>('sound/tracks/form', { params })
+
+  if (response.libraries) {
+    tabsWithFormData.value[0].formData[1].componentData.options = response.libraries.map(library => {
+      return {
+        id: library.id,
+        title: library.name_ru,
+      }
+    })
+  }
+
+  if (response.ucs_sub_categories) {
+    tabsWithFormData.value[1].formData[1].componentData.options = response.ucs_sub_categories.map(uscSubCategory => {
+      return {
+        id: uscSubCategory.id,
+        title: uscSubCategory.name_ru,
+      }
+    })
+  }
+
+  if (response.location_countries) {
+    tabsWithFormData.value[1].formData[3].componentData.options = response.location_countries.map(locationCountry => {
+      return {
+        id: locationCountry.id,
+        title: locationCountry.name_ru,
+      }
+    })
+  }
+
+  if (response.location_cities) {
+    tabsWithFormData.value[1].formData[4].componentData.options = response.location_cities.map(locationCity => {
+      return {
+        id: locationCity.id,
+        title: locationCity.name_ru,
+      }
+    })
+  }
+}
+
 const FormComponent = getFormComponent(emit, props, tabsWithFormData, errors)
 
 onMounted(async () => {
@@ -310,6 +369,10 @@ onMounted(async () => {
       }
     }
   })
+
+  if (props.data.id) {
+    await setDefaultForUpdate()
+  }
 })
 </script>
 
