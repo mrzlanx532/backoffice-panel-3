@@ -173,6 +173,10 @@ const SubscriptionTab = {
         const item = findFormDataItemByName('subscription_till_for_exclusive_tracks')
 
         item.componentData.value.disabled = value
+
+        if (value) {
+          formDataValues.subscription_till_for_exclusive_tracks = null
+        }
       }
     }),
     select({
@@ -211,6 +215,18 @@ const setDefaultForCreate = () => {
   const subscriptionTillForExclusiveTracksFormItem = findFormDataItemByName('subscription_till_for_exclusive_tracks')
 
   subscriptionTillForExclusiveTracksFormItem.componentData.value.disabled = true
+}
+
+const setDefaultForUpdate = () => {
+  const subscriptionLabelsFormItem = findFormDataItemByName('subscription_labels')
+
+  if (['ONLY_MUSIC', 'MUSIC_AND_SOUNDS'].includes(formDataValues.subscription_type_id)) {
+    subscriptionLabelsFormItem.section = 'Подписка на лейблы'
+    subscriptionLabelsFormItem.hide = false
+  } else {
+    subscriptionLabelsFormItem.section = undefined
+    subscriptionLabelsFormItem.hide = true
+  }
 }
 
 const FormComponent = getFormComponent(emit, props, tabsWithFormData, errors)
@@ -258,21 +274,17 @@ onMounted(() => {
     },
     subscription_till: {
       fn: (subscriptionTill) => {
-        return moment(subscriptionTill, 'X').format('DD.MM.yyyy')
+        return subscriptionTill ? moment(subscriptionTill, 'X').format('DD.MM.yyyy') : null
       }
     },
     subscription_till_for_exclusive_tracks: {
       fn: (subscriptionTillForExclusiveTracks) => {
-        return moment(subscriptionTillForExclusiveTracks, 'X').format('DD.MM.yyyy')
+        return subscriptionTillForExclusiveTracks ? moment(subscriptionTillForExclusiveTracks, 'X').format('DD.MM.yyyy') : null
       }
     }
   })
 
-  if (!props.data.id) {
-    setDefaultForCreate()
-
-    return
-  }
+  props.data.id ? setDefaultForUpdate() : setDefaultForCreate()
 })
 </script>
 
