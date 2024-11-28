@@ -8,6 +8,7 @@ import MainTab from '~/pages/sounds/_tabs/main.vue'
 import VariationsTab from '~/pages/sounds/_tabs/variations.vue'
 import CollectionsTab from '~/pages/sounds/_tabs/collections.vue'
 import Tabs from '~/components/Base/Tabs.vue'
+import SoundTrackForm from '~/modals/sound/SoundTrackForm.vue'
 
 definePageMeta({
   middleware: ['auth']
@@ -249,22 +250,22 @@ const onClickMultiple = async () => {
   >
     <template #rightSide>
       <div class="btn__group-separated">
+        <Button :class="['--small --primary']" @click="onClickBulkActions">Массовые действия {{ selectedIds.length ? `(${(selectedIds.length)})` : '' }}</Button>
         <Button @click="onClickCreate({
-          formURL: 'music/tracks/form',
-          modalPath: 'music/tracks/form',
+          formURL: 'sound/tracks/form',
+          modalComponent: SoundTrackForm,
           modalTitle: 'Создать трек',
           notificationMessage: 'Трек создан'
         })" :class="['--small --success']">Добавить</Button>
-        <Button :class="['--small --primary']" @click="onClickBulkActions">Массовые действия {{ selectedIds.length ? `(${(selectedIds.length)})` : '' }}</Button>
       </div>
     </template>
 
     <template #browserDetailHeader>
       <div class="btn__group">
         <Button @click="onClickEdit({
-          formURL: 'music/tracks/form',
-          modalPath: 'music/tracks/form',
-          modalTitle: 'Трек изменен',
+          formURL: 'sound/tracks/form',
+          modalComponent: SoundTrackForm,
+          modalTitle: 'Изменить трек',
           notificationMessage: 'Трек изменен'
         })" :class="['--big --outline-primary']">Изменить</Button>
         <Button @click="onClickDelete({

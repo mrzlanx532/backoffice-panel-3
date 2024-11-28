@@ -345,13 +345,13 @@ const buttonDropdownItems = [
   >
     <template #rightSide>
       <div class="btn__group-separated">
+        <Button :class="['--small --primary']" @click="onClickBulkActions">Массовые действия {{ selectedIds.length ? `(${(selectedIds.length)})` : '' }}</Button>
         <Button @click="onClickCreate({
           formURL: 'music/tracks/form',
           modalComponent: MusicTrackForm,
           modalTitle: 'Создать трек',
           notificationMessage: 'Трек создан'
         })" :class="['--small --success']">Добавить</Button>
-        <Button :class="['--small --primary']" @click="onClickBulkActions">Массовые действия {{ selectedIds.length ? `(${(selectedIds.length)})` : '' }}</Button>
       </div>
     </template>
 
