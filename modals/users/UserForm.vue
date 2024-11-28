@@ -218,6 +218,12 @@ const setDefaultForCreate = () => {
 }
 
 const setDefaultForUpdate = () => {
+
+  if (!formDataValues.subscription_till_for_exclusive_tracks) {
+    formDataValues.remove = true
+    findFormDataItemByName('subscription_till_for_exclusive_tracks').componentData.value.disabled = true
+  }
+
   const subscriptionLabelsFormItem = findFormDataItemByName('subscription_labels')
 
   if (['ONLY_MUSIC', 'MUSIC_AND_SOUNDS'].includes(formDataValues.subscription_type_id)) {
