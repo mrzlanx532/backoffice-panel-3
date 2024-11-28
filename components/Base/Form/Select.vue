@@ -32,7 +32,7 @@ const filteredOptions: Ref<IOption[]> = ref(props.componentData?.isFilterable ? 
 const inverseRender = ref(false)
 const selectedItems: Ref<{[key: string]: IOption}> = ref({})
 const selectedId: Ref<string|number|null> = ref(null)
-const topPxStyle = ref(props.componentData?.isFilterable ? '30px' : '0')
+const topPxStyle = ref('0')
 const topPxStyleInput = ref('0')
 const selectedItemOrItems: Ref<IOption|IOption[]|undefined> = ref()
 const resizeObserverIsSet = false
@@ -130,6 +130,15 @@ const getInverseValue = (rect: DOMRect) => {
     return true
   }
 
+  if (inverseRender.value) {
+    return true
+  }
+
+
+  if (props.componentData!.isFilterable) {
+    return window.innerHeight < (rect.height + rect.top + 28)
+  }
+
   return window.innerHeight < (rect.height + rect.top)
 }
 
@@ -159,7 +168,7 @@ const resizeObserverCallback = () => {
     return
   }
 
-  topPxStyle.value = ((rect.height + selected__container.value!.offsetHeight + (props.componentData.isFilterable ? 27 : 0)) * -1) + 'px'
+  topPxStyle.value = ((rect.height + selected__container.value!.offsetHeight + (props.componentData.isFilterable ? 28 : 0)) * -1) + 'px'
   topPxStyleInput.value = props.componentData.isFilterable ? '-60px' : '0'
 }
 
@@ -177,7 +186,7 @@ watch(
         if (!resizeObserverIsSet) {
           const ro = new ResizeObserver(resizeObserverCallback)
 
-          ro.observe(selected__container.value!)
+          ro.observe(select__dropdown.value!)
         }
       })
     }
@@ -282,7 +291,7 @@ watch(
                 @mouseup="onMouseDownOnDropdownOption(option, index)"
             >{{ option.title }}</div>
           </template>
-          <div v-else class="select__dropdown-option select__dropdown-option_empty">Нет записей</div>
+          <div v-else class="select__dropdown-option --empty">Нет записей</div>
         </div>
       </div>
     </div>

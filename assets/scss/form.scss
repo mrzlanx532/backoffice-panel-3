@@ -329,6 +329,11 @@
       -moz-user-select: none;
       user-select: none;
 
+      &.--empty {
+        cursor: default !important;
+        background-color: var(--color-1) !important;
+      }
+
       &:hover {
         cursor: pointer;
         background-color: var(--color-3);
