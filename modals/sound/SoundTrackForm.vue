@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import type { defaultProps } from '~/composables/useForm'
+import { useNuxtApp } from '#imports'
+
+interface IFormResponse {
+  ucs_sub_categories?: any[]
+}
+
+const {
+  $authFetch
+} = useNuxtApp()
 
 const props = defineProps<defaultProps>()
 
@@ -48,7 +57,30 @@ const AttributesTab = {
     select({
       name: 'ucs_id',
       label: 'Category',
-      class: '--full'
+      class: '--full',
+      onUpdate: async (value, findFormDataItemByName) => {
+
+        const ucsSubFormItem = findFormDataItemByName('ucs_sub_id')
+
+        formDataValues.ucs_sub_id = null
+
+        if (!value) {
+          ucsSubFormItem.componentData.options = []
+        }
+
+        const response = await $authFetch<IFormResponse>('sound/tracks/form', {
+          params: {
+            ucs_category_id: value
+          }
+        })
+
+        ucsSubFormItem.componentData.options = response.ucs_sub_categories!.map(ucsSubCategory => {
+          return {
+            id: ucsSubCategory.id,
+            title: ucsSubCategory.name_ru,
+          }
+        })
+      },
     }),
     select({
       name: 'ucs_sub_id',
@@ -128,7 +160,7 @@ onMounted(async () => {
   fillComponents(props, tabsWithFormData, formDataValues, {
     authors: {
       to: 'author_id',
-      fn: (author) => {
+      fn(author) {
         return {
           id: author.id,
           title: author.name_ru
@@ -137,7 +169,7 @@ onMounted(async () => {
     },
     labels: {
       to: 'label_id',
-      fn: (label) => {
+      fn(label) {
         return {
           id: label.id,
           title: label.name_ru
@@ -146,7 +178,7 @@ onMounted(async () => {
     },
     ucs_categories: {
       to: 'ucs_id',
-      fn: (uscCategory) => {
+      fn(uscCategory) {
         return {
           id: uscCategory.id,
           title: uscCategory.name_ru,
