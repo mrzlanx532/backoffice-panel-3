@@ -172,7 +172,7 @@ const resizeObserverCallback = () => {
   }
 
   topPxStyle.value = ((rect.height + selected__container.value!.offsetHeight + (props.componentData.isFilterable ? 28 : 0)) * -1) + 'px'
-  topPxStyleInput.value = props.componentData.isFilterable ? '-60px' : '0'
+  topPxStyleInput.value = props.componentData.isFilterable ? ((selected__container.value!.offsetHeight + 28) * -1) + 'px' : '0'
 }
 
 watch(
@@ -188,8 +188,10 @@ watch(
 
         if (!resizeObserverIsSet) {
           const ro = new ResizeObserver(resizeObserverCallback)
+          const ro2 = new ResizeObserver(resizeObserverCallback)
 
           ro.observe(select__dropdown.value!)
+          ro2.observe(selected__container.value!)
         }
       })
     }
