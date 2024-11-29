@@ -54,7 +54,8 @@ interface ISelect extends IFormComponent {
         options?: {}[],
         isMultiple?: boolean,
         isFilterable?: boolean,
-        isRemovable?: boolean
+        isRemovable?: boolean,
+        inverse?: boolean
     }
 }
 
