@@ -332,6 +332,7 @@
       &.--empty {
         cursor: default !important;
         background-color: var(--color-1) !important;
+        color: var(--color-4);
       }
 
       &:hover {

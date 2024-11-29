@@ -14,6 +14,7 @@ import { useNuxtApp } from '#imports'
 import { FetchError } from 'ofetch'
 import type { LooseRequired } from '@vue/shared'
 import FormSelect from '~/components/Base/Form/Select.vue'
+import FormSelectWrap from '~/components/Base/Form/SelectWrap.vue'
 import FormInput from '~/components/Base/Form/Input.jsx'
 import FormDatetime from '~/components/Base/Form/Datetime.vue'
 import FormDate from '~/components/Base/Form/Date.vue'
@@ -55,7 +56,15 @@ interface ISelect extends IFormComponent {
         isMultiple?: boolean,
         isFilterable?: boolean,
         isRemovable?: boolean,
-        inverse?: boolean
+        isForceInverse?: boolean
+    }
+}
+
+interface ISelectWrap extends IFormComponent {
+    componentData?: {
+        options?: {}[],
+        isFilterable?: boolean,
+        isForceInverse?: boolean
     }
 }
 
@@ -89,7 +98,7 @@ interface IInputFile extends IFormComponent {
     }
 }
 
-type TFormDataItemInput = ISelect | IInput | IDatetime | IDate | IInputFile | ITextArea | ICheckbox
+type TFormDataItemInput = ISelect | ISelectWrap | IInput | IDatetime | IDate | IInputFile | ITextArea | ICheckbox
 type TFormDataItemOutput = IFormComponent & { component: Component, componentData: any }
 
 export interface defaultProps {
@@ -550,7 +559,8 @@ export const useForm = () => {
         const defaultComponentData = {
             options: [],
             isFilterable: false,
-            isRemovable: false
+            isRemovable: false,
+            isForceInverse: false
         }
 
         const componentData = config.componentData ? defu(config.componentData, defaultComponentData) : defaultComponentData
@@ -558,6 +568,22 @@ export const useForm = () => {
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormSelect,
+            componentData: config.isComponentDataReactive ? ref(componentData) : componentData
+        }
+    }
+
+    const selectWrap = (config: ISelectWrap): TFormDataItemOutput => {
+        const defaultComponentData = {
+            options: [],
+            isFilterable: false,
+            isForceInverse: false
+        }
+
+        const componentData = config.componentData ? defu(config.componentData, defaultComponentData) : defaultComponentData
+
+        return {
+            ...getDefaultFormDataItemProperties(config),
+            component: FormSelectWrap,
             componentData: config.isComponentDataReactive ? ref(componentData) : componentData
         }
     }
@@ -721,6 +747,7 @@ export const useForm = () => {
         formRequestBody,
 
         select,
+        selectWrap,
         input,
         date,
         datetime,

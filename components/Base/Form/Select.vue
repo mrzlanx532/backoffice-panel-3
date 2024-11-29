@@ -9,7 +9,7 @@ interface IOption {
 interface IComponentData {
   options: IOption[]
   isMultiple: boolean,
-  inverse?: boolean
+  isForceInverse?: boolean
   isFilterable?: boolean,
   isRemovable?: boolean
 }
@@ -127,8 +127,8 @@ onUnmounted(() => {
 const getInverseValue = (rect: DOMRect) => {
   if (
       props.componentData !== undefined &&
-      props.componentData.inverse !== undefined &&
-      props.componentData.inverse
+      props.componentData.isForceInverse !== undefined &&
+      props.componentData.isForceInverse
   ) {
     return true
   }
@@ -206,10 +206,9 @@ watch(
       <div
           tabindex="0"
           ref="selected__container"
-          class="select__selected-container"
+          class="select__selected-container --multiple"
           :class="{
             '--open': isSelecting,
-            '--multiple': componentData.isMultiple !== undefined ? componentData.isMultiple : false,
             '--inverse': inverseRender,
             '--has-errors': errors && errors[0]
           }"

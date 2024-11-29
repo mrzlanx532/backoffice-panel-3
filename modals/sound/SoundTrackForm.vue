@@ -26,6 +26,7 @@ const {
   fillComponents,
 
   select,
+  selectWrap,
   textArea,
 } = useForm()
 
@@ -183,22 +184,20 @@ const AttributesTab = {
       label: 'Microphone distance',
       class: '--right-half'
     }),
-    select({
+    selectWrap({
       name: 'classifier_microphones',
       label: 'Microphones',
       class: '--full',
       componentData: {
-        isMultiple: true,
-        isFilterable: true
+        isFilterable: true,
       }
     }),
-    select({
+    selectWrap({
       name: 'classifier_keywords',
       label: 'Keywords',
       class: '--full',
       componentData: {
-        isMultiple: true,
-        isFilterable: true
+        isFilterable: true,
       }
     }),
   ]
