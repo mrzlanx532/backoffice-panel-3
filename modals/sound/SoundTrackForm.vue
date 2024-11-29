@@ -114,6 +114,7 @@ const AttributesTab = {
     select({
       name: 'location_continent_id',
       label: 'Location (continent)',
+      class: '--left',
       onUpdate: async (value, findFormDataItemByName) => {
         const locationCountryFormItem = findFormDataItemByName('location_country_id')
 
@@ -137,6 +138,7 @@ const AttributesTab = {
     select({
       name: 'location_country_id',
       label: 'Location (country)',
+      class: '--middle',
       onUpdate: async (value, findFormDataItemByName) => {
         const locationCityFormItem = findFormDataItemByName('location_city_id')
 
@@ -159,6 +161,7 @@ const AttributesTab = {
     select({
       name: 'location_city_id',
       label: 'Location (city)',
+      class: '--right',
     }),
     select({
       name: 'classifier_micsetup_id',
@@ -173,12 +176,12 @@ const AttributesTab = {
     select({
       name: 'classifier_space_id',
       label: 'Acoustic space',
-      class: '--full'
+      class: '--left-half'
     }),
     select({
       name: 'classifier_perspective_id',
       label: 'Microphone distance',
-      class: '--full'
+      class: '--right-half'
     }),
     select({
       name: 'classifier_microphones',
