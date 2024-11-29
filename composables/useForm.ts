@@ -276,7 +276,7 @@ export const useForm = () => {
         const getFormComponent = (
             emit: (event: ("modal:resolve" | "modal:close"), ...args: any[]) => void,
             props: propsWithDefaultPropsType,
-            shallowRefTabsWithFormData: Ref<ITabWithFormData[]>,
+            shallowRefTabsWithFormData: ShallowRef<ITabWithFormData[]>,
             errors: Ref<Record<string, any>>
         ) => {
             return defineComponent(
