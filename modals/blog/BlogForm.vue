@@ -49,6 +49,9 @@ const {
     name: 'date',
     label: 'Дата',
     class: '--full',
+    componentData: {
+      format: 'DD.MM.yyyy HH:mm'
+    }
   }),
   inputFile({
     name: 'cover',

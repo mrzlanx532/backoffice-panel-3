@@ -28,7 +28,7 @@
     box-shadow: 0 2px 10px 0 rgba(34, 60, 80, 0.2);
 
     & > * {
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
 
     & > div {
@@ -41,6 +41,7 @@
   }
 
   &__input {
+    font-size: 14px;
     width: 100%;
     padding: 10px;
     border: 1px solid var(--color-2, #dbdbdb);
@@ -62,6 +63,7 @@
     font-size: 12px;
     padding-top: 5px;
     font-family: "Roboto";
+    min-height: 19px;
 
     &_hidden {
       display: none;
@@ -90,8 +92,12 @@
     border: 1px solid var(--color-2, #dbdbdb);
     border-radius: 5px;
 
+    &:disabled:hover {
+      background: inherit;
+    }
+
     &:hover {
-      background: var(--color-2, #dbdbdb);
+      background: var(--color-7, #dbdbdb);
       cursor: pointer;
     }
 

@@ -5,6 +5,8 @@ import type { Ref } from 'vue'
 
 const errors: Ref<Record<string, any>> = ref({})
 
+const isWait = ref(false)
+
 definePageMeta({
   middleware: ['guest'],
   layout: 'empty',
@@ -18,8 +20,11 @@ const formData = ref({
 const { $auth } = useNuxtApp()
 
 async function onClick() {
+  isWait.value = true
+
   await $auth().login(formData.value).catch((err) => {
     errors.value = err.data.errors
+    isWait.value = false
   })
 }
 </script>
@@ -44,7 +49,7 @@ async function onClick() {
           v-model="formData.password"
           :errors="errors"
       />
-      <button class="login__btn" :classes="['--full-width --special']" @click.prevent="onClick">
+      <button class="login__btn" :classes="['--full-width --special']" @click.prevent="onClick" :disabled="isWait">
         Войти
       </button>
     </form>

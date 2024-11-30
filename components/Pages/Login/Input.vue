@@ -35,7 +35,6 @@ const onInput = (payload: Event) => {
     />
     <div
         class="login__input-error"
-        :class="{'login__input-error_hidden': !(props.errors[props.name])}"
     >
       {{ props.errors && props.errors[props.name] ? props.errors[props.name][0] : undefined }}
     </div>
