@@ -33,7 +33,6 @@ interface IFormComponent {
     section?: string
     hide?: boolean,
     /** для того чтобы изменять свойство в componentData */
-    isComponentDataReactive?: boolean,
     componentData?: {
         [key: string]: any
     }
@@ -236,7 +235,7 @@ export const useForm = () => {
                             class: formDataItem.class,
                             name: formDataItem.name,
                             label: formDataItem.label,
-                            componentData: formDataItem.isComponentDataReactive ? formDataItem.componentData.value : formDataItem.componentData,
+                            componentData: formDataItem.componentData,
                             modelValue: _props.formDataValues[formDataItem.name],
                             'onUpdate:modelValue': (value: any) => {
 
@@ -405,7 +404,7 @@ export const useForm = () => {
 
                             contentFormData.push(
                                 h(formDataItem.component, {
-                                    componentData: formDataItem.isComponentDataReactive ? formDataItem.componentData.value : formDataItem.componentData,
+                                    componentData: formDataItem.componentData,
                                     class: formDataItem.class,
                                     label: formDataItem.label,
                                     name: formDataItem.name,
@@ -550,7 +549,6 @@ export const useForm = () => {
             section: config.section,
             onUpdate: config.onUpdate,
             hide: config.hide ? config.hide : false,
-            isComponentDataReactive: config.isComponentDataReactive ? config.isComponentDataReactive : false,
         }
     }
 
@@ -568,7 +566,7 @@ export const useForm = () => {
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormSelect,
-            componentData: config.isComponentDataReactive ? ref(componentData) : componentData
+            componentData: componentData
         }
     }
 
@@ -584,7 +582,7 @@ export const useForm = () => {
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormSelectWrap,
-            componentData: config.isComponentDataReactive ? ref(componentData) : componentData
+            componentData: componentData
         }
     }
 
@@ -595,7 +593,7 @@ export const useForm = () => {
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormInput,
-            componentData: config.isComponentDataReactive ? ref(componentData) : componentData
+            componentData: componentData
         }
     }
 
@@ -611,7 +609,7 @@ export const useForm = () => {
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormDate,
-            componentData: config.isComponentDataReactive ? ref(componentData) : componentData
+            componentData: componentData
         }
     }
 
@@ -627,7 +625,7 @@ export const useForm = () => {
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormDatetime,
-            componentData: config.isComponentDataReactive ? ref(componentData) : componentData,
+            componentData: componentData,
         }
     }
 
@@ -642,7 +640,7 @@ export const useForm = () => {
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormInputFile,
-            componentData: config.isComponentDataReactive ? ref(componentData) : componentData
+            componentData: componentData
         }
     }
 
@@ -653,7 +651,7 @@ export const useForm = () => {
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormTextArea,
-            componentData: config.isComponentDataReactive ? ref(componentData) : componentData
+            componentData: componentData
         }
     }
 
@@ -664,7 +662,7 @@ export const useForm = () => {
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormCheckbox,
-            componentData: config.isComponentDataReactive ? ref(componentData) : componentData
+            componentData: componentData
         }
     }
 
@@ -675,7 +673,7 @@ export const useForm = () => {
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormSwitcher,
-            componentData: config.isComponentDataReactive ? ref(componentData) : componentData
+            componentData: componentData
         }
     }
 
