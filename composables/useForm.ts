@@ -147,7 +147,7 @@ export const useForm = () => {
             formDataValues[param] = value
         }
 
-        const shallowRefTabsWithFormData = shallowRef(tabsWithFormData)
+        const refTabsWithFormData = ref(tabsWithFormData)
 
         const onClickSave = async (
             props: propsWithDefaultPropsType,
@@ -171,15 +171,15 @@ export const useForm = () => {
                     if (err.status === 422 && err.data.errors) {
                         errors.value = err.data.errors
 
-                        for (let tabI = 0; tabI <= shallowRefTabsWithFormData.value.length - 1; tabI++) {
-                            shallowRefTabsWithFormData.value[tabI].hasError = false
+                        for (let tabI = 0; tabI <= refTabsWithFormData.value.length - 1; tabI++) {
+                            refTabsWithFormData.value[tabI].hasError = false
 
-                            formIterator: for (let formItemI = 0; formItemI <= shallowRefTabsWithFormData.value[tabI].formData.length - 1; formItemI++) {
+                            formIterator: for (let formItemI = 0; formItemI <= refTabsWithFormData.value[tabI].formData.length - 1; formItemI++) {
 
                                 for (let errorKey in err.data.errors) {
 
-                                    if (errorKey === shallowRefTabsWithFormData.value[tabI].formData[formItemI].name) {
-                                        shallowRefTabsWithFormData.value[tabI].hasError = true
+                                    if (errorKey === refTabsWithFormData.value[tabI].formData[formItemI].name) {
+                                        refTabsWithFormData.value[tabI].hasError = true
 
                                         break formIterator
                                     }
@@ -195,11 +195,11 @@ export const useForm = () => {
 
             let formDataItem: TFormDataItemOutput | undefined = undefined;
 
-            tab_loop: for (let i = 0; i < shallowRefTabsWithFormData.value.length; i++) {
-                for (let j = 0; j < shallowRefTabsWithFormData.value[i].formData.length; j++) {
+            tab_loop: for (let i = 0; i < refTabsWithFormData.value.length; i++) {
+                for (let j = 0; j < refTabsWithFormData.value[i].formData.length; j++) {
 
-                    if (name === shallowRefTabsWithFormData.value[i].formData[j].name) {
-                        formDataItem = shallowRefTabsWithFormData.value[i].formData[j]
+                    if (name === refTabsWithFormData.value[i].formData[j].name) {
+                        formDataItem = refTabsWithFormData.value[i].formData[j]
 
                         break tab_loop;
                     }
@@ -230,7 +230,7 @@ export const useForm = () => {
                             return
                         }
 
-                        contentVNodes.push(h(formDataItem.component, {
+                        contentVNodes.push(h(toRaw(formDataItem.component), {
                             key: formDataItem.name,
                             errors: _props.errors && _props.errors[formDataItem.name] ? _props.errors[formDataItem.name] : null,
                             class: formDataItem.class,
@@ -276,7 +276,7 @@ export const useForm = () => {
         const getFormComponent = (
             emit: (event: ("modal:resolve" | "modal:close"), ...args: any[]) => void,
             props: propsWithDefaultPropsType,
-            shallowRefTabsWithFormData: ShallowRef<ITabWithFormData[]>,
+            refTabsWithFormData: Ref<ITabWithFormData[]>,
             errors: Ref<Record<string, any>>
         ) => {
             return defineComponent(
@@ -290,13 +290,13 @@ export const useForm = () => {
                             }
                         }, {
                             header: () => h(Tabs, {
-                                tabs: shallowRefTabsWithFormData.value as [],
+                                tabs: refTabsWithFormData.value as [],
                                 onChange: onChangeTab,
                             }),
                             content: () => h(KeepAlive, h(TabComponent, {
                                 key: selectedTab.value,
-                                class: shallowRefTabsWithFormData.value[selectedTab.value].formClass ? shallowRefTabsWithFormData.value[selectedTab.value].formClass : '--2x2',
-                                data: shallowRefTabsWithFormData.value[selectedTab.value],
+                                class: refTabsWithFormData.value[selectedTab.value].formClass ? refTabsWithFormData.value[selectedTab.value].formClass : '--2x2',
+                                data: refTabsWithFormData.value[selectedTab.value],
                                 formDataValues,
                                 onChange: onChangeFormData,
                                 errors: errors.value,
@@ -320,7 +320,7 @@ export const useForm = () => {
         }
 
         return {
-            tabsWithFormData: shallowRefTabsWithFormData,
+            tabsWithFormData: refTabsWithFormData,
             formDataValues,
             errors,
             selectedTab,
