@@ -1,7 +1,9 @@
-<script setup>
+<script setup lang="ts">
 import { definePageMeta, useNuxtApp } from "#imports"
-import { ref } from 'vue'
-import { default as LoginInput } from '@/components/Pages/Login/Input'
+import { default as LoginInput } from '@/components/Pages/Login/Input.vue'
+import type { Ref } from 'vue'
+
+const errors: Ref<Record<string, any>> = ref({})
 
 definePageMeta({
   middleware: ['guest'],
@@ -17,7 +19,7 @@ const { $auth } = useNuxtApp()
 
 async function onClick() {
   await $auth().login(formData.value).catch((err) => {
-    console.log(err)
+    errors.value = err.data.errors
   })
 }
 </script>
@@ -32,13 +34,15 @@ async function onClick() {
           type="text"
           label="Логин"
           name="email"
-          :value="formData.email"
+          v-model="formData.email"
+          :errors="errors"
       />
       <LoginInput
           type="password"
           label="Пароль"
           name="password"
-          :value="formData.password"
+          v-model="formData.password"
+          :errors="errors"
       />
       <button class="login__btn" :classes="['--full-width --special']" @click.prevent="onClick">
         Войти

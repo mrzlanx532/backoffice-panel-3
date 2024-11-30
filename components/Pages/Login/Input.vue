@@ -1,11 +1,23 @@
 <script setup lang="ts">
-const props = defineProps<{
+const modelValue = defineModel()
+
+const emit = defineEmits(['update:modelValue'])
+
+const props = withDefaults(defineProps<{
   name: string,
   type: string,
-  value?: string,
+  modelValue?: string|null
   label: string,
-  errorMessage?: {}
-}>()
+  errors?: {[key: string]: string[]}
+}>(), {
+  errors: () => {
+    return {}
+  }
+})
+
+const onInput = (payload: Event) => {
+  emit('update:modelValue', (payload.target as HTMLInputElement).value)
+}
 </script>
 
 <template>
@@ -18,12 +30,14 @@ const props = defineProps<{
         :type="type"
         :name="name"
         :id="name"
-        v-model="props.value"/>
+        v-model="modelValue"
+        @input="onInput"
+    />
     <div
         class="login__input-error"
-        :class="{'login__input-error_hidden': errorMessage && errorMessage[name] === ''}"
+        :class="{'login__input-error_hidden': !(props.errors[props.name])}"
     >
-      {{ errorMessage && errorMessage[name] ? errorMessage[name] : ''}}
+      {{ props.errors && props.errors[props.name] ? props.errors[props.name][0] : undefined }}
     </div>
   </div>
 </template>
