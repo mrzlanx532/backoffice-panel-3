@@ -160,7 +160,6 @@ const SubscriptionTab = {
       name: 'subscription_till_for_exclusive_tracks',
       label: 'Дата истечения',
       class: '--full',
-      isComponentDataReactive: true,
       componentData: {
         format: 'DD.MM.yyyy'
       },
@@ -172,7 +171,7 @@ const SubscriptionTab = {
       onUpdate(value, findFormDataItemByName) {
         const item = findFormDataItemByName('subscription_till_for_exclusive_tracks')
 
-        item.componentData.value.disabled = value
+        item.componentData.disabled = value
 
         if (value) {
           formDataValues.subscription_till_for_exclusive_tracks = null
@@ -214,14 +213,14 @@ const setDefaultForCreate = () => {
 
   const subscriptionTillForExclusiveTracksFormItem = findFormDataItemByName('subscription_till_for_exclusive_tracks')
 
-  subscriptionTillForExclusiveTracksFormItem.componentData.value.disabled = true
+  subscriptionTillForExclusiveTracksFormItem.componentData.disabled = true
 }
 
 const setDefaultForUpdate = () => {
 
   if (!formDataValues.subscription_till_for_exclusive_tracks) {
     formDataValues.remove = true
-    findFormDataItemByName('subscription_till_for_exclusive_tracks').componentData.value.disabled = true
+    findFormDataItemByName('subscription_till_for_exclusive_tracks').componentData.disabled = true
   }
 
   const subscriptionLabelsFormItem = findFormDataItemByName('subscription_labels')
