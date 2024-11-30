@@ -33,9 +33,7 @@ const onInput = (payload: Event) => {
         v-model="modelValue"
         @input="onInput"
     />
-    <div
-        class="login__input-error"
-    >
+    <div class="login__input-error">
       {{ props.errors && props.errors[props.name] ? props.errors[props.name][0] : undefined }}
     </div>
   </div>
