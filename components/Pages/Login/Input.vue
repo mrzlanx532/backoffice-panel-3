@@ -6,20 +6,19 @@ const props = defineProps<{
   label: string,
   errorMessage?: {}
 }>()
-
-const localValue = ref(props.value)
-const localLabel = ref(props.label)
 </script>
 
 <template>
   <div class="login__input-container">
-    <div class="label" :for="name">{{ localLabel }}</div>
+    <div class="label" :for="name">{{ props.label }}</div>
     <input
+        :label=props.label
+        autocomplete="off"
         class="login__input"
         :type="type"
         :name="name"
         :id="name"
-        v-model="localValue"/>
+        v-model="props.value"/>
     <div
         class="login__input-error"
         :class="{'login__input-error_hidden': errorMessage && errorMessage[name] === ''}"
