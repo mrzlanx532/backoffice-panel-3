@@ -1,75 +1,26 @@
 <script setup lang="ts">
 import { useNuxtApp, useRouter } from '#imports'
+import type { Ref } from 'vue'
+
+interface IMenuItemChild {
+  name: string,
+  link: string
+}
+
+interface IMenuItem {
+  name: string,
+  link?: string,
+  children?: IMenuItemChild[]
+}
+
+const props = defineProps<{
+  items: IMenuItem[]
+}>()
 
 const router = useRouter()
 
-const menuItemsIsClosing = ref({})
-const activeMenuItem = ref(null)
-const menu = ref([
-  {
-    name: 'Шумы',
-    children: [
-      {
-        name: 'Каталог треков',
-        link: '/sounds'
-      },
-      {
-        name: 'Коллекции',
-        link: '/sounds/collections'
-      },
-      {
-        name: 'Авторы',
-        link: '/sounds/authors'
-      },
-      {
-        name: 'Библиотеки',
-        link: '/sounds/libraries'
-      },
-    ]
-  },
-  {
-    name: 'Музыка',
-    children: [
-      {
-        name: 'Каталог треков',
-        link: '/music'
-      },
-      {
-        name: 'Плейлисты',
-        link: '/music/playlists'
-      },
-      {
-        name: 'Авторы',
-        link: '/music/authors'
-      },
-      {
-        name: 'Лейблы',
-        link: '/music/labels'
-      },
-      {
-        name: 'Альбомы',
-        link: '/music/albums'
-      },
-    ]
-  },
-  {
-    name: 'Пользователи',
-    children: [
-      {
-        name: 'Каталог пользователей',
-        link: '/users'
-      },
-      {
-        name: 'Отчеты',
-        link: '/reports'
-      },
-    ]
-  },
-  {
-    name: 'Блог',
-    link: '/blog'
-  },
-])
+const menuItemsIsClosing: Ref<{[key: string]: boolean}> = ref({})
+const activeMenuItem: Ref<string|null> = ref(null)
 
 const logout = async () => {
   const { $auth } = useNuxtApp()
@@ -85,7 +36,7 @@ const onClickOutside = () => {
   }
 }
 
-const onSectionMenuItemClick = (menuItem) => {
+const onSectionMenuItemClick = (menuItem: IMenuItem | null) => {
 
   const oldActiveMenuItem = activeMenuItem.value
 
@@ -106,7 +57,7 @@ const onSectionMenuItemClick = (menuItem) => {
   menuItem.link ? router.push(menuItem.link) : null
 }
 
-const onSubSectionMenuItemClick = (menuItem, child) => {
+const onSubSectionMenuItemClick = (child: IMenuItemChild) => {
 
   closeOpenMenuItem(activeMenuItem.value)
 
@@ -115,16 +66,16 @@ const onSubSectionMenuItemClick = (menuItem, child) => {
   child.link ? router.push(child.link) : null
 }
 
-const closeOpenMenuItem = (menuItem) => {
-  menuItemsIsClosing.value[menuItem] = true
+const closeOpenMenuItem = (menuItem: null|string) => {
+  menuItemsIsClosing.value[menuItem as string] = true
 
   setTimeout(() => {
-    menuItemsIsClosing.value[menuItem] = false
+    menuItemsIsClosing.value[menuItem as string] = false
   }, 100)
 }
 
 onMounted(() => {
-  menuItemsIsClosing.value = menu.value ? menu.value.reduce((acc, value) => {
+  menuItemsIsClosing.value = props.items ? props.items.reduce((acc, value) => {
     return {...acc, [value.name]: false}
   }, {}) : {}
 })
@@ -139,7 +90,7 @@ onMounted(() => {
         </div>
         <div class="side-menu__sections">
           <ul class="side-menu__sections-list">
-            <template v-for="menuItem in menu">
+            <template v-for="menuItem in props.items">
               <li
                   class="side-menu__sections-list-item"
                   :class="[
@@ -166,7 +117,7 @@ onMounted(() => {
                 <li
                     class="side-menu__sub-sections-list-item"
                     v-for="child in menuItem.children"
-                    @click="onSubSectionMenuItemClick(menuItem, child)"
+                    @click="onSubSectionMenuItemClick(child)"
                 >
                   <NuxtLink :to="child.link">
                     {{ child.name }}
