@@ -93,6 +93,7 @@ const items = [
   display: flex;
   place-items: center center;
   padding-left: 10px;
+  user-select: none;
 }
 
 .img-container {

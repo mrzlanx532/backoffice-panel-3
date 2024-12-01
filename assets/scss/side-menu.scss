@@ -9,6 +9,10 @@
   position: sticky;
   top: 0;
 
+  &__logo-container {
+    cursor: pointer;
+  }
+
   &__logo-img {
     display: inline-block;
     width: 50px;
