@@ -32,6 +32,10 @@ async function onClick() {
 <template>
   <div class="login">
     <form class="login__form">
+      <div class="login__img">
+        <img src="/img/logo.png" alt="logo" style="height: 20px; width: 20px;">
+        <div>Digital Dyatel</div>
+      </div>
       <div class="login__header">
         Авторизация
       </div>
@@ -55,3 +59,12 @@ async function onClick() {
     </form>
   </div>
 </template>
+
+<style scoped>
+.login__img {
+  display: flex;
+  place-items: center center;
+  flex-direction: column;
+  opacity: .5;
+}
+</style>
