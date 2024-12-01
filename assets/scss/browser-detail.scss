@@ -2,7 +2,7 @@
   position: fixed;
   top: 74px;
   right: 0;
-  width: 0;
+  width: 600px;
   height: calc(100% - 80px);
   background: var(--color-1, #ffffff);
   border: none;
@@ -12,21 +12,19 @@
   box-shadow: -2px 2px 8px 0px rgba(34, 60, 80, 0.2);
   transition-property: transform;
   transition-duration: 150ms;
-  transform: translateX(350px);
+  transform: translateX(600px);
 
   &_loading {
     filter: blur(1px);
   }
 
   &_open {
-    width: 600px;
     transform: translateX(-8px);
     border: 1px solid var(--color-2, #dbdbdb);
   }
 
   &_closing {
-    width: 0;
-    transform: translateX(350px);
+    transform: translateX(600px);
   }
 
   &__back {
