@@ -10,7 +10,7 @@
   -webkit-box-shadow: -2px 2px 8px 0px rgba(34, 60, 80, 0.2);
   -moz-box-shadow: -2px 2px 8px 0px rgba(34, 60, 80, 0.2);
   box-shadow: -2px 2px 8px 0px rgba(34, 60, 80, 0.2);
-  transition-property: transform;
+  transition-property: transform, opacity;
   transition-duration: 150ms;
   transform: translateX(600px);
 
@@ -24,6 +24,7 @@
   }
 
   &_closing {
+    opacity: 0;
     transform: translateX(600px);
   }
 
