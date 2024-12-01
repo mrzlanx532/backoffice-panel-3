@@ -71,7 +71,12 @@ const items = [
 <template>
   <div id="app">
     <div class="container">
-      <SideMenu :items="items"/>
+      <SideMenu :items="items">
+        <div class="img-container">
+          <img alt="logo" src="/img/logo.png"/>
+          <div class="logo-text-container">Digital Dyatel</div>
+        </div>
+      </SideMenu>
       <div class="page">
         <div class="page__container">
           <slot/>
@@ -82,3 +87,22 @@ const items = [
     <Notification/>
   </div>
 </template>
+
+<style scoped>
+.logo-text-container {
+  display: flex;
+  place-items: center center;
+  padding-left: 10px;
+}
+
+.img-container {
+  padding: 20px 10px 20px 30px;
+  display: flex;
+  flex-direction: row;
+}
+
+img {
+  width: 30px;
+  height: 30px;
+}
+</style>

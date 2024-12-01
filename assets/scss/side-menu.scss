@@ -9,36 +9,10 @@
   position: sticky;
   top: 0;
 
-  &__logo-title-container {
-    padding: 20px 30px;
-    color: white;
-    font-size: 20px;
-    text-align: center;
-
-    &:hover {
-      cursor: pointer;
-    }
-
-    &:after {
-      content: "";
-      width: 100%;
-      position: relative;
-      height: 1px;
-      display: block;
-      top: 10px;
-      background: linear-gradient(to right, #DE4020 0%, orange 100%);
-    }
-  }
-
-  &__logo-title {
-    display: inline;
-    background: linear-gradient(to right, #DE4020 0%, orange 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  &__sections {
-    padding-top: 20px;
+  &__logo-img {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
   }
 
   &__header {
@@ -68,16 +42,6 @@
         color: #606060;
       }
     }
-  }
-
-  &__logo-container {
-    padding: 10px 30px;
-    cursor: pointer;
-  }
-
-  &__logo {
-    width: 100%;
-    user-select: none;
   }
 
   &__sub-sections-list {
@@ -160,7 +124,7 @@
     }
 
     &:hover {
-      background-color: #c5bfbf;
+      background-color: var(--color-7);
       cursor: pointer;
     }
   }

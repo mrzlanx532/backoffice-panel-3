@@ -85,8 +85,8 @@ onMounted(() => {
   <aside class="side-menu">
     <div class="side-menu__container">
       <div class="side-menu__header" v-click-outside="onClickOutside">
-        <div class="side-menu__logo-title-container" @click="onSectionMenuItemClick(null)">
-          <p class="side-menu__logo-title">BULLET WEB UI</p>
+        <div class="side-menu__logo-container" @click="onSectionMenuItemClick(null)">
+          <slot/>
         </div>
         <div class="side-menu__sections">
           <ul class="side-menu__sections-list">
