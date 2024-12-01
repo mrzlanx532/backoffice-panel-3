@@ -1,7 +1,7 @@
 .browser-detail {
   position: fixed;
   top: 74px;
-  right: -700px;
+  right: 0;
   width: 0;
   height: calc(100% - 80px);
   background: var(--color-1, #ffffff);
@@ -10,8 +10,9 @@
   -webkit-box-shadow: -2px 2px 8px 0px rgba(34, 60, 80, 0.2);
   -moz-box-shadow: -2px 2px 8px 0px rgba(34, 60, 80, 0.2);
   box-shadow: -2px 2px 8px 0px rgba(34, 60, 80, 0.2);
-  transition-property: width, right;
-  transition-duration: 200ms;
+  transition-property: transform;
+  transition-duration: 150ms;
+  transform: translateX(350px);
 
   &_loading {
     filter: blur(1px);
@@ -19,15 +20,13 @@
 
   &_open {
     width: 600px;
-    right: 8px;
+    transform: translateX(-8px);
     border: 1px solid var(--color-2, #dbdbdb);
   }
 
   &_closing {
-    transition-property: width, right, opacity;
-    transition-duration: 100ms, 100ms, 0s;
     width: 0;
-    right: -350px;
+    transform: translateX(350px);
   }
 
   &__back {
