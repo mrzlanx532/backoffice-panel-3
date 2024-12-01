@@ -1,7 +1,7 @@
 export default defineNuxtConfig({
   app: {
     head: {
-      title: 'LSM Backoffice',
+      title: 'DD | Backoffice',
     }
   },
 
