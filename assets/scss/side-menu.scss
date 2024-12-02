@@ -20,22 +20,21 @@
   }
 
   &__header {
+    flex-grow: 1;
     outline: none;
   }
 
   &__container {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     height: 100%;
   }
 
   &__footer {
-    padding: 10px 30px;
+    padding: 40px 30px;
     text-transform: uppercase;
     font-size: 12px;
     text-align: center;
-    margin: 30px;
 
     a {
       font-family: FiraSansExtraCondensed;
@@ -102,6 +101,10 @@
       width: 8px;
       display: inline-block;
     }
+  }
+
+  &__sections {
+    overflow-y: auto;
   }
 
   &__sections-list-item {

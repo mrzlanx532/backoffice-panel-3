@@ -97,7 +97,7 @@ const items = [
 }
 
 .img-container {
-  padding: 30px 10px 20px 30px;
+  padding: 30px 10px 30px 30px;
   display: flex;
   flex-direction: row;
 }
