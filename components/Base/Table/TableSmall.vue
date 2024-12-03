@@ -20,8 +20,6 @@ const {
 
   // Pagination
   totalItems,
-  currentPage,
-  onChangePage,
 
   // Other
   callPreset,
@@ -79,6 +77,9 @@ const searchString = ref('')
 const selectedPaginationItemsCount = ref(10)
 const fetchError: Ref<FetchError|null> = ref(null)
 
+/** pagination */
+const currentPage = ref(1)
+
 const localRequestProperties: Ref<{} | null> = ref(getLocalRequestProperties(props.requestProperties))
 
 const fetchData = async () => {
@@ -134,6 +135,12 @@ const onClickRow = (item: IItem) => {
 const onSearchStringInput = (value: string) => {
   currentPage.value = 1
   searchString.value = value
+
+  fetchData()
+}
+
+const onChangePage = (page: number, fetchData: () => {}) => {
+  currentPage.value = page
 
   fetchData()
 }

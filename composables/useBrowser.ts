@@ -98,13 +98,6 @@ export const useBrowser = () => {
     const loadingIsActive = ref(false)
 
     const totalItems = ref(0)
-    const currentPage = ref(1)
-
-    const onChangePage = (page: number, fetchData: () => {}) => {
-        currentPage.value = page
-
-        fetchData()
-    }
 
     const isVueComponent = (component: any): boolean => {
         return typeof component === 'object' && ('setup' in component || 'template' in component)
@@ -137,8 +130,6 @@ export const useBrowser = () => {
     return {
         /** Pagination */
         totalItems,
-        currentPage,
-        onChangePage,
 
         /** Items*/
         items,

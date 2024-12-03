@@ -39,8 +39,6 @@ const {
 
   // Pagination
   totalItems,
-  currentPage,
-  onChangePage,
 
   // Other
   callPreset,
@@ -49,6 +47,9 @@ const {
   isVueComponent,
   getSubComponent
 } = useBrowser()
+
+const router = useRouter()
+const route = useRoute()
 
 interface Props {
   urlPrefix: string,
@@ -166,6 +167,9 @@ const fetchError: Ref<FetchError|null> = ref(null)
 const openItem = ref({})
 const paginationItemsCountOptions = ref([20, 50, 100])
 const selectedPaginationItemsCount = ref(20)
+
+/** pagination */
+const currentPage = route.query.page ? ref(parseInt(route.query.page as string)) : ref(1)
 
 /** sorts */
 const sorts: Ref<{[key: string]: any}> = ref({})
@@ -444,6 +448,19 @@ const onCloseBulkActions = () => {
 
 const resetSelectedIds = () => {
   selectedIds.value = {}
+}
+
+const onChangePage = (page: number, fetchData: () => {}) => {
+  currentPage.value = page
+
+  void router.push({
+    path: route.path,
+    query: {
+      page: currentPage.value
+    }
+  })
+
+  fetchData()
 }
 
 defineExpose({

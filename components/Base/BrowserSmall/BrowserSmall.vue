@@ -24,8 +24,6 @@ const {
 
   // Pagination
   totalItems,
-  currentPage,
-  onChangePage,
 
   // Other
   callPreset,
@@ -112,6 +110,9 @@ const filtersByName: Ref<{[key: string]: IFilter}> = ref({})
 const searchString = ref('')
 const selectedPaginationItemsCount = ref(10)
 const fetchError: Ref<FetchError|null> = ref(null)
+
+/** pagination */
+const currentPage = ref(1)
 
 /** sorts */
 const sorts: Ref<{[key: string]: any}> = ref({})
@@ -232,6 +233,12 @@ const reset = () => {
   Object.keys(sorts.value).map((key) => {
     sorts.value[key] = null
   })
+
+  fetchData()
+}
+
+const onChangePage = (page: number, fetchData: () => {}) => {
+  currentPage.value = page
 
   fetchData()
 }
