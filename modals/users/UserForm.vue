@@ -121,14 +121,17 @@ const CompanyTab = {
     input({
       name: 'company_index',
       label: 'Индекс',
+      class: '--left'
     }),
     select({
       name: 'company_country_id',
       label: 'Страна',
+      class: '--middle'
     }),
     input({
       name: 'company_city',
-      label: 'Город'
+      label: 'Город',
+      class: '--right'
     })
   ]
 }
