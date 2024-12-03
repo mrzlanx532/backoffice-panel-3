@@ -26,7 +26,7 @@ const items = [
   },
   {
     name: 'Музыка',
-    icon: '/img/menu_icons_sprite.svg#user',
+    icon: '/img/menu_icons_sprite.svg#waveform',
     children: [
       {
         name: 'Каталог треков',
@@ -67,7 +67,7 @@ const items = [
   {
     name: 'Блог',
     link: '/blog',
-    icon: '/img/menu_icons_sprite.svg#user',
+    //icon: '/img/menu_icons_sprite.svg#waveform',
   },
 ]
 </script>

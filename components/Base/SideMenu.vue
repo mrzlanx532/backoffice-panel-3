@@ -9,7 +9,7 @@ interface IMenuItemChild {
 
 interface IMenuItem {
   name: string,
-  icon: string,
+  icon?: string,
   link?: string,
   children?: IMenuItemChild[]
 }
@@ -116,7 +116,7 @@ onMounted(() => {
                   <svg v-if="menuItem.icon" class="side-menu__icon">
                     <use :xlink:href="menuItem.icon" width="14" height="14"/>
                   </svg>
-                  <div>
+                  <div :class="{'--without-icon': !menuItem.icon}">
                     {{ menuItem.name }}
                   </div>
                 </NuxtLink>
@@ -124,7 +124,7 @@ onMounted(() => {
                   <svg v-if="menuItem.icon" class="side-menu__icon">
                     <use :xlink:href="menuItem.icon" width="14" height="14"/>
                   </svg>
-                  <div>{{ menuItem.name }}</div>
+                  <div :class="{'--without-icon': !menuItem.icon}">{{ menuItem.name }}</div>
                 </div>
               </li>
               <ul

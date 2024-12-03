@@ -9,6 +9,10 @@
   position: sticky;
   top: 0;
 
+  .--without-icon {
+    margin-left: 24px;
+  }
+
   &__icon {
     width: 14px;
     height: 14px;
@@ -81,6 +85,10 @@
     user-select: none;
     z-index: 1;
     position: relative;
+
+    &:hover {
+      background-color: var(--color-7);
+    }
 
     a {
       font-family: "FiraSansExtraCondensed";
