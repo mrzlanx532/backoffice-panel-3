@@ -97,17 +97,15 @@ await SSRLoadDetail(item, 'blog/posts/detail', route.params.id)
           Удалить
         </Button>
       </div>
-      <div class="btn__group ml_10">
-        <Button
-            @click="onChangeState"
-            :class="{
-              '--big': true,
-              '--outline-contrast-success': item?.state?.id === 'DRAFT',
-              '--outline-contrast-default': item?.state?.id === 'PUBLISHED'
-            }"
-        >{{ item?.state && item.state.id === 'DRAFT' ? 'Опубликовать' : 'Снять с публикации' }}</Button>
-      </div>
-
+      <Button
+          @click="onChangeState"
+          :class="{
+            'ml_10': true,
+            '--big': true,
+            '--outline-contrast-success': item?.state?.id === 'DRAFT',
+            '--outline-contrast-default': item?.state?.id === 'PUBLISHED'
+          }"
+      >{{ item?.state && item.state.id === 'DRAFT' ? 'Опубликовать' : 'Снять с публикации' }}</Button>
     </template>
     <template #content>
       <Tabs @change="onChangeSelectedTab" :tabs="tabs"/>
