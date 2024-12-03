@@ -94,12 +94,10 @@ const columns = ref([
       @itemUpdated="onItemUpdated"
   >
     <template #browserDetailHeader>
-      <div class="btn__group">
         <Button @click="onClickDelete({
           deleteURL: 'reports/delete',
           notificationMessage: 'Отчет успешно удален'
         })" :class="['--big --outline-danger']">Удалить</Button>
-      </div>
       <Tabs :tabs="tabs" @change="onChangeSelectedTab"/>
     </template>
     <template #browserDetailContent>
