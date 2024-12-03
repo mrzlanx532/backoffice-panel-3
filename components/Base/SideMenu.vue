@@ -93,6 +93,10 @@ onMounted(() => {
 
   updateDimensions()
 })
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateDimensions)
+})
 </script>
 
 <template>
