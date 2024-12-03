@@ -403,6 +403,7 @@ const reset = (isUpdateItem = false) => {
   fetchData()
 
   if (isUpdateItem) {
+    /* @ts-ignore */
     browserDetail.value!.fetchData()
   }
 }
