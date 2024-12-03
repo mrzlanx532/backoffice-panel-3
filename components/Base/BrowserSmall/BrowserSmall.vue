@@ -94,6 +94,19 @@ interface IFilter {
   }
 }
 
+interface IResponse {
+  filters: IFilter[],
+  items: IItem[],
+  meta: {
+    browser_id: string,
+    count: number,
+    page: number,
+    per_page: number,
+    searchable: boolean,
+    sort: string[]
+  }
+}
+
 const BrowserSmallEl = getCurrentInstance()
 
 const emit = defineEmits([
@@ -174,7 +187,7 @@ const fetchData = async () => {
 
   try {
 
-    const data = await $authFetch(props.urlPrefix, config)
+    const data = await $authFetch<IResponse>(props.urlPrefix, config)
 
     fetchError.value = null
     totalItems.value = data.meta.count
