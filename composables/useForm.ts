@@ -22,6 +22,7 @@ import FormInputFile from '~/components/Base/Form/InputFile.vue'
 import FormTextArea from '~/components/Base/Form/TextArea.vue'
 import FormCheckbox from '~/components/Base/Form/Checkbox.vue'
 import FormSwitcher from '~/components/Base/Form/Switcher.vue'
+import FormEditor from '~/components/Base/Form/Editor.vue'
 import Form from '~/components/Base/Form.vue'
 import Tabs from '~/components/Base/Tabs.vue'
 
@@ -44,6 +45,9 @@ interface IFormComponent {
 }
 
 interface ITextArea extends IFormComponent {
+}
+
+interface IEditor extends IFormComponent {
 }
 
 interface ICheckbox extends IFormComponent {
@@ -655,6 +659,16 @@ export const useForm = () => {
         }
     }
 
+    const editor = (config: IEditor): TFormDataItemOutput => {
+        const componentData = config.componentData ? config.componentData : {}
+
+        return {
+            ...getDefaultFormDataItemProperties(config),
+            component: FormEditor,
+            componentData: componentData
+        }
+    }
+
     const checkbox = (config: ICheckbox): TFormDataItemOutput => {
 
         const componentData = config.componentData ? config.componentData : {}
@@ -751,6 +765,7 @@ export const useForm = () => {
         datetime,
         inputFile,
         textArea,
+        editor,
         checkbox,
         switcher
     }

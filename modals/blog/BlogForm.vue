@@ -19,6 +19,7 @@ const {
   datetime,
   inputFile,
   textArea,
+  editor
 } = useForm()
 
 const {
@@ -63,7 +64,7 @@ const {
     label: 'Краткое содержание',
     class: '--full'
   }),
-  textArea({
+  editor({
     name: 'content',
     label: 'Содержание',
     class: '--full'

@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@editorjs/editorjs": "^2.30.7",
     "@mrzlanx532/nuxt-3-backoffice-ui": "^0.0.41",
     "@mrzlanx532/nuxt-3-laravel-auth-module": "^0.0.25",
     "@pinia/nuxt": "^0.5.1",
