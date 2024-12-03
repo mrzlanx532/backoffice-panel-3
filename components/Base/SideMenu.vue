@@ -4,7 +4,8 @@ import type { Ref } from 'vue'
 
 interface IMenuItemChild {
   name: string,
-  link: string
+  link: string,
+  icon?: string
 }
 
 interface IMenuItem {
@@ -140,7 +141,10 @@ onMounted(() => {
                     v-for="child in menuItem.children"
                     @click="onSubSectionMenuItemClick(child)"
                 >
-                  <NuxtLink :to="child.link">
+                  <svg v-if="child.icon" class="side-menu__icon">
+                    <use :xlink:href="child.icon" width="14" height="14"/>
+                  </svg>
+                  <NuxtLink :to="child.link" :class="{'--without-icon': !child.icon}">
                     {{ child.name }}
                   </NuxtLink>
                 </li>

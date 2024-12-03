@@ -56,18 +56,20 @@ const items = [
     children: [
       {
         name: 'Каталог пользователей',
-        link: '/users'
+        link: '/users',
+        icon: '/img/menu_icons_sprite.svg#user',
       },
       {
         name: 'Отчеты',
-        link: '/reports'
+        link: '/reports',
+        icon: '/img/menu_icons_sprite.svg#document',
       },
     ]
   },
   {
     name: 'Блог',
     link: '/blog',
-    //icon: '/img/menu_icons_sprite.svg#waveform',
+    icon: '/img/menu_icons_sprite.svg#users',
   },
 ]
 </script>

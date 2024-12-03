@@ -85,6 +85,12 @@
     user-select: none;
     z-index: 1;
     position: relative;
+    display: flex;
+    padding: 10px 0 10px 20px;
+
+    :nth-child(2) {
+      margin-left: 10px;
+    }
 
     &:hover {
       background-color: var(--color-7);
@@ -102,18 +108,7 @@
     }
 
     a {
-      padding: 10px 0 10px 30px;
       display: block;
-    }
-
-    a::before {
-      content: "";
-      border-bottom: 1px solid var(--color-gradient-2, orange);
-      position: relative;
-      left: -4px;
-      top: -4px;
-      width: 8px;
-      display: inline-block;
     }
   }
 
