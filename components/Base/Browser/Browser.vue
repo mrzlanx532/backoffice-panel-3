@@ -69,6 +69,19 @@ interface Props {
   isOpenBulkActionsDetail?: boolean
 }
 
+interface IResponse {
+  filters: IFilter[],
+  items: IItem[],
+  meta: {
+    browser_id: string,
+    count: number,
+    page: number,
+    per_page: number,
+    searchable: boolean,
+    sort: string[]
+  }
+}
+
 const props = withDefaults(defineProps<Props>(), {
   itemPrimaryKeyPropertyName: 'id',
   detailTitleProperty: 'id',
@@ -202,7 +215,7 @@ const fetchData = async () => {
 
   try {
 
-    const data = await $authFetch(props.urlPrefix, config)
+    const data = await $authFetch<IResponse>(props.urlPrefix, config)
 
     fetchError.value = null
     totalItems.value = data.meta.count
