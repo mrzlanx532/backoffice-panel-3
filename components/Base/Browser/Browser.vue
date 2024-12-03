@@ -165,11 +165,11 @@ const activeFilters: Ref<{[key: string]: any[]}> = ref({})
 const searchString = ref('')
 const fetchError: Ref<FetchError|null> = ref(null)
 const openItem = ref({})
-const paginationItemsCountOptions = ref([20, 50, 100])
-const selectedPaginationItemsCount = ref(20)
 
 /** pagination */
 const currentPage = route.query.page ? ref(parseInt(route.query.page as string)) : ref(1)
+const selectedPaginationItemsCount = route.query.per_page ? ref(parseInt(route.query.per_page as string)) : ref(20)
+const paginationItemsCountOptions = ref([20, 50, 100])
 
 /** sorts */
 const sorts: Ref<{[key: string]: any}> = ref({})
@@ -299,6 +299,16 @@ const onSearchStringInput = (value: string) => {
 const onChangePaginationItemsCount = (value: number) => {
   selectedPaginationItemsCount.value = value
   currentPage.value = 1
+
+  router.push({
+    path: route.path,
+    query: {
+      ...route.query,
+      ...{
+        per_page: selectedPaginationItemsCount.value
+      }
+    }
+  })
 }
 
 const onSortChanged = (name: string, value: string) => {
@@ -456,7 +466,8 @@ const onChangePage = (page: number, fetchData: () => {}) => {
   void router.push({
     path: route.path,
     query: {
-      page: currentPage.value
+      ...route.query,
+      ...{ page: currentPage.value}
     }
   })
 
