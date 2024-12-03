@@ -29,6 +29,13 @@ const {
   loadingIsActive,
 } = useBrowser()
 
+interface IResponse {
+  items: IItem[],
+  meta: {
+    total: number,
+  }
+}
+
 interface Props {
   h1: string,
   filters?: {
@@ -104,7 +111,7 @@ const fetchData = async () => {
 
   try {
 
-    const data = await $authFetch(props.urlPrefix, config)
+    const data = await $authFetch<IResponse>(props.urlPrefix, config)
 
     fetchError.value = null
     totalItems.value = data.meta.total
