@@ -4,6 +4,7 @@ import SideMenu from '@/components/Base/SideMenu.vue'
 const items = [
   {
     name: 'Шумы',
+    icon: '/img/menu_icons_sprite.svg#home',
     children: [
       {
         name: 'Каталог треков',
@@ -25,6 +26,7 @@ const items = [
   },
   {
     name: 'Музыка',
+    icon: '/img/menu_icons_sprite.svg#user',
     children: [
       {
         name: 'Каталог треков',
@@ -50,6 +52,7 @@ const items = [
   },
   {
     name: 'Пользователи',
+    icon: '/img/menu_icons_sprite.svg#user',
     children: [
       {
         name: 'Каталог пользователей',
@@ -63,7 +66,8 @@ const items = [
   },
   {
     name: 'Блог',
-    link: '/blog'
+    link: '/blog',
+    icon: '/img/menu_icons_sprite.svg#user',
   },
 ]
 </script>

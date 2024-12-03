@@ -9,6 +9,12 @@
   position: sticky;
   top: 0;
 
+  &__icon {
+    width: 14px;
+    height: 14px;
+    color: black;
+  }
+
   &__logo-container {
     cursor: pointer;
   }
@@ -126,8 +132,13 @@
       font-size: 14px;
       color: #000000;
       font-family: "FiraSansExtraCondensed";
-      padding: 10px 10px 10px 30px;
-      display: block;
+      padding: 10px 10px 10px 20px;
+      display: flex;
+      flex-direction: row;
+
+      :nth-child(2) {
+        margin-left: 10px;
+      }
     }
 
     &:hover {
@@ -137,7 +148,13 @@
   }
 
   &__sections-list-item-title {
-    padding: 10px 10px 10px 30px;
+    padding: 10px 10px 10px 20px;
+    display: flex;
+    flex-direction: row;
+
+    :nth-child(2) {
+      margin-left: 10px;
+    }
   }
 
   &__sections-list-item-arrow {

@@ -9,6 +9,7 @@ interface IMenuItemChild {
 
 interface IMenuItem {
   name: string,
+  icon: string,
   link?: string,
   children?: IMenuItemChild[]
 }
@@ -87,6 +88,8 @@ onMounted(() => {
     return {...acc, [value.name]: false}
   }, {}) : {}
 
+  window.addEventListener('resize', updateDimensions)
+
   updateDimensions()
 })
 </script>
@@ -110,9 +113,17 @@ onMounted(() => {
                   @click="onSectionMenuItemClick(menuItem)"
               >
                 <NuxtLink v-if="menuItem.link" :to="menuItem.link">
-                  {{ menuItem.name }}
+                  <svg v-if="menuItem.icon" class="side-menu__icon">
+                    <use :xlink:href="menuItem.icon" width="14" height="14"/>
+                  </svg>
+                  <div>
+                    {{ menuItem.name }}
+                  </div>
                 </NuxtLink>
                 <div v-else class="side-menu__sections-list-item-title">
+                  <svg v-if="menuItem.icon" class="side-menu__icon">
+                    <use :xlink:href="menuItem.icon" width="14" height="14"/>
+                  </svg>
                   <div>{{ menuItem.name }}</div>
                 </div>
               </li>
