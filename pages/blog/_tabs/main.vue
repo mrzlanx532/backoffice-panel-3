@@ -27,7 +27,7 @@ const props = defineProps({
     </Section>
     <Section>
       <template #header>Полное содержание</template>
-      <template #content>{{ props.item?.content ? props.item.content : '[Не заполнено]' }}</template>
+      <template #content><div v-html="props.item?.content ? props.item.content : '[Не заполнено]'" /></template>
     </Section>
   </div>
 </template>

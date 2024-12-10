@@ -1,23 +1,28 @@
 <script setup lang="ts">
-import { onBeforeUnmount, ref, shallowRef, onMounted } from 'vue'
-
-const emit = defineEmits(['update:modelValue'])
-
+import { onBeforeUnmount, ref, shallowRef } from 'vue'
 /* @ts-ignore */
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { i18nChangeLanguage } from '@wangeditor/editor'
 
 i18nChangeLanguage('ru')
 
+const props = defineProps<{
+  modelValue?: string,
+}>()
+
+const emit = defineEmits(['update:modelValue'])
+
 const editorRef = shallowRef()
 
-const valueHtml = ref('<p>hello</p>')
+const valueHtml = ref(props.modelValue)
 
-onMounted(() => {
-  setTimeout(() => {
-    valueHtml.value = '<p>Ajax async set HTML.</p>'
-  }, 1500)
-})
+watch(
+    () => props.modelValue,
+    (value) => {
+      valueHtml.value = value
+    },
+    { once: true}
+)
 
 const toolbarKeys = [
   'headerSelect',
@@ -90,12 +95,18 @@ onBeforeUnmount(() => {
 
 // @ts-ignore
 const handleCreated = (editor) => {
-  editorRef.value = editor // record editor instance
+  editorRef.value = editor
 }
 
 // @ts-ignore
 const handleChange = (editor) => {
   emit('update:modelValue', editor.getHtml())
+}
+
+// @ts-ignore
+const onCustomPaste = (editor, event) => {
+  editor.insertText(event.clipboardData.getData('text/plain'))
+  event.preventDefault()
 }
 </script>
 
@@ -108,12 +119,13 @@ const handleChange = (editor) => {
         :mode="'default'"
     />
     <Editor
-        style="height: 300px;"
+        style="height: auto; min-height: 300px; background: #fff; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;"
         v-model="valueHtml"
         :defaultConfig="editorConfig"
         :mode="'default'"
         @onCreated="handleCreated"
         @onChange="handleChange"
+        @customPaste="onCustomPaste"
     />
   </div>
 </template>

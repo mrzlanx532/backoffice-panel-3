@@ -30,16 +30,20 @@ export default defineNuxtPlugin((nuxtApp) => {
         },
         videoModule: {
             insertVideo: 'Видео',
-            videoSrc: 'src',
+            videoSrc: 'Ссылка',
             videoPoster: 'Заставка',
-            ok: 'ок'
+            ok: 'ок',
+            videoSrcPlaceHolder: '',
+            videoPosterPlaceHolder: ''
         },
         image: {
             netImage: 'Изображение',
-            src: 'src',
+            src: 'Ссылка',
             desc: 'Описание',
-            link: 'Ссылка',
-            edit: 'Редактировать'
+            link: 'data-href (необязательно)',
+            edit: 'Редактировать',
+            delete: 'Удалить',
+            viewLink: 'Ссылка'
         },
         blockQuote: {
             title: 'Цитата'
