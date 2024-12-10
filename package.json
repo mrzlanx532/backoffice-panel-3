@@ -15,6 +15,8 @@
     "@mrzlanx532/nuxt-3-laravel-auth-module": "^0.0.25",
     "@pinia/nuxt": "^0.5.1",
     "@vuepic/vue-datepicker": "^8.8.1",
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-vue": "^5.1.12",
     "click-outside-vue3": "^4.0.1",
     "defu": "^6.1.4",
     "lodash.debounce": "^4.0.8",
