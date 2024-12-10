@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onBeforeUnmount, ref, shallowRef, onMounted } from 'vue'
 
+const emit = defineEmits(['update:modelValue'])
+
 /* @ts-ignore */
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { i18nChangeLanguage } from '@wangeditor/editor'
@@ -26,8 +28,8 @@ const toolbarKeys = [
       'bold',
       'italic',
       'through',
-      'code',
       'underline',
+      'code',
       'clearStyle'
     ]
   },
@@ -43,6 +45,7 @@ const toolbarKeys = [
       'justifyJustify',
     ]
   },
+  'insertTable',
   {
     key: 'group-more-list',
     title: 'Список',
@@ -51,14 +54,19 @@ const toolbarKeys = [
       'bulletedList'
     ]
   },
-  'todo',
-  'blockquote',
-  'insertImage',
-  'insertVideo',
-  'insertTable',
-  'insertLink',
-  'codeBlock',
-    'divider',
+  {
+    key: 'group-more-more',
+    title: 'Еще',
+    menuKeys: [
+      'insertImage',
+      'insertVideo',
+      'todo',
+      'blockquote',
+      'insertLink',
+      'divider',
+      'codeBlock',
+    ]
+  },
     'undo',
     'redo'
 ]
@@ -87,20 +95,20 @@ const handleCreated = (editor) => {
 
 // @ts-ignore
 const handleChange = (editor) => {
-  //console.log(editor.getHtml())
+  emit('update:modelValue', editor.getHtml())
 }
 </script>
 
 <template>
-  <div style="border: 1px solid #ccc">
+  <div class="wangeditor-container">
     <Toolbar
-        style="border-bottom: 1px solid #ccc; "
+        style="border-bottom: 1px solid #dbdbdb;"
         :editor="editorRef"
         :defaultConfig="toolbarConfig"
         :mode="'default'"
     />
     <Editor
-        style="height: auto; height: 300px;"
+        style="height: 300px;"
         v-model="valueHtml"
         :defaultConfig="editorConfig"
         :mode="'default'"
@@ -109,3 +117,29 @@ const handleChange = (editor) => {
     />
   </div>
 </template>
+
+<style>
+.wangeditor-container {
+  border: 1px solid #dbdbdb;
+  border-radius: 5px;
+
+  >div:nth-child(1) {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+
+  .w-e-bar {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+
+  .w-e-text-container {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  .w-e-text-container [data-slate-editor] {
+    padding: 0 12px;
+  }
+}
+</style>

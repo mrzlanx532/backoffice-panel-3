@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import EditorJS from '~/components/Base/EditorJS.vue'
-import { useNuxtApp } from '#app'
+import WangEditor from '~/components/WangEditor.vue'
 import type { OutputData } from '@editorjs/editorjs'
 
 const emit = defineEmits(['update:modelValue'])
+
+const model = defineModel()
 
 const editorEl = useTemplateRef<HTMLElement>('editorEl')
 
@@ -40,19 +41,8 @@ const onChange = (data: OutputData) => {
   <div>
     <label class="label">{{ props.label }}</label>
     <ClientOnly>
-      <div class="editorjs__wrapper">
-        <EditorJS @change="onChange" :data="props.modelValue as undefined"/>
-      </div>
+      <WangEditor v-model="model" class="mt_10" @change="onChange"/>
     </ClientOnly>
     <div class="input__error">{{ props.errors && props.errors[0] ? props.errors[0] : null }}</div>
   </div>
 </template>
-
-<style scoped>
-.editorjs__wrapper {
-  margin-top: 10px;
-  padding: 0 10px;
-  border: 1px solid var(--color-2, #dbdbdb);
-  border-radius: 5px;
-}
-</style>
