@@ -307,10 +307,15 @@ export const useForm = () => {
                             footer: () => h('div', {class: 'btn__group'}, [
                                 h('button', {
                                     class: 'btn --primary --big',
-                                    onClick: () => onClickSave(props, emit),
+                                    type: 'submit',
+                                    onClick: (e) => {
+                                        e.preventDefault()
+                                        void onClickSave(props, emit)
+                                    },
                                 }, 'Сохранить'),
                                 h('button', {
                                     class: 'btn --outline-primary --big',
+                                    type: 'button',
                                     onClick: () => {
                                         emit('modal:close')
                                     }
@@ -436,10 +441,15 @@ export const useForm = () => {
                             footer: () => h('div', {class: 'btn__group'}, [
                                 h('button', {
                                     class: 'btn --primary --big',
-                                    onClick: () => onClickSave(props, emit),
+                                    type: 'submit',
+                                    onClick: (e) => {
+                                        e.preventDefault()
+                                        void onClickSave(props, emit)
+                                    }
                                 }, 'Сохранить'),
                                 h('button', {
                                     class: 'btn --outline-primary --big',
+                                    type: 'button',
                                     onClick: () => {
                                         emit('modal:close')
                                     }

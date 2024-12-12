@@ -5,7 +5,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="form">
+  <form class="form">
     <div class="form__header">
       <div class="form__header-section-top">
         <div class="form__header-title">{{ props.title }}</div>
@@ -23,5 +23,5 @@ const props = defineProps<{
     <div class="form__footer">
       <slot name="footer"/>
     </div>
-  </div>
+  </form>
 </template>
