@@ -80,6 +80,7 @@ const toolbarConfig = {
   toolbarKeys
 }
 const editorConfig = {
+  autoFocus: false,
   toolbarKeys
 }
 
