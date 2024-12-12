@@ -17,13 +17,22 @@ const formData = ref({
   password: '4aWvh75t'
 })
 
-const { $auth } = useNuxtApp()
+const { $auth, $notification } = useNuxtApp()
 
 async function onClick() {
   isWait.value = true
 
   await $auth().login(formData.value).catch((err) => {
+
+    if (err.status === undefined) {
+      $notification.push({type: 'danger', message: 'Сервер недоступен'})
+
+      return
+    }
+
     errors.value = err.data.errors
+
+  }).finally(() => {
     isWait.value = false
   })
 }

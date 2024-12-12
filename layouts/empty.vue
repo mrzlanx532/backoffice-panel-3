@@ -5,5 +5,6 @@
 <template>
   <div id="app">
     <slot/>
+    <Notification/>
   </div>
 </template>
