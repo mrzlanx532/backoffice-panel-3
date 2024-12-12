@@ -153,5 +153,9 @@ const onCustomPaste = (editor, event) => {
   .w-e-text-container [data-slate-editor] {
     padding: 0 12px;
   }
+
+  .w-e-scroll {
+    min-height: 300px;
+  }
 }
 </style>
