@@ -168,7 +168,10 @@ const onChangeState = async () => {
               formURL: 'blog/posts/form',
               modalComponent: BlogForm,
               modalTitle: 'Создание статьи',
-              notificationMessage: 'Статья добавлена'
+              notificationMessage: 'Статья добавлена',
+              modalConfig: {
+                isPreventClickOverlay: true
+              }
             })"
             :class="['--small --primary']"
         >
@@ -183,7 +186,10 @@ const onChangeState = async () => {
               formURL: 'blog/posts/form',
               modalComponent: BlogForm,
               modalTitle: 'Редактирование статьи',
-              notificationMessage: 'Статья изменена'
+              notificationMessage: 'Статья изменена',
+              modalConfig: {
+                isPreventClickOverlay: true
+              }
             })"
             :class="['--big --outline-primary']"
         >

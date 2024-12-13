@@ -8,7 +8,11 @@ export interface IConfigCreateEdit {
     formURL: string,
     modalComponent: Component,
     modalTitle: string,
-    notificationMessage: string
+    notificationMessage: string,
+    modalConfig?: {
+        isPreventClickOverlay?: boolean,
+        modalContainerClass?: string
+    }
 }
 
 export interface IConfigDelete {
@@ -37,7 +41,7 @@ export const usePage = () => {
         $modal.load(config.modalComponent, {
             title: config.modalTitle,
             formResponse
-        }).then(() => {
+        }, config.modalConfig).then(() => {
             browserEl.value!.reset()
             $notification.push({type: 'success', message: config.notificationMessage})
         })
@@ -55,7 +59,7 @@ export const usePage = () => {
             title: config.modalTitle,
             id: item.value!.id,
             formResponse
-        }).then(() => {
+        }, config.modalConfig).then(() => {
             browserEl.value!.reset(true)
             $notification.push({type: 'success', message: config.notificationMessage})
         })
