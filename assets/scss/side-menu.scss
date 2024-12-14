@@ -1,10 +1,10 @@
 .side-menu {
   width: 240px;
   height: 100vh;
-  background-color: var(--color-2, #dbdbdb);
+  background-color: var(--side-menu-background-color);
   -webkit-box-shadow: 0 5px 10px 2px rgba(34, 60, 80, 0.2);
   -moz-box-shadow: 0 5px 10px 2px rgba(34, 60, 80, 0.2);
-  box-shadow: 0 5px 10px 2px rgba(34, 60, 80, 0.2);
+  box-shadow: var(--main-box-shadow);
   z-index: 1;
   position: sticky;
   top: 0;
@@ -58,7 +58,7 @@
   }
 
   &__sub-sections-list {
-    background: var(--color-3, #f3f3f3);
+    background: var(--side-menu-sub-section-list-background-color);
     max-height: 0;
     transition-property: max-height;
     transition-duration: 1.5s;
@@ -117,7 +117,7 @@
   }
 
   &__sections-list-item {
-    background: var(--color-2, #dbdbdb);
+    background: var(--side-menu-background-color);
     text-transform: uppercase;
     text-decoration: none;
     color: #000000;
@@ -127,7 +127,7 @@
     position: relative;
     border-left: none;
     z-index: 2;
-    border-bottom: 1px solid #cfcfcf;
+    border-bottom: var(--side-menu-item-border-bottom);
     outline: none;
 
     >a {

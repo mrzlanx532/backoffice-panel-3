@@ -1,8 +1,9 @@
 .detail {
   background: var(--color-1, #ffffff);
   padding: 20px;
-  border-radius: 10px;
+  border-radius: var(--main-border-radius);
   min-height: calc(100vh - 40px);
+  box-shadow: var(--main-box-shadow);
 
   &__header {
     margin-top: 20px;

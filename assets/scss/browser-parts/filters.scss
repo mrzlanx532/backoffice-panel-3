@@ -3,9 +3,10 @@
   padding: 15px;
   background: var(--color-1, #ffffff);
   margin-right: 10px;
-  border-radius: 10px;
+  border-radius: var(--main-border-radius);
   height: 100%;
   z-index: 1;
+  box-shadow: var(--main-box-shadow);
 }
 
 &__filter {

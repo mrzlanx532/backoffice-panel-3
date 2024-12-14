@@ -18,6 +18,24 @@
   --scrollable-thickness: 4px;
   --scrollable-track-background: #dbdbdb;
   --scrollable-slider-background: linear-gradient(to bottom, #DE4020 0%, orange 100%);
+
+  /* Side-menu */
+  --side-menu-background-color: var(--main-background-color); // Платиновый
+
+  /* Browser detail */
+  --browser-detail-header-background-color: var(--main-background-color);
+
+  /* Login form */
+  --login-form-background-color: var(--main-background-color);
+
+  /* Page container */
+  --page-container-background-color: linear-gradient(to top right, #ffffff 0%, #f8e1d0 100%);
+
+  --browser-control-panel-padding-bottom-color: #ffede6;
+
+  --main-padding-color: #e7e7e7;
+  --side-menu-item-border-bottom: 1px solid var(--main-padding-color);
+  --side-menu-sub-section-list-background-color: #f7f7f7;
 }
 
 * {
