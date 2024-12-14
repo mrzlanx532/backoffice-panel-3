@@ -99,7 +99,7 @@
 
       &:hover {
         cursor: pointer;
-        background: var(--color-3, #f3f3f3);
+        background-color: var(--browser-table-tr-background-color);
       }
     }
   }

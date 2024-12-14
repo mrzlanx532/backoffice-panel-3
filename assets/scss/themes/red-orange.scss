@@ -35,7 +35,11 @@
 
   --main-padding-color: #e7e7e7;
   --side-menu-item-border-bottom: 1px solid var(--main-padding-color);
-  --side-menu-sub-section-list-background-color: #f7f7f7;
+  --side-menu-sub-section-list-background-color: var(--main-hover-background-color);
+
+  /* Browser table */
+  --browser-table-tr-background-color: var(--main-hover-background-color);
+  --select-dropdown-hover-background-color: var(--main-hover-background-color);
 }
 
 * {
