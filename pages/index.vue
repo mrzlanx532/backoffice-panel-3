@@ -74,7 +74,10 @@ const onChangeStateButton = (_selectedOption: IStateButtonOption) => {
 </script>
 
 <template>
-  <p style="margin-top: 20px;">Для начала работы используйте меню слева</p>
+  <div style="background: white; border-radius: 7px; min-height: calc(100vh - 40px); padding: 20px;">
+    <div class="page__title">Главная</div>
+    <p class="mt_10">Для начала работы используйте меню слева</p>
+  </div>
   <!--  <Page h1="Главная" style="background: white; border-radius: 5px;">
       <p style="margin-top: 20px;">Для начала работы используйте меню слева</p>
 
