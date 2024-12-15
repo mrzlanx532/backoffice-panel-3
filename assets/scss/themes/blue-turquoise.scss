@@ -10,7 +10,7 @@
 
   --color-gradient-1: #1ba512;
   --color-gradient-2: #12a599;
-  --color-gradient-intermediate: #12a572;
+  --color-gradient-intermediate: #12bd8a;
 
   /* Document Scroll */
   --document-scroll-background: linear-gradient(to bottom, var(--color-gradient-1) 0%, var(--color-gradient-2) 100%);
@@ -23,4 +23,20 @@
 
   /* Browser detail */
   --browser-detail-header-background-color: #fdf9f6;
+
+  /* Login form */
+  --login-form-background-color: var(--main-background-color);
+
+  /* Page container */
+  --page-container-background-color: linear-gradient(to top right, #ffffff 0%, #d3f8d0 100%);
+
+  /* Side menu */
+  --side-menu-item-border-bottom: 1px solid var(--main-border-color);
+  --side-menu-sub-section-list-background-color: var(--main-hover-background-color);
+
+  /* Browser table */
+  --browser-table-tr-background-color: var(--main-hover-background-color);
+
+  /* Select */
+  --select-dropdown-hover-background-color: var(--main-hover-background-color);
 }
