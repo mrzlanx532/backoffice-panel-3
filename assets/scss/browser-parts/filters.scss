@@ -513,26 +513,22 @@
     margin: 1px 0;
 
     &:hover {
-      color: #ff6e00;
+      color: var(--color-gradient-2);
     }
 
     &.--today {
-      border: 1px solid orange;
+      border: 1px solid var(--color-gradient-2);
     }
 
     &.--selected {
-      border: 1px solid orange;
-      background: orange;
+      border: 1px solid var(--color-gradient-2);;
+      background: var(--color-gradient-2);;
       color: var(--color-gradient-1);
       color: var(--color-1, #ffffff);
     }
 
     &.--not-current {
       color: var(--color-4, #dbdbdb);
-
-      &:hover {
-        color: #ff6e00;
-      }
     }
   }
 
