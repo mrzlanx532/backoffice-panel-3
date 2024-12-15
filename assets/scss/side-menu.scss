@@ -1,7 +1,7 @@
 .side-menu {
   width: 240px;
   height: 100vh;
-  background-color: var(--side-menu-background-color);
+  background-color: var(--side-menu-background-color, #ffffff);
   -webkit-box-shadow: 0 5px 10px 2px rgba(34, 60, 80, 0.2);
   -moz-box-shadow: 0 5px 10px 2px rgba(34, 60, 80, 0.2);
   box-shadow: var(--main-box-shadow);
@@ -93,10 +93,10 @@
     }
 
     &:hover {
-      color: var(--side-menu-list-item-hover-color);
+      color: var(--side-menu-list-item-hover-color, #606060);
 
       svg, >a {
-        color: var(--side-menu-list-item-hover-color);
+        color: var(--side-menu-list-item-hover-color, #606060);
       }
     }
 
@@ -149,11 +149,11 @@
     }
 
     &:hover {
-      color: var(--side-menu-list-item-hover-color);
+      color: var(--side-menu-list-item-hover-color, #606060);
       cursor: pointer;
 
       svg, >a {
-        color: var(--side-menu-list-item-hover-color);
+        color: var(--side-menu-list-item-hover-color, #606060);
       }
     }
   }
