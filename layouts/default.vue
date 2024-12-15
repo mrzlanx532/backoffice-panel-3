@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useNuxtApp } from '#imports'
 import SideMenu from '@/components/Base/SideMenu.vue'
 
 const items = [
@@ -72,12 +73,22 @@ const items = [
     icon: '/img/menu_icons_sprite.svg#users',
   },
 ]
+
+const {
+  $auth
+} = useNuxtApp()
+
+const user = ref({
+  id: $auth().user.value.id,
+  name: $auth().user.value.name,
+  img: $auth().user.value.picture.original,
+})
 </script>
 
 <template>
   <div id="app">
     <div class="container">
-      <SideMenu :items="items">
+      <SideMenu :items="items" :user="user">
         <div class="img-container">
           <img alt="logo" src="/img/logo.png"/>
           <div class="logo-text-container">Digital Dyatel</div>

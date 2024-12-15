@@ -2,6 +2,13 @@
 import { useNuxtApp, useRouter } from '#imports'
 import type { Ref } from 'vue'
 
+interface IAuthorizedUser {
+  id: string|number,
+  name: string,
+  role?: string,
+  img?: string,
+}
+
 interface IMenuItemChild {
   name: string,
   link: string,
@@ -16,7 +23,8 @@ interface IMenuItem {
 }
 
 const props = defineProps<{
-  items: IMenuItem[]
+  items: IMenuItem[],
+  user: IAuthorizedUser,
 }>()
 
 const router = useRouter()
@@ -158,6 +166,9 @@ onUnmounted(() => {
         </div>
       </div>
       <div ref="footerEl" class="side-menu__footer">
+        <img :src="props.user.img ?? '/img/avatar.png'" alt="avatar">
+        <p v-if="props.user.name" class="username">{{ props.user.name }}</p>
+        <p class="role">{{ props.user.role ?? 'Администратор' }}</p>
         <a @click="logout">Выйти</a>
       </div>
     </div>
