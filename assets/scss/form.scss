@@ -16,12 +16,16 @@
 
   }
 
+  &__content {
+    background: var(--main-background-color, #ffffff);
+  }
+
   &__header {
     padding: 20px;
     position: sticky;
     z-index: 3;
     top: 0;
-    background: var(--color-1, #ffffff);
+    background: var(--main-background-color, #ffffff);
     border-bottom: 1px solid var(--color-2, #dbdbdb);
 
     .tabs {

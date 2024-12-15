@@ -29,7 +29,7 @@
   thead {
     tr {
       text-align: left;
-      background-color: var(--color-1, #ffffff);
+      background-color: var(--main-background-color, #ffffff);
 
       .container {
         display: flex;
@@ -84,7 +84,7 @@
 
   tbody {
     tr {
-      background-color: var(--color-1, #ffffff);
+      background-color: var(--main-background-color, #ffffff);
       border-top: 1px solid var(--main-border-color);
 
       td {

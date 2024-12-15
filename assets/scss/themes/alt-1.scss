@@ -1,16 +1,9 @@
 :root {
   /* Colors */
-  --color-1: #ffffff;
-  --color-2: #dbdbdb;
-  --color-3: #f3f3f3;
-  --color-4: #757575;
-  --color-5: #2b2b2b;
-  --color-6: #959595;
-  --color-7: #e8e7e7;
 
-  --color-gradient-1: #0091a8;
-  --color-gradient-2: #00c171;
-  --color-gradient-intermediate: #00A98D;
+  --color-gradient-1: #007183;
+  --color-gradient-2: #009f5e;
+  --color-gradient-intermediate: #008871;
 
   /* Document Scroll */
   --document-scroll-background: linear-gradient(to bottom, var(--color-gradient-1) 0%, var(--color-gradient-2) 100%);

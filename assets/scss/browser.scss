@@ -5,7 +5,7 @@
   @import "browser-detail";
 
   &__control-panel {
-    background: var(--color-1, #ffffff);
+    background: var(--main-background-color, #ffffff);
     padding: 5px 15px;
     display: flex;
     justify-content: space-between;
