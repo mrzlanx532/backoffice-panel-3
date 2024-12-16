@@ -1,5 +1,14 @@
 <script setup lang="ts">
 import type { NuxtError } from '#app'
+import { useNuxtApp } from '#imports'
+
+interface IUser {
+  id: number,
+  name: string,
+  picture: {
+    original: string
+  } | null
+}
 
 const props = defineProps({
   error: Object as () => NuxtError
@@ -9,6 +18,8 @@ const {
   $auth
 } = useNuxtApp()
 
+const authorizedUser = $auth().getUser<IUser>()
+
 type layoutNameType = 'default' | 'empty'
 
 const config = useRuntimeConfig()
@@ -17,7 +28,7 @@ let layoutName: layoutNameType = 'default'
 const to = ref(config.public.laravelAuth.redirects.auth)
 const marginTop = ref('-20px')
 
-if ($auth().user.value === null) {
+if (authorizedUser.value === null) {
   layoutName = 'empty'
   to.value = config.public.laravelAuth.redirects.guest
   marginTop.value = '0'

@@ -2,6 +2,14 @@
 import { useNuxtApp } from '#imports'
 import SideMenu from '@/components/Base/SideMenu.vue'
 
+interface IUser {
+  id: number,
+  name: string,
+  picture: {
+    original: string
+  } | null
+}
+
 const items = [
   {
     name: 'Шумы',
@@ -78,10 +86,12 @@ const {
   $auth
 } = useNuxtApp()
 
+const authorizedUser = $auth().getUser<IUser>()
+
 const user = ref({
-  id: $auth().user.value.id,
-  name: $auth().user.value.name,
-  img: $auth().user.value.picture.original,
+  id: authorizedUser.value!.id,
+  name: authorizedUser.value!.name,
+  img: authorizedUser.value!.picture?.original,
 })
 </script>
 
