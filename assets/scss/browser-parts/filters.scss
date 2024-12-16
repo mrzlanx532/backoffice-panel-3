@@ -17,7 +17,7 @@
 
   &.--useless, &.--useless:hover {
     color: #757575;
-    cursor: default;
+    pointer-events: none;
   }
 
   &:hover {
