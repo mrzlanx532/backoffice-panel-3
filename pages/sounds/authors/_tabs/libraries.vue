@@ -92,7 +92,7 @@ const columns = [
   {
     name: '_',
     title: '',
-    classes: ['--min-width'],
+    class: '--min-width',
     component: editColumn
   },
 ]

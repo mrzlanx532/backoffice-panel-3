@@ -3,7 +3,7 @@ import { type IColumn } from '~/composables/useBrowser'
 
 const emit = defineEmits(['sortChanged'])
 
-type ISort = 'asc'|'desc'|null
+type ISort = 'asc' | 'desc' | 'null'
 
 const props = defineProps<{
   column: IColumn,
@@ -25,7 +25,7 @@ const nextValue = (value: ISort) => {
 </script>
 
 <template>
-  <th :class="column.hasOwnProperty('classes') ? column.classes.reduce((concatString, className) => {return `${concatString} ${className}`}) : null">
+  <th :class="column.class">
     <div class="container">
       <div class="title">{{ column.title }}</div>
       <div

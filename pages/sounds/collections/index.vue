@@ -75,7 +75,7 @@ const columns: Ref<IColumn[]> = ref([
   {
     name: 'tracks_counter',
     title: 'Кол-во треков',
-    classes: ['--min-width']
+    class: '--min-width'
   },
 ])
 </script>

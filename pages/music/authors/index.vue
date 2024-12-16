@@ -30,37 +30,27 @@ const columns = ref([
       title: 'name_ru',
       firstLetterAsImage: true
     },
-    classes: [
-      '--min-width'
-    ]
+    class: '--min-width'
   },
   {
     name: 'name_ru',
     title: 'Имя',
-    classes: [
-      '--max-width-200'
-    ]
+    class: '--max-width-200'
   },
   {
     name: 'tracks_counter',
     title: 'Треки',
-    classes: [
-      '--max-width-200'
-    ]
+    class: '--max-width-200'
   },
   {
     name: 'albums_counter',
     title: 'Альбомы',
-    classes: [
-      '--max-width-200'
-    ]
+    class: '--max-width-200'
   },
   {
     name: 'created_at',
     title: 'Создан',
-    classes: [
-      '--min-width'
-    ],
+    class: '--min-width',
     preset: {
       name: 'timestampToFormatPreset',
     },

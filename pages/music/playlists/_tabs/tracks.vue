@@ -80,7 +80,7 @@ const columns: Ref<IColumn[]> = ref([
   {
     title: '',
     component: ButtonColumn,
-    classes: ['--min-width']
+    class: '--min-width'
   }
 ])
 

@@ -19,6 +19,7 @@ export interface IConfigItem {
 export interface IColumn {
     name: string,
     title: string,
+    class?: string,
     toFormat?: (item: {[key: string]: any}) => {}
     component?: any | {
         component: Component,

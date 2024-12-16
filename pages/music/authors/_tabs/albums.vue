@@ -23,7 +23,7 @@ const columns: IColumn[] = [
   {
     name: 'tracks_counter',
     title: 'Треки',
-    classes: ['--min-width']
+    class: '--min-width'
   },
 ]
 
@@ -41,7 +41,7 @@ watch(
 )
 
 const onClickRow = () => {
-  window.open('/music/albums/' + props.item.id)
+  window.open('/music/albums/' + props.item!.id)
 }
 </script>
 
