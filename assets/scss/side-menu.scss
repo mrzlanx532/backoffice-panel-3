@@ -88,6 +88,7 @@
     position: relative;
     visibility: collapse;
     overflow-y: hidden;
+    will-change: max-height;
 
     &_open {
       max-height: 100vh;

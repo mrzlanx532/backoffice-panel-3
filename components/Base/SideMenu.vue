@@ -32,7 +32,7 @@ const router = useRouter()
 const menuItemsIsClosing: Ref<{[key: string]: boolean}> = ref({})
 const activeMenuItem: Ref<string|null> = ref(null)
 
-const sectionsEl = useTemplateRef<HTMLElement>('sectionsEl')
+const sectionsEl = useTemplateRef<HTMLElement & {scrollable_manager: { updateScroll: () => void}}>('sectionsEl')
 const logoContainerEl = useTemplateRef<HTMLElement>('logoContainerEl')
 const footerEl = useTemplateRef<HTMLElement>('footerEl')
 
@@ -69,6 +69,10 @@ const onSectionMenuItemClick = (menuItem: IMenuItem | null) => {
   closeOpenMenuItem(oldActiveMenuItem)
 
   menuItem.link ? router.push(menuItem.link) : null
+
+  setTimeout(() => {
+    sectionsEl.value!.scrollable_manager.updateScroll()
+  }, 400)
 }
 
 const onSubSectionMenuItemClick = (child: IMenuItemChild) => {
