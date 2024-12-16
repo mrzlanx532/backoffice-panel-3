@@ -172,9 +172,12 @@ const currentPage = route.query.page ? ref(parseInt(route.query.page as string))
 const selectedPaginationItemsCount = route.query.per_page ? ref(parseInt(route.query.per_page as string)) : ref(20)
 const paginationItemsCountOptions = ref([20, 50, 100])
 
+const sortURL = route.query.sort ? JSON.parse(route.query.sort as string) : undefined
+
 /** sorts */
-const sorts: Ref<{[key: string]: any}> = ref({})
-const activeSort: Ref<string|null> = ref(null)
+const sorts: Ref<{[key: string]: any}> = ref(sortURL && sortURL.field && sortURL.value ? { [sortURL.field]: sortURL.value }: {})
+
+const activeSort: Ref<string|null> = ref(sortURL && sortURL.field ? sortURL.field : null)
 
 const debouncedFetchDataFunction: Ref<null|DebouncedFunc<() => Promise<void>>> = ref(null)
 const localRequestProperties: Ref<{} | null> = ref(getLocalRequestProperties(props.requestProperties))
@@ -231,7 +234,7 @@ const fetchData = async () => {
 
       setFilters(data.filters)
       sorts.value = data.meta.sort.reduce((acc: {[key: string]: any}, value: string) => {
-        return {...acc, [value]: null}
+        return {...acc, [value]: value === activeSort.value ? sorts.value[value] : null}
       }, {})
     }
 
@@ -325,6 +328,19 @@ const onSortChanged = (name: string, value: string) => {
   sorts.value[name] = value
 
   fetchData()
+
+  void router.push({
+    path: route.path,
+    query: {
+      ...route.query,
+      ...{
+        sort: value ? JSON.stringify({
+          field: name,
+          value: value
+        }) : undefined
+      }
+    }
+  })
 }
 
 const setFilters = (_filters: IFilter[]) => {
