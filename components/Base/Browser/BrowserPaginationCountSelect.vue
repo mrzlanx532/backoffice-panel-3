@@ -1,11 +1,20 @@
 <script setup lang="ts">
+import type { Ref } from 'vue'
+
 const props = defineProps<{
   options: number[],
   selectedValue: number
 }>()
 
-const localSelectedValue = ref(null)
+const localSelectedValue: Ref<number | null> = ref(null)
 const isSelecting = ref(false)
+
+watch(
+    () => props.selectedValue,
+    (value) => {
+      localSelectedValue.value = value
+    }
+)
 
 const emit = defineEmits(['change'])
 
@@ -13,7 +22,7 @@ const onClickSelectedValue = () => {
   isSelecting.value = !isSelecting.value
 }
 
-const onMouseDownOnDropdownOption = (option) => {
+const onMouseDownOnDropdownOption = (option: number) => {
 
   localSelectedValue.value = option
   isSelecting.value = false

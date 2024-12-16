@@ -163,7 +163,7 @@ const filtersByName: Ref<{[key: string]: IFilter}> = ref({})
 const activeFilters: Ref<{[key: string]: any[]}> = ref({})
 const activeFiltersIsExists = computed(() => Object.keys(activeFilters.value).length > 0)
 
-const searchString = ref('')
+const searchString: Ref<string> = ref(route.query.search_string ? route.query.search_string as string : '')
 const fetchError: Ref<FetchError|null> = ref(null)
 const openItem = ref({})
 
@@ -257,13 +257,6 @@ const filterMapper = shallowRef({
   BOOLEAN: BrowserBooleanFilter
 })
 
-watch(
-    selectedPaginationItemsCount,
-    () => {
-      fetchData()
-    }
-)
-
 const onClickRow = (item: IItem) => {
 
   if (id.value === item.id) {
@@ -298,11 +291,23 @@ const onSearchStringInput = (value: string) => {
   searchString.value = value
 
   fetchData()
+
+  router.push({
+    path: route.path,
+    query: {
+      ...route.query,
+      ...{
+        search_string: value && value !== '' ? value : undefined
+      }
+    }
+  })
 }
 
 const onChangePaginationItemsCount = (value: number) => {
   selectedPaginationItemsCount.value = value
   currentPage.value = 1
+
+  fetchData()
 
   router.push({
     path: route.path,
@@ -412,6 +417,7 @@ const reset = (isUpdateItem = false) => {
   selectedPaginationItemsCount.value = 20
   activeFilters.value = {}
   activeSort.value = null
+  searchString.value = ''
 
   Object.keys(sorts.value).map((key) => {
     sorts.value[key] = null
@@ -496,6 +502,22 @@ const resetFilters = () => {
   activeFilters.value = {}
 }
 
+const clearPage = () => {
+  if (
+      currentPage.value !== 1 ||
+      selectedPaginationItemsCount.value !== 20 ||
+      Object.keys(activeFilters.value).length != 0 ||
+      activeSort.value !== null ||
+      searchString.value !== ''
+  ) {
+    reset()
+  }
+
+  router.push({
+    path: route.path,
+  })
+}
+
 defineExpose({
   reset,
   resetSelectedIds,
@@ -508,10 +530,14 @@ defineExpose({
     <ClientOnly>
       <TransitionGroup name="fade">
         <div class="browser__control-panel" v-if="!firstLoadingIsActive">
-          <div class="page__title-container">
+          <div class="page__title-container" @click="clearPage">
             <div class="page__title">{{ h1 }}</div>
           </div>
-          <BrowserSearchString class="--fixed-search-string" @search="onSearchStringInput"/>
+          <BrowserSearchString
+              class="--fixed-search-string"
+              @search="onSearchStringInput"
+              :value="searchString"
+          />
           <div class="browser__control-panel-right">
             <BrowserPagination
                 :page="currentPage"

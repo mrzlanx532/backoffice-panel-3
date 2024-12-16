@@ -1,7 +1,17 @@
 <script setup lang="ts">
 const emit = defineEmits(['search'])
+const props = defineProps<{
+  value?: string
+}>()
 
-const searchString = ref('')
+const searchString = ref(props.value)
+
+watch(
+    () => props.value,
+    (value) => {
+      searchString.value = value
+    }
+)
 
 const onInput = () => {
   if (searchString.value === '') {
