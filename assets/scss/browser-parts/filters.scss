@@ -9,16 +9,28 @@
   box-shadow: var(--main-box-shadow);
 }
 
+&__filters-reset {
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+  color: var(--color-gradient-1);
+
+  &.--useless, &.--useless:hover {
+    color: #757575;
+    cursor: default;
+  }
+
+  &:hover {
+    color: var(--color-gradient-intermediate);
+  }
+}
+
 &__filter {
   margin-top: 17px;
   position: relative;
 
   &:first-of-type {
     margin-top: 0;
-  }
-
-  &:last-of-type {
-    margin-bottom: 15px;
   }
 }
 

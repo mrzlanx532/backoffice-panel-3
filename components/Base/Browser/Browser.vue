@@ -161,6 +161,7 @@ const selectedIds: Ref<Record<string, boolean>> = ref({})
 const filters: Ref<IFilter[]> = ref([])
 const filtersByName: Ref<{[key: string]: IFilter}> = ref({})
 const activeFilters: Ref<{[key: string]: any[]}> = ref({})
+const activeFiltersIsExists = computed(() => Object.keys(activeFilters.value).length > 0)
 
 const searchString = ref('')
 const fetchError: Ref<FetchError|null> = ref(null)
@@ -475,6 +476,10 @@ const onChangePage = (page: number, fetchData: () => {}) => {
   fetchData()
 }
 
+const resetFilters = () => {
+  activeFilters.value = {}
+}
+
 defineExpose({
   reset,
   resetSelectedIds,
@@ -523,6 +528,9 @@ defineExpose({
                   @filterValueChanged="onFilterValueChanged"
               ></component>
             </template>
+            <div class="browser__filter">
+              <a @click="resetFilters" class="browser__filters-reset" :class="{'--useless': !activeFiltersIsExists}">Сбросить фильтры</a>
+            </div>
           </div>
           <div
               class="browser__error-container"
