@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
 import type { IPayload } from '~/components/Base/Datepicker/types'
-import DatePicker from '../Datepicker/DatePicker.vue'
+import DatePicker from '../../Datepicker/DatePicker.vue'
 import 'moment/dist/locale/ru'
 import moment from 'moment'
 

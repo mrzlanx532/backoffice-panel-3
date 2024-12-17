@@ -42,11 +42,11 @@ import debounce from "lodash.debounce"
 import { useBrowser, useNuxtApp } from '#imports'
 import { FetchError } from 'ofetch'
 
-import BrowserSelectFilter from "@/components/Base/Browser/BrowserSelectFilter.vue"
-import BrowserSelectSearchFilter from "@/components/Base/Browser/BrowserSelectSearchFilter.vue"
-import BrowserInputFilter from "@/components/Base/Browser/BrowserInputFilter.vue"
-import BrowserDateFilter from "@/components/Base/Browser/BrowserDateFilter.vue"
-import BrowserBooleanFilter from "@/components/Base/Browser/BrowserBooleanFilter.vue"
+import BrowserSelectFilter from "~/components/Base/Browser/Filters/BrowserSelectFilter.vue"
+import BrowserSelectSearchFilter from "~/components/Base/Browser/Filters/BrowserSelectSearchFilter.vue"
+import BrowserInputFilter from "~/components/Base/Browser/Filters/BrowserInputFilter.vue"
+import BrowserDateFilter from "~/components/Base/Browser/Filters/BrowserDateFilter.vue"
+import BrowserBooleanFilter from "~/components/Base/Browser/Filters/BrowserBooleanFilter.vue"
 import BrowserSearchString from "@/components/Base/Browser/BrowserSearchString.vue"
 import BrowserPagination from "@/components/Base/Browser/BrowserPagination.vue"
 import BrowserPaginationCountSelect from "@/components/Base/Browser/BrowserPaginationCountSelect.vue"
@@ -159,7 +159,7 @@ const selectedIds: Ref<Record<string, boolean>> = ref({})
 /** filters */
 const filters: Ref<IFilter[]> = ref([])
 const filtersByName: Ref<{[key: string]: IFilter}> = ref({})
-const activeFilters: Ref<{[key: string]: any[]}> = ref({})
+const activeFilters: Ref<{[key: string]: any[]}> = ref(route.query.filters ? JSON.parse(route.query.filters as string) : {})
 const activeFiltersIsExists = computed(() => Object.keys(activeFilters.value).length > 0)
 
 const searchString: Ref<string> = ref(route.query.search_string ? route.query.search_string as string : '')
@@ -390,6 +390,7 @@ const onFilterValueChanged = (type: string, id: string, value: any) => {
   debouncedFetchDataFunction.value()
 }
 
+// TODO: Удалить позже
 const prepareFilterValue = (filter: IUnpreparedFilterValue) => {
   if (filtersByName.value[filter.id].config.range) {
 
