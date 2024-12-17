@@ -357,7 +357,7 @@ const onFilterValueChanged = (type: string, id: string, value: any) => {
 
   switch (type) {
     default: // BOOLEAN
-      value = value !== undefined ? [value] : value
+      value = value !== undefined ? value : value
   }
 
   value === undefined ? delete activeFilters.value[id] : activeFilters.value[id] = value

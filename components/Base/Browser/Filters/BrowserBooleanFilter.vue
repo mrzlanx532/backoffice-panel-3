@@ -15,14 +15,14 @@ const value: Ref<IValue> = ref()
 watch(
     () => props.modelValue,
     (_value) => {
-      value.value = _value !== undefined ? _value[0] : _value
+      value.value = _value === undefined ? _value : _value[0]
     }, {
       immediate: true
     }
 )
 
 const onClick = (value: IValue) => {
-  emit('update:modelValue', props.filter.type, props.filter.id, value)
+  emit('update:modelValue', props.filter.type, props.filter.id, value === undefined ? value : [value])
 }
 </script>
 
