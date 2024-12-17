@@ -21,14 +21,18 @@ watch(
     }
 )
 
-const onClick = (value: IValue) => {
-  emit('update:modelValue', props.filter.type, props.filter.id, value === undefined ? value : [value])
+const onClick = (_value: IValue) => {
+  if (_value === value.value) {
+    return
+  }
+
+  emit('update:modelValue', props.filter.type, props.filter.id, _value === undefined ? _value : [_value])
 }
 </script>
 
 <template>
   <div class="browser__filter">
-    <label :for="filter.id" class="browser__filter-name">{{ filter.title }}</label>
+    <div :for="filter.id" class="browser__filter-name">{{ filter.title }}</div>
     <div class="browser__filter-container">
       <div class="boolean">
         <div class="boolean__item-container" @click="onClick(undefined)">
@@ -41,14 +45,14 @@ const onClick = (value: IValue) => {
         <div class="boolean__item-container" @click="onClick(true)">
           <input type="radio" hidden="hidden" :value="true" v-model="value">
           <div class="boolean__radio" :class="{'--checked': value == true}">
-            <div class="boolean__checker" v-if="value == true"></div>
+            <div class="boolean__checker" v-if="value == true"/>
           </div>
           <label class="boolean__label">Да</label>
         </div>
         <div class="boolean__item-container" @click="onClick(false)">
           <input type="radio" hidden="hidden" :value="false" v-model="value">
           <div class="boolean__radio" :class="{'--checked': value == false}">
-            <div class="boolean__checker" v-if="value == false"></div>
+            <div class="boolean__checker" v-if="value == false"/>
           </div>
           <label class="boolean__label">Нет</label>
         </div>

@@ -526,6 +526,8 @@ const resetFilters = () => {
       filters: undefined
     }
   })
+
+  fetchData()
 }
 
 const clearPage = () => {
