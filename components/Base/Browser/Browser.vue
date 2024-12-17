@@ -296,9 +296,7 @@ const onSearchStringInput = (value: string) => {
     path: route.path,
     query: {
       ...route.query,
-      ...{
-        search_string: value && value !== '' ? value : undefined
-      }
+      search_string: value && value !== '' ? value : undefined
     }
   })
 }
@@ -313,9 +311,7 @@ const onChangePaginationItemsCount = (value: number) => {
     path: route.path,
     query: {
       ...route.query,
-      ...{
-        per_page: selectedPaginationItemsCount.value
-      }
+      per_page: selectedPaginationItemsCount.value
     }
   })
 }
@@ -338,12 +334,10 @@ const onSortChanged = (name: string, value: string) => {
     path: route.path,
     query: {
       ...route.query,
-      ...{
-        sort: value ? JSON.stringify({
-          field: name,
-          value: value
-        }) : undefined
-      }
+      sort: value ? JSON.stringify({
+        field: name,
+        value: value
+      }) : undefined
     }
   })
 }
@@ -369,7 +363,18 @@ const onFilterValueChanged = (unpreparedFilterValue: IUnpreparedFilterValue) => 
     debouncedFetchDataFunction.value.cancel()
   }
 
-  debouncedFetchDataFunction.value = debounce(fetchData, 100)
+  debouncedFetchDataFunction.value = debounce(() => {
+
+    router.push({
+      path: route.path,
+      query: {
+        ...route.query,
+        filters: Object.keys(activeFilters.value).length ? JSON.stringify(activeFilters.value) : undefined
+      }
+    })
+
+    fetchData()
+  }, 100)
   debouncedFetchDataFunction.value()
 }
 
@@ -491,7 +496,7 @@ const onChangePage = (page: number, fetchData: () => {}) => {
     path: route.path,
     query: {
       ...route.query,
-      ...{ page: currentPage.value}
+      page: currentPage.value
     }
   })
 
@@ -500,6 +505,14 @@ const onChangePage = (page: number, fetchData: () => {}) => {
 
 const resetFilters = () => {
   activeFilters.value = {}
+
+  void router.push({
+    path: route.path,
+    query: {
+      ...route.query,
+      filters: undefined
+    }
+  })
 }
 
 const clearPage = () => {
