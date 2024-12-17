@@ -62,7 +62,11 @@ async function onClick() {
           v-model="formData.password"
           :errors="errors"
       />
-      <button class="login__btn" :classes="['--full-width --special']" @click.prevent="onClick" :disabled="isWait">
+      <button
+          class="login__btn"
+          type="button"
+          @click.prevent="onClick" :disabled="isWait"
+      >
         Войти
       </button>
     </form>
