@@ -648,6 +648,10 @@
     color: var(--color-5);
     user-select: none;
     cursor: pointer;
+
+    &.--not-selected {
+      color: #757575;
+    }
   }
 
   &__radio {

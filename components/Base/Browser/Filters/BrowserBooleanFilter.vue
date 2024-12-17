@@ -36,7 +36,7 @@ const onClick = (value: IValue) => {
           <div class="boolean__radio" :class="{'--checked': value === undefined}">
             <div class="boolean__checker" v-if="value === undefined"></div>
           </div>
-          <label class="boolean__label" style="color: grey;">Не задано</label>
+          <label class="boolean__label --not-selected">Не задано</label>
         </div>
         <div class="boolean__item-container" @click="onClick(true)">
           <input type="radio" hidden="hidden" :value="true" v-model="value">
