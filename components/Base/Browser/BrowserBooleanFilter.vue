@@ -1,20 +1,29 @@
 <script setup lang="ts">
-  const emit = defineEmits(['filterValueChanged'])
+import type { IFilter } from '~/components/Base/Browser/Browser.vue'
+import type { Ref } from 'vue'
+type IValue = boolean | null | undefined
 
-  const props = defineProps({
-    filter: {
-      type: Object,
-      required: true
+const emit = defineEmits(['update:modelValue'])
+
+const props = defineProps<{
+  filter: IFilter,
+  modelValue?: [boolean | null]
+}>()
+
+const value: Ref<IValue> = ref()
+
+watch(
+    () => props.modelValue,
+    (_value) => {
+      value.value = _value !== undefined ? _value[0] : _value
+    }, {
+      immediate: true
     }
-  })
+)
 
-  const checked = ref(null)
-
-  const onClick = (value: boolean|null) => {
-    checked.value = value
-
-    emit('filterValueChanged', {id: props.filter.id, value})
-  }
+const onClick = (value: IValue) => {
+  emit('update:modelValue', props.filter.type, props.filter.id, value)
+}
 </script>
 
 <template>
@@ -22,26 +31,33 @@
     <label :for="filter.id" class="browser__filter-name">{{ filter.title }}</label>
     <div class="browser__filter-container">
       <div class="boolean">
-        <div class="boolean__item-container" @click="onClick(null)">
-          <input type="radio" hidden="hidden" :value="null" v-model="checked">
-          <div class="boolean__radio" :class="{'--checked': checked === null}">
-            <div class="boolean__checker" v-if="checked === null"></div>
+        <div class="boolean__item-container" @click="onClick(undefined)">
+          <input type="radio" hidden="hidden" :value="undefined" v-model="value">
+          <div class="boolean__radio" :class="{'--checked': value === undefined}">
+            <div class="boolean__checker" v-if="value === undefined"></div>
           </div>
-          <label class="boolean__label">Не выбрано</label>
+          <label class="boolean__label" style="color: grey;">Не задано</label>
         </div>
         <div class="boolean__item-container" @click="onClick(true)">
-          <input type="radio" hidden="hidden" :value="true" v-model="checked">
-          <div class="boolean__radio" :class="{'--checked': checked === true}">
-            <div class="boolean__checker" v-if="checked === true"></div>
+          <input type="radio" hidden="hidden" :value="true" v-model="value">
+          <div class="boolean__radio" :class="{'--checked': value == true}">
+            <div class="boolean__checker" v-if="value == true"></div>
           </div>
           <label class="boolean__label">Да</label>
         </div>
         <div class="boolean__item-container" @click="onClick(false)">
-          <input type="radio" hidden="hidden" :value="false" v-model="checked">
-          <div class="boolean__radio" :class="{'--checked': checked === false}">
-            <div class="boolean__checker" v-if="checked === false"></div>
+          <input type="radio" hidden="hidden" :value="false" v-model="value">
+          <div class="boolean__radio" :class="{'--checked': value == false}">
+            <div class="boolean__checker" v-if="value == false"></div>
           </div>
           <label class="boolean__label">Нет</label>
+        </div>
+        <div class="boolean__item-container" v-if="props.filter.config.nullable" @click="onClick(null)">
+          <input type="radio" hidden="hidden" :value="null" v-model="value">
+          <div class="boolean__radio" :class="{'--checked': value === null}">
+            <div class="boolean__checker" v-if="value === null"/>
+          </div>
+          <label class="boolean__label">Пусто</label>
         </div>
       </div>
     </div>

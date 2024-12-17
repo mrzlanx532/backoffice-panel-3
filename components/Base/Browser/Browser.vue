@@ -6,12 +6,38 @@ export interface IBrowser {
   resetSelectedIds: () => void,
   closeDetail: () => void
 }
+
+enum FilterType {
+  SELECT = 'SELECT',
+  SELECT_SEARCH = 'SELECT_SEARCH',
+  INPUT = 'INPUT',
+  DATE = 'DATE',
+  BOOLEAN = 'BOOLEAN',
+}
+
+export interface IFilter {
+  id: string
+  title: string
+  type: keyof typeof FilterType
+  options?: {
+    id: string
+    title: string
+  }[]
+  config: {
+    filter: boolean
+    hidden: boolean
+    mask: string|null
+    multiple: boolean
+    range: boolean
+    url: string
+    nullable: boolean
+  }
+}
 </script>
 
 <script setup lang="ts">
 import { type Ref, type Component, useSlots, defineComponent, h } from "vue";
 import type { DebouncedFunc } from "lodash-es"
-import isEmpty from "lodash.isempty"
 import debounce from "lodash.debounce"
 import { useBrowser, useNuxtApp } from '#imports'
 import { FetchError } from 'ofetch'
@@ -99,15 +125,6 @@ const emit = defineEmits([
   'closeBulkActions'
 ])
 
-enum FilterType {
-  // noinspection JSUnusedGlobalSymbols
-  SELECT = 'SELECT',
-  SELECT_SEARCH = 'SELECT_SEARCH',
-  INPUT = 'INPUT',
-  DATE = 'DATE',
-  BOOLEAN = 'BOOLEAN',
-}
-
 interface IRequestParams {
   filters?: {},
   search_string?: string,
@@ -117,24 +134,6 @@ interface IRequestParams {
   }
   per_page: number,
   page: number
-}
-
-interface IFilter {
-  id: string,
-  title: string,
-  type: keyof typeof FilterType,
-  options?: {
-    id: string,
-    title: string,
-  }[]
-  config: {
-    filter: boolean,
-    hidden: boolean,
-    mask: string|null,
-    multiple: boolean,
-    range: boolean,
-    url: string
-  }
 }
 
 interface IUnpreparedFilterValue {
@@ -192,34 +191,32 @@ const fetchData = async () => {
 
   const config: { params?: IRequestParams } = {}
 
-  if (activeFilters.value) {
-    const requestData = {} as IRequestParams;
+  const requestData = {} as IRequestParams;
 
-    if (!isEmpty(activeFilters.value)) {
-      requestData.filters = activeFilters.value
-    }
-
-    if (searchString.value !== '') {
-      requestData.search_string = searchString.value
-    }
-
-    if (activeSort.value && sorts.value[activeSort.value]) {
-      requestData.sort = {
-        field: activeSort.value,
-        direction: sorts.value[activeSort.value]
-      }
-    }
-
-    if (selectedPaginationItemsCount.value !== 20) {
-      requestData.per_page = selectedPaginationItemsCount.value
-    }
-
-    if (currentPage.value > 1) {
-      requestData.page = currentPage.value
-    }
-
-    config.params = requestData
+  if (Object.keys(activeFilters.value).length) {
+    requestData.filters = activeFilters.value
   }
+
+  if (searchString.value !== '') {
+    requestData.search_string = searchString.value
+  }
+
+  if (activeSort.value && sorts.value[activeSort.value]) {
+    requestData.sort = {
+      field: activeSort.value,
+      direction: sorts.value[activeSort.value]
+    }
+  }
+
+  if (selectedPaginationItemsCount.value !== 20) {
+    requestData.per_page = selectedPaginationItemsCount.value
+  }
+
+  if (currentPage.value > 1) {
+    requestData.page = currentPage.value
+  }
+
+  config.params = requestData
 
   try {
 
@@ -355,9 +352,23 @@ const setFilters = (_filters: IFilter[]) => {
   filtersByName.value = preparedFiltersByName
 }
 
-const onFilterValueChanged = (unpreparedFilterValue: IUnpreparedFilterValue) => {
-  prepareFilterValue(unpreparedFilterValue)
+const onFilterValueChanged = (type: string, id: string, value: any) => {
   currentPage.value = 1
+
+  switch (type) {
+    default: // BOOLEAN
+      value = value !== undefined ? [value] : value
+  }
+
+  value === undefined ? delete activeFilters.value[id] : activeFilters.value[id] = value
+
+  router.push({
+    path: route.path,
+    query: {
+      ...route.query,
+      filters: Object.keys(activeFilters.value).length ? JSON.stringify(activeFilters.value) : undefined
+    }
+  })
 
   if (debouncedFetchDataFunction.value) {
     debouncedFetchDataFunction.value.cancel()
@@ -375,6 +386,7 @@ const onFilterValueChanged = (unpreparedFilterValue: IUnpreparedFilterValue) => 
 
     fetchData()
   }, 100)
+
   debouncedFetchDataFunction.value()
 }
 
@@ -579,9 +591,9 @@ defineExpose({
               <component
                   :is="filterMapper[filter.type]"
                   :filter="filter"
-                  :model-value="activeFilters[filter.id]"
-                  @filterValueChanged="onFilterValueChanged"
-              ></component>
+                  :modelValue="activeFilters[filter.id]"
+                  @update:modelValue="onFilterValueChanged"
+              />
             </template>
             <div class="browser__filter">
               <a @click="resetFilters" class="browser__filters-reset" :class="{'--useless': !activeFiltersIsExists}">Сбросить фильтры</a>
