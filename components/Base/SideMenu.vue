@@ -90,6 +90,10 @@ const closeOpenMenuItem = (menuItem: null|string) => {
   setTimeout(() => {
     menuItemsIsClosing.value[menuItem as string] = false
   }, 100)
+
+  setTimeout(() => {
+    sectionsEl.value!.scrollable_manager.updateScroll()
+  }, 400)
 }
 
 const updateDimensions = () => {
