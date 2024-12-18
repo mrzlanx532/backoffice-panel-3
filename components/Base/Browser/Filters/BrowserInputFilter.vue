@@ -30,8 +30,8 @@ watch(
           return
         }
 
-        unconfirmedValue1 = value[0] === undefined ? undefined : value[0]
-        unconfirmedValue2 = value[1] === undefined ? undefined : value[1]
+        unconfirmedValue1 = value[0] === undefined || value[0] === '' ? undefined : value[0]
+        unconfirmedValue2 = value[1] === undefined || value[1] === '' ? undefined : value[1]
 
         value1.value = unconfirmedValue1
         value2.value = unconfirmedValue2
@@ -45,50 +45,18 @@ watch(
     { immediate: true }
 )
 
-const mapper: [Ref<IValue>, Ref<IValue>] = [
-  value1,
-  value2
-]
-
-const onBlur = () => {
-  if (unconfirmedValue1 !== undefined) {
+const onSubmit = () => {
+  if (unconfirmedValue1 !== undefined && unconfirmedValue1 !== value1.value) {
     emitSingleValue(unconfirmedValue1)
   }
 }
 
-const onBlurMultiple = (param: number) => {
-  if (unconfirmedValue1 !== undefined && param === 0) {
+const onSubmitMultiple = (param: number) => {
+  if (unconfirmedValue1 !== undefined && param === 0 && unconfirmedValue1 !== value1.value) {
     emitDoubleValue(unconfirmedValue1, unconfirmedValue2)
   }
 
-  if (unconfirmedValue2 !== undefined && param === 1) {
-    emitDoubleValue(unconfirmedValue1, unconfirmedValue2)
-  }
-}
-
-const onInputMultiple = (e: InputEvent, param: number) => {
-
-  const value = (e.target as HTMLInputElement).value === '' ? undefined : (e.target as HTMLInputElement).value
-
-  if (param === 0) {
-    unconfirmedValue1 = value
-  }
-
-  if (param === 1) {
-    unconfirmedValue2 = value
-  }
-
-/*  console.group()
-  console.log('value', value)
-  console.log('unconfirmedValue1', unconfirmedValue1)
-  console.log('unconfirmedValue2', unconfirmedValue2)
-  console.groupEnd()*/
-
-  if (value === undefined && param === 0 && value1.value !== unconfirmedValue1) {
-    emitDoubleValue(unconfirmedValue1, unconfirmedValue2)
-  }
-
-  if (value === undefined && param === 1 && value2.value !== unconfirmedValue2) {
+  if (unconfirmedValue2 !== undefined && param === 1 && unconfirmedValue2 !== value2.value) {
     emitDoubleValue(unconfirmedValue1, unconfirmedValue2)
   }
 }
@@ -106,34 +74,42 @@ const onInput = (e: InputEvent) => {
   }
 }
 
-const onKeyUpEnter = (param: number|undefined = undefined) => {
+const onInputMultiple = (e: InputEvent, param: number) => {
 
-  if (props.filter.config.range && param !== undefined) {
+  const value = (e.target as HTMLInputElement).value === '' ? undefined : (e.target as HTMLInputElement).value
 
-    if (mapper[param].value !== '' && mapper[param].value !== null) {
-      emitDoubleValue()
-
-      return
-    }
+  if (param === 0) {
+    unconfirmedValue1 = value
   }
 
-  if (unconfirmedValue1 !== undefined) {
-    emitSingleValue(unconfirmedValue1)
+  if (param === 1) {
+    unconfirmedValue2 = value
+  }
+
+  if (value === undefined && param === 0 && value1.value !== unconfirmedValue1) {
+    emitDoubleValue(unconfirmedValue1, unconfirmedValue2)
+  }
+
+  if (value === undefined && param === 1 && value2.value !== unconfirmedValue2) {
+    emitDoubleValue(unconfirmedValue1, unconfirmedValue2)
   }
 }
-const onClickRemoveButton = (param: number|undefined = undefined) => {
 
-  console.log('remove')
-
-  if (props.filter.config.range && param !== undefined) {
-    mapper[param].value = null
-    emitDoubleValue()
-
-    return
-  }
-
+const onClickRemove = () => {
   unconfirmedValue1 = undefined
   emitSingleValue(unconfirmedValue1)
+}
+
+const onClickRemoveMultiple = (param: number) => {
+  if (param === 0) {
+    unconfirmedValue1 = undefined
+  }
+
+  if (param === 1) {
+    unconfirmedValue2 = undefined
+  }
+
+  emitDoubleValue(unconfirmedValue1, unconfirmedValue2)
 }
 
 const emitSingleValue = (value: IValue) => {
@@ -148,8 +124,8 @@ const emitDoubleValue = (value1: IValue, value2: IValue) => {
   }
 
   emit('update:modelValue', props.filter.type, props.filter.id, [
-    value1 === undefined ? undefined : value1,
-    value2 === undefined ? undefined : value2
+    value1 === undefined ? '' : value1,
+    value2 === undefined ? '' : value2
   ])
 }
 </script>
@@ -169,12 +145,12 @@ const emitDoubleValue = (value1: IValue, value2: IValue) => {
               class="input input_range"
               type="text"
               @input="onInputMultiple($event as InputEvent, 0)"
-              @blur="onBlurMultiple(0)"
-              @keyup.enter="onKeyUpEnter(0)"
+              @blur="onSubmitMultiple(0)"
+              @keyup.enter="onSubmitMultiple(0)"
           >
           <div
               class="input__remove-button input__remove-button_range"
-              @click="onClickRemoveButton(0)"
+              @click="onClickRemoveMultiple(0)"
               v-show="value1 !== undefined"
           >
             <svg>
@@ -192,12 +168,12 @@ const emitDoubleValue = (value1: IValue, value2: IValue) => {
               class="input"
               type="text"
               @input="onInputMultiple($event as InputEvent, 1)"
-              @blur="onBlurMultiple(1)"
-              @keyup.enter="onKeyUpEnter(1)"
+              @blur="onSubmitMultiple(1)"
+              @keyup.enter="onSubmitMultiple(1)"
           >
           <div
               class="input__remove-button input__remove-button_range"
-              @click="onClickRemoveButton(1)"
+              @click="onClickRemoveMultiple(1)"
               v-show="value2 !== undefined"
           >
             <svg>
@@ -213,12 +189,12 @@ const emitDoubleValue = (value1: IValue, value2: IValue) => {
             class="input"
             type="text"
             @input="onInput($event as InputEvent)"
-            @keyup.enter="onKeyUpEnter(0)"
-            @blur="onBlur"
+            @keyup.enter="onSubmit"
+            @blur="onSubmit"
         >
         <div
             class="input__remove-button"
-            @click="onClickRemoveButton()"
+            @click="onClickRemove"
             v-show="value1 !== undefined"
         >
           <svg>
