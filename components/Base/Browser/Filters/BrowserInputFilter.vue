@@ -1,51 +1,53 @@
 <script setup lang="ts">
-interface IFilter {
-  id: string,
-  title: string,
-  type: keyof typeof FilterType,
-  options?: {
-    id: string,
-    title: string,
-  }[]
-  config: {
-    filter: boolean,
-    hidden: boolean,
-    mask: string|null,
-    multiple: boolean,
-    range: boolean,
-    url: string
-  }
-}
+import type { IFilter } from '~/components/Base/Browser/Browser.vue'
+import type { Ref } from 'vue'
+type IValue = string | undefined
+
+const emit = defineEmits(['update:modelValue'])
 
 const props = defineProps<{
-  filter: IFilter
+  filter: IFilter,
+  modelValue?: [IValue] | [IValue, IValue]
 }>()
 
-const singleValue = ref(null)
-const doubleValueFirst = ref(null)
-const doubleValueSecond = ref(null)
+let unconfirmedValue1: IValue = undefined
+const value1: Ref<IValue> = ref()
+const value2: Ref<IValue> = ref()
 
-const emit = defineEmits(['filterValueChanged'])
+watch(
+    () => props.modelValue,
+    (value) => {
+      if (props.filter.config.multiple) {
 
-const mapper = [
-  doubleValueFirst,
-  doubleValueSecond
+        if (value === undefined) {
+          return
+        }
+
+        value1.value = value[0]
+        value2.value = value[1]
+
+        return
+      }
+
+      value1.value = value === undefined ? undefined : value[0]
+    },
+    { immediate: true }
+)
+
+const mapper: [Ref<IValue>, Ref<IValue>] = [
+  value1,
+  value2
 ]
 
 const onBlur = () => {
-  if (props.filter.config.range) {
-    return
+  if (unconfirmedValue1 !== undefined) {
+    emitSingleValue(unconfirmedValue1)
   }
-
-  if (singleValue.value === null || singleValue.value === '') {
-    return
-  }
-
-  emitSingleValue()
 }
 
-const onInput = (param: number|undefined = undefined) => {
-  if (props.filter.config.range) {
+const onInput = (e: InputEvent, param: number|undefined = undefined) => {
+
+  if (props.filter.config.range && param !== undefined) {
 
     if (mapper[param].value === '') {
       emitDoubleValue()
@@ -54,13 +56,20 @@ const onInput = (param: number|undefined = undefined) => {
     return
   }
 
-  if (singleValue.value === '') {
-    emitSingleValue()
+  unconfirmedValue1 = (e.target as HTMLInputElement).value
+
+  if (unconfirmedValue1 === '') {
+    unconfirmedValue1 = undefined
+  }
+
+  if (unconfirmedValue1 === undefined && value1.value !== unconfirmedValue1) {
+    emitSingleValue(unconfirmedValue1)
   }
 }
 
 const onKeyUpEnter = (param: number|undefined = undefined) => {
-  if (props.filter.config.range) {
+
+  if (props.filter.config.range && param !== undefined) {
 
     if (mapper[param].value !== '' && mapper[param].value !== null) {
       emitDoubleValue()
@@ -69,34 +78,31 @@ const onKeyUpEnter = (param: number|undefined = undefined) => {
     }
   }
 
-  if (singleValue.value !== '' && singleValue.value !== null) {
-    emitSingleValue()
+  if (unconfirmedValue1 !== undefined) {
+    emitSingleValue(unconfirmedValue1)
   }
 }
 const onClickRemoveButton = (param: number|undefined = undefined) => {
-  if (props.filter.config.range) {
+
+  console.log('remove')
+
+  if (props.filter.config.range && param !== undefined) {
     mapper[param].value = null
     emitDoubleValue()
 
     return
   }
 
-  singleValue.value = null
-  emitSingleValue()
+  unconfirmedValue1 = undefined
+  emitSingleValue(unconfirmedValue1)
 }
 
-const emitSingleValue = () => {
-  emit('filterValueChanged', {
-    'id': props.filter.id,
-    'value': singleValue.value
-  })
+const emitSingleValue = (value: IValue) => {
+  emit('update:modelValue', props.filter.type, props.filter.id, value === undefined ? undefined : [value])
 }
 
-const emitDoubleValue = () => {
-  emit('filterValueChanged', {
-    'id': props.filter.id,
-    'value': [doubleValueFirst.value, doubleValueSecond.value]
-  })
+const emitDoubleValue = (value1: IValue, value2: IValue) => {
+  emit('update:modelValue', props.filter.type, props.filter.id, [value1 === undefined ? undefined : value1, value2 === undefined ? undefined : value2])
 }
 </script>
 
@@ -111,17 +117,16 @@ const emitDoubleValue = () => {
           </div>
           <input
               spellcheck="false"
-              v-model="doubleValueFirst"
+              :value="value1"
               class="input input_range"
               type="text"
-              @input="onInput(0)"
+              @input="onInput($event as InputEvent, 0)"
               @keyup.enter="onKeyUpEnter(0)"
-              @blur="onBlur"
           >
           <div
               class="input__remove-button input__remove-button_range"
               @click="onClickRemoveButton(0)"
-              v-show="doubleValueFirst !== '' && doubleValueFirst !== null"
+              v-show="value1 !== undefined"
           >
             <svg>
               <use xlink:href="/img/temp_sprite.svg#min_cross"/>
@@ -134,17 +139,16 @@ const emitDoubleValue = () => {
           </div>
           <input
               spellcheck="false"
-              v-model="doubleValueSecond"
+              :value="value2"
               class="input"
               type="text"
-              @input="onInput(1)"
+              @input="onInput($event as InputEvent, 1)"
               @keyup.enter="onKeyUpEnter(1)"
-              @blur="onBlur"
           >
           <div
               class="input__remove-button input__remove-button_range"
               @click="onClickRemoveButton(1)"
-              v-show="doubleValueSecond !== '' && doubleValueSecond !== null"
+              v-show="value2 !== undefined"
           >
             <svg>
               <use xlink:href="/img/temp_sprite.svg#min_cross"/>
@@ -155,17 +159,17 @@ const emitDoubleValue = () => {
       <div class="input__container" v-else>
         <input
             spellcheck="false"
-            v-model="singleValue"
+            :value="value1"
             class="input"
             type="text"
-            @input="onInput"
-            @keyup.enter="onKeyUpEnter"
+            @input="onInput($event as InputEvent)"
+            @keyup.enter="onKeyUpEnter(0)"
             @blur="onBlur"
         >
         <div
             class="input__remove-button"
-            @click="onClickRemoveButton"
-            v-show="singleValue !== '' && singleValue !== null"
+            @click="onClickRemoveButton()"
+            v-show="value1 !== undefined"
         >
           <svg>
             <use xlink:href="/img/temp_sprite.svg#min_cross"/>
