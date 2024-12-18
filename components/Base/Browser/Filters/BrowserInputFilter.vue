@@ -11,25 +11,36 @@ const props = defineProps<{
 }>()
 
 let unconfirmedValue1: IValue = undefined
+let unconfirmedValue2: IValue = undefined
 const value1: Ref<IValue> = ref()
 const value2: Ref<IValue> = ref()
 
 watch(
     () => props.modelValue,
     (value) => {
-      if (props.filter.config.multiple) {
+
+      if (props.filter.config.range) {
 
         if (value === undefined) {
+          unconfirmedValue1 = undefined
+          unconfirmedValue2 = undefined
+
+          value1.value = unconfirmedValue1
+          value2.value = unconfirmedValue2
           return
         }
 
-        value1.value = value[0]
-        value2.value = value[1]
+        unconfirmedValue1 = value[0] === undefined ? undefined : value[0]
+        unconfirmedValue2 = value[1] === undefined ? undefined : value[1]
+
+        value1.value = unconfirmedValue1
+        value2.value = unconfirmedValue2
 
         return
       }
 
-      value1.value = value === undefined ? undefined : value[0]
+      unconfirmedValue1 = value === undefined ? undefined : value[0]
+      value1.value = unconfirmedValue1
     },
     { immediate: true }
 )
@@ -45,16 +56,44 @@ const onBlur = () => {
   }
 }
 
-const onInput = (e: InputEvent, param: number|undefined = undefined) => {
-
-  if (props.filter.config.range && param !== undefined) {
-
-    if (mapper[param].value === '') {
-      emitDoubleValue()
-    }
-
-    return
+const onBlurMultiple = (param: number) => {
+  if (unconfirmedValue1 !== undefined && param === 0) {
+    emitDoubleValue(unconfirmedValue1, unconfirmedValue2)
   }
+
+  if (unconfirmedValue2 !== undefined && param === 1) {
+    emitDoubleValue(unconfirmedValue1, unconfirmedValue2)
+  }
+}
+
+const onInputMultiple = (e: InputEvent, param: number) => {
+
+  const value = (e.target as HTMLInputElement).value === '' ? undefined : (e.target as HTMLInputElement).value
+
+  if (param === 0) {
+    unconfirmedValue1 = value
+  }
+
+  if (param === 1) {
+    unconfirmedValue2 = value
+  }
+
+/*  console.group()
+  console.log('value', value)
+  console.log('unconfirmedValue1', unconfirmedValue1)
+  console.log('unconfirmedValue2', unconfirmedValue2)
+  console.groupEnd()*/
+
+  if (value === undefined && param === 0 && value1.value !== unconfirmedValue1) {
+    emitDoubleValue(unconfirmedValue1, unconfirmedValue2)
+  }
+
+  if (value === undefined && param === 1 && value2.value !== unconfirmedValue2) {
+    emitDoubleValue(unconfirmedValue1, unconfirmedValue2)
+  }
+}
+
+const onInput = (e: InputEvent) => {
 
   unconfirmedValue1 = (e.target as HTMLInputElement).value
 
@@ -102,7 +141,16 @@ const emitSingleValue = (value: IValue) => {
 }
 
 const emitDoubleValue = (value1: IValue, value2: IValue) => {
-  emit('update:modelValue', props.filter.type, props.filter.id, [value1 === undefined ? undefined : value1, value2 === undefined ? undefined : value2])
+
+  if (value1 === undefined && value2 === undefined) {
+    emit('update:modelValue', props.filter.type, props.filter.id, undefined)
+    return
+  }
+
+  emit('update:modelValue', props.filter.type, props.filter.id, [
+    value1 === undefined ? undefined : value1,
+    value2 === undefined ? undefined : value2
+  ])
 }
 </script>
 
@@ -120,7 +168,8 @@ const emitDoubleValue = (value1: IValue, value2: IValue) => {
               :value="value1"
               class="input input_range"
               type="text"
-              @input="onInput($event as InputEvent, 0)"
+              @input="onInputMultiple($event as InputEvent, 0)"
+              @blur="onBlurMultiple(0)"
               @keyup.enter="onKeyUpEnter(0)"
           >
           <div
@@ -142,7 +191,8 @@ const emitDoubleValue = (value1: IValue, value2: IValue) => {
               :value="value2"
               class="input"
               type="text"
-              @input="onInput($event as InputEvent, 1)"
+              @input="onInputMultiple($event as InputEvent, 1)"
+              @blur="onBlurMultiple(1)"
               @keyup.enter="onKeyUpEnter(1)"
           >
           <div
