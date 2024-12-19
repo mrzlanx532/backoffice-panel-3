@@ -2,7 +2,6 @@
 import 'moment/dist/locale/ru'
 import DatePicker from '@/components/Base/Datepicker/DatePicker.vue'
 import type { IPayload } from '@/components/Base/Datepicker/types'
-import type { PropType } from 'vue'
 
 const emit = defineEmits(['update:modelValue'])
 
@@ -12,29 +11,13 @@ interface IComponentData {
   disabled?: boolean
 }
 
-const props = defineProps({
-  label: {
-    required: true,
-    type: String,
-  },
-  name: {
-    required: true,
-    type: String,
-  },
-  modelValue: {
-    required: false,
-    type: [Number, String, Array]
-  },
-  errors: {
-    type: Array,
-    required: false,
-    default: []
-  },
-  componentData: {
-    type: Object as PropType<IComponentData>,
-    required: false
-  }
-})
+const props = defineProps<{
+  label: string,
+  name: string,
+  modelValue?: number|string,
+  errors?: string[],
+  componentData?: IComponentData
+}>()
 
 const onUpdateModelValue = (payload: IPayload) => {
   emit('update:modelValue', payload.value)
@@ -45,8 +28,8 @@ const onUpdateModelValue = (payload: IPayload) => {
   <div>
     <div class="label">{{ label }}</div>
     <DatePicker
-        :model-value="props.modelValue"
-        @update:model-value="onUpdateModelValue"
+        :modelValue="props.modelValue"
+        @update:modelValue="onUpdateModelValue"
         :force-inverse="props?.componentData?.forceInverse"
         :format="props?.componentData?.format"
         :disabled="props?.componentData?.disabled"
