@@ -9,35 +9,16 @@ moment.locale('ru')
 
 const emit = defineEmits(['update:modelValue'])
 
-const props = defineProps({
-  modelValue: {
-    required: false,
-    type: [Number, String]
-  },
-  rangeIndex: {
-    type: Number,
-    required: false
-  },
-  typeOf: {
-    type: String,
-    required: true,
-    default: 'date'
-  },
-  forceInverse: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  format: {
-    type: String,
-    required: false,
-    default: 'X'
-  },
-  disabled: {
-    type: Boolean,
-    required: false,
-    default: false
-  }
+const props = withDefaults(defineProps<{
+  modelValue?: number | string
+  rangeIndex?: number,
+  forceInverse?: boolean,
+  format?: string,
+  disabled?: boolean
+}>(), {
+  forceInverse: false,
+  format: 'X',
+  disabled: false,
 })
 
 const navMonthsIsOpen = ref(false)
