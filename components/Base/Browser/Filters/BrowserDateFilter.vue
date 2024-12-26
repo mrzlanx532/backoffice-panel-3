@@ -7,7 +7,7 @@ import moment from 'moment'
 
 moment.locale('ru')
 
-const emit = defineEmits(['filterValueChanged'])
+const emit = defineEmits(['update:modelValue'])
 
 interface IFilter {
   id: string,
@@ -28,7 +28,7 @@ const props = defineProps<{
   filter: IFilter
 }>()
 
-const localValue: Ref<null|number|string> = ref(null)
+const localValue: Ref<number|string|undefined> = ref(undefined)
 const localValues: Ref<[(null|number|string)]|[(null|number|string),(null|number|string)]> = ref([null, null])
 
 watch(
@@ -50,7 +50,7 @@ watch(
       }
 
       if (value === undefined) {
-        localValue.value = null
+        localValue.value = undefined
         return
       }
 
@@ -68,19 +68,13 @@ const onFilterValueChanged = (payload: IPayload) => {
     // @ts-ignore
     preparedValue[payload.rangeIndex] = payload.value ? Number(payload.value) : payload.value
 
-    emit('filterValueChanged', {
-      id: props.filter.id,
-      value: preparedValue,
-    })
+    emit('update:modelValue', props.filter.type, props.filter.id, preparedValue)
 
     return
   }
 
   if (payload.rangeIndex === undefined) {
-    emit('filterValueChanged', {
-      id: props.filter.id,
-      value: payload.value ? Number(payload.value) : payload.value,
-    })
+    emit('update:modelValue', props.filter.type, props.filter.id, payload.value ? [Number(payload.value)] : payload.value)
 
     return
   }
@@ -96,23 +90,20 @@ const onFilterValueChanged = (payload: IPayload) => {
             :model-value="localValues[0]!"
             :filter="filter"
             :range-index="0"
-            type-of="date"
         />
         <DatePicker
             @update:modelValue="onFilterValueChanged"
             :model-value="localValues[1]!"
             :filter="filter"
             :range-index="1"
-            type-of="date"
             :style="{'marginTop': '2px'}"
         />
       </template>
       <DatePicker
           v-else
-          :model-value="localValue!"
+          :model-value="localValue"
           @update:modelValue="onFilterValueChanged"
           :filter="filter"
-          type-of="date"
       />
     </div>
   </div>

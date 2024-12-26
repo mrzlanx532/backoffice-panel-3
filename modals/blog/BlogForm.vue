@@ -17,6 +17,7 @@ const {
   select,
   input,
   datetime,
+  //date,
   inputFile,
   textArea,
   editor
@@ -31,6 +32,11 @@ const {
     'blog/posts/create',
     'blog/posts/update',
     [
+  /*date({
+    name: 'created_at_from_front',
+    label: 'created at from front',
+    class: '--full',
+  }),*/
   select({
     name: 'locale_id',
     label: 'Язык публикации',
@@ -50,9 +56,6 @@ const {
     name: 'date',
     label: 'Дата',
     class: '--full',
-    componentData: {
-      format: 'DD.MM.yyyy HH:mm'
-    }
   }),
   inputFile({
     name: 'cover',
