@@ -284,8 +284,8 @@ const onKeydownEnter = () => {
   isOpen.value = !isOpen.value
 }
 
-const setLocalValues = (value: string|number|undefined|null) => {
-  if (value === null || value === undefined) {
+const setLocalValues = (value?: string | number) => {
+  if (value === undefined) {
     localDateMoment = undefined
     localDate.value = undefined
 

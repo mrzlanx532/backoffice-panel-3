@@ -56,8 +56,8 @@ let calendarNavMoment = currentDate.clone()
 let localDateMoment: Moment|null = null
 const localDate: Ref<null|string> = ref(null)
 
-const localDateUnconfirmed: Ref<null|string> = ref(null)
-let localDateUnconfirmedMoment: Moment|null = null
+const localDateUnconfirmed: Ref<string | null> = ref(null)
+let localDateUnconfirmedMoment: Moment | null = null
 
 const calendarNavMonth = ref(calendarNavMoment.format('MMMM'))
 const calendarNavYear = ref(calendarNavMoment.format('YYYY'))
@@ -470,8 +470,8 @@ const onClickMinute = (value: number) => {
   timeIsOpen.value = true
 }
 
-const setLocalValues = (value: string|number|undefined) => {
-  if (value === null || value === undefined) {
+const setLocalValues = (value?: string | number) => {
+  if (value === undefined) {
     localDateMoment = null
     localDate.value = null
 
