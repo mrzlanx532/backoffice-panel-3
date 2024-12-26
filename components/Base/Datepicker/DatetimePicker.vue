@@ -38,6 +38,11 @@ const props = defineProps({
     type: Boolean,
     required: false,
     default: false
+  },
+  toUTC: {
+    type: Boolean,
+    required: false,
+    default: false,
   }
 })
 
@@ -370,7 +375,10 @@ const onKeydown = (e: Event) => {
     const localDateMoment = moment(localDate.value, 'DD.MM.YYYY HH:mm')
 
     if (localDate.value.length === 16 && localDateMoment.isValid()) {
-      emit('update:modelValue', {'value': localDateMoment.format(props.format), 'rangeIndex': props.rangeIndex})
+      emit('update:modelValue', {
+        'value': prepareValue(localDateMoment),
+        'rangeIndex': props.rangeIndex
+      })
 
       return
     }
@@ -390,7 +398,24 @@ const apply = () => {
   calendarIsOpen.value = true
   timeIsOpen.value = false
 
-  emit('update:modelValue', {'value': localDateUnconfirmedMoment === null ? null : localDateUnconfirmedMoment.format(props.format), 'rangeIndex': props.rangeIndex})
+  emit('update:modelValue', {
+    'value': prepareValue(localDateUnconfirmedMoment),
+    'rangeIndex': props.rangeIndex
+  })
+}
+
+const prepareValue = (value: Moment|null) => {
+  if (value === null) {
+    return null
+  }
+
+  if (props.toUTC) {
+    const _value = value.clone()
+
+    return _value.subtract(value.utcOffset(), 'minutes').format(props.format)
+  }
+
+  return value.format(props.format)
 }
 
 const increaseHour = () => {
@@ -483,6 +508,11 @@ const setLocalValues = (value: string|number|undefined) => {
   }
 
   localDateMoment = moment(value as moment.MomentInput, props.format)
+
+  if (props.toUTC) {
+    localDateMoment.add(localDateMoment.utcOffset(), 'minutes')
+  }
+
   localDate.value = localDateMoment.format('DD.MM.YYYY HH:mm')
 
   localDateUnconfirmedMoment = localDateMoment.clone()

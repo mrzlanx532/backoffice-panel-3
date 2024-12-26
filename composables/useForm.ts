@@ -84,6 +84,7 @@ interface IDatetime extends IFormComponent {
     componentData?: {
         format?: 'X' | 'DD.MM.yyyy HH:mm',
         disabled?: boolean,
+        toUTC?: boolean
     }
 }
 
@@ -615,7 +616,7 @@ export const useForm = () => {
 
         const defaultComponentData = {
             disabled: false,
-            format: 'X',
+            format: 'DD.MM.yyyy',
         }
 
         const componentData = config.componentData ? defu(config.componentData, defaultComponentData) : defaultComponentData
@@ -631,7 +632,8 @@ export const useForm = () => {
 
         const defaultComponentData = {
             disabled: false,
-            format: 'X'
+            format: 'DD.MM.yyyy HH:mm',
+            toUTC: false
         }
 
         const componentData = config.componentData ? defu(config.componentData, defaultComponentData) : defaultComponentData

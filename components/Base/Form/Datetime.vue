@@ -8,7 +8,8 @@ const emit = defineEmits(['update:modelValue'])
 interface IComponentData {
   forceInverse?: boolean,
   format?: string,
-  disabled?: boolean
+  disabled?: boolean,
+  toUTC?: boolean
 }
 
 const props = defineProps<{
@@ -16,7 +17,7 @@ const props = defineProps<{
   name: string,
   modelValue?: number|string,
   errors?: string[],
-  componentData?: IComponentData
+  componentData?: IComponentData,
 }>()
 
 const onUpdateModelValue = (payload: IPayload) => {
@@ -33,6 +34,7 @@ const onUpdateModelValue = (payload: IPayload) => {
         :force-inverse="props?.componentData?.forceInverse"
         :format="props?.componentData?.format"
         :disabled="props?.componentData?.disabled"
+        :to-u-t-c="props?.componentData?.toUTC"
         type-of="datetime"
     />
     <div class="input__error">{{ errors && errors[0] ? errors[0] : null }}</div>
