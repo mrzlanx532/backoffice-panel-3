@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
-import type { IPayload } from '~/components/Base/Datepicker/types'
+import type { IPayload, IPayloadMultiple } from '~/components/Base/Datepicker/types'
 import DatePicker from '../../Datepicker/DatePicker.vue'
 import 'moment/dist/locale/ru'
 import moment from 'moment'
@@ -8,6 +8,8 @@ import moment from 'moment'
 moment.locale('ru')
 
 const emit = defineEmits(['update:modelValue'])
+
+type IValue = number | string | undefined
 
 interface IFilter {
   id: string,
@@ -28,8 +30,8 @@ const props = defineProps<{
   filter: IFilter
 }>()
 
-const localValue: Ref<number|string|undefined> = ref(undefined)
-const localValues: Ref<[(null|number|string)]|[(null|number|string),(null|number|string)]> = ref([null, null])
+const localValue: Ref<IValue> = ref(undefined)
+const localValues: Ref<[IValue,IValue]> = ref([undefined, undefined])
 
 watch(
     () => props.modelValue,
@@ -38,14 +40,16 @@ watch(
       if (props.filter.config.range) {
 
         if (value === undefined) {
-          localValues.value = [null, null]
-          return
+          localValues.value = [undefined, undefined]
         }
 
         if (Array.isArray(value)) {
-          localValues.value[0] = value[0] === '' ? null : value[0]
-          localValues.value[1] = value[1] === '' ? null : value[1]
+          localValues.value = [
+            value[0] === '' ? undefined : value[0],
+            value[1] === '' ? undefined : value[1],
+          ]
         }
+
         return
       }
 
@@ -57,27 +61,33 @@ watch(
       if (Array.isArray(value)) {
         localValue.value = value[0]
       }
+    },
+    {
+      immediate: true
     }
 )
 
+const onFilterValueChangedMultiple = (payload: IPayloadMultiple) => {
+
+  let preparedValue: ([IValue,IValue] | undefined) = ['', '']
+  preparedValue[0] = localValues.value[0]
+  preparedValue[1] = localValues.value[1]
+
+  preparedValue[payload.rangeIndex] = payload.value ? Number(payload.value) : payload.value
+
+  if (preparedValue[0] === undefined && preparedValue[1]) {
+    preparedValue[0] = ''
+  } else if (preparedValue[1] === undefined && preparedValue[0]) {
+    preparedValue[1] = ''
+  } else if (preparedValue[0] === undefined && preparedValue[1] === undefined) {
+    preparedValue = undefined
+  }
+
+  emit('update:modelValue', props.filter.type, props.filter.id, preparedValue)
+}
+
 const onFilterValueChanged = (payload: IPayload) => {
-
-  if (props.filter.config.range) {
-    let preparedValue = props.modelValue ? props.modelValue : [null, null]
-
-    // @ts-ignore
-    preparedValue[payload.rangeIndex] = payload.value ? Number(payload.value) : payload.value
-
-    emit('update:modelValue', props.filter.type, props.filter.id, preparedValue)
-
-    return
-  }
-
-  if (payload.rangeIndex === undefined) {
-    emit('update:modelValue', props.filter.type, props.filter.id, payload.value ? [Number(payload.value)] : payload.value)
-
-    return
-  }
+  emit('update:modelValue', props.filter.type, props.filter.id, payload.value ? [Number(payload.value)] : payload.value)
 }
 </script>
 <template>
@@ -86,14 +96,14 @@ const onFilterValueChanged = (payload: IPayload) => {
     <div class="browser__filter-container date">
       <template v-if="filter.config.range">
         <DatePicker
-            @update:modelValue="onFilterValueChanged"
-            :model-value="localValues[0]!"
+            @update:modelValue="onFilterValueChangedMultiple"
+            :model-value="localValues[0]"
             :filter="filter"
             :range-index="0"
         />
         <DatePicker
-            @update:modelValue="onFilterValueChanged"
-            :model-value="localValues[1]!"
+            @update:modelValue="onFilterValueChangedMultiple"
+            :model-value="localValues[1]"
             :filter="filter"
             :range-index="1"
             :style="{'marginTop': '2px'}"

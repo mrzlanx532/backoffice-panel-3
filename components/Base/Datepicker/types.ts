@@ -33,6 +33,10 @@ export interface IYear {
 }
 
 export interface IPayload {
-    value: number|null,
-    rangeIndex: number|undefined
+    value?: number,
+}
+
+export interface IPayloadMultiple {
+    value?: number,
+    rangeIndex: number
 }
