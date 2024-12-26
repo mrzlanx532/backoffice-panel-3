@@ -34,7 +34,6 @@ const onUpdateModelValue = (payload: IPayload) => {
         :format="props?.componentData?.format"
         :disabled="props?.componentData?.disabled"
         :errors="errors"
-        type-of="date"
     />
     <div class="input__error">{{ errors && errors[0] ? errors[0] : null }}</div>
   </div>

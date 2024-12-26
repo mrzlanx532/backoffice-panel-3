@@ -247,7 +247,7 @@ const onClickRemove = () => {
     return
   }
 
-  emit('update:modelValue', {'value': null, 'rangeIndex': props.rangeIndex})
+  emit('update:modelValue', {'value': undefined, 'rangeIndex': props.rangeIndex})
 }
 
 onMounted(() => {
@@ -276,7 +276,7 @@ const onKeydown = (e: Event) => {
   }
 
   if (!localDate.value) {
-    emit('update:modelValue', {'value': null, 'rangeIndex': props.rangeIndex})
+    emit('update:modelValue', {'value': undefined, 'rangeIndex': props.rangeIndex})
   }
 }
 
@@ -285,11 +285,7 @@ const onKeydownEnter = () => {
 }
 
 const setLocalValues = (value: string|number|undefined|null) => {
-  if (value === undefined) {
-    return
-  }
-
-  if (value === null) {
+  if (value === null || value === undefined) {
     localDateMoment = undefined
     localDate.value = undefined
 

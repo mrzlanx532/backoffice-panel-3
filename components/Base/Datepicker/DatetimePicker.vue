@@ -332,7 +332,7 @@ const onClickRemove = () => {
     return
   }
 
-  emit('update:modelValue', {'value': null, 'rangeIndex': props.rangeIndex})
+  emit('update:modelValue', {'value': undefined, 'rangeIndex': props.rangeIndex})
 }
 
 onMounted(() => {
@@ -364,7 +364,7 @@ const onKeydown = (e: Event) => {
   }
 
   if (!localDate.value) {
-    emit('update:modelValue', {'value': null, 'rangeIndex': props.rangeIndex})
+    emit('update:modelValue', {'value': undefined, 'rangeIndex': props.rangeIndex})
   }
 }
 
@@ -385,7 +385,7 @@ const apply = () => {
 
 const prepareValue = (value: Moment|null) => {
   if (value === null) {
-    return null
+    return undefined
   }
 
   if (props.toUTC) {
