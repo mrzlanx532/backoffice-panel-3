@@ -282,7 +282,7 @@ onMounted(() => {
     },
     subscription_till: {
       fn: (subscriptionTill) => {
-        return subscriptionTill ? moment(subscriptionTill, 'X').format('DD.MM.yyyy') : null
+        return subscriptionTill ? moment(subscriptionTill, 'X').format('DD.MM.yyyy') : undefined
       }
     },
     subscription_till_for_exclusive_tracks: {

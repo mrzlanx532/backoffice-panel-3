@@ -33,8 +33,8 @@ let currentDate = moment()
 let currentDateStartOfDay = moment().startOf('day')
 let calendarNavMoment = currentDate.clone()
 
-let localDateMoment: Moment|null = null
-const localDate: Ref<null|string> = ref(null)
+let localDateMoment: Moment|undefined = undefined
+const localDate: Ref<undefined|string> = ref(undefined)
 
 const calendarNavMonth = ref(calendarNavMoment.format('MMMM'))
 const calendarNavYear = ref(calendarNavMoment.format('YYYY'))
@@ -186,7 +186,7 @@ const buildCalendar = () => {
         value: moment.format('D'),
         moment: moment,
         isCurrentMonth: firstDayOfMonth.format('M') === moment.format('M'),
-        isSelectedValue: localDateMoment !== null && localDateMoment.isSame(moment),
+        isSelectedValue: localDateMoment !== undefined && localDateMoment.isSame(moment),
         isToday: currentDateStartOfDay.isSame(moment)
       })
     }
@@ -289,8 +289,8 @@ const setLocalValues = (value: string|number|undefined|null) => {
   }
 
   if (value === null) {
-    localDateMoment = null
-    localDate.value = null
+    localDateMoment = undefined
+    localDate.value = undefined
 
     buildCalendar()
     return
@@ -323,7 +323,7 @@ setLocalValues(props.modelValue)
         ref="input"
     />
     <div
-        v-if="localDate !== null"
+        v-if="localDate !== undefined"
         class="date__input-remove-icon"
         :class="{'--disabled': props.disabled}"
         @click="onClickRemove"
