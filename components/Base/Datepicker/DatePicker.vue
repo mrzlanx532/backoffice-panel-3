@@ -14,7 +14,8 @@ const props = withDefaults(defineProps<{
   rangeIndex?: number,
   forceInverse?: boolean,
   format?: string,
-  disabled?: boolean
+  disabled?: boolean,
+  errors?: string[]
 }>(), {
   forceInverse: false,
   format: 'X',
@@ -312,7 +313,12 @@ setLocalValues(props.modelValue)
 </script>
 
 <template>
-  <div class="date__input-container" v-click-outside="onClickOutside" :class="{'--is-open': isOpen, '--inverse': isNeedToInverse, '--disabled': props.disabled }">
+  <div class="date__input-container" v-click-outside="onClickOutside" :class="{
+    '--is-open': isOpen,
+    '--inverse': isNeedToInverse,
+    '--disabled': props.disabled,
+    '--has-errors': props.errors && props.errors[0]
+  }">
     <div class="date__multiple-label" v-if="rangeIndex !== undefined">{{ rangeIndex === 0 ? 'от' : 'до' }}</div>
     <input
         @keydown.enter="onKeydownEnter"

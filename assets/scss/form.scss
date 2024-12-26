@@ -600,6 +600,10 @@
       position: relative;
       margin-top: 12px;
 
+      &.--has-errors {
+        border: 1px solid #ff5252;
+      }
+
       &.--disabled {
 
         input {
