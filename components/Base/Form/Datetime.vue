@@ -35,7 +35,7 @@ const onUpdateModelValue = (payload: IPayload) => {
         :format="props?.componentData?.format"
         :disabled="props?.componentData?.disabled"
         :to-u-t-c="props?.componentData?.toUTC"
-        type-of="datetime"
+        :errors="errors"
     />
     <div class="input__error">{{ errors && errors[0] ? errors[0] : null }}</div>
   </div>
