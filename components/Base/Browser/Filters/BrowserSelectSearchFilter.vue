@@ -1,43 +1,36 @@
 <script setup lang="ts">
-interface IFilter {
-  id: string,
-  title: string,
-  type: keyof typeof FilterType,
-  options?: {
-    id: string,
-    title: string,
-  }[]
-  config: {
-    filter: boolean,
-    hidden: boolean,
-    mask: string|null,
-    multiple: boolean,
-    range: boolean,
-    url: string
-  }
+import type { IFilter } from '~/components/Base/Browser/Browser.vue'
+import type { Ref } from 'vue'
+
+interface IOption {
+  id: number|string,
+  title: string
 }
 
 const props = defineProps<{
+  modelValue?: any,
   filter: IFilter,
-  optionsById?: {}
 }>()
 
 const emit = defineEmits(['filterValueChanged'])
 
-const selectedItems = ref({})
-const selectedId = ref(null)
-const selectedTitle = ref(null)
+const selectedItems: Ref<{[key: string]: IOption}> = ref({})
+const selectedId: Ref<string | number | null> = ref(null)
+const selectedTitle: Ref<string | null> = ref(null)
 const isSelecting = ref(false)
 const searchString = ref('')
 const options = ref([])
-const filteredOptions = ref([])
+const filteredOptions: Ref<({
+  id: string
+  title: string
+}[])|undefined> = ref([])
 const inverseRender = ref(false)
-const topPxStyle = ref(0)
-const topPxStyleInput = ref(0)
+const topPxStyle = ref('0')
+const topPxStyleInput = ref('0')
 
-const selectDropdownEl = ref(null)
-const selectContainerEl = ref(null)
-const inputEl = ref(null)
+const selectDropdownEl = useTemplateRef<HTMLDivElement>('selectDropdownEl')
+const selectContainerEl = useTemplateRef<HTMLDivElement>('selectContainerEl')
+const inputEl = useTemplateRef<HTMLInputElement>('inputEl')
 
 const onDocumentVisibilityChange = () => {
   if (document.hidden) {
@@ -45,21 +38,22 @@ const onDocumentVisibilityChange = () => {
   }
 }
 
-const updateDimensions = (rect) => {
+const updateDimensions = (rect: DOMRect) => {
+
   if (!isSelecting.value) {
     return
   }
 
   if (window.innerHeight >= (rect.height + rect.top)) {
-    topPxStyle.value = 0
-    topPxStyleInput.value = 0
+    topPxStyle.value = '0'
+    topPxStyleInput.value = '0'
     inverseRender.value = false
     return
   }
 
   inverseRender.value = true
-  topPxStyle.value = ((selectDropdownEl.value.offsetHeight + selectContainerEl.value.offsetHeight + 30) * -1) + 'px'
-  topPxStyleInput.value = ((selectDropdownEl.value.offsetHeight + selectContainerEl.value.offsetHeight + 30) * -1) + 'px'
+  topPxStyle.value = ((selectDropdownEl.value!.offsetHeight + selectContainerEl.value!.offsetHeight + 30) * -1) + 'px'
+  topPxStyleInput.value = ((selectDropdownEl.value!.offsetHeight + selectContainerEl.value!.offsetHeight + 30) * -1) + 'px'
 }
 
 const onClickSelectedValue = () => {
@@ -68,7 +62,7 @@ const onClickSelectedValue = () => {
   nextTick(() => {
     nextTick(() => {
       if (inputEl.value !== undefined) {
-        inputEl.value.focus()
+        inputEl.value!.focus()
       }
     })
   })
@@ -76,7 +70,7 @@ const onClickSelectedValue = () => {
   isSelecting.value = !isSelecting.value
 }
 
-const onMouseDownOnDropdownOption = (filterName, option) => {
+const onMouseDownOnDropdownOption = (filterName: string, option: IOption) => {
 
   if (props.filter.config.multiple) {
 
@@ -97,7 +91,7 @@ const onClickOutside = () => {
   isSelecting.value = false
 }
 
-const onClickCancel = (filterName, index) => {
+const onClickCancel = (filterName: string, index: number) => {
   if (props.filter.config.multiple) {
     delete selectedItems.value[index]
 
@@ -105,7 +99,7 @@ const onClickCancel = (filterName, index) => {
   }
 }
 
-const onCrossClick = (filterName) => {
+const onCrossClick = (filterName: string) => {
   selectedId.value = null
   selectedTitle.value = null
 
@@ -116,7 +110,7 @@ watch(
     searchString,
     (newValue) => {
       filteredOptions.value = props.filter.options
-      filteredOptions.value = filteredOptions.value.filter((option) => {
+      filteredOptions.value = filteredOptions.value!.filter((option: IOption) => {
         return option.title.toLowerCase().includes(newValue.toLowerCase())
       })
     }
@@ -128,7 +122,7 @@ watch(
       nextTick(() => {
         if (selectDropdownEl.value === null) {
           inverseRender.value = false
-          topPxStyle.value = 0;
+          topPxStyle.value = '0';
           return
         }
 
@@ -139,7 +133,7 @@ watch(
         const ro = new ResizeObserver(() => {
           updateDimensions(rect)
         })
-        ro.observe(selectContainerEl.value, {})
+        ro.observe(selectContainerEl.value!, {})
 
         const ro2 = new ResizeObserver(() => {
           updateDimensions(rect)
