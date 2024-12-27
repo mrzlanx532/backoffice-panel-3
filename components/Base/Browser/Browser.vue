@@ -140,12 +140,9 @@ interface IRequestParams {
   page: number
 }
 
-interface IUnpreparedFilterValue {
-  id: string,
-  value: string[]|number[]|null[]|null|string
-}
-
 onMounted(() => {
+  tryToParseJSON(route.query.filters as string)
+
   fetchData().then(() => {
     firstLoadingIsActive.value = false
   })
@@ -163,8 +160,25 @@ const selectedIds: Ref<Record<string, boolean>> = ref({})
 /** filters */
 const filters: Ref<IFilter[]> = ref([])
 const filtersByName: Ref<{[key: string]: IFilter}> = ref({})
-const activeFilters: Ref<{[key: string]: any[]}> = ref(route.query.filters ? JSON.parse(route.query.filters as string) : {})
+const activeFilters: Ref<{[key: string]: any[]}> = ref({})
 const activeFiltersIsExists = computed(() => Object.keys(activeFilters.value).length > 0)
+const tryToParseJSON = (json?: string) => {
+  if (!json) {
+    return
+  }
+
+  try {
+    activeFilters.value = JSON.parse(json);
+  } catch (e) {
+    router.push({
+      path: route.path,
+      query: {
+        ...route.query,
+        filters: undefined
+      }
+    })
+  }
+}
 
 const searchString: Ref<string> = ref(route.query.search_string ? route.query.search_string as string : '')
 const fetchError: Ref<FetchError|null> = ref(null)
