@@ -25,7 +25,7 @@ async function onClick() {
   await $auth().login(formData.value).catch((err) => {
 
     if (err.status === undefined) {
-      $notification.push({type: 'danger', message: 'Сервер недоступен'})
+      $notification.push({type: 'danger', message: ['Сервер недоступен,', 'попробуйте позже']})
 
       return
     }
