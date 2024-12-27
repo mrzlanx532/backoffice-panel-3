@@ -360,10 +360,7 @@ const setFilters = (_filters: IFilter[]) => {
 const onFilterValueChanged = (type: string, id: string, value: any) => {
   currentPage.value = 1
 
-  switch (type) {
-    default: // BOOLEAN
-      value = value !== undefined ? value : value
-  }
+  value = value !== undefined ? value : value
 
   value === undefined ? delete activeFilters.value[id] : activeFilters.value[id] = value
 
@@ -393,46 +390,6 @@ const onFilterValueChanged = (type: string, id: string, value: any) => {
   }, 100)
 
   debouncedFetchDataFunction.value()
-}
-
-// TODO: Удалить позже
-const prepareFilterValue = (filter: IUnpreparedFilterValue) => {
-  if (filtersByName.value[filter.id].config.range) {
-
-    if (filter.value === null) {
-      delete activeFilters.value[filter.id]
-
-      return
-    }
-
-    const preparedFirstValue = filter.value[0] === null ? "" : filter.value[0]
-    const preparedSecondValue = filter.value[1] === null ? "" : filter.value[1]
-
-    if (preparedFirstValue === "" && preparedSecondValue === "") {
-      delete activeFilters.value[filter.id]
-
-      return
-    }
-
-    activeFilters.value[filter.id] = [preparedFirstValue, preparedSecondValue]
-
-    return
-  }
-
-  if (filtersByName.value[filter.id].config.multiple && filter.value instanceof Array) {
-
-    filter.value.length ? activeFilters.value[filter.id] = filter.value : delete activeFilters.value[filter.id]
-
-    return
-  }
-
-  if (filter.value === null || filter.value === '') {
-    delete activeFilters.value[filter.id]
-
-    return
-  }
-
-  activeFilters.value[filter.id] = [filter.value]
 }
 
 const reset = (isUpdateItem = false) => {

@@ -140,7 +140,7 @@ const onMouseDownOnDropdownOption = (filterName: string, option: IOption) => {
   selectedTitle.value = option.title
   isSelecting.value = false
 
-  emit('update:modelValue', props.filter.type, filterName, option.id)
+  emit('update:modelValue', props.filter.type, filterName, [option.id])
 }
 
 const onClickOutside = () => {
