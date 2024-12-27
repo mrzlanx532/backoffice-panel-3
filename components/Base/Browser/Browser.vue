@@ -12,6 +12,7 @@ enum FilterType {
   SELECT_SEARCH = 'SELECT_SEARCH',
   INPUT = 'INPUT',
   DATE = 'DATE',
+  DATETIME = 'DATETIME',
   BOOLEAN = 'BOOLEAN',
 }
 
@@ -58,6 +59,7 @@ import BrowserDetail from "@/components/Base/Browser/BrowserDetail.vue";
 import { type IItem, type IConfigItem, type IColumn } from '~/composables/useBrowser'
 import BrowserDetailBulkActions from '~/components/Base/Browser/BrowserDetailBulkActions.vue'
 import BrowserCheckbox from '~/components/Base/Browser/BrowserCheckbox.vue'
+import BrowserDatetimeFilter from '~/components/Base/Browser/Filters/BrowserDatetimeFilter.vue'
 
 const {
   // Items
@@ -253,6 +255,7 @@ const filterMapper = shallowRef({
   SELECT_SEARCH: BrowserSelectSearchFilter,
   INPUT: BrowserInputFilter,
   DATE: BrowserDateFilter,
+  DATETIME: BrowserDatetimeFilter,
   BOOLEAN: BrowserBooleanFilter
 })
 

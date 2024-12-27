@@ -2,7 +2,7 @@
 import type { Ref } from 'vue'
 import type { IPayload, IPayloadMultiple } from '~/components/Base/Datepicker/types'
 import type { IFilter, IFilterConfig } from '~/components/Base/Browser/Browser.vue'
-import DatePicker from '../../Datepicker/DatePicker.vue'
+import DatetimePicker from '../../Datepicker/DatetimePicker.vue'
 import 'moment/dist/locale/ru'
 import moment from 'moment'
 
@@ -12,17 +12,17 @@ const emit = defineEmits(['update:modelValue'])
 
 type IValue = number | string | undefined
 
-interface IDateFilterConfig extends IFilterConfig {
+interface IDatetimeFilterConfig extends IFilterConfig {
   is_timestamp: boolean;
 }
 
-export interface IDateFilter extends IFilter {
-  config: IDateFilterConfig;
+export interface IDatetimeFilter extends IFilter {
+  config: IDatetimeFilterConfig;
 }
 
 const props = defineProps<{
   modelValue?: [number|string]|[(number|string),(number|string)],
-  filter: IDateFilter
+  filter: IDatetimeFilter
 }>()
 
 const localValue: Ref<IValue> = ref(undefined)
@@ -100,28 +100,28 @@ const onFilterValueChanged = (payload: IPayload) => {
     <div :for="filter.id" class="browser__filter-name">{{ filter.title }}</div>
     <div class="browser__filter-container date">
       <template v-if="filter.config.range">
-        <DatePicker
+        <DatetimePicker
             @update:modelValue="onFilterValueChangedMultiple"
             :model-value="localValues[0]"
             :filter="filter"
             :range-index="0"
-            :format="props.filter.config.is_timestamp ? 'X' : 'DD.MM.yyyy'"
+            :format="props.filter.config.is_timestamp ? 'X' : 'DD.MM.yyyy HH:mm'"
         />
-        <DatePicker
+        <DatetimePicker
             @update:modelValue="onFilterValueChangedMultiple"
             :model-value="localValues[1]"
             :filter="filter"
             :range-index="1"
             :style="{'marginTop': '2px'}"
-            :format="props.filter.config.is_timestamp ? 'X' : 'DD.MM.yyyy'"
+            :format="props.filter.config.is_timestamp ? 'X' : 'DD.MM.yyyy HH:mm'"
         />
       </template>
-      <DatePicker
+      <DatetimePicker
           v-else
           :model-value="localValue"
           @update:modelValue="onFilterValueChanged"
           :filter="filter"
-          :format="props.filter.config.is_timestamp ? 'X' : 'DD.MM.yyyy'"
+          :format="props.filter.config.is_timestamp ? 'X' : 'DD.MM.yyyy HH:mm'"
       />
     </div>
   </div>

@@ -477,6 +477,15 @@
     }
   }
 
+  &__nav-calendar {
+    padding: 6px;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
   &__nav-center {
     flex-basis: 100%;
     display: flex;
@@ -633,6 +642,131 @@
   &__time-delimiter {
     padding: 5px 0;
     height: 28px;
+  }
+
+  &__enums {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-gap: 1px;
+    padding-bottom: 5px;
+
+    &.--years, &.--hours, &.--minutes {
+      height: 155px;
+      position: relative;
+      top: 0;
+    }
+  }
+
+  &__enum {
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    font-size: 14px;
+
+    &.--is-selected {
+      border: 1px solid var(--color-gradient-2);
+    }
+
+    &:hover {
+      color: var(--color-gradient-1);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px;
+  }
+
+  &__information {
+    color: var(--color-4);
+    font-size: 14px;
+    padding-top: 3px;
+    user-select: none;
+  }
+
+  &__button {
+    padding: 4px;
+    font-size: 12px;
+    background: transparent;
+    outline: none;
+    border: 1px solid var(--color-2);
+    border-radius: 5px;
+    cursor: pointer;
+    user-select: none;
+    transition: border .2s;
+
+    &:hover {
+      border: 1px solid var(--color-gradient-2);
+    }
+  }
+
+  &__time {
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__time_parts {
+    width: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+
+  &__time_arrow {
+    height: 22px;
+    cursor: pointer;
+
+    svg {
+      color: grey;
+      fill: currentColor;
+    }
+
+    &:hover svg {
+      color: var(--color-gradient-intermediate);
+      fill: currentColor;
+    }
+
+    &.--top {
+      transform: rotate(270deg);
+    }
+
+    &.--bottom {
+      transform: rotate(90deg);
+    }
+
+    svg {
+      height: 22px;
+      width: 22px;
+    }
+  }
+
+  &__time_label {
+    text-align: center;
+    cursor: pointer;
+    font-size: 24px;
+    user-select: none;
+    border-radius: 5px;
+
+    &:hover {
+      box-shadow: rgba(50, 50, 93, 0.25) 0 2px 5px -1px, rgba(0, 0, 0, 0.3) 0 1px 3px -1px;
+    }
+  }
+
+  &__time_divider {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px;
+    font-size: 24px;
+    user-select: none;
   }
 }
 
