@@ -12,14 +12,13 @@ const props = defineProps<{
   filter: IFilter,
 }>()
 
-const emit = defineEmits(['filterValueChanged'])
+const emit = defineEmits(['update:modelValue'])
 
 const selectedItems: Ref<{[key: string]: IOption}> = ref({})
-const selectedId: Ref<string | number | null> = ref(null)
-const selectedTitle: Ref<string | null> = ref(null)
+const selectedId: Ref<string | number | undefined> = ref()
+const selectedTitle: Ref<string | undefined> = ref()
 const isSelecting = ref(false)
 const searchString = ref('')
-const options = ref([])
 const filteredOptions: Ref<({
   id: string
   title: string
@@ -27,6 +26,63 @@ const filteredOptions: Ref<({
 const inverseRender = ref(false)
 const topPxStyle = ref('0')
 const topPxStyleInput = ref('0')
+
+watch(
+    () => props.modelValue,
+    (value) => {
+
+      if (props.filter.config.multiple) {
+
+        if (value === undefined) {
+          selectedItems.value = {}
+          return
+        }
+
+        if (props.filter.options!.length && value instanceof Array) {
+
+          const preparedSelectedItems: {[key: string]: IOption} = {}
+
+          props.filter.options!.map(option => {
+            value.forEach(_option => {
+              if (option.id === _option) {
+                preparedSelectedItems[option.id] = option
+              }
+            })
+          })
+
+          selectedItems.value = preparedSelectedItems
+        }
+
+        return
+      }
+
+      if (value === undefined) {
+        selectedId.value = undefined
+        selectedTitle.value = undefined
+
+        return
+      }
+
+      selectedId.value = value as string | number | undefined
+
+      if (props.filter.options!.length) {
+        props.filter.options!.map(option => {
+          if (option.id === value) {
+            selectedTitle.value = option.title
+
+            return
+          }
+        })
+
+        return
+      }
+
+      selectedTitle.value = undefined
+    },
+    {
+      immediate: true
+    }
+)
 
 const selectDropdownEl = useTemplateRef<HTMLDivElement>('selectDropdownEl')
 const selectContainerEl = useTemplateRef<HTMLDivElement>('selectContainerEl')
@@ -76,7 +132,7 @@ const onMouseDownOnDropdownOption = (filterName: string, option: IOption) => {
 
     selectedItems.value[option.id] ? delete selectedItems.value[option.id] : selectedItems.value[option.id] = option
 
-    emit('filterValueChanged', {'id': filterName, 'value': Object.values(selectedItems.value).map(item => item.id)})
+    emit('update:modelValue', props.filter.type, filterName, Object.values(selectedItems.value).map(item => item.id))
     return
   }
 
@@ -84,7 +140,7 @@ const onMouseDownOnDropdownOption = (filterName: string, option: IOption) => {
   selectedTitle.value = option.title
   isSelecting.value = false
 
-  emit('filterValueChanged', {'id': filterName, 'value': option.id})
+  emit('update:modelValue', props.filter.type, filterName, option.id)
 }
 
 const onClickOutside = () => {
@@ -95,15 +151,17 @@ const onClickCancel = (filterName: string, index: number) => {
   if (props.filter.config.multiple) {
     delete selectedItems.value[index]
 
-    emit('filterValueChanged', {'id': filterName, 'value': Object.values(selectedItems.value).map(item => item.id)})
+    const preparedValues = Object.values(selectedItems.value).map(item => item.id)
+
+    emit('update:modelValue', props.filter.type, filterName, preparedValues.length ? preparedValues : undefined)
   }
 }
 
 const onCrossClick = (filterName: string) => {
-  selectedId.value = null
-  selectedTitle.value = null
+  selectedId.value = undefined
+  selectedTitle.value = undefined
 
-  emit('filterValueChanged', {'id': filterName, 'value': null})
+  emit('update:modelValue', props.filter.type, filterName, undefined)
 }
 
 watch(
@@ -178,7 +236,7 @@ onUnmounted(() => {
               <div class="select__active-select-option-title">
                 {{ selectedItem.title }}
               </div>
-              <div class="select__active-select-option-cancel" @click.stop="onClickCancel(filter.id, index)">
+              <div class="select__active-select-option-cancel" @click.stop="onClickCancel(filter.id, index as number)">
                 <svg>
                   <use xlink:href="/img/temp_sprite.svg#min_cross"/>
                 </svg>
@@ -188,7 +246,7 @@ onUnmounted(() => {
         </div>
         <div class="select__active-select" v-else>{{ selectedTitle }}</div>
         <div class="select__active-select-remove-button"
-             v-if="selectedId !== null"
+             v-if="selectedId"
              @click.stop="onCrossClick(filter.id)"
         >
           <svg>
@@ -227,12 +285,12 @@ onUnmounted(() => {
             :class="{'--inverse': inverseRender}"
             v-scrollable="{classes: ['--without-track', '--smart-opacity']}"
         >
-          <template v-if="filteredOptions.length > 0">
+          <template v-if="filteredOptions!.length > 0">
             <div
                 v-for="(option, index) in filteredOptions"
                 class="select__dropdown-option"
                 :class="{'select__dropdown-option_selected': selectedItems[option.id]}"
-                @mouseup="onMouseDownOnDropdownOption(filter.id, option, index)"
+                @mouseup="onMouseDownOnDropdownOption(filter.id, option)"
             >{{ option.title }}</div>
           </template>
           <div class="select__dropdown-option select__dropdown-option_empty" v-else>Нет записей</div>

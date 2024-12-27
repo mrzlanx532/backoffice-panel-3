@@ -8,18 +8,75 @@ interface IOption {
 }
 
 const props = defineProps<{
-  modelValue?: any,
+  modelValue?: string[]|number[]|string|number,
   filter: IFilter,
 }>()
 
 const emit = defineEmits(['update:modelValue'])
 
 const selectedItems: Ref<{[key: string]: IOption}> = ref({})
-const selectedId: Ref<string | number | null> = ref(null)
-const selectedTitle: Ref<string | null> = ref(null)
+const selectedId: Ref<string | number | undefined> = ref()
+const selectedTitle: Ref<string | undefined> = ref()
 const isSelecting = ref(false)
 const inverseRender = ref(false)
 const topPxStyle = ref('0')
+
+watch(
+    () => props.modelValue,
+    (value) => {
+
+      if (props.filter.config.multiple) {
+
+        if (value === undefined) {
+          selectedItems.value = {}
+          return
+        }
+
+        if (props.filter.options!.length && value instanceof Array) {
+
+          const preparedSelectedItems: {[key: string]: IOption} = {}
+
+          props.filter.options!.map(option => {
+            value.forEach(_option => {
+              if (option.id === _option) {
+                preparedSelectedItems[option.id] = option
+              }
+            })
+          })
+
+          selectedItems.value = preparedSelectedItems
+        }
+
+        return
+      }
+
+      if (value === undefined) {
+        selectedId.value = undefined
+        selectedTitle.value = undefined
+
+        return
+      }
+
+      selectedId.value = value as string | number | undefined
+
+      if (props.filter.options!.length) {
+        props.filter.options!.map(option => {
+          if (option.id === value) {
+            selectedTitle.value = option.title
+
+            return
+          }
+        })
+
+        return
+      }
+
+      selectedTitle.value = undefined
+    },
+    {
+      immediate: true
+    }
+)
 
 const selectDropdownEl = useTemplateRef<HTMLDivElement>('selectDropdownEl')
 const selectContainerEl = useTemplateRef<HTMLDivElement>('selectContainerEl')
@@ -58,13 +115,15 @@ const onClickCancel = (filterName: string, index: number) => {
   if (props.filter.config.multiple) {
     delete selectedItems.value[index]
 
-    emit('update:modelValue', props.filter.type, filterName, Object.values(selectedItems.value).map(item => item.id))
+    const preparedValues = Object.values(selectedItems.value).map(item => item.id)
+
+    emit('update:modelValue', props.filter.type, filterName, preparedValues.length ? preparedValues : undefined)
   }
 }
 
 const onCrossClick = (filterName: string) => {
-  selectedId.value = null
-  selectedTitle.value = null
+  selectedId.value = undefined
+  selectedTitle.value = undefined
 
   emit('update:modelValue', props.filter.type, filterName, undefined)
 }
@@ -140,7 +199,7 @@ onUnmounted(() => {
         </div>
         <div class="select__active-select" v-else>{{ selectedTitle }}</div>
         <div class="select__active-select-remove-button"
-             v-if="selectedId !== null"
+             v-if="selectedId"
              @click.stop="onCrossClick(filter.id)"
         >
           <svg>
