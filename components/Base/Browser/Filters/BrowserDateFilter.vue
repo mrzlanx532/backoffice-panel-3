@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
 import type { IPayload, IPayloadMultiple } from '~/components/Base/Datepicker/types'
+import type { IFilter, IFilterConfig } from '~/components/Base/Browser/Browser.vue'
 import DatePicker from '../../Datepicker/DatePicker.vue'
 import 'moment/dist/locale/ru'
 import moment from 'moment'
@@ -11,23 +12,17 @@ const emit = defineEmits(['update:modelValue'])
 
 type IValue = number | string | undefined
 
-interface IFilter {
-  id: string,
-  type: string
-  title: string,
-  options?: [],
-  config: {
-    filter: boolean,
-    hidden: false,
-    mask: null|string,
-    multiple: boolean,
-    range: boolean,
-  }
+interface IDateFilterConfig extends IFilterConfig {
+  is_timestamp: boolean;
+}
+
+export interface IDateFilter extends IFilter {
+  config: IDateFilterConfig;
 }
 
 const props = defineProps<{
   modelValue?: number|string|[number|string]|[(number|string),(number|string)],
-  filter: IFilter
+  filter: IDateFilter
 }>()
 
 const localValue: Ref<IValue> = ref(undefined)
@@ -73,7 +68,11 @@ const onFilterValueChangedMultiple = (payload: IPayloadMultiple) => {
   preparedValue[0] = localValues.value[0]
   preparedValue[1] = localValues.value[1]
 
-  preparedValue[payload.rangeIndex] = payload.value ? Number(payload.value) : payload.value
+  if (props.filter.config.is_timestamp) {
+    preparedValue[payload.rangeIndex] = payload.value ? Number(payload.value) : payload.value
+  } else {
+    preparedValue[payload.rangeIndex] = payload.value
+  }
 
   if (preparedValue[0] === undefined && preparedValue[1]) {
     preparedValue[0] = ''
@@ -87,7 +86,13 @@ const onFilterValueChangedMultiple = (payload: IPayloadMultiple) => {
 }
 
 const onFilterValueChanged = (payload: IPayload) => {
-  emit('update:modelValue', props.filter.type, props.filter.id, payload.value ? [Number(payload.value)] : payload.value)
+  if (props.filter.config.is_timestamp) {
+    emit('update:modelValue', props.filter.type, props.filter.id, payload.value ? [Number(payload.value)] : payload.value)
+
+    return
+  }
+
+  emit('update:modelValue', props.filter.type, props.filter.id, payload.value ? [payload.value] : payload.value)
 }
 </script>
 <template>
@@ -100,6 +105,7 @@ const onFilterValueChanged = (payload: IPayload) => {
             :model-value="localValues[0]"
             :filter="filter"
             :range-index="0"
+            :format="props.filter.config.is_timestamp ? 'X' : 'DD.MM.yyyy'"
         />
         <DatePicker
             @update:modelValue="onFilterValueChangedMultiple"
@@ -107,6 +113,7 @@ const onFilterValueChanged = (payload: IPayload) => {
             :filter="filter"
             :range-index="1"
             :style="{'marginTop': '2px'}"
+            :format="props.filter.config.is_timestamp ? 'X' : 'DD.MM.yyyy'"
         />
       </template>
       <DatePicker
@@ -114,6 +121,7 @@ const onFilterValueChanged = (payload: IPayload) => {
           :model-value="localValue"
           @update:modelValue="onFilterValueChanged"
           :filter="filter"
+          :format="props.filter.config.is_timestamp ? 'X' : 'DD.MM.yyyy'"
       />
     </div>
   </div>

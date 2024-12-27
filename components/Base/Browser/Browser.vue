@@ -15,6 +15,16 @@ enum FilterType {
   BOOLEAN = 'BOOLEAN',
 }
 
+export interface IFilterConfig {
+  filter: boolean
+  hidden: boolean
+  mask: string|null
+  multiple: boolean
+  range: boolean
+  url: string
+  nullable: boolean
+}
+
 export interface IFilter {
   id: string
   title: string
@@ -23,15 +33,7 @@ export interface IFilter {
     id: string
     title: string
   }[]
-  config: {
-    filter: boolean
-    hidden: boolean
-    mask: string|null
-    multiple: boolean
-    range: boolean
-    url: string
-    nullable: boolean
-  }
+  config: IFilterConfig
 }
 </script>
 
