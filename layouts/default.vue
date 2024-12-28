@@ -80,6 +80,11 @@ const items = [
     link: '/blog',
     icon: '/img/menu_icons_sprite.svg#users',
   },
+  {
+    name: 'Ручки',
+    link: '/pencils',
+    icon: '/img/menu_icons_sprite.svg#users',
+  },
 ]
 
 const {
