@@ -332,7 +332,7 @@ const onClickRemove = () => {
     return
   }
 
-  emit('update:modelValue', {'value': undefined, 'rangeIndex': props.rangeIndex})
+  emit('update:modelValue', {'value': null, 'rangeIndex': props.rangeIndex})
 }
 
 onMounted(() => {
@@ -364,7 +364,7 @@ const onKeydown = (e: Event) => {
   }
 
   if (!localDate.value) {
-    emit('update:modelValue', {'value': undefined, 'rangeIndex': props.rangeIndex})
+    emit('update:modelValue', {'value': null, 'rangeIndex': props.rangeIndex})
   }
 }
 
@@ -383,9 +383,13 @@ const apply = () => {
   })
 }
 
-const prepareValue = (value: Moment|null) => {
+const prepareValue = (value: Moment | null | undefined) => {
   if (value === null) {
-    return undefined
+    return null
+  }
+
+  if (value === undefined) {
+    return undefined;
   }
 
   if (props.toUTC) {
@@ -470,8 +474,8 @@ const onClickMinute = (value: number) => {
   timeIsOpen.value = true
 }
 
-const setLocalValues = (value?: string | number) => {
-  if (value === undefined) {
+const setLocalValues = (value?: string | number | null) => {
+  if (value === undefined || value === null) {
     localDateMoment = null
     localDate.value = null
 
