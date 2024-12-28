@@ -32,8 +32,8 @@ const {
   errors,
   getFormComponent
 } = initForm(
-    'blog/posts/create',
-    'blog/posts/update',
+    'pencils/create',
+    'pencils/update',
     [
 
       date({
