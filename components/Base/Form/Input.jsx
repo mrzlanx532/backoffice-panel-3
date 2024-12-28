@@ -70,7 +70,7 @@ export default defineComponent({
     },
     methods: {
         onInput(e) {
-            this.$emit('update:modelValue', e.target.value)
+            this.$emit('update:modelValue', e.target.value === '' ? null : e.target.value)
         }
     },
     render: (ctx) => {

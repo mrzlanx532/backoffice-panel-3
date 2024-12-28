@@ -46,7 +46,7 @@ const {
         label: 'Date',
         class: '--full'
       }),
-      textArea({
+      editor({
         name: 'example_editor',
         label: 'Editor',
         class: '--full'
@@ -65,6 +65,9 @@ const {
         name: 'example_select',
         label: 'Select',
         class: '--full',
+        componentData: {
+          isRemovable: true
+        }
       }),
       selectWrap({
         name: 'example_select_wrap',

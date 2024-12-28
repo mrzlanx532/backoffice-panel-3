@@ -4,7 +4,7 @@ import type { OutputData } from '@editorjs/editorjs'
 
 const emit = defineEmits(['update:modelValue'])
 
-const model = defineModel()
+const model = defineModel<string | undefined>()
 
 const editorEl = useTemplateRef<HTMLElement>('editorEl')
 

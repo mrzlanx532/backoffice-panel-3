@@ -40,6 +40,14 @@ const selectedItemOrItems: Ref<IOption|IOption[]|undefined> = ref()
 const resizeObserverIsSet = false
 
 const setLocalValues = (value: number|number[]|string|string[]|null|undefined) => {
+
+  if (value === undefined || value === null) {
+    selectedItems.value = {}
+    selectedItemOrItems.value = undefined
+
+    return
+  }
+
   if (Array.isArray(value)) {
 
     const preparedItems: IOption[] = []
@@ -62,12 +70,13 @@ const setLocalValues = (value: number|number[]|string|string[]|null|undefined) =
   }
 }
 
-setLocalValues(props.modelValue)
-
 watch(
     () => props.modelValue,
     (value) => {
       setLocalValues(value)
+    },
+    {
+      immediate: true
     }
 )
 
@@ -79,7 +88,9 @@ const onDocumentVisibilityChange = () =>  {
   }
 }
 const onClickCancel = (index?: number|string) => {
-  emit('update:modelValue', Object.values(selectedItems.value).map(item => item.id).filter(id => id != index))
+  const preparedModelValue = Object.values(selectedItems.value).map(item => item.id).filter(id => id != index)
+
+  emit('update:modelValue', Array.isArray(preparedModelValue) && preparedModelValue.length === 0 ? null : preparedModelValue)
 }
 const onMouseDownOnDropdownOption = (option: IOption) => {
 

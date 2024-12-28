@@ -101,7 +101,7 @@ const handleCreated = (editor) => {
 
 // @ts-ignore
 const handleChange = (editor) => {
-  emit('update:modelValue', editor.getHtml())
+  emit('update:modelValue', editor.isEmpty() ? null : editor.getHtml())
 }
 
 // @ts-ignore

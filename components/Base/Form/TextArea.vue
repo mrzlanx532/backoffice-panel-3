@@ -43,10 +43,11 @@ watch(
     () => props.modelValue,
     (value) => {
       setLocalValues(value)
+    },
+    {
+      immediate: true
     }
 )
-
-setLocalValues(props.modelValue)
 
 const triggerAutosize = () => {
   textareaEl.value!.style.height = "50px";
@@ -55,7 +56,7 @@ const triggerAutosize = () => {
 
 const onInput = () => {
   triggerAutosize()
-  emit('update:modelValue', internalValue.value)
+  emit('update:modelValue', internalValue.value === '' ? null : internalValue.value)
 }
 </script>
 
