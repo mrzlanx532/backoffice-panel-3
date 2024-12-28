@@ -11,7 +11,7 @@ moment.locale('ru')
 const emit = defineEmits(['update:modelValue'])
 
 const props = withDefaults(defineProps<{
-  modelValue?: number | string,
+  modelValue?: number | string | null,
   rangeIndex?: number,
   forceInverse?: boolean,
   format?: string,
