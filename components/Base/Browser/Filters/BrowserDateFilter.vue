@@ -10,7 +10,7 @@ moment.locale('ru')
 
 const emit = defineEmits(['update:modelValue'])
 
-type IValue = number | string | undefined
+type IValue = number | string | undefined | null
 
 interface IDateFilterConfig extends IFilterConfig {
   is_timestamp: boolean;
@@ -74,11 +74,13 @@ const onFilterValueChangedMultiple = (payload: IPayloadMultiple) => {
     preparedValue[payload.rangeIndex] = payload.value
   }
 
-  if (preparedValue[0] === undefined && preparedValue[1]) {
+  if ((preparedValue[0] === undefined || preparedValue[0] === null) && preparedValue[1]) {
     preparedValue[0] = ''
-  } else if (preparedValue[1] === undefined && preparedValue[0]) {
+  } else if ((preparedValue[1] === undefined || preparedValue[1] === null) && preparedValue[0]) {
     preparedValue[1] = ''
-  } else if (preparedValue[0] === undefined && preparedValue[1] === undefined) {
+  } else if (
+      (preparedValue[0] === undefined || preparedValue[0] === null) &&
+      (preparedValue[1] === undefined || preparedValue[1] === null)) {
     preparedValue = undefined
   }
 
@@ -86,9 +88,14 @@ const onFilterValueChangedMultiple = (payload: IPayloadMultiple) => {
 }
 
 const onFilterValueChanged = (payload: IPayload) => {
+
+  if (payload.value === null) {
+    emit('update:modelValue', props.filter.type, props.filter.id, undefined)
+    return
+  }
+
   if (props.filter.config.is_timestamp) {
     emit('update:modelValue', props.filter.type, props.filter.id, payload.value ? [Number(payload.value)] : payload.value)
-
     return
   }
 
