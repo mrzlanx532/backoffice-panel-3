@@ -65,9 +65,9 @@ watch(
 
       selectedId.value = value as string | number | undefined
 
-      if (props.filter.options!.length) {
+      if (props.filter.options!.length && value instanceof Array) {
         props.filter.options!.map(option => {
-          if (option.id === value) {
+          if (option.id === value[0]) {
             selectedTitle.value = option.title
 
             return
