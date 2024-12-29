@@ -93,15 +93,6 @@ const sections = ref([
       {
         title: 'Кол-во просмотров',
         name: 'views_counter',
-        component: {
-          component: Badge,
-        },
-        toFormat(item: IItem) {
-          return {
-            title: item?.views_counter,
-            class: '--success'
-          }
-        }
       },
       {
         title: 'Создано',
@@ -163,7 +154,10 @@ await SSRLoadDetail(item, 'blog/posts/detail', route.params.id)
               formURL: 'blog/posts/form',
               modalComponent: BlogForm,
               modalTitle: 'Редактирование статьи',
-              notificationMessage: 'Статья изменена'
+              notificationMessage: 'Статья изменена',
+              modalConfig: {
+                isPreventClickOverlay: true
+              }
             })"
             :class="['--small --outline-primary']"
         >
