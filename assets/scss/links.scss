@@ -1,12 +1,12 @@
 .link {
-  text-underline-offset: 5px;
-  text-decoration: underline;
+
+  text-decoration: none;
 
   &.--special {
-    color: var(--color-gradient-intermediate, #ff6e00);
+    color: var(--color-gradient-intermediate);
 
     &:hover {
-      color: black;
+      color: var(--color-gradient-1);
     }
   }
 
