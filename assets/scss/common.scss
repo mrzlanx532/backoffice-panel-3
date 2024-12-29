@@ -21,7 +21,12 @@ div, button, label, li {
   font-family: "FiraSansExtraCondensed";
 }
 
-a, h1, h2, h3, h4, h5, h6, input {
+a, input {
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 10px 0;
   font-family: "Roboto";
   font-weight: normal;
 }
@@ -38,10 +43,6 @@ thead > tr > th {
 
 #__nuxt {
   height: 100%;
-}
-
-p {
-  margin: 0;
 }
 
 .mr_10 {

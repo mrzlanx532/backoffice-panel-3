@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { useRoute, useNuxtApp } from '#imports';
+import { useRoute, useNuxtApp, type IItem } from '#imports';
 
-import Detail from '@/components/Base/Detail.vue'
-import Button from '@/components/Base/Button.vue'
+import Detail from '~/components/Base/Detail.vue'
+import Button from '~/components/Base/Button.vue'
 import BlogForm from '~/modals/blog/BlogForm.vue'
-import Tabs from '~/components/Base/Tabs.vue'
-import MainTab from '~/pages/blog/_tabs/main.vue'
-import PhotosTab from '~/pages/blog/_tabs/photos.vue'
+import Picture from '~/components/Base/Browser/ColumnComponents/Picture.vue'
+import Badge from '~/components/Base/Browser/ColumnComponents/Badge.vue'
 
 const route = useRoute()
 
@@ -24,23 +23,6 @@ const {
 
   SSRLoadDetail
 } = usePage()
-
-const { initTabs } = useTabs()
-
-const {
-  tabs,
-  selectedTabComponent,
-  onChangeSelectedTab
-} = initTabs([
-  {
-    title: 'Пост',
-    component: MainTab
-  },
-  {
-    title: 'Фото',
-    component: PhotosTab
-  }
-])
 
 const onChangeState = async () => {
 
@@ -65,16 +47,116 @@ const onChangeState = async () => {
   })
 }
 
+const sections = ref([
+  {
+    title: 'Общее',
+    rows: [
+      {
+        title: 'id',
+        name: 'id'
+      },
+      {
+        title: 'Заголовок',
+        name: 'name'
+      },
+      {
+        title: 'Дата',
+        name: 'date'
+      },
+      {
+        title: 'Локаль',
+        name: 'locale',
+        toFormat(item: any) {
+          return item.locale.title
+        }
+      },
+      {
+        title: 'Статус',
+        name: 'state',
+        toFormat(item: any) {
+          return item.state.title
+        }
+      },
+      {
+        title: 'Категория',
+        name: 'category',
+        toFormat(item: any) {
+          let string = item.category.name_ru
+
+          if (item.category.name_en) {
+            string = string + ' (' + item.category.name_en + ')'
+          }
+
+          return string
+        }
+      },
+      {
+        title: 'Кол-во просмотров',
+        name: 'views_counter',
+        component: {
+          component: Badge,
+        },
+        toFormat(item: IItem) {
+          return {
+            title: item?.views_counter,
+            class: '--success'
+          }
+        }
+      },
+      {
+        title: 'Создано',
+        name: 'created_at',
+        preset: {
+          name: 'timestampToFormatPreset'
+        }
+      },
+      {
+        title: 'Обновлено',
+        name: 'updated_at',
+        preset: {
+          name: 'timestampToFormatPreset'
+        }
+      },
+      {
+        title: 'Ident',
+        name: 'ident',
+      },
+      {
+        title: 'cover',
+        name: 'cover',
+        component: {
+          component: Picture,
+          title: 'name',
+        }
+      },
+    ]
+  }, {
+    title: 'Контент',
+    rows: [
+      {
+        title: 'Контент (короткий)',
+        name: 'content_short'
+      },
+      {
+        title: 'Контент',
+        name: 'content',
+        isRaw: true
+      },
+    ]
+  }
+])
+
 await SSRLoadDetail(item, 'blog/posts/detail', route.params.id)
 </script>
 
 <template>
   <Detail
-      url-prefix="blog"
-      :h1="'Пост ' + route.params.id"
-      :data-id="route.params.id"
+      entity-name="Статья блога"
+      back-link="/blog"
+      :item="item!"
+      :sections="sections"
   >
-    <template #header>
+    <template #actions>
       <div class="btn__group">
         <Button
             @click="onClickEdit({
@@ -83,7 +165,7 @@ await SSRLoadDetail(item, 'blog/posts/detail', route.params.id)
               modalTitle: 'Редактирование статьи',
               notificationMessage: 'Статья изменена'
             })"
-            :class="['--big --outline-primary']"
+            :class="['--small --outline-primary']"
         >
           Изменить
         </Button>
@@ -92,7 +174,7 @@ await SSRLoadDetail(item, 'blog/posts/detail', route.params.id)
               deleteURL: 'blog/posts/delete',
               notificationMessage: 'Статья удалена'}
             )"
-            :class="['--big --outline-danger']"
+            :class="['--small --outline-danger']"
         >
           Удалить
         </Button>
@@ -101,15 +183,11 @@ await SSRLoadDetail(item, 'blog/posts/detail', route.params.id)
           @click="onChangeState"
           :class="{
             'ml_10': true,
-            '--big': true,
+            '--small': true,
             '--outline-contrast-success': item?.state?.id === 'DRAFT',
             '--outline-contrast-default': item?.state?.id === 'PUBLISHED'
           }"
       >{{ item?.state && item.state.id === 'DRAFT' ? 'Опубликовать' : 'Снять с публикации' }}</Button>
     </template>
-    <template #content>
-      <Tabs @change="onChangeSelectedTab" :tabs="tabs"/>
-      <component :is="selectedTabComponent" :item="item"/>
-    </template>>
   </Detail>
 </template>

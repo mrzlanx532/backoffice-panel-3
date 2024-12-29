@@ -60,8 +60,11 @@ export const usePage = () => {
             id: item.value!.id,
             formResponse
         }, config.modalConfig).then(() => {
-            browserEl.value!.reset(true)
             $notification.push({type: 'success', message: config.notificationMessage})
+
+            if (browserEl.value) {
+                browserEl.value!.reset(true)
+            }
         })
     }
 
