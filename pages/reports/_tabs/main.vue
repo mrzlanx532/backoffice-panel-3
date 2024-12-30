@@ -17,12 +17,12 @@ const detailConfig: Ref<IConfigItem[]> = ref([
   {
     name: 'id',
     title: 'ID',
-    columnClass: 6
+    class: 6
   },
   {
     name: 'created_at',
     title: 'Дата создания',
-    columnClass: 6,
+    class: 6,
     preset: {
       name: 'timestampToFormatPreset',
     }
@@ -30,22 +30,22 @@ const detailConfig: Ref<IConfigItem[]> = ref([
   {
     name: 'name',
     title: 'Название проекта',
-    columnClass: 6
+    class: 6
   },
   {
     name: 'content_counter',
     title: 'Кол-во треков',
-    columnClass: 6
+    class: 6
   },
   {
     name: 'media',
     title: 'Медиа',
-    columnClass: 6
+    class: 6
   },
   {
     name: 'region',
     title: 'Территория',
-    columnClass: 6
+    class: 6
   },
 ])
 </script>

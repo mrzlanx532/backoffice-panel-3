@@ -8,23 +8,23 @@ const config = ref([
   {
     name: 'photo',
     title: 'Изображение',
-    columnClass: 12,
+    class: 12,
     component: FlexTablePicture
   },
   {
     name: 'name_ru',
     title: 'Название (ru)',
-    columnClass: 6
+    class: 6
   },
   {
     name: 'name_en',
     title: 'Название (en)',
-    columnClass: 6
+    class: 6
   },
   {
     name: 'a_list_is_active',
     title: 'A-List',
-    columnClass: 12,
+    class: 12,
     toFormat(item: IItem) {
       return item.a_list_is_active ? 'Да' : 'Нет'
     }
@@ -32,24 +32,24 @@ const config = ref([
   {
     name: 'tracks_counter',
     title: 'Кол-во треков',
-    columnClass: 6
+    class: 6
   },
   {
     name: 'libraries_counter',
     title: 'Кол-во библиотек',
-    columnClass: 6
+    class: 6
   },
   {
     name: 'created_at',
     title: 'Добавлен',
     preset: {name: 'timestampToFormatPreset'},
-    columnClass: 6,
+    class: 6,
   },
   {
     name: 'updated_at',
     title: 'Измекнен',
     preset: {name: 'timestampToFormatPreset'},
-    columnClass: 6,
+    class: 6,
   },
 ])
 

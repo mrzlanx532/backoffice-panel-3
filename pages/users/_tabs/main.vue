@@ -15,22 +15,22 @@ const detailConfigInfo = ref([
   {
     name: 'name',
     title: 'Имя',
-    columnClass: 12
+    class: 12
   },
   {
     name: 'email',
     title: 'E-mail',
-    columnClass: 6
+    class: 6
   },
   {
     name: 'phone',
     title: 'Телефон',
-    columnClass: 6,
+    class: 6,
   },
   {
     name: 'about',
     title: 'О себе',
-    columnClass: 12,
+    class: 12,
   },
 ])
 
@@ -38,12 +38,12 @@ const detailConfigCompany = ref([
   {
     name: 'company_name',
     title: 'Компания',
-    columnClass: 12
+    class: 12
   },
   {
     name: 'company_business_type',
     title: 'Направление работы компании',
-    columnClass: 6,
+    class: 6,
     toFormat(item: IItem) {
       return item?.company_business_type?.name_ru
     }
@@ -51,22 +51,22 @@ const detailConfigCompany = ref([
   {
     name: 'job_title',
     title: 'Должность',
-    columnClass: 6,
+    class: 6,
   },
   {
     name: 'company_address',
     title: 'Адрес',
-    columnClass: 6,
+    class: 6,
   },
   {
     name: 'company_index',
     title: 'Индекс',
-    columnClass: 6,
+    class: 6,
   },
   {
     name: 'company_country',
     title: 'Страна',
-    columnClass: 6,
+    class: 6,
     toFormat(item: IItem) {
       return item?.company_country?.name_ru;
     }
@@ -74,17 +74,17 @@ const detailConfigCompany = ref([
   {
     name: 'company_city',
     title: 'Город',
-    columnClass: 6,
+    class: 6,
   },
   {
     name: 'about',
     title: 'Сайт компании',
-    columnClass: 12,
+    class: 12,
   },
   {
     name: 'created_at',
     title: 'Добавлен',
-    columnClass: 6,
+    class: 6,
     preset: {
       name: 'timestampToFormatPreset',
     }
@@ -92,7 +92,7 @@ const detailConfigCompany = ref([
   {
     name: 'updated_at',
     title: 'Изменен',
-    columnClass: 6,
+    class: 6,
     preset: {
       name: 'timestampToFormatPreset',
     }

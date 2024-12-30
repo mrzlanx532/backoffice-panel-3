@@ -4,7 +4,7 @@ import moment from 'moment/moment'
 export type IItem = {[key: string]: any}
 
 export interface IConfigItem {
-  columnClass: number,
+  class: number,
   title: string,
   name: string,
   toFormat?: (item: {[key: string]: any}) => {},
@@ -57,11 +57,11 @@ const callPreset = (methodName: string, configItem: IConfigItem, item: IItem) =>
 <template>
   <div class="detail__flex-table flex-table" v-if="item">
     <div class="flex-table__item" v-for="configItem in props.config" :class="[
-        {'--col-12': configItem.columnClass === 12},
-        {'--col-6': configItem.columnClass === 6},
-        {'--col-4': configItem.columnClass === 4},
-        {'--col-3': configItem.columnClass === 3},
-        {'--col-2': configItem.columnClass === 2},
+        {'--col-12': configItem.class === 12},
+        {'--col-6': configItem.class === 6},
+        {'--col-4': configItem.class === 4},
+        {'--col-3': configItem.class === 3},
+        {'--col-2': configItem.class === 2},
     ]">
       <div class="flex-table__item-header">
         {{ configItem.title }}

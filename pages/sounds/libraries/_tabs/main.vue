@@ -10,12 +10,12 @@ const config: Ref<IConfigItem[]> = ref([
   {
     name: 'description_ru',
     title: 'Описание',
-    columnClass: 12,
+    class: 12,
   },
   {
     name: 'created_at',
     title: 'Добавлен',
-    columnClass: 4,
+    class: 4,
     preset: {
       name: 'timestampToFormatPreset',
     }
@@ -23,7 +23,7 @@ const config: Ref<IConfigItem[]> = ref([
   {
     name: 'updated_at',
     title: 'Изменен',
-    columnClass: 4,
+    class: 4,
     preset: {
       name: 'timestampToFormatPreset',
     }
@@ -31,7 +31,7 @@ const config: Ref<IConfigItem[]> = ref([
   {
     name: 'tracks_counter',
     title: 'Кол-во треков',
-    columnClass: 4,
+    class: 4,
   },
 ])
 </script>

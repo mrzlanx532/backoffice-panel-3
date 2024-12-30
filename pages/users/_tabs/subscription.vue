@@ -16,7 +16,7 @@ const detailConfigSubscription = ref([
   {
     name: 'subscription_type',
     title: 'Тип',
-    columnClass: 6,
+    class: 6,
     toFormat(item: IItem) {
       return item?.subscription_type?.title;
     }
@@ -24,7 +24,7 @@ const detailConfigSubscription = ref([
   {
     name: 'subscription_till',
     title: 'Дата окончания подписки',
-    columnClass: 6,
+    class: 6,
     toFormat(item: IItem) {
       if (!item.subscription_till) {
         return '-'
@@ -39,7 +39,7 @@ const detailConfigSubscriptionExclusiveTracks = ref([
   {
     name: 'condition',
     title: 'Условия',
-    columnClass: 6,
+    class: 6,
     toFormat(item: IItem) {
       return 'Активна только при действующей подписке на музыку';
     }
@@ -47,7 +47,7 @@ const detailConfigSubscriptionExclusiveTracks = ref([
   {
     name: 'subscription_till_for_exclusive_tracks',
     title: 'Дата окончания подписки',
-    columnClass: 6,
+    class: 6,
     toFormat(item: IItem) {
       if (!item.subscription_till_for_exclusive_tracks) {
         return '-'

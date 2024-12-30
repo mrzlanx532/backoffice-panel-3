@@ -5,24 +5,24 @@ const config = ref([
   {
     name: 'description_ru',
     title: 'Описание',
-    columnClass: 12
+    class: 12
   },
   {
     name: 'created_at',
     title: 'Создан',
     preset: {name: 'timestampToFormatPreset'},
-    columnClass: 4
+    class: 4
   },
   {
     name: 'updated_at',
     title: 'Изменен',
     preset: {name: 'timestampToFormatPreset'},
-    columnClass: 4,
+    class: 4,
   },
   {
     name: 'tracks_counter',
     title: 'Кол-во треков',
-    columnClass: 4,
+    class: 4,
   },
 ])
 

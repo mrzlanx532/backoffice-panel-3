@@ -13,12 +13,11 @@
   &__header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding-bottom: 20px;
-    min-height: 50px;
   }
 
   &__header-left {
+    display: inline-flex;
+    justify-items: center;
     font-size: 18px;
   }
 
@@ -52,11 +51,12 @@
   &__empty-list {
     text-align: center;
     margin-top: 20px;
-    color: var(--color-4, #757575);
+    color: var(--color-6);
     user-select: none;
+    background: var(--browser-detail-header-background-color);
 
     &:hover {
-      background-color: var(--color-1, #ffffff);
+      background: var(--browser-detail-header-background-color);
       cursor: default;
     }
   }

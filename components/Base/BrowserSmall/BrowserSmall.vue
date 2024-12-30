@@ -298,7 +298,9 @@ defineExpose({
               class="browser__table-container"
           >
             <div class="browser-small__header">
-              <div class="browser-small__header-left">{{ props.h1 }}</div>
+              <div class="browser-small__header-left">
+                <span>{{ props.h1 }}</span>
+              </div>
               <div v-if="slots.actions" class="browser-small__actions">
                 <slot name="actions"/>
               </div>

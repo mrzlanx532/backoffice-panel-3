@@ -16,12 +16,12 @@ const shortConfig = ref([
   {
     name: 'description_ru',
     title: 'Описание (ru)',
-    columnClass: 6
+    class: 6
   },
   {
     name: 'description_en',
     title: 'Описание (en)',
-    columnClass: 6
+    class: 6
   },
 ])
 
@@ -148,7 +148,7 @@ const dateConfig = ref([
   {
     name: 'created_at',
     title: 'Добавлен',
-    columnClass: 4,
+    class: 4,
     preset: {
       name: 'timestampToFormatPreset',
     }
@@ -156,7 +156,7 @@ const dateConfig = ref([
   {
     name: 'updated_at',
     title: 'Изменен',
-    columnClass: 4,
+    class: 4,
     preset: {
       name: 'timestampToFormatPreset',
     }
@@ -164,7 +164,7 @@ const dateConfig = ref([
   {
     name: 'downloads_counter',
     title: 'Кол-во скачиваний',
-    columnClass: 4,
+    class: 4,
   },
 ])
 </script>
