@@ -14,7 +14,7 @@ interface IRow {
   title: string,
   name: string,
   toFormat?: (item: {[key: string]: any}) => {},
-  isRaw: boolean,
+  isRaw?: boolean,
   component?: any | {
     component: Component,
     [key: string]: any
@@ -72,7 +72,7 @@ const props = withDefaults(defineProps<{
                 :column="row"
             />
             <template v-else-if="row.preset">
-              {{ callPreset(row.preset!.name, row as IConfigItem, item)}}
+              {{ callPreset(row.preset.name, row as IConfigItem, item)}}
             </template>
             <template v-else-if="row.toFormat">
               {{ row.toFormat(item) }}

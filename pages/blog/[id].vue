@@ -4,8 +4,6 @@ import { useRoute, useNuxtApp, type IItem } from '#imports';
 import Detail from '~/components/Base/Detail.vue'
 import Button from '~/components/Base/Button.vue'
 import BlogForm from '~/modals/blog/BlogForm.vue'
-import Picture from '~/components/Base/Browser/ColumnComponents/Picture.vue'
-import Badge from '~/components/Base/Browser/ColumnComponents/Badge.vue'
 
 const route = useRoute()
 
@@ -115,10 +113,6 @@ const sections = ref([
       {
         title: 'cover',
         name: 'cover',
-        component: {
-          component: Picture,
-          title: 'name',
-        }
       },
     ]
   }, {
