@@ -646,8 +646,17 @@ defineExpose({
             </table>
           </div>
           <div class="browser__label-empty-container" v-if="items.length === 0">
-            <div class="browser__label-empty">
-              Нет записей
+            <div
+                v-if="items.length === 0"
+                class="browser-small__empty-list"
+            >
+              <div>
+                <svg>
+                  <use xlink:href="/img/temp_sprite.svg#empty_list"/>
+                </svg>
+                <span class="browser-small__empty-list-header">Список пуст</span>
+                <span class="browser-small__empty-list-description">По вашему запросу ничего не найдено</span>
+              </div>
             </div>
           </div>
         </div>

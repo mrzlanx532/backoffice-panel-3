@@ -19,9 +19,15 @@ const valueHtml = ref(props.modelValue)
 watch(
     () => props.modelValue,
     (value) => {
+      if (value === null) {
+        valueHtml.value = undefined
+
+        return
+      }
+
       valueHtml.value = value
     },
-    { once: true}
+    { once: true }
 )
 
 const toolbarKeys = [

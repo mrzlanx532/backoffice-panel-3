@@ -500,6 +500,10 @@
       outline: none;
       transition: border .5s;
 
+      p {
+        margin: 0;
+      }
+
       &:hover {
         border: 1px dashed var(--color-gradient-2, orange);
 
