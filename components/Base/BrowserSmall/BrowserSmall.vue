@@ -316,57 +316,53 @@ defineExpose({
                 :per-page="selectedPaginationItemsCount"
                 @changePage="onChangePage($event, fetchData)"
             />
-            <div
-                v-if="items.length === 0"
-                class="browser-small__empty-list"
-            >
-              Список пуст
-            </div>
-            <template v-if="items.length">
-              <table class="browser-small__table" :class="{'--loading': loadingIsActive}">
-                <thead v-if="isEnabledTHead">
-                  <tr>
-                    <BrowserTHeadTh
-                        @sortChanged="onSortChanged"
-                        v-for="column in columns"
-                        :key="column.name"
-                        :sorts="sorts"
-                        :column="column"
-                    />
+
+            <table class="browser-small__table" :class="{'--loading': loadingIsActive}">
+              <thead v-if="isEnabledTHead">
+                <tr>
+                  <BrowserTHeadTh
+                      @sortChanged="onSortChanged"
+                      v-for="column in columns"
+                      :key="column.name"
+                      :sorts="sorts"
+                      :column="column"
+                  />
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="browser-small__empty-list">Список пуст</td>
+                </tr>
+                <template v-if="props.customTr">
+                  <component
+                      :is="props.customTr"
+                      v-for="item in items"
+                      :item="item"
+                      :key="item[itemPrimaryKeyPropertyName]"
+                      @click="onClickRow(item)"
+                      :browserSmallEl="BrowserSmallEl"
+                  />
+                </template>
+                <template v-else>
+                  <tr v-for="item in items" :key="item[itemPrimaryKeyPropertyName]" @click="onClickRow(item)">
+                    <td v-for="column in columns">
+                      <template v-if="column.hasOwnProperty('component')">
+                        <component :is="column.component" :item="item" :column="column"/>
+                      </template>
+                      <template v-else-if="column.hasOwnProperty('preset')">
+                        {{ callPreset(column.preset!.name, column as IConfigItem, item)}}
+                      </template>
+                      <template v-else-if="column.toFormat">
+                        {{ column.toFormat(item) }}
+                      </template>
+                      <template v-else>
+                        {{ item[column.name] }}
+                      </template>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  <template v-if="props.customTr">
-                    <component
-                        :is="props.customTr"
-                        v-for="item in items"
-                        :item="item"
-                        :key="item[itemPrimaryKeyPropertyName]"
-                        @click="onClickRow(item)"
-                        :browserSmallEl="BrowserSmallEl"
-                    />
-                  </template>
-                  <template v-else>
-                    <tr v-for="item in items" :key="item[itemPrimaryKeyPropertyName]" @click="onClickRow(item)">
-                      <td v-for="column in columns">
-                        <template v-if="column.hasOwnProperty('component')">
-                          <component :is="column.component" :item="item" :column="column"/>
-                        </template>
-                        <template v-else-if="column.hasOwnProperty('preset')">
-                          {{ callPreset(column.preset!.name, column as IConfigItem, item)}}
-                        </template>
-                        <template v-else-if="column.toFormat">
-                          {{ column.toFormat(item) }}
-                        </template>
-                        <template v-else>
-                          {{ item[column.name] }}
-                        </template>
-                      </td>
-                    </tr>
-                  </template>
-                </tbody>
-              </table>
-            </template>
+                </template>
+              </tbody>
+            </table>
           </div>
         </div>
       </Transition>

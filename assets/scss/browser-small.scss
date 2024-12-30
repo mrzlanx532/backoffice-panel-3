@@ -45,12 +45,20 @@
     margin-left: 10px;
   }
 
+  td.browser-small__empty-list {
+    font-size: 16px;
+  }
+
   &__empty-list {
     text-align: center;
-    font-size: 22px;
     margin-top: 20px;
     color: var(--color-4, #757575);
     user-select: none;
+
+    &:hover {
+      background-color: var(--color-1, #ffffff);
+      cursor: default;
+    }
   }
 
   &__spinner-container {
