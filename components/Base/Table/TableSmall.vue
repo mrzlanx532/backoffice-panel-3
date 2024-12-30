@@ -207,7 +207,13 @@ onMounted(() => {
                 v-if="items.length === 0"
                 class="browser-small__empty-list"
             >
-              Список пуст
+              <div>
+                <svg>
+                  <use xlink:href="/img/temp_sprite.svg#empty_list"/>
+                </svg>
+                <span class="browser-small__empty-list-header">Список пуст</span>
+                <span class="browser-small__empty-list-description">По вашему запросу ничего не найдено</span>
+              </div>
             </div>
             <template v-if="items.length">
               <table class="browser-small__table" :class="{'--loading': loadingIsActive}">
@@ -217,7 +223,7 @@ onMounted(() => {
                       v-for="column in columns"
                       :key="column.name"
                       :column="column"
-                      :sorts="[]"
+                      :sorts="{}"
                   />
                 </tr>
                 </thead>

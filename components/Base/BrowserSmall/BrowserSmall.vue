@@ -307,7 +307,7 @@ defineExpose({
             </div>
 
             <BrowserSearchString
-                style="width: 100%;"
+                style="width: 100%; margin-top: 10px;"
                 v-if="isEnabledSearch"
                 @search="onSearchStringInput"
                 class="--in-small-browser"
