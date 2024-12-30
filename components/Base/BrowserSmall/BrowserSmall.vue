@@ -29,6 +29,8 @@ const {
   callPreset,
   firstLoadingIsActive,
   loadingIsActive,
+  isVueComponent,
+  getSubComponent
 } = useBrowser()
 
 interface Props {
@@ -357,10 +359,19 @@ defineExpose({
                   <template v-else>
                     <tr v-for="item in items" :key="item[itemPrimaryKeyPropertyName]" @click="onClickRow(item)">
                       <td v-for="column in columns">
-                        <template v-if="column.hasOwnProperty('component')">
-                          <component :is="column.component" :item="item" :column="column"/>
-                        </template>
-                        <template v-else-if="column.hasOwnProperty('preset')">
+                        <component
+                            v-if="column.component && isVueComponent(column.component)"
+                            :is="column.component"
+                            :item="item"
+                            :column="column"
+                        />
+                        <component
+                            v-else-if="column.component && isVueComponent(column.component.component)"
+                            :is="getSubComponent(column.component)"
+                            :item="item"
+                            :column="column"
+                        />
+                        <template v-else-if="column.preset">
                           {{ callPreset(column.preset!.name, column as IConfigItem, item)}}
                         </template>
                         <template v-else-if="column.toFormat">

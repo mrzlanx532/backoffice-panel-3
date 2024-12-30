@@ -7,6 +7,7 @@ import BlogForm from '~/modals/blog/BlogForm.vue'
 import BlogPhotosTr from '~/components/CustomTr/BlogPhotosTr.vue'
 import BrowserSmall from '~/components/Base/BrowserSmall/BrowserSmall.vue'
 import BlogPhotoForm from '~/modals/blog/BlogPhotoForm.vue'
+import Picture from '~/components/Base/Browser/ColumnComponents/Picture.vue'
 
 const route = useRoute()
 
@@ -153,6 +154,30 @@ const onClickCreate = async () => {
   })
 }
 
+const columns = shallowRef([
+  {
+    name: 'id',
+    title: 'ID'
+  },
+  {
+    name: 'name',
+    title: 'Название',
+  },
+  {
+    name: 'picture',
+    title: 'Картинка',
+    component: {
+      component: Picture,
+      title: 'name',
+    }
+  },
+  {
+    name: 'created_at',
+    title: 'Создано',
+    preset: {name: 'timestampToFormatPreset'},
+  },
+])
+
 await SSRLoadDetail(item, 'blog/posts/detail', route.params.id)
 </script>
 
@@ -207,8 +232,7 @@ await SSRLoadDetail(item, 'blog/posts/detail', route.params.id)
             h1="Фото"
             urlPrefix="blog/posts/contents/browse"
             :filters="filters"
-            :customTr="BlogPhotosTr"
-            :is-enabled-t-head="false"
+            :columns="columns"
         >
           <template #actions>
             <Button class="--small --success" @click="onClickCreate">Добавить</Button>
