@@ -71,7 +71,9 @@ const onSectionMenuItemClick = (menuItem: IMenuItem | null) => {
   menuItem.link ? router.push(menuItem.link) : null
 
   setTimeout(() => {
-    sectionsEl.value!.scrollable_manager.updateScroll()
+    if (sectionsEl.value) {
+      sectionsEl.value.scrollable_manager.updateScroll()
+    }
   }, 400)
 }
 
