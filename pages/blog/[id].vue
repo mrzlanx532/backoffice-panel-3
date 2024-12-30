@@ -226,7 +226,7 @@ await SSRLoadDetail(item, 'blog/posts/detail', route.params.id)
     </template>
 
     <template #more>
-      <div class="clouds__cloud">
+      <div class="clouds__cloud --has-browser">
         <BrowserSmall
             ref="browserEl"
             h1="Фото"
