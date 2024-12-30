@@ -653,6 +653,10 @@ export const useForm = () => {
 
         const componentData = config.componentData ? defu(config.componentData, defaultComponentData) : defaultComponentData
 
+        if (config.componentData?.allowedTypes) {
+            componentData.allowedTypes = config.componentData?.allowedTypes
+        }
+
         return {
             ...getDefaultFormDataItemProperties(config),
             component: FormInputFile,

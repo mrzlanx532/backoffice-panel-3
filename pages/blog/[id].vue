@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { useRoute, useNuxtApp, type IItem } from '#imports';
+import { useRoute, useNuxtApp } from '#imports';
 
 import Detail from '~/components/Base/Detail.vue'
 import Button from '~/components/Base/Button.vue'
 import BlogForm from '~/modals/blog/BlogForm.vue'
+import BlogPhotosTr from '~/components/CustomTr/BlogPhotosTr.vue'
+import BrowserSmall from '~/components/Base/BrowserSmall/BrowserSmall.vue'
+import BlogPhotoForm from '~/modals/blog/BlogPhotoForm.vue'
 
 const route = useRoute()
 
@@ -131,6 +134,25 @@ const sections = ref([
   }
 ])
 
+const filters = ref({
+  'blog_post_id': [route.params.id]
+})
+
+const onClickCreate = async () => {
+  const formResponse = await $authFetch('blog/posts/contents/form', {
+    method: 'GET',
+  })
+
+  $modal.load(BlogPhotoForm, {
+    title: 'Добавить фото',
+    formResponse,
+    blogPostId: route.params.id
+  }).then(() => {
+    browserEl.value!.reset()
+    $notification.push({type: 'success', message: 'Фото добавлено'})
+  })
+}
+
 await SSRLoadDetail(item, 'blog/posts/detail', route.params.id)
 </script>
 
@@ -176,6 +198,23 @@ await SSRLoadDetail(item, 'blog/posts/detail', route.params.id)
             '--outline-contrast-default': item?.state?.id === 'PUBLISHED'
           }"
       >{{ item?.state && item.state.id === 'DRAFT' ? 'Опубликовать' : 'Снять с публикации' }}</Button>
+    </template>
+
+    <template #more>
+      <div class="clouds__cloud">
+        <BrowserSmall
+            ref="browserEl"
+            h1="Фото"
+            urlPrefix="blog/posts/contents/browse"
+            :filters="filters"
+            :customTr="BlogPhotosTr"
+            :is-enabled-t-head="false"
+        >
+          <template #actions>
+            <Button class="--small --success" @click="onClickCreate">Добавить</Button>
+          </template>
+        </BrowserSmall>
+      </div>
     </template>
   </Detail>
 </template>

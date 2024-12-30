@@ -84,6 +84,9 @@ const props = withDefaults(defineProps<{
           </div>
         </div>
       </div>
+
+      <slot name="more" />
+
     </div>
   </div>
 </template>
