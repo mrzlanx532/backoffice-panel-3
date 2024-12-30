@@ -93,7 +93,7 @@ interface Props {
   browserFetchUrl?: string,
   browserDetailFetchUrl?: string,
   itemPrimaryKeyPropertyName?: string,
-  detailPageUrlPrefix: string,
+  detailPageUrlPrefix?: string,
   detailTitleProperty?: string,
   detailSubtitleProperty?: string,
   isMultipleSelectionIsEnable?: boolean,
@@ -200,7 +200,11 @@ const debouncedFetchDataFunction: Ref<null|DebouncedFunc<() => Promise<void>>> =
 const localRequestProperties: Ref<{} | null> = ref(getLocalRequestProperties(props.requestProperties))
 
 const detailPageUrl = computed(() => {
-  return `/${props.detailPageUrlPrefix}/${id.value}`
+  if (props.detailPageUrlPrefix) {
+    return `/${props.detailPageUrlPrefix}/${id.value}`
+  }
+
+  return undefined
 })
 
 const fetchData = async () => {

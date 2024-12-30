@@ -10,7 +10,7 @@ const emit = defineEmits([
 const props = withDefaults(defineProps<{
   dataId: number|null,
   urlPrefix: string,
-  detailPageUrlPrefix: string,
+  detailPageUrlPrefix?: string,
   titleProperty?: string,
   subtitleProperty?: string,
 }>(), {
@@ -117,7 +117,7 @@ defineExpose({
                 </div>
               </div>
               <div class="browser-detail__header-buttons">
-                <div class="browser-detail__header-more-button">
+                <div class="browser-detail__header-more-button" v-if="detailPageUrlPrefix">
                   <NuxtLink :to="detailPageUrlPrefix">
                     <svg stroke="currentColor" class="feather feather-external-link">
                       <use xlink:href="/img/sprite.svg#more_button"/>

@@ -76,7 +76,6 @@ const columns = shallowRef([
 
       detail-title-property="id"
       detail-subtitle-property="name"
-      detail-page-url-prefix="pencils"
 
       :columns="columns"
 
