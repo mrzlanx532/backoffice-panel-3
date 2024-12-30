@@ -15,7 +15,7 @@ const {
   $authFetch
 } = useNuxtApp()
 
-const browserEl = useTemplateRef<HTMLElement>('browserEl')
+const browserEl = useTemplateRef<HTMLElement & { reset: () => void }>('browserEl')
 
 const filters = ref({
   'blog_post_id': [props.item!.id]
@@ -30,7 +30,7 @@ watch(
     }
 )
 
-const onClickCreate = async() => {
+const onClickCreate = async () => {
   const formResponse = await $authFetch('blog/posts/contents/form', {
     method: 'GET',
   })
