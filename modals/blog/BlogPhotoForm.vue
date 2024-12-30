@@ -5,7 +5,7 @@ import { FetchError } from 'ofetch'
 const props = defineProps<{
   data: {
     formResponse: {
-      entity?: {[key: string]: any}
+      entity?: { [key: string]: any }
       [key: string]: any,
     },
     title: string,
@@ -38,21 +38,23 @@ const {
   formData,
   formDataValues,
   errors,
-} = initForm([
-    input({
-      name: 'name',
-      label: 'Название',
-      class: '--full'
-    }),
-    inputFile({
-      name: 'picture',
-      label: 'Фото',
-      class: '--full',
-      componentData: {
-        allowedTypes: ['jpg, png', 'jpeg']
-      }
-    })
-])
+} = initForm(
+    'blog/posts/contents/create',
+    'blog/posts/contents/update', [
+      input({
+        name: 'name',
+        label: 'Название',
+        class: '--full'
+      }),
+      inputFile({
+        name: 'picture',
+        label: 'Фото',
+        class: '--full',
+        componentData: {
+          allowedTypes: ['jpg, png', 'jpeg']
+        }
+      })
+    ])
 
 const onClickSave = async () => {
 
@@ -106,7 +108,7 @@ onMounted(() => {
     </template>
     <template #footer>
       <div class="btn__group">
-        <button class="btn --primary --big" @click="onClickSave">Сохранить</button>
+        <button class="btn --primary --big" @click.prevent="onClickSave">Сохранить</button>
         <button class="btn --outline-primary --big" @click="emit('modal:close')">Отмена</button>
       </div>
     </template>

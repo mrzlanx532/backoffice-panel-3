@@ -3,7 +3,7 @@ import { useNuxtApp } from '#imports'
 import ButtonDropdown from '~/components/Base/ButtonDropdown.vue'
 import BlogPhotoForm from '~/modals/blog/BlogPhotoForm.vue'
 
-type IItem = Record<any, string>
+type IItem = Record<string, any>
 
 const {
   $authFetch,
@@ -12,7 +12,12 @@ const {
 } = useNuxtApp()
 
 const props = defineProps<{
-  item: IItem
+  item: IItem,
+  browserSmallEl: {
+    exposed: {
+      reset: () => void
+    }
+  }
 }>()
 
 const onClickEdit = async () => {
@@ -29,6 +34,7 @@ const onClickEdit = async () => {
     formResponse,
     blogPostId: props.item!.blog_post_id,
   }).then(() => {
+    props.browserSmallEl.exposed.reset()
     $notification.push({type: 'success', message: 'Фото изменено'})
   })
 }
@@ -52,8 +58,8 @@ const onClickDelete = async () => {
 }
 
 const buttonDropdownItems = [
-  { title: 'Изменить', class: '--primary', onClick: onClickEdit },
-  { title: 'Удалить', class: '--danger', onClick: onClickDelete },
+  {title: 'Изменить', class: '--primary', onClick: onClickEdit},
+  {title: 'Удалить', class: '--danger', onClick: onClickDelete},
 ]
 </script>
 
