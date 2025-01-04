@@ -1,3 +1,10 @@
+.browser .browser-detail__content {
+  padding: 20px;
+  overflow-y: auto;
+  height: 100%;
+  background: var(--color-1, #ffffff);
+}
+
 .browser-detail {
   position: fixed;
   top: 74px;
