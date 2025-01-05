@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Form from '@/components/Base/Form.vue'
+import Form from '#backoffice-ui/components/Form.vue'
 import { FetchError } from 'ofetch'
 
 const props = defineProps<{
