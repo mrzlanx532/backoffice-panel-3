@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import type { defaultProps } from '~/composables/useForm'
 import { useNuxtApp } from '#imports'
+import { type IUseFormDefaultProps } from '#backoffice-ui/types'
 
 interface IFormResponse {
   ucs_sub_categories?: any[],
@@ -14,7 +14,7 @@ const {
   $authFetch
 } = useNuxtApp()
 
-const props = defineProps<defaultProps>()
+const props = defineProps<IUseFormDefaultProps>()
 
 const emit = defineEmits([
   'modal:resolve',
