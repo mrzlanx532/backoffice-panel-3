@@ -21,10 +21,6 @@ export default defineNuxtConfig({
     },
   },
 
-  css: [
-    'assets/scss/main.scss',
-  ],
-
   modules: [
       '@pinia/nuxt',
       '@mrzlanx532/nuxt-3-laravel-auth-module',
