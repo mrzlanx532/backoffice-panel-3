@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import BrowserSmall from '~/components/Base/BrowserSmall/BrowserSmall.vue'
+import BrowserSmall from '#backoffice-ui/components/BrowserSmall.vue'
+import Button from '#backoffice-ui/components/Button.vue'
+
 import SoundCollectionsByTrackTr from '~/components/CustomTr/SoundCollectionsByTrackTr.vue'
-import Button from '~/components/Base/Button.vue'
 
 const props = defineProps<{
   item: IItem,

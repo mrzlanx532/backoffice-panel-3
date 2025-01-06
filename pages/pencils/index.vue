@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { definePageMeta } from '#imports'
-import Button from '@/components/Base/Button.vue'
-import Browser from '@/components/Base/Browser/Browser.vue';
+import Button from '#backoffice-ui/components/Button.vue'
+import Browser from '#backoffice-ui/components/Browser.vue';
+
 import PencilForm from '~/modals/pencils/PencilForm.vue'
 
 definePageMeta({

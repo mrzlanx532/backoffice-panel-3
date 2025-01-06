@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { definePageMeta } from '#imports'
-import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue';
+import Browser, { type IItem } from '#backoffice-ui/components/Browser.vue';
+import Button from '#backoffice-ui/components/Button.vue'
+import ButtonDropdown from '#backoffice-ui/components/ButtonDropdown.vue'
+import Tabs from '#backoffice-ui/components/Tabs.vue'
 import { prepareDuration } from '~/helpers/functions-for-table-columns'
-import Button from '~/components/Base/Button.vue'
-import ButtonDropdown from '~/components/Base/ButtonDropdown.vue'
+
 import MainTab from '~/pages/sounds/_tabs/main.vue'
 import VariationsTab from '~/pages/sounds/_tabs/variations.vue'
 import CollectionsTab from '~/pages/sounds/_tabs/collections.vue'
-import Tabs from '~/components/Base/Tabs.vue'
+
 import SoundTrackForm from '~/modals/sound/SoundTrackForm.vue'
 
 definePageMeta({

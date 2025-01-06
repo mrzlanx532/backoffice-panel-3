@@ -3,7 +3,7 @@ import { useRouter } from '#imports'
 
 const router = useRouter()
 
-import BrowserSmall from '~/components/Base/BrowserSmall/BrowserSmall.vue'
+import BrowserSmall from '#backoffice-ui/components/BrowserSmall.vue'
 
 type IItem = {[key: string]: any}
 

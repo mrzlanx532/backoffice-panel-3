@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import Section from '~/components/Base/Section.vue'
+import Section from '#backoffice-ui/components/Section.vue'
+import FlexTable from '#backoffice-ui/components/FlexTable.vue'
+import type { IConfigItem } from '#backoffice-ui/components/FlexTable.vue'
 import type { PropType, Ref } from 'vue'
-import FlexTable from '~/components/Base/FlexTable/FlexTable.vue'
-import type { IConfigItem } from '~/components/Base/FlexTable/FlexTable.vue'
 
 type IItem = {[key: string]: any}
 

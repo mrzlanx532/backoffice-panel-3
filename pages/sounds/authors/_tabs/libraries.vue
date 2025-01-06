@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import BrowserSmall from '~/components/Base/BrowserSmall/BrowserSmall.vue'
 import { defineComponent, useNuxtApp } from '#imports'
-import ButtonDropdown from '~/components/Base/ButtonDropdown.vue'
+import BrowserSmall from '#backoffice-ui/components/BrowserSmall.vue'
+import ButtonDropdown from '#backoffice-ui/components/ButtonDropdown.vue'
 
 const {
   $authFetch,

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BrowserSmall from '~/components/Base/BrowserSmall/BrowserSmall.vue'
+import BrowserSmall from '#backoffice-ui/components/BrowserSmall.vue'
 import MusicAuthorsTrackTr from '~/components/CustomTr/MusicAuthorsTrackTr.vue'
 
 const props = defineProps<{

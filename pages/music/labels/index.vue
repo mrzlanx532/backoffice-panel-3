@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { definePageMeta, usePage } from '#imports'
 
-import Browser from '~/components/Base/Browser/Browser.vue'
-import Tabs from '~/components/Base/Tabs.vue'
-import Button from '~/components/Base/Button.vue'
+import Browser from '#backoffice-ui/components/Browser.vue'
+import Tabs from '#backoffice-ui/components/Tabs.vue'
+import Button from '#backoffice-ui/components/Button.vue'
 import MainTab from '~/pages/music/labels/_tabs/main.vue'
 import TracksTab from '~/pages/music/labels/_tabs/tracks.vue'
 import AlbumsTab from '~/pages/music/labels/_tabs/albums.vue'

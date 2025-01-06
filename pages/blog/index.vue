@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { definePageMeta, useNuxtApp } from '#imports'
-import Button from '@/components/Base/Button.vue'
-import Browser, { type IItem } from '@/components/Base/Browser/Browser.vue';
-import Badge from '@/components/Base/Browser/ColumnComponents/Badge.vue'
-import Picture from '~/components/Base/Browser/ColumnComponents/Picture.vue'
+import Button from '#backoffice-ui/components/Button.vue'
+import Browser, { type IItem } from '#backoffice-ui/components/Browser.vue';
+import Badge from '#backoffice-ui/components/Browser/ColumnComponents/Badge.vue'
+import Picture from '#backoffice-ui/components/Browser/ColumnComponents/Picture.vue'
+import Tabs from '#backoffice-ui/components/Tabs.vue'
+
 import MainTab from '~/pages/blog/_tabs/main.vue'
 import PhotosTab from '~/pages/blog/_tabs/photos.vue'
-import Tabs from '~/components/Base/Tabs.vue'
 import BlogForm from '~/modals/blog/BlogForm.vue'
 
 definePageMeta({

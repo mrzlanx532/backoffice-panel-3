@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { useRoute, useNuxtApp } from '#imports';
 
-import Detail from '~/components/Base/Detail.vue'
-import Button from '~/components/Base/Button.vue'
-import BlogForm from '~/modals/blog/BlogForm.vue'
+import Detail from '#backoffice-ui/components/Detail.vue'
+import Button from '#backoffice-ui/components/Button.vue'
+import Picture from '#backoffice-ui/components/Browser/ColumnComponents/Picture.vue'
+import BrowserSmall from '#backoffice-ui/components/BrowserSmall.vue'
+
 import BlogPhotosTr from '~/components/CustomTr/BlogPhotosTr.vue'
-import BrowserSmall from '~/components/Base/BrowserSmall/BrowserSmall.vue'
+import BlogForm from '~/modals/blog/BlogForm.vue'
 import BlogPhotoForm from '~/modals/blog/BlogPhotoForm.vue'
-import Picture from '~/components/Base/Browser/ColumnComponents/Picture.vue'
 
 const route = useRoute()
 

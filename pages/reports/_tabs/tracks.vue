@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TableSmall, {type IColumn } from '~/components/Base/Table/TableSmall.vue'
+import TableSmall, { type IColumn } from '#backoffice-ui/components/TableSmall.vue'
 import ReportTracksTr from '~/components/CustomTr/ReportTracksTr.vue'
 import type { Ref } from 'vue'
 

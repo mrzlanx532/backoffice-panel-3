@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { definePageMeta } from '#imports'
 
-import Button from '~/components/Base/Button.vue'
-import Browser, { type IItem } from '~/components/Base/Browser/Browser.vue'
-import Tabs from '~/components/Base/Tabs.vue'
+import Button from '#backoffice-ui/components/Button.vue'
+import Browser, { type IItem } from '#backoffice-ui/components/Browser.vue'
+import Tabs from '#backoffice-ui/components/Tabs.vue'
+import Picture from '#backoffice-ui/components/Browser/ColumnComponents/Picture.vue'
+
 import TabMain from '~/pages/music/albums/_tabs/main.vue'
 import TabTracks from '~/pages/music/albums/_tabs/tracks.vue'
-import Picture from '~/components/Base/Browser/ColumnComponents/Picture.vue'
 import MusicAlbumForm from '~/modals/music/MusicAlbumForm.vue'
 
 definePageMeta({

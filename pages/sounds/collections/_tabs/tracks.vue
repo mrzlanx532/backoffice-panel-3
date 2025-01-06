@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BrowserSmall, { type IItem} from '~/components/Base/BrowserSmall/BrowserSmall.vue'
+import BrowserSmall, { type IItem } from '#backoffice-ui/components/BrowserSmall.vue'
 import CollectionTracksTr from '~/components/CustomTr/CollectionTracksTr.vue'
 
 const props = defineProps<{

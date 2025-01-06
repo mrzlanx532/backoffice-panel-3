@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import FlexTable, { type IItem } from '~/components/Base/FlexTable/FlexTable.vue'
+import FlexTable, { type IItem } from '#backoffice-ui/components/FlexTable.vue'
 
 const props = defineProps<{
   item?: IItem,

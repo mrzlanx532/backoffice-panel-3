@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { definePageMeta } from '#imports'
 
-import Browser from '@/components/Base/Browser/Browser.vue';
-import Tabs from '@/components/Base/Tabs.vue';
-import Button from '@/components/Base/Button.vue';
+import Browser from '#backoffice-ui/components/Browser.vue';
+import Tabs from '#backoffice-ui/components/Tabs.vue';
+import Button from '#backoffice-ui/components/Button.vue';
+import Picture from '#backoffice-ui/components/Browser/ColumnComponents/Picture.vue'
+
 import MainTab from '@/pages/users/_tabs/main.vue'
 import SubscriptionTab from '@/pages/users/_tabs/subscription.vue'
 import ReportsTab from '@/pages/users/_tabs/reports.vue'
 import DownloadedMusicTab from '@/pages/users/_tabs/downloaded_music.vue'
 import DownloadedSoundTab from '@/pages/users/_tabs/downloaded_sounds.vue'
-import Picture from '~/components/Base/Browser/ColumnComponents/Picture.vue'
+
 import UserForm from '~/modals/users/UserForm.vue'
 
 definePageMeta({

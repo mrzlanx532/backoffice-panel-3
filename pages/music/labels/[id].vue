@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useRoute, definePageMeta } from '#imports'
 
-import Detail from '@/components/Base/Detail.vue'
-import Button from '@/components/Base/Button.vue'
-import Tabs from '@/components/Base/Tabs.vue'
+import Detail from '#backoffice-ui/components/Detail.vue'
+import Button from '#backoffice-ui/components/Button.vue'
+import Tabs from '#backoffice-ui/components/Tabs.vue'
+
 import MainTab from '~/pages/music/labels/_tabs/main.vue'
 import TracksTab from '~/pages/music/labels/_tabs/tracks.vue'
 import AlbumsTab from '~/pages/music/labels/_tabs/albums.vue'

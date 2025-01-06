@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import Browser from '~/components/Base/Browser/Browser.vue';
-
 import { definePageMeta } from '#imports'
+import Browser from '#backoffice-ui/components/Browser.vue';
+import Tabs from '#backoffice-ui/components/Tabs.vue'
+import Button from '#backoffice-ui/components/Button.vue'
+import Picture from '#backoffice-ui/components/Browser/ColumnComponents/Picture.vue'
+
 import MainTab from '~/pages/sounds/authors/_tabs/main.vue'
 import TracksTab from '~/pages/sounds/authors/_tabs/tracks.vue'
 import LibrariesTab from '~/pages/sounds/authors/_tabs/libraries.vue'
-import Tabs from '~/components/Base/Tabs.vue'
-import Button from '~/components/Base/Button.vue'
-import Picture from '~/components/Base/Browser/ColumnComponents/Picture.vue'
+
 import SoundAuthorForm from '~/modals/sound/SoundAuthorForm.vue'
 
 definePageMeta({

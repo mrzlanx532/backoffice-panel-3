@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import Section from '~/components/Base/Section.vue'
-import FlexTable from '~/components/Base/FlexTable/FlexTable.vue';
-import KeyValueTable from '~/components/Base/KeyValueTable.vue'
+import Section from '#backoffice-ui/components/Section.vue'
+import FlexTable from '#backoffice-ui/components/FlexTable.vue';
+import KeyValueTable from '#backoffice-ui/components/KeyValueTable.vue'
 
 type IItem = Record<string, any>
 

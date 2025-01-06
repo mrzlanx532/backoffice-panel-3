@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { prepareDuration } from '~/helpers/functions-for-table-columns';
-import Button from '~/components/Base/Button.vue';
-import Tabs from '~/components/Base/Tabs.vue';
-import Browser, {type IItem} from '~/components/Base/Browser/Browser.vue'
+import Button from '#backoffice-ui/components/Button.vue';
+import Tabs from '#backoffice-ui/components/Tabs.vue';
+import Browser, { type IItem } from '#backoffice-ui/components/Browser.vue'
+import ButtonDropdown from '#backoffice-ui/components/ButtonDropdown.vue'
+
 import MainTab from '~/pages/music/_tabs/main.vue'
-import ButtonDropdown from '~/components/Base/ButtonDropdown.vue'
+
 import MusicTrackForm from '~/modals/music/MusicTrackForm.vue'
 import AddTrackToPlaylistForm from '~/modals/music/AddTrackToPlaylistForm.vue'
 

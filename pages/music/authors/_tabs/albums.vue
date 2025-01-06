@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import BrowserSmall from '~/components/Base/BrowserSmall/BrowserSmall.vue'
-import type { IColumn } from '~/composables/useBrowser'
+import BrowserSmall from '#backoffice-ui/components/BrowserSmall.vue'
+import type { IColumn } from '#backoffice-ui/composables/useBrowser'
 
 const props = defineProps<{
   item?: IItem,

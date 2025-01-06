@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useNuxtApp } from '#imports'
-import BrowserSmall from '~/components/Base/BrowserSmall/BrowserSmall.vue'
+import BrowserSmall from '#backoffice-ui/components/BrowserSmall.vue'
+import Button from '#backoffice-ui/components/Button.vue'
+
 import BlogPhotosTr from '~/components/CustomTr/BlogPhotosTr.vue'
-import Button from '~/components/Base/Button.vue'
 import BlogPhotoForm from '~/modals/blog/BlogPhotoForm.vue'
 
 const props = defineProps<{

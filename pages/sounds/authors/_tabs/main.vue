@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import FlexTable from '~/components/Base/FlexTable/FlexTable.vue'
-import FlexTablePicture from '~/components/Base/FlexTable/FlexTablePicture.vue'
+import FlexTable from '#backoffice-ui/components/FlexTable.vue'
+import FlexTablePicture from '#backoffice-ui/components/FlexTable/FlexTablePicture.vue'
 
 type IItem = Record<any, string>
 

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import BrowserSmall, { type IBrowser } from '~/components/Base/BrowserSmall/BrowserSmall.vue'
+import BrowserSmall, { type IBrowser } from '#backoffice-ui/components/BrowserSmall.vue'
+import Button from '#backoffice-ui/components/Button.vue'
+import type { IColumn, IItem } from '#backoffice-ui/composables/useBrowser'
 import { h, type Ref } from 'vue'
-import type { IColumn, IItem } from '~/composables/useBrowser'
 import { defineComponent, useNuxtApp } from '#imports'
-import Button from '~/components/Base/Button.vue'
 
 const props = defineProps<{
   item?: IItem,

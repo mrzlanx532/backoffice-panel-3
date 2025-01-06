@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Section from '~/components/Base/Section.vue'
+import Section from '#backoffice-ui/components/Section.vue'
 
 const props = defineProps({
   item: {

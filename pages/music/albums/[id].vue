@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import Detail from '~/components/Base/Detail.vue'
-import Tabs from '~/components/Base/Tabs.vue'
-import Button from '~/components/Base/Button.vue'
+import Detail from '#backoffice-ui/components/Detail.vue'
+import Tabs from '#backoffice-ui/components/Tabs.vue'
+import Button from '#backoffice-ui/components/Button.vue'
+
 import MainTab from '~/pages/music/albums/_tabs/main.vue'
 import TracksTab from '~/pages/music/albums/_tabs/tracks.vue'
 import MusicAlbumForm from '~/modals/music/MusicAlbumForm.vue'

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { Record } from 'immutable'
-
 type IItem = Record<string, any>
 
 const props = defineProps<{
