@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Section from '#backoffice-ui/components/Section.vue'
 import FlexTable from '#backoffice-ui/components/FlexTable.vue'
+import BaseLink from '#backoffice-ui/components/BaseLink.vue'
 import type { IConfigItem } from '#backoffice-ui/components/FlexTable.vue'
 import type { PropType, Ref } from 'vue'
 

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import FlexTable from '#backoffice-ui/components/FlexTable.vue'
+
 const props = defineProps<{
   item?: IItem,
 }>()
@@ -27,8 +29,6 @@ const config = ref([
     class: 4,
   },
 ])
-
-import FlexTable from '~/components/Base/FlexTable/FlexTable.vue'
 </script>
 
 <template>

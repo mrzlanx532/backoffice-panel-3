@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ComponentInternalInstance } from 'vue'
-import Button from '~/components/Base/Button.vue'
+import Button from '#backoffice-ui/components/Button.vue'
 
 const props = defineProps<{
   item: IItem,

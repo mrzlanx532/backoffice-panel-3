@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import Button from '~/components/Base/Button.vue'
+import Button from '#backoffice-ui/components/Button.vue'
+import ButtonDropdown from '#backoffice-ui/components/ButtonDropdown.vue'
 import { prepareDuration } from '~/helpers/functions-for-table-columns'
-import ButtonDropdown from '~/components/Base/ButtonDropdown.vue'
 import { useNuxtApp } from '#imports'
 
 type IItem = Record<any, string>

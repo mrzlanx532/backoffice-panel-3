@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import FlexTable from '#backoffice-ui/components/FlexTable.vue'
+
 type IItem = Record<string, any>
 
 const props = defineProps<{
@@ -65,8 +67,6 @@ const config = ref([
     preset: { name: 'timestampToFormatPreset' },
   },
 ])
-
-import FlexTable from '~/components/Base/FlexTable/FlexTable.vue'
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Button from '~/components/Base/Button.vue'
+import Button from '#backoffice-ui/components/Button.vue'
 import { prepareDuration } from '~/helpers/functions-for-table-columns'
 
 type IItem = {[key: string]: any}

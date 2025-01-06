@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { definePageMeta } from '#imports'
 
-import Page from '@/components/Base/Page.vue'
-import Button from '@/components/Base/Button.vue'
-import StateButton from '@/components/Base/StateButton.vue'
-import BaseLink from '@/components/Base/BaseLink.vue'
-import Badge from '@/components/Base/Badge.vue'
+import Page from '#backoffice-ui/components/Page.vue'
+import Button from '#backoffice-ui/components/Button.vue'
+import StateButton from '#backoffice-ui/components/StateButton.vue'
+import BaseLink from '#backoffice-ui/components/BaseLink.vue'
+import Badge from '#backoffice-ui/components/Badge.vue'
+import ButtonDropdown from '#backoffice-ui/components/ButtonDropdown.vue'
+
 import type { Ref } from 'vue'
-import ButtonDropdown from '~/components/Base/ButtonDropdown.vue'
 
 definePageMeta({
   middleware: ['auth']
