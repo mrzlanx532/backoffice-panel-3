@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useNuxtApp } from '#imports'
-import SideMenu from '@/components/Base/SideMenu.vue'
+import SideMenu from '#backoffice-ui/components/SideMenu.vue'
 
 interface IUser {
   id: number,
@@ -10,7 +10,7 @@ interface IUser {
   } | null
 }
 
-const items = [
+const items = ([
   {
     name: 'Шумы',
     icon: '/img/menu_icons_sprite.svg#home',
@@ -85,7 +85,7 @@ const items = [
     link: '/pencils',
     icon: '/img/menu_icons_sprite.svg#users',
   },
-]
+])
 
 const {
   $auth
@@ -115,8 +115,8 @@ const user = ref({
         </div>
       </div>
     </div>
-    <Modal/>
-    <Notification/>
+    <Modal />
+    <Notification />
   </div>
 </template>
 
